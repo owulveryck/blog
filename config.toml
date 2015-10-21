@@ -1,3 +1,24 @@
-baseurl = "http://replace-this-with-your-hugo-site.com/"
+baseurl = "https://owulveryck.github.io/"
 languageCode = "en-us"
-title = "My New Hugo Site"
+title = "Olivier Wulveryck"
+paginate = 5
+DisqusShortname = "YOUR_SHORT_NAME_HERE"
+Copyright = "All rights reserved - 2015"
+canonifyurls = true
+
+[params]
+  description = "Mon blog"
+  cover = "images/cover.jpg"
+  author = "Olivier Wulveryck"
+  authorlocation = "Lille, France"
+  authorwebsite = "https://owulveryck.github.io"
+  bio= "my bio"
+  logo = "images/logo.png"
+  #googleAnalyticsUserID = "UA-79101-12"
+  # Optional RSS-Link, if not provided it defaults to the standard index.xml
+  RSSLink = "http://feeds.feedburner.com/..." 
+  githubName = "owulveryck"
+  twitterName = "owulveryck"
+  # facebookName = ""
+  # set true if you are not proud of using Hugo (true will hide the footer note "Proudly published with HUGO.....")
+  hideHUGOSupport = false
