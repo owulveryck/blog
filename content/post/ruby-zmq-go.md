@@ -61,6 +61,7 @@ _Note_: the [examples directory](https://github.com/pebbe/zmq4/blob/master/examp
 I will use the [hello world client](https://github.com/pebbe/zmq4/blob/master/examples/hwclient.go) and the [hello world server](https://github.com/pebbe/zmq4/blob/master/examples/hwserver.go) for my tests
 
 The hello world client/server is implementing a Request-Reply patternt and are communicating via a TCP socket.
+
 * The server is the *replier* and is listening on the TCP port 5555
 ```go
 ...
