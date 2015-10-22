@@ -1,7 +1,7 @@
 +++
 date = "2015-10-22T20:40:36+02:00"
 draft = true
-title = "Ruby and go dialog via ZMQ"
+title = "Ruby <- ZeroMQ -> GO" 
 
 +++
 
@@ -143,26 +143,61 @@ ERROR: Failed to build gem native extension.
 Arg!, something went wrong. It looks like there is a version mismatch between th libzmq brew installed and the version expected by the gem
 The _zmq_ gem seems a bit old and there is a *FFI* ruby extension with a more active developement.
 
-Let's install this one:
-```
-~ gem install ffi-rzmq                                                                                                          
-Fetching: ffi-1.9.10.gem (100%)
-Building native extensions.  This could take a while...
-Successfully installed ffi-1.9.10
-Fetching: ffi-rzmq-core-1.0.4.gem (100%)
-Successfully installed ffi-rzmq-core-1.0.4
-Fetching: ffi-rzmq-2.0.4.gem (100%)
-Successfully installed ffi-rzmq-2.0.4
-Parsing documentation for ffi-1.9.10
-Installing ri documentation for ffi-1.9.10
-Parsing documentation for ffi-rzmq-core-1.0.4
-Installing ri documentation for ffi-rzmq-core-1.0.4
-Parsing documentation for ffi-rzmq-2.0.4
-Installing ri documentation for ffi-rzmq-2.0.4
-Done installing documentation for ffi, ffi-rzmq-core, ffi-rzmq after 33 seconds
-3 gems installed
-```
+Moreover, I have found []the perfect website for the ruby-and-zmq-ignorant(https://github.com/andrewvc/learn-ruby-zeromq)
 
-Looks good !
+As written in the doc, let's install the needed gems via `gem install ffi ffi-rzmq zmqmachine`
 
 ## Let's try the lib
+
+Ok, it is now time to run an example
+
+```
+require 'rubygems'
+require 'ffi-rzmq'
+def error_check(rc)
+    if ZMQ::Util.resultcode_ok?(rc)
+        false
+    else
+        STDERR.puts "Operation failed, errno [#{ZMQ::Util.errno}] description [#{ZMQ::Util.error_string}]"
+        caller(1).each { |callstack| STDERR.puts(callstack)  }
+        true
+    end
+end
+
+ctx = ZMQ::Context.create(1)
+STDERR.puts "Failed to create a Context"
+
+req_sock = ctx.socket(ZMQ::REQ)
+rc = req_sock.connect('tcp://127.0.0.1:5555')
+STDERR.puts "Failed to connect REQ socket" unless ZMQ::Util.resultcode_ok?(rc)
+
+2.times do
+    rc = req_sock.send_string('Ruby says Hello')
+    break if error_check(rc)
+
+    rep = ''
+    rc = req_sock.recv_string(rep)
+    break if error_check(rc)
+    puts "Received reply '#{rep}'"
+end
+error_check(req_sock.close)
+
+ctx.terminate
+```
+
+Running this example with a simple `ruby client.rb` command leads to the following errors:
+```
+ruby client.rb
+Failed to create a Context
+Assertion failed: check () (src/msg.cpp:248)
+```
+
+But, my GO server is receiving the messages:
+
+```
+~ go run hwserver.go
+Received  Ruby says Hello
+Received  Ruby says Hello
+```
+
+I will check later...
