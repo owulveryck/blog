@@ -1,16 +1,8 @@
 +++
 date = "2015-10-22T15:59:07+01:00"
-draft = true
-title = "The engine of the blog"
+draft = false
+title = "Welcome"
 
 +++
 
-# Abstract
-
-Attempt of putting code
-```golang
-func main() {
-
-
-}
-```
+You are in a place where a new technical blog will stand soon.
