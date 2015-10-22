@@ -1,23 +1,31 @@
 baseurl = "https://blog.owulveryck.info/"
 languageCode = "en-us"
-title = "Olivier Wulveryck"
+title = "Tech Blog"
+author = "Olivier Wulveryck"
 paginate = 5
 DisqusShortname = "YOUR_SHORT_NAME_HERE"
 Copyright = "All rights reserved - 2015"
 canonifyurls = true
 
+
+[indexes]
+  category = "categories"
+  tag = "tags"
 [params]
-  description = "My Technical blog"
+  description = "To share my technical experiences alongside my life of IT professional"
   cover = "images/cover.jpg"
-  author = "Olivier Wulveryck"
+  AuthorName = "Olivier"
   authorlocation = "Lille, France"
   authorwebsite = "https://owulveryck.github.io"
-  bio= "my bio"
+  bio= "I am a french IT professional and a passionate geek"
   logo = "images/logo.png"
   #googleAnalyticsUserID = "UA-79101-12"
   # Optional RSS-Link, if not provided it defaults to the standard index.xml
   RSSLink = "http://feeds.feedburner.com/..." 
   githubName = "owulveryck"
+  github = "owulveryck"
+  twitter = "owulveryck"
+  linkedin = "olivierwulveryck"
   twitterName = "owulveryck"
   # facebookName = ""
   # set true if you are not proud of using Hugo (true will hide the footer note "Proudly published with HUGO.....")
