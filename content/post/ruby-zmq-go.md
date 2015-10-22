@@ -2,7 +2,13 @@
 date = "2015-10-22T20:40:36+02:00"
 draft = true
 title = "Ruby / ZeroMQ / GO" 
-
+description = "My attempt to make a go program talk to a ruby script via a 0MQ message"
+categories = [
+    "Development",
+    "goland",
+    "ruby",
+    "zmq"
+]
 +++
 
 # Abtract
