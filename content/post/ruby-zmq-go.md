@@ -205,4 +205,4 @@ Received  Ruby says Hello
 Received  Ruby says Hello
 ```
 
-I will check later...
+I've found an [issue](https://github.com/chuckremes/ffi-rzmq/issues/118)... I will check again later, or I will try on another environement 
