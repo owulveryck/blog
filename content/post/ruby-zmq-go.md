@@ -205,4 +205,9 @@ Received  Ruby says Hello
 Received  Ruby says Hello
 ```
 
-I've found an [issue](https://github.com/chuckremes/ffi-rzmq/issues/118)... I will check again later, or I will try on another environement 
+# End of show
+
+That's it for now. I think I'm facing a bug in the ruby implementation of the libzmq I'm using. 
+Indeed, I've found an [issue](https://github.com/chuckremes/ffi-rzmq/issues/118)... 
+
+I will check again later, or I will try on another environement but the essential is here.
