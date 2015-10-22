@@ -1,4 +1,4 @@
-baseurl = "https://owulveryck.github.io/"
+baseurl = "https://blog.owulveryck.info/"
 languageCode = "en-us"
 title = "Olivier Wulveryck"
 paginate = 5
@@ -7,7 +7,7 @@ Copyright = "All rights reserved - 2015"
 canonifyurls = true
 
 [params]
-  description = "Mon blog"
+  description = "My Technical blog"
   cover = "images/cover.jpg"
   author = "Olivier Wulveryck"
   authorlocation = "Lille, France"
