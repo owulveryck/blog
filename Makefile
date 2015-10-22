@@ -1,2 +1,2 @@
 deploy:
-	hugo -t casper -d ../owulveryck.github.io 
+	hugo -t uno -d ../owulveryck.github.io 
