@@ -171,7 +171,7 @@ def error_check(rc)
 end
 
 ctx = ZMQ::Context.create(1)
-STDERR.puts "Failed to create a Context"
+STDERR.puts "Failed to create a Context" unless ctx
 
 req_sock = ctx.socket(ZMQ::REQ)
 rc = req_sock.connect('tcp://127.0.0.1:5555')
@@ -194,7 +194,6 @@ ctx.terminate
 Running this example with a simple `ruby client.rb` command leads to the following errors:
 ```
 ruby client.rb
-Failed to create a Context
 Assertion failed: check () (src/msg.cpp:248)
 ```
 
