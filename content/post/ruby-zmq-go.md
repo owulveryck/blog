@@ -109,3 +109,60 @@ Received  World
 Sending  Hello 2
 ...
 ```
+
+# Ruby
+
+Now let's implement a Ruby client.
+
+## Installation of the library
+
+a _gem install_ is supposed to do the trick:
+
+```
+~ gem install zmq
+Building native extensions.  This could take a while...
+ERROR:  Error installing zmq:
+ERROR: Failed to build gem native extension.
+
+/usr/local/linuxbrew/opt/ruby/bin/ruby -r ./siteconf20151022-23021-1ehwusq.rb extconf.rb
+    checking for zmq.h... yes
+    checking for zmq_init() in -lzmq... yes
+    Cool, I found your zmq install...
+    creating Makefile
+
+    make "DESTDIR=" clean
+
+    make "DESTDIR="
+    compiling rbzmq.c
+    rbzmq.c: In function 'socket_getsockopt':
+    rbzmq.c:968:7: error: 'ZMQ_RECOVERY_IVL_MSEC' undeclared (first use in this function)
+        case ZMQ_RECOVERY_IVL_MSEC:
+        ...
+```
+
+Arg!, something went wrong. It looks like there is a version mismatch between th libzmq brew installed and the version expected by the gem
+The _zmq_ gem seems a bit old and there is a *FFI* ruby extension with a more active developement.
+
+Let's install this one:
+```
+~ gem install ffi-rzmq                                                                                                          
+Fetching: ffi-1.9.10.gem (100%)
+Building native extensions.  This could take a while...
+Successfully installed ffi-1.9.10
+Fetching: ffi-rzmq-core-1.0.4.gem (100%)
+Successfully installed ffi-rzmq-core-1.0.4
+Fetching: ffi-rzmq-2.0.4.gem (100%)
+Successfully installed ffi-rzmq-2.0.4
+Parsing documentation for ffi-1.9.10
+Installing ri documentation for ffi-1.9.10
+Parsing documentation for ffi-rzmq-core-1.0.4
+Installing ri documentation for ffi-rzmq-core-1.0.4
+Parsing documentation for ffi-rzmq-2.0.4
+Installing ri documentation for ffi-rzmq-2.0.4
+Done installing documentation for ffi, ffi-rzmq-core, ffi-rzmq after 33 seconds
+3 gems installed
+```
+
+Looks good !
+
+## Let's try the lib
