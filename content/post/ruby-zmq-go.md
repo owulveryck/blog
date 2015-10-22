@@ -1,7 +1,7 @@
 +++
 date = "2015-10-22T20:40:36+02:00"
 draft = true
-title = "Ruby <- ZeroMQ -> GO" 
+title = "Ruby / ZeroMQ / GO" 
 
 +++
 
