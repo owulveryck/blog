@@ -39,5 +39,35 @@ Will you participate
 +---------------------+-------+
 ```
 
+# Setting up the development environment
+
+First, we will create a directory that will host the sources of our application in our `GOPATH/src`.
+_Note_: For convenience I've created a github repo named "google-app-example" to host the complete source.
+
+```
+~ mkdir -p $GOPATH/src/github.com/owulveryck/google-app-example
+~ cd $GOPATH/src/github.com/owulveryck/google-app-example
+~ git init
+~ git remote add origin https://github.com/owulveryck/google-app-example
+```
 
 
+## Hello World!
+
+Let's create the hello world first to validate the whole development chain.
+As written in the doc, create the two files `hello.go` and `app.yaml`.
+Obviously the `simple-polling.go` file will hold the code of the application. Let's focus a bit on the _app.yaml_ file.
+The documentation of the _app.yaml_ file is [here](https://cloud.google.com/appengine/docs/go/config/appconfig). The goal of this file is to specifiy the runtime configuration of the engine.
+This simple file replace the "integration" task for an application typed "born in the datacenter"
+
+Here is my app.yaml
+```yaml
+application: simple-polling
+version: 1
+runtime: go
+api_version: go1
+
+handlers:
+- url: /.*
+script: _go_app
+```
