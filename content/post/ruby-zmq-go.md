@@ -5,7 +5,7 @@ title = "Ruby / ZeroMQ / GO"
 description = "My attempt to make a go program talk to a ruby script via a 0MQ message"
 categories = [
     "Development",
-    "goland",
+    "go",
     "ruby",
     "zmq"
 ]
