@@ -62,3 +62,21 @@ That's where I am now, stuck with a stupid python error. I'd like the folks at g
 
 I'll post an update as soon as I have solved this issue !
 
+*EDIT*:
+
+I've had a look in the `setup.py` file. To compile the sqlite extension, it looks into the following paths:
+
+```
+...
+sqlite_incdir = sqlite_libdir = None
+sqlite_inc_paths = [ '/usr/include',
+                     '/usr/include/sqlite',
+                     '/usr/include/sqlite3',
+                     '/usr/local/include',
+                     '/usr/local/include/sqlite',
+                     '/usr/local/include/sqlite3',
+                   ]
+...
+```
+
+But in my configuration, the libraries are present in `/usr/local/linuxbrew/*`. Hence, simply linking the include and libs dd the trick
