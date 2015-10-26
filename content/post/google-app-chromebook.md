@@ -80,3 +80,40 @@ sqlite_inc_paths = [ '/usr/include',
 ```
 
 But in my configuration, the libraries are present in `/usr/local/linuxbrew/*`. Hence, simply linking the include and libs dd the trick
+
+I'm now facing another error when I try to run the `goapp serve` command:
+
+```
+...
+AttributeError: 'module' object has no attribute 'poll'
+error while running dev_appserver.py: exit status 1
+```
+
+Google told me, that on OSX the poll system call is broken and has been disabled.
+As brew is mainly developped on MacOS, that may be the reason
+
+I've recompiled the python with the `--with-poll` option and that did the trick.
+
+## Finally
+
+Here are my options for compiling python:
+
+```
+~ brew reinstall python --with-brewed-openssl --with-brewed-sqlite --with-poll 
+...
+Warning: The given option --with-poll enables a somewhat broken poll() on OS X (https://bugs.python.org/issue5154)  Formula git:(master)).
+...
+```
+
+And the `goapp serve` is finally working on my Chromebook:
+
+```
+~ goapp serve /home/chronos/user/GOPROJECTS/src/github.com/owulveryck/google-app-example/
+INFO     2015-10-26 15:48:04,840 devappserver2.py:763] Skipping SDK update check.
+INFO     2015-10-26 15:48:04,935 api_server.py:205] Starting API server at: http://localhost:54116
+INFO     2015-10-26 15:48:06,092 dispatcher.py:197] Starting module "default" running at: http://localhost:8080
+INFO     2015-10-26 15:48:06,096 admin_server.py:116] Starting admin server at: http://localhost:8000
+INFO     2015-10-26 15:48:16,700 shutdown.py:45] Shutting down.
+INFO     2015-10-26 15:48:16,701 api_server.py:648] Applying all pending transactions and saving the datastore
+INFO     2015-10-26 15:48:16,701 api_server.py:651] Saving search indexes
+```
