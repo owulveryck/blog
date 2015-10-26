@@ -1,7 +1,7 @@
 +++
 date = "2015-10-26T10:41:57Z"
 draft = true
-title = "Google App dev on my chromebook"
+title = "Developping \"Google Apps\" on my Chromebook"
 
 +++
 
@@ -11,17 +11,17 @@ I really enjoy this little internet Terminal.
 I "geeked" it a little bit and I installed my favorites dev tools eg:
 
 * [The solarized theme for the terminal](https://gist.github.com/johnbender/5018685)
-* zsh with [Oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh)
-* tmux (stared with `tmux -2` to get 254 colors)
-* git
-* vim
-* a Go compiler
-* The HUGO tools to write this blog.
+* `zsh` with [Oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh)
+* `tmux` (stared with `tmux -2` to get 254 colors)
+* `git`
+* `vim`
+* a `Go` compiler
+* The [`HUGO`](http://gohugo.io/overview/quickstart/) tools to write this blog.
 
 
 All of it has been installed thanks to the "brew" package manager and following [those instructions](https://github.com/Homebrew/linuxbrew/wiki/Chromebook-Install-Instructions).
 
-# GoogleAppEngine
+## Google Development Environment
 
 I've installed the Google Development Environement as described [here](https://cloud.google.com/appengine/docs/go/gettingstarted/devenvironment).
 
@@ -36,11 +36,11 @@ ImportError: No module named _sqlite3
 error while running dev_appserver.py: exit status 1
 ```
 
-Too bad. 
+Too bad. I've read that this module should be built with python, but a even a `find /` (I know it's evil) didn't return me any occurence.
 
-I have 
+So, I have:
 
-* googled 
+* Googled 
 * reinstalled sqlite with `brew reinstall sqlite`
 * reinstalled python with `brew reinstall python`
 * played with brew link, unlink and so
