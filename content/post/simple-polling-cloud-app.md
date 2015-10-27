@@ -71,3 +71,14 @@ handlers:
 - url: /.*
 script: _go_app
 ```
+
+And then we try our application with the command `goapp serve $GOPATH/src/github.com/owulveryck/google-app-example/`
+which should display something similar to:
+````
+INFO     2015-10-26 21:02:10,295 devappserver2.py:763] Skipping SDK update check.
+INFO     2015-10-26 21:02:10,468 api_server.py:205] Starting API server at: http://localhost:52457
+INFO     2015-10-26 21:02:12,011 dispatcher.py:197] Starting module "default" running at: http://localhost:8080
+INFO     2015-10-26 21:02:12,014 admin_server.py:116] Starting admin server at: http://localhost:8000
+``
+
+Then I can open my browser and point it to http://localhost:8080 to see my brand new "Hello World!" displayed
