@@ -1,31 +1,33 @@
 +++
 date = "2015-10-23T09:54:27+01:00"
 draft = true
-title = "Simple polling app, cloud native"
+title = "Simple polling app, a cloud native part 1"
 
 +++
 
-In this post I explain how to setup a simple polling app, the cloud way.
+In this series of posts I'll explain how to setup a simple polling app, the cloud way.
 This app, written in go, will be hosted on a PAAS, and I've chosen the [Google App Engine](https://cloud.google.com/appengine/docs) for convenience.
 
 I will not explain in this post how to setup the Development environment as it is described [here](https://cloud.google.com/appengine/docs/go/gettingstarted/devenvironment)
 
 # The principles of the application
 
-The application is a single page that will display a header with a question "will you participate" and a form input where you will be able to write your name and three buttons "yes", "no" and ""maybe"".
-The body of the page will contain a simple table with two columns:
+The application is composed of two web pages that will display :
 
-* One will hold the participant name
-* The other one will display its response
-
+* the question "will you participate" and a form input where you will be able to write your name and three buttons "yes", "no" and ""maybe"".
 ```
 Will you participate 
 +------------------+  +-----+ +-----+ +-------+
 |  Your name       |  | YES | |  NO | | Maybe |
 +------------------+  +-----+ +-----+ +-------+
+```
 
------------------------------------------------
+* a simple table with two columns:
 
+* One will hold the participant name
+* The other one will display its response
+
+```
 +---------------------+-------+
 |  John doe           | YES   |
 +---------------------+-------+
@@ -69,16 +71,24 @@ api_version: go1
 
 handlers:
 - url: /.*
-script: _go_app
+  script: _go_app
 ```
 
 And then we try our application with the command `goapp serve $GOPATH/src/github.com/owulveryck/google-app-example/`
 which should display something similar to:
-````
+```
 INFO     2015-10-26 21:02:10,295 devappserver2.py:763] Skipping SDK update check.
 INFO     2015-10-26 21:02:10,468 api_server.py:205] Starting API server at: http://localhost:52457
 INFO     2015-10-26 21:02:12,011 dispatcher.py:197] Starting module "default" running at: http://localhost:8080
 INFO     2015-10-26 21:02:12,014 admin_server.py:116] Starting admin server at: http://localhost:8000
-``
+```
 
-Then I can open my browser and point it to http://localhost:8080 to see my brand new "Hello World!" displayed
+Then I can open my browser (or curl) and point it to http://localhost:8080 to see my brand new "Hello World!" displayed
+
+```
+~ curl http://localhost:8080
+Hello, world!
+```
+
+# The web templates
+
