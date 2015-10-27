@@ -10,6 +10,20 @@ This app, written in go, will be hosted on a PAAS, and I've chosen the [Google A
 
 I will not explain in this post how to setup the Development environment as it is described [here](https://cloud.google.com/appengine/docs/go/gettingstarted/devenvironment)
 
+# A word about the Hosting
+
+Google Apps Engine is a cloud service aim to host applications without worrying about scalability, and technical architecture of the hosting environement.
+The application is seen as a web service and proxyfied and load balanced in several compute nodes.
+The storage service is provided via a schemaless NoSQL datastore, featuring:
+
+* high availability
+* consistency
+* ...
+
+and basically all the strong features you would expect from a decent production ready database provider.
+
+To be simple: Take care of the functionnality of your app and respect the cloud principles (see for example the [12factor.net](http://12factor.net) ), and google will take care that it can run in the best conditions.
+
 # The principles of the application
 
 The application is composed of two web pages that will display :
@@ -91,4 +105,6 @@ Hello, world!
 ```
 
 # The web templates
+## The question page
+
 
