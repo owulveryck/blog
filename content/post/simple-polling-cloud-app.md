@@ -26,7 +26,18 @@ To be simple: Take care of the functionnality of your app and respect the cloud 
 
 # The principles of the application
 
-The application is composed of two web pages that will display :
+The application is composed of a stateless engine, a data bucket and some web pages for the presentation.
+
+## The engine
+
+The engine is the core of the application. It is the "computational element" that will take care of the inputs of the user and interact with the storage.
+It is a [GO](http://golang.org) developement.
+
+## The bucket
+
+It is the data warehouse. It will store the participant name and its answer. It will be NoSQL based, the key will be the username and the value its answer.
+
+## The web pages
 
 * the question "will you participate" and a form input where you will be able to write your name and three buttons "yes", "no" and ""maybe"".
 ```
@@ -104,7 +115,6 @@ Then I can open my browser (or curl) and point it to http://localhost:8080 to se
 Hello, world!
 ```
 
-# The web templates
-## The question page
+This ends the part 1 of this serie of articles.
 
 
