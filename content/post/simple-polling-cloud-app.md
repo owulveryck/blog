@@ -107,4 +107,8 @@ Hello, world!
 # The web templates
 ## The question page
 
+Let's create the HTML template.
 
+```html
+
+```
