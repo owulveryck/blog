@@ -143,11 +143,14 @@ Let's dial the RPC server and call the `NodeCreate` method with, as argument, th
         return
     }
     client := rpc.NewSession(conn, true)
-    retval, err := client.Send("NodeCreate", 2, 3)
+    retval, err := client.Send("NodeCreate", nodeRequest.Kind, nodeRequest.Size, nodeRequest.Disksize, nodeRequest.Leasedays, nodeRequest.EnvironmentType, nodeRequest.Description)
     if err != nil {
-    fmt.Println(err)
+        fmt.Println(err)
         return
     }
-    fmt.Println(rpc.CoerceInt(retval))
-
+    fmt.Println(retval)
 ```
+# The RPC server part
+
+This part is written in ruby, and will take care of the effective node creation
+
