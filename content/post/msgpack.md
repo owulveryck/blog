@@ -52,3 +52,46 @@ Later on, outside of the scope of this post, I may use ZMQ (as I have already bl
 # The implementation
 
 I will describe here the node creation via a POST method, and consider that the other method could be implemented in a similar way.
+
+## The signature of the node creation
+
+Here is the expected signature for creating a compute element:
+
+```json
+{
+    "kind":"linux",
+    "size":"S",
+    "disksize":20,
+    "leasedays":1,
+    "environment_type":"dev",
+    "description":"my_description",
+}
+```
+
+## The route
+
+The Middleware is using the [gorilla mux package](http://gorilla.mux.io). According the description, I will an entry in the routes array (into the _routes.go_ file):
+
+```golang
+Route{
+    "NodeCreate",
+    "POST",
+    "/v1/nodes",
+    NodeCreate,
+},
+```
+
+I will then create the corresponding handler in the file with this signature:
+
+```golang
+func NodeCreate(w http.ResponseWriter, r *http.Request){
+   ...    
+}
+```
+
+And that's in this part that we will implement the RPC. To keep it simple at the very begining, I will instanciate a TCP connection on every call.
+That will be changed later following the advice of Mat Ryer.
+
+
+
+
