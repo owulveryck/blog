@@ -154,3 +154,15 @@ Let's dial the RPC server and call the `NodeCreate` method with, as argument, th
 
 This part is written in ruby, and will take care of the effective node creation
 
+```ruby
+require 'msgpack/rpc'
+class MyHandler
+    def NodeCreate(kind, size, disksize, leasedays, environmenttype, description) 
+        print "Creating the node with parameters: ",kind, size, disksize, leasedays, environmenttype, description
+        return ok
+    end
+end
+svr = MessagePack::RPC::Server.new
+svr.listen('0.0.0.0', 18800, MyHandler.new)
+svr.run
+```
