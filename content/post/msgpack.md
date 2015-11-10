@@ -28,14 +28,17 @@ What I want to do is :
 
 ## The backend
 
-The backend is whatever service able to create a node, suchs as openstack, vmware vcac, juju, or whatever. Thoses services usually provide RESTfull API.
+The backend is whatever service able to create a node, suchs as openstack, vmware vcac, juju, or whatever. 
+Thoses services usually provide RESTfull API.
 
-What I've seen in my experience, is that usually, the API are given with a library in whatever modern language. This aim to simplify the developpement of the clients.
+What I've seen in my experience, is that usually, the API are given with a library in whatever modern language. 
+This aim to simplify the developpement of the clients.
 Sometimes this library may also be developped by an internal team that will take care of the maintenance.
 
 ## The library
 
-In my example, we will consider that the library is a simple _gem_ file developped in ruby. Therefore, our service will be a simple server that will get RPC calls, call the good method in the _gemfile_ 
+In my example, we will consider that the library is a simple _gem_ file developped in ruby. 
+Therefore, our service will be a simple server that will get RPC calls, call the good method in the _gemfile_ 
 and that will, _in fine_ transfer it to the backend.
 
 ## The RestFull API.
@@ -44,7 +47,8 @@ I will use the example described [here](http://blogpost) as a basis for my work.
 
 ## The glue: MSGPACK-RPC
 
-There are severeal method for RPC-ing different languages. Ages ago, there was xml-rpc; then there has been json-rpc; I will use msgpack-rpc which is a binary, json base codec.
+There are severeal method for RPC-ing different languages. Ages ago, there was xml-rpc; then there has been json-rpc; 
+I will use msgpack-rpc which is a binary, json base codec.
 The communication between the Go Server and the ruby client will be donc over TCP via HTTP for example.
 
 Later on, outside of the scope of this post, I may use ZMQ (as I have already blogged about 0MQ communication between thoses languages).
@@ -68,11 +72,25 @@ Here is the expected signature for creating a compute element:
 }
 ```
 
+The corresponding GO structure is:
+
+```go
+type NodeRequest struct {
+    Kind string `json:"kind"` // Node kind (eg linux)
+    Size string `json:"size"` // size
+    Disksize         int    `json:"disksize"`
+    Leasedays        int    `json:"leasedays"`
+    EnvironmentType  string `json:"environment_type"`
+    Description      string `json:"description"`
+}
+```
+
 ## The route
 
-The Middleware is using the [gorilla mux package](http://gorilla.mux.io). According the description, I will an entry in the routes array (into the _routes.go_ file):
+The Middleware is using the [gorilla mux package](http://gorilla.mux.io). 
+According the description, I will add an entry in the routes array (into the _routes.go_ file):
 
-```golang
+```go
 Route{
     "NodeCreate",
     "POST",
@@ -81,17 +99,24 @@ Route{
 },
 ```
 
+*Note* : I am using a prefix `/v1` for my API, for exploitation purpose.
+
 I will then create the corresponding handler in the file with this signature:
 
-```golang
+```go
 func NodeCreate(w http.ResponseWriter, r *http.Request){
    ...    
 }
 ```
 
-And that's in this part that we will implement the RPC. To keep it simple at the very begining, I will instanciate a TCP connection on every call.
-That will be changed later following the advice of Mat Ryer.
+That's in this fuction that will be implemented RPC (client part). To keep it simple at the begining, 
+I will instanciate a TCP connection on every call.
+Don't throw things at me, that will be changed later following the advice of Mat Ryer.
 
+## The implementation of the handler
 
+### The RPC part
 
+To use _msgpack_ I need to import the go implemtation `github.com/msgpack-rpc/msgpack-rpc-go/rpc`.
+This library will take care of the encoding/decoding of the messages.
 
