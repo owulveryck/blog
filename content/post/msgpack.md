@@ -7,9 +7,9 @@ title = "a IaaS-like RESTfull API based on microservices"
 
 # Absract
 
-Recently, I've been looking at the principles of a middleware layer and especially on how [API would glue a system](http://insertpulereference).
+Recently, I've been looking at the principles of a middleware layer and especially on how a RESTFULL API would glue a system.
 
-I've also seen this excellent video made by [Mat Ryer](http://reference) about how to code an API in GO and why go would be the perfect language to code such a portal.
+I've also seen this excellent video made by [Mat Ryer](https://www.youtube.com/watch?v=tIm8UkSf6RA&list=PLDWZ5uzn69ezRJYeWxYNRMYebvf8DerHd) about how to code an API in GO and why go would be the perfect language to code such a portal.
 
 The problem I'm facing is that in the organization I'm working for, the developments are heterogenous and therefore you can find *ruby* teams as well as *python* team and myself as a *go* team (That will change in the future anyway)
 The point is that I would like my middleware to serve as an entry point to the services provided by the departement.
@@ -43,17 +43,17 @@ and that will, _in fine_ transfer it to the backend.
 
 ## The RestFull API.
 
-I will use the example described [here](http://blogpost) as a basis for my work.
+I will use the example described [here](http://thenewstack.io/make-a-restful-json-api-go/) as a basis for this post.
 
 ## The glue: MSGPACK-RPC
 
 There are severeal method for RPC-ing different languages. Ages ago, there was xml-rpc; then there has been json-rpc; 
-I will use msgpack-rpc which is a binary, json base codec.
+I will use [msgpack-rpc](https://github.com/msgpack-rpc/msgpack-rpc) which is a binary, json base codec.
 The communication between the Go Server and the ruby client will be donc over TCP via HTTP for example.
 
 Later on, outside of the scope of this post, I may use ZMQ (as I have already blogged about 0MQ communication between thoses languages).
 
-# The implementation
+# The implementation of the Client (the go part)
 
 I will describe here the node creation via a POST method, and consider that the other method could be implemented in a similar way.
 
@@ -87,7 +87,7 @@ type NodeRequest struct {
 
 ## The route
 
-The Middleware is using the [gorilla mux package](http://gorilla.mux.io). 
+The Middleware is using the [gorilla mux package](http://www.gorillatoolkit.org/pkg/mux). 
 According the description, I will add an entry in the routes array (into the _routes.go_ file):
 
 ```go
@@ -129,7 +129,7 @@ Don't throw things at me, that will be changed later following the advice of Mat
 
 ## The implementation of the handler
 
-### The RPC part
+### The effective remote procedure call
 
 To use _msgpack_ I need to import the go implemtation `github.com/msgpack-rpc/msgpack-rpc-go/rpc`.
 This library will take care of the encoding/decoding of the messages.
@@ -150,7 +150,7 @@ Let's dial the RPC server and call the `NodeCreate` method with, as argument, th
     }
     fmt.Println(retval)
 ```
-# The RPC server part
+# The RPC server (the ruby part)
 
 This part is written in ruby, and will take care of the effective node creation.
 At first, we should install the GEM file with the command `gem install msgpack-rpc`.
@@ -168,7 +168,7 @@ svr.listen('0.0.0.0', 18800, MyHandler.new)
 svr.run
 ```
 
-## let's test it
+# let's test it
 
 Launch the RPC server:
 `ruby server.rb`
@@ -195,3 +195,11 @@ Creating the node with parameters: linux S 20 1 dev my_description
 ```
 
 That's all folks! What's left:
+
+* To implement the other methods to be "[CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)" compliant
+* To implement an authentication and accreditation mechanism (JWT, Oauth, ?)
+* To change the implementation of the RPC client to use a pool instead of a single connection
+* To implement the swagger interface and documentation of the API
+* Whatever fancy stuff you may want from a production ready interface.
+
+See you !
