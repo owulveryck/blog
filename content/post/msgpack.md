@@ -1,61 +1,65 @@
 +++
 date = "2015-11-10T08:56:36+01:00"
-draft = true
-title = "a IaaS-like RESTfull API based on microservices"
+draft = false
+title = "IaaS-like RESTfull API based on microservices"
 
 +++
 
 # Absract
 
-Recently, I've been looking at the principles of a middleware layer and especially on how a RESTFULL API would glue a system.
+Recently, I've been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.
+
+I am reading more and more about the "API economy"
 
 I've also seen this excellent video made by [Mat Ryer](https://www.youtube.com/watch?v=tIm8UkSf6RA&list=PLDWZ5uzn69ezRJYeWxYNRMYebvf8DerHd) about how to code an API in GO and why go would be the perfect language to code such a portal.
 
-The problem I'm facing is that in the organization I'm working for, the developments are heterogenous and therefore you can find *ruby* teams as well as *python* team and myself as a *go* team (That will change in the future anyway)
-The point is that I would like my middleware to serve as an entry point to the services provided by the departement.
+The problem I'm facing is that in the organization I'm working for, the developments are heterogenous and therefore you can find *ruby* teams as well as *python* teams and myself as a *go* team (That will change in the future anyway)
+The key point is that I would like my middleware to serve as an entry point to the services provided by the department.
 
-We (as a department) would then be able to present the interface via, for example, a [swagger](http://swagger.io) like interface, take care of the API and do whatever RPC to any submodule.
+We (as an "ops" team) would then be able to present the interface via, for example, a [swagger](http://swagger.io) like interface, take care of the API and do whatever RPC to any submodule.
 
 # An example: a IAAS like interface
 
 Let's consider a node compute lifecycle.
-What I want to do is :
 
-* create a node
-* update a node (maybe)
-* delete a node
-* get the status of the node
+What I'd like to be able to do is:
+
+* to create a node
+* to update a node (maybe)
+* to delete a node
+* to get the status of the node
 
 ## The backend
 
-The backend is whatever service able to create a node, suchs as openstack, vmware vcac, juju, or whatever. 
+The backend is whatever service, able to create a node, suchs as openstack, vmware vcac, juju, ... 
 Thoses services usually provide RESTfull API.
 
-What I've seen in my experience, is that usually, the API are given with a library in whatever modern language. 
-This aim to simplify the developpement of the clients.
-Sometimes this library may also be developped by an internal team that will take care of the maintenance.
+I've seen in my experience, that usually, the API are given with a library in a so called "modern language". 
+This aim to simplify the development of the clients.
+Sometimes this library may also be developed by an internal team that will take care of the maintenance.
 
 ## The library
 
-In my example, we will consider that the library is a simple _gem_ file developped in ruby. 
+In my example, we will consider that the library is a simple _gem_ file developed in ruby. 
 Therefore, our service will be a simple server that will get RPC calls, call the good method in the _gemfile_ 
 and that will, _in fine_ transfer it to the backend.
 
 ## The RestFull API.
 
 I will use the example described [here](http://thenewstack.io/make-a-restful-json-api-go/) as a basis for this post.
+Of course there are many other examples and excellent go packages that may be used, but according to Mat Ryer, I will stick to the idiomatic approach.
 
 ## The glue: MSGPACK-RPC
 
-There are severeal method for RPC-ing different languages. Ages ago, there was xml-rpc; then there has been json-rpc; 
+There are several methods for RPC-ing between different languages. Ages ago, there was xml-rpc; then there has been json-rpc; 
 I will use [msgpack-rpc](https://github.com/msgpack-rpc/msgpack-rpc) which is a binary, json base codec.
-The communication between the Go Server and the ruby client will be donc over TCP via HTTP for example.
+The communication between the Go client and the ruby server will be done over TCP via HTTP for example.
 
 Later on, outside of the scope of this post, I may use ZMQ (as I have already blogged about 0MQ communication between thoses languages).
 
 # The implementation of the Client (the go part)
 
-I will describe here the node creation via a POST method, and consider that the other method could be implemented in a similar way.
+I will describe here the node creation via a POST method, and consider that the other methods could be implemented in a similar way.
 
 ## The signature of the node creation
 
@@ -183,7 +187,7 @@ Then perform a POST request
 curl -X POST -H 'Content-Type:application/json' -H 'Accept:application/json' -d '{"kind":"linux","size":"S","disksize":20,"leasedays":1,"environment_type":"dev","description":"my_description"}' -k http://localhost:8080/v1/nodes
 ```
 
-It shall write something like this: 
+It should write something like this: 
 ```
 2015/11/10 13:56:51 POST        /v1/nodes       NodeCreate      2.520673ms
 ok
