@@ -152,17 +152,46 @@ Let's dial the RPC server and call the `NodeCreate` method with, as argument, th
 ```
 # The RPC server part
 
-This part is written in ruby, and will take care of the effective node creation
+This part is written in ruby, and will take care of the effective node creation.
+At first, we should install the GEM file with the command `gem install msgpack-rpc`.
 
 ```ruby
 require 'msgpack/rpc'
 class MyHandler
     def NodeCreate(kind, size, disksize, leasedays, environmenttype, description) 
         print "Creating the node with parameters: ",kind, size, disksize, leasedays, environmenttype, description
-        return ok
+        return "ok"
     end
 end
 svr = MessagePack::RPC::Server.new
 svr.listen('0.0.0.0', 18800, MyHandler.new)
 svr.run
 ```
+
+## let's test it
+
+Launch the RPC server:
+`ruby server.rb`
+
+Then launch the API rest server
+
+`go run *go`
+
+Then perform a POST request
+
+```shell
+curl -X POST -H 'Content-Type:application/json' -H 'Accept:application/json' -d '{"kind":"linux","size":"S","disksize":20,"leasedays":1,"environment_type":"dev","description":"my_description"}' -k http://localhost:8080/v1/nodes
+```
+
+It shall write something like this: 
+```
+2015/11/10 13:56:51 POST        /v1/nodes       NodeCreate      2.520673ms
+ok
+```
+
+And something like this in the output of the ruby code:
+```
+Creating the node with parameters: linux S 20 1 dev my_description
+```
+
+That's all folks! What's left:
