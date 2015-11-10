@@ -116,5 +116,3 @@ Hello, world!
 ```
 
 This ends the part 1 of this serie of articles.
-
-
