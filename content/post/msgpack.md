@@ -134,4 +134,20 @@ Don't throw things at me, that will be changed later following the advice of Mat
 To use _msgpack_ I need to import the go implemtation `github.com/msgpack-rpc/msgpack-rpc-go/rpc`.
 This library will take care of the encoding/decoding of the messages.
 
+Let's dial the RPC server and call the `NodeCreate` method with, as argument, the information we had from the JSON input
 
+```go
+    conn, err := net.Dial("tcp", "127.0.0.1:18800")
+    if err != nil {
+        fmt.Println("fail to connect to server.")
+        return
+    }
+    client := rpc.NewSession(conn, true)
+    retval, err := client.Send("NodeCreate", 2, 3)
+    if err != nil {
+    fmt.Println(err)
+        return
+    }
+    fmt.Println(rpc.CoerceInt(retval))
+
+```
