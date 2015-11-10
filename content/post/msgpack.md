@@ -101,11 +101,25 @@ Route{
 
 *Note* : I am using a prefix `/v1` for my API, for exploitation purpose.
 
-I will then create the corresponding handler in the file with this signature:
+I will then create the corresponding handler in the file with this signature
 
 ```go
 func NodeCreate(w http.ResponseWriter, r *http.Request){
-   ...    
+    var nodeRequest NodeRequest
+    body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+    if err != nil {
+        panic(err)
+    }
+    if err := r.Body.Close(); err != nil {
+        panic(err)
+    }
+    if err := json.Unmarshal(body, &nodeRequest); err != nil {
+        w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+        w.WriteHeader(http.StatusBadRequest) // unprocessable entity
+        if err := json.NewEncoder(w).Encode(err); err != nil {
+            panic(err)
+        }
+    }    
 }
 ```
 
@@ -119,4 +133,5 @@ Don't throw things at me, that will be changed later following the advice of Mat
 
 To use _msgpack_ I need to import the go implemtation `github.com/msgpack-rpc/msgpack-rpc-go/rpc`.
 This library will take care of the encoding/decoding of the messages.
+
 
