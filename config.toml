@@ -1,34 +1,56 @@
 baseurl = "http://blog.owulveryck.info/"
 languageCode = "en-us"
 title = "Olivier Wulveryck's Tech Blog"
-author = "Olivier Wulveryck"
-paginate = 5
-DisqusShortname = "YOUR_SHORT_NAME_HERE"
 Copyright = "All rights reserved - 2015"
-canonifyurls = true
+#canonifyurls = true
 
+# Metadata format
+# "yaml", "toml", "json"
+metaDataFormat = "yaml"
 
-[indexes]
-  category = "categories"
-  tag = "tags"
+# Theme to use (located in /themes/THEMENAME/)
+theme = "hugo-bootstrap"
+
+# Pagination
+paginate = 10
+paginatePath = "page"
+
+# Enable Disqus integration
+disqusShortname = "your_disqus_shortname"
+
+[permalinks]
+    post = "/:year/:month/:day/:slug/"
+    code = "/:slug/"
+
+[taxonomies]
+    tag = "tags"
+    topic = "topics"
+
+[author]
+    name = "Olivier Wulveryck"
+    email = "olivier.wulveryck@gmail.com"
+
 [params]
-  description = "To share my technical experiences alongside my life of IT professional"
-  cover = "images/cover.jpg"
-  AuthorName = "Olivier"
-  authorlocation = "Lille, France"
-  authorwebsite = "https://owulveryck.github.io"
-  bio= "I am a french IT professional and a passionate geek"
-  cv = "http://www.owulveryck.info"
-  #logo = "images/logo.png"
-  googleAnalyticsUserID = "UA-69673850-1"
-  # Optional RSS-Link, if not provided it defaults to the standard index.xml
-  RSSLink = "http://feeds.feedburner.com/..." 
-  githubName = "owulveryck"
-  github = "owulveryck"
-  twitter = "owulveryck"
-  linkedin = "olivierwulveryck"
-  twitterName = "owulveryck"
-  # facebookName = ""
-  # set true if you are not proud of using Hugo (true will hide the footer note "Proudly published with HUGO.....")
-  hideHUGOSupport = false
-  muut = "owulveryck"
+    topline = "To share my technical experiences alongside my life of IT professional"
+    #footline = "code with <i class='fa fa-heart'></i>"
+
+    # Text for the top menu link, which goes the root URL for the site.
+    # Default (if omitted) is "Home"
+
+    # Select a syntax highight.
+# Check the static/css/highlight directory for options.
+    highlight = "default"
+
+# Google Analytics.
+    googleAnalytics = "UA-69673850-1"
+
+# Sidebar social links.
+    github = "owulveryck" # Your Github profile ID
+    bitbucket = "" # Your Bitbucket profile ID
+    linkedin = "olivierwulveryck" # Your LinkedIn profile ID (from public URL)
+    googleplus = "olivier.wulveryck" # Your Google+ profile ID
+    facebook = "" # Your Facebook profile ID
+    twitter = "owulveryck" # Your Twitter profile ID
+    youtube = ""  # Your Youtube channel ID
+    flattr = ""  # populate with your flattr uid
+

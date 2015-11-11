@@ -3,7 +3,7 @@ date = "2015-10-22T20:40:36+02:00"
 draft = false
 title = "Ruby / ZeroMQ / GO" 
 description = "My attempt to make a go program talk to a ruby script via a 0MQ message"
-categories = [
+tags = [
     "Development",
     "go",
     "ruby",

@@ -2,7 +2,14 @@
 date = "2015-11-10T08:56:36+01:00"
 draft = false
 title = "IaaS-like RESTfull API based on microservices"
-
+tags = [
+    "Development",
+    "ruby",
+    "go",
+    "API",
+    "REST",
+    "msgpack"
+]
 +++
 
 # Absract
