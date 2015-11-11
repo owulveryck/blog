@@ -54,7 +54,7 @@ title = "About me"
                     </div>
                     <div class="col-xs-6 col-sm-3 col-md-2 col-lg-3 social-btn-holder">
                         <a title="LinkedIn" class="btn btn-social btn-block btn-linkedin"
-                            target="_BLANK" href="https://www.linkedin.com/in/owulveryck">
+                            target="_BLANK" href="https://www.linkedin.com/in/olivierwulveryck">
                             <i class="fa fa-linkedin"></i> /owulveryck
                         </a>
                     </div>
