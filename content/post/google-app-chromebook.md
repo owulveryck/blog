@@ -2,21 +2,24 @@
 date = "2015-10-26T10:41:57Z"
 draft = false
 title = "Developping \"Google Apps\" on my Chromebook"
-
+tags = [
+    "chromebook",
+    "configuration"
+]
 +++
 
-It is a  week now that I'm playing with my chromebook.
+It is a week now that I'm playing with my chromebook.
 I really enjoy this little internet Terminal.
 
 I "geeked" it a little bit and I installed my favorites dev tools eg:
 
 * [The solarized theme for the terminal](https://gist.github.com/johnbender/5018685)
 * `zsh` with [Oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh)
-* `tmux` (stared with `tmux -2` to get 254 colors)
+* `tmux` (stared with `tmux -2` to get 256 colors)
 * `git`
 * `vim`
 * a `Go` compiler
-* The [`HUGO`](http://gohugo.io/overview/quickstart/) tools to write this blog.
+* The [`HUGO`](http://gohugo.io/overview/quickstart/) tool to write this blog.
 
 
 All of it has been installed thanks to the "brew" package manager and following [those instructions](https://github.com/Homebrew/linuxbrew/wiki/Chromebook-Install-Instructions).
@@ -79,7 +82,7 @@ sqlite_inc_paths = [ '/usr/include',
 ...
 ```
 
-But in my configuration, the libraries are present in `/usr/local/linuxbrew/*`. Hence, simply linking the include and libs dd the trick
+But in my configuration, the libraries are present in `/usr/local/linuxbrew/*`. Hence, simply linking the include and libs did the trick
 
 I'm now facing another error when I try to run the `goapp serve` command:
 
