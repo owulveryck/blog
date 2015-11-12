@@ -12,7 +12,7 @@ tags = [
 ]
 +++
 
-# Absract
+# Abstracts
 
 Recently, I've been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.
 
@@ -20,7 +20,7 @@ I am reading more and more about the "API economy"
 
 I've also seen this excellent video made by [Mat Ryer](https://www.youtube.com/watch?v=tIm8UkSf6RA&list=PLDWZ5uzn69ezRJYeWxYNRMYebvf8DerHd) about how to code an API in GO and why go would be the perfect language to code such a portal.
 
-The problem I'm facing is that in the organization I'm working for, the developments are heterogenous and therefore you can find *ruby* teams as well as *python* teams and myself as a *go* team (That will change in the future anyway)
+The problem I'm facing is that in the organization I'm working for, the developments are heterogeneous and therefore you can find *ruby* teams as well as *python* teams and myself as a *go* team (That will change in the future anyway)
 The key point is that I would like my middleware to serve as an entry point to the services provided by the department.
 
 We (as an "ops" team) would then be able to present the interface via, for example, a [swagger](http://swagger.io) like interface, take care of the API and do whatever RPC to any submodule.
@@ -38,7 +38,7 @@ What I'd like to be able to do is:
 
 ## The backend
 
-The backend is whatever service, able to create a node, suchs as openstack, vmware vcac, juju, ... 
+The backend is whatever service, able to create a node, such as openstack, vmware vcac, juju, ... 
 Thoses services usually provide RESTfull API.
 
 I've seen in my experience, that usually, the API are given with a library in a so called "modern language". 
@@ -62,7 +62,7 @@ There are several methods for RPC-ing between different languages. Ages ago, the
 I will use [msgpack-rpc](https://github.com/msgpack-rpc/msgpack-rpc) which is a binary, json base codec.
 The communication between the Go client and the ruby server will be done over TCP via HTTP for example.
 
-Later on, outside of the scope of this post, I may use ZMQ (as I have already blogged about 0MQ communication between thoses languages).
+Later on, outside of the scope of this post, I may use ZMQ (as I have already blogged about 0MQ communication between those languages).
 
 # The implementation of the Client (the go part)
 
@@ -134,15 +134,15 @@ func NodeCreate(w http.ResponseWriter, r *http.Request){
 }
 ```
 
-That's in this fuction that will be implemented RPC (client part). To keep it simple at the begining, 
-I will instanciate a TCP connection on every call.
+That's in this function that will be implemented RPC (client part). To keep it simple at the beginning, 
+I will instantiate a TCP connection on every call.
 Don't throw things at me, that will be changed later following the advice of Mat Ryer.
 
 ## The implementation of the handler
 
 ### The effective remote procedure call
 
-To use _msgpack_ I need to import the go implemtation `github.com/msgpack-rpc/msgpack-rpc-go/rpc`.
+To use _msgpack_ I need to import the go implementation `github.com/msgpack-rpc/msgpack-rpc-go/rpc`.
 This library will take care of the encoding/decoding of the messages.
 
 Let's dial the RPC server and call the `NodeCreate` method with, as argument, the information we had from the JSON input
