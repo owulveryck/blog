@@ -24,3 +24,57 @@ Swagger is a framework. On top of the the swagger project is composed of several
 
 The entry point is to write the API interface using the [Swagger Formal Specification](http://swagger.io/specification/). I will the use the [swagger-ui](https://github.com/swagger-api/swagger-ui) to display the documentation.
 The swagger-ui can be modified and recompiled, but I won't do it (as I don't want to play with nodejs). Instead I will rely on the "dist" part which can be used "as-is"
+
+
+# Defining the API interface with Swagger
+
+## Header and specification version:
+
+Swagger comes with an editor which can be used [online](http://editor.swagger.io/#/).
+
+I will use swagger spec 2.0, as I don't see any good reason not to do so. Morover, I will describe the API using the `YAML` format instead of the JSON format to be human-friendly.
+
+Indeed, in my `YAML` squeleton the header of my specs will then look like thi:
+
+```yaml
+swagger: '2.0'
+info:
+  version: 1.0.0
+    title: 'Very Simple IAAS'
+```
+
+## The node creation: a POST method
+Let's document the Node creation (as it is the method that we have implemented before).
+
+The node creation is a `POST` method, that produces a JSON in output with the request ID of the node created.
+
+The responses code may be:
+
+* 202 : if the request has been taken in account
+* 400 : when the request is not formatted correctly
+* 500 : if any unhaldled exception occured
+* 502 : if the backend is not accessible (etiher the RPC server or the backend)
+
+So far, the YAML spec will look like:
+```yaml
+paths:
+  /v1/nodes:
+    post:
+      description: Create a node
+      produces:
+        - application/json
+      responses:
+        202:
+          description: A request ID.
+        400:
+          description: |
+            When the request is malformated or when mandatory arguments are missing
+        500:
+          desctiption: Unhandled error
+        502:
+          description: Execution backend not available
+```
+
+So far so good, let's continue with the input payload.
+
+
