@@ -54,7 +54,7 @@ The responses code may be:
 
 * 202 : if the request has been taken in account
 * 400 : when the request is not formatted correctly
-* 500 : if any unhaldled exception occurred
+* 500 : if any unhanldled exception occurred
 * 502 : if the backend is not accessible (either the RPC server or the backend)
 
 So far, the YAML spec will look like:
@@ -255,7 +255,7 @@ mv /tmp/swagger-ui/dist /tmp/example-iaas
 ## Adding a route to the GO server to serve the static files
 
 I cannot simply add a route in the `routes.go` file for this very simple reason: 
-The loop used in the `router.go` is using the `Path` method, and to serve the content of the directory, I need to use the `PathPrefix` methoda (see [The Gorilla Documentation](http://www.gorillatoolkit.org/pkg/mux#Route.PathPrefix) for more information).
+The loop used in the `router.go` is using the `Path` method, and to serve the content of the directory, I need to use the `PathPrefix` method (see [The Gorilla Documentation](http://www.gorillatoolkit.org/pkg/mux#Route.PathPrefix) for more information).
 
 To serve the content, I add this entry to the muxrouter in the `router.go` file:
 
@@ -273,9 +273,9 @@ Wait, nothing is displayed...
 
 # The final test
 
-As I serve the files from the `./dist` directory, what I need to do is to move my `swagger.yaml` spec file into the dist subfilder and tell swagger to reade it.
+As I serve the files from the `./dist` directory, what I need to do is to move my `swagger.yaml` spec file into the dist subfolder and tell swagger to read it.
 
-Et voilà!
+_Et voilà!_
 
 <center>
 <img class="img-square img-responsive" src="/assets/images/swagger.png" alt="Result"/>
@@ -283,7 +283,7 @@ Et voilà!
 
 # Final word
 
-As you can see, there is a "Try out" button, which triggers a `curl` command... Very helpful to enter a test driver development mode.
+As you can see, there is a "Try out" button, which triggers a `curl` command... Very helpful to enter a test driven development mode.
 
 On top of that swagger is really helpful and may be a great tool to synthesize the need of a client in term of an interface.
 Once the API is fully implemented, any client binding may also be generated with the swagger framework.
