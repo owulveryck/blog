@@ -224,4 +224,62 @@ definitions:
         type: string
 ```
 
+OK ! The swagger file is valid... Now let's glue it together with swagger-ui and serve it from the GO API server I have developed before
+
+# Integrating swagger-ui
+
+As written in the README in the github of the project, swagger-ui can be used "as-is" using the files in the _dist_ folder. Let's get the files from github:
+```shell
+/tmp #  git clone https://github.com/swagger-api/swagger-ui.git
+Cloning into 'swagger-ui'...
+remote: Counting objects: 7292, done.
+remote: Compressing objects: 100% (33/33), done.
+remote: Total 7292 (delta 8), reused 0 (delta 0), pack-reused 7256
+Receiving objects: 100% (7292/7292), 19.20 MiB | 1021.00 KiB/s, done.
+Resolving deltas: 100% (3628/3628), done.
+Checking connectivity... done.
+```
+
+Let's checkout our project:
+
+```shell
+/tmp # git clone https://github.com/owulveryck/example-iaas.git 
+...
+```
+
+and move the `dist` folder into the project:
+```
+mv /tmp/swagger-ui/dist /tmp/example-iaas
+```
+
+## Adding a route to the GO server to serve the static files
+
+I cannot simply add a route in the `routes.go` file for this very simple reason: 
+The loop used in the `router.go` is using the `Path` method, and to serve the content of the directory, I need to use the `PathPrefix` methoda (see [The Gorilla Documentation](http://www.gorillatoolkit.org/pkg/mux#Route.PathPrefix) for more information).
+
+To serve the content, I add this entry to the muxrouter in the `router.go` file:
+
+```go 
+router.
+       Methods("GET").
+       PathPrefix("/apidocs").
+       Name("Apidocs").
+       Handler(http.StripPrefix("/apidocs", http.FileServer(http.Dir("./dist"))))
+```
+
+Then I start the server and point my browser to http://localhost:8080/apidocs...
+
+Wait, nothing is displayed...
+
+# The final test
+
+As I serve the files from the `./dist` directory, what I need to do is to move my `swagger.yaml` spec file into the dist subfilder and tell swagger to reade it.
+
+Et voilà!
+
+<center>
+<img class="img-square img-responsive" src="/assets/images/swagger.png" alt="Result"/>
+</center>
+
+# One more thing: how to test
 
