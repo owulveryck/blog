@@ -20,7 +20,7 @@ in this project to generate a beautiful documentation.
 
 # About Swagger
 
-Swagger is a framework. On top of the the swagger project is composed of several tools.
+Swagger is a framework. On top of the swagger project is composed of several tools.
 
 The entry point is to write the API interface using the [Swagger Formal Specification](http://swagger.io/specification/). I will the use the [swagger-ui](https://github.com/swagger-api/swagger-ui) to display the documentation.
 The swagger-ui can be modified and recompiled, but I won't do it (as I don't want to play with nodejs). Instead I will rely on the "dist" part which can be used "as-is"
@@ -32,9 +32,9 @@ The swagger-ui can be modified and recompiled, but I won't do it (as I don't wan
 
 Swagger comes with an editor which can be used [online](http://editor.swagger.io/#/).
 
-I will use swagger spec 2.0, as I don't see any good reason not to do so. Morover, I will describe the API using the `YAML` format instead of the JSON format to be human-friendly.
+I will use swagger spec 2.0, as I don't see any good reason not to do so. Moreover, I will describe the API using the `YAML` format instead of the JSON format to be human-friendly.
 
-Indeed, in my `YAML` squeleton the header of my specs will then look like thi:
+Indeed, in my `YAML` skeleton the header of my specs will then look like this:
 
 ```yaml
 swagger: '2.0'
