@@ -14,5 +14,8 @@ type: post
 In a [previous post](http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/) I have explained how to develop a very simple API server.
 
 Without the associated documentation, the API will be useless. Let's see how we can use [swagger-ui](https://github.com/swagger-api/swagger-ui) 
-in this project to generate a beautiful documentation
+in this project to generate a beautiful documentation.
+
+*Note* I'm blogging and experimenting, of course, in the "real" life, it's a lot better to code the API interface before implementing the middleware.
+
 
