@@ -52,8 +52,8 @@ The responses code may be:
 
 * 202 : if the request has been taken in account
 * 400 : when the request is not formatted correctly
-* 500 : if any unhaldled exception occured
-* 502 : if the backend is not accessible (etiher the RPC server or the backend)
+* 500 : if any unhaldled exception occurred
+* 502 : if the backend is not accessible (either the RPC server or the backend)
 
 So far, the YAML spec will look like:
 ```yaml
