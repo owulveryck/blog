@@ -194,34 +194,4 @@ parameters:
     required: true
     schema:
         $ref: '#/definitions/NodeRequest'
-``` 
-
-And the proper NodeRequest definition in the _definition_ area:
-
-```YAML
-definitions:
-  NodeRequest:
-    description: A Node Request object
-    properties:
-      kind:
-        type: string
-        description: The OS type
-      size:
-        type: string
-        description: The size of the (virtual) machine
-      disksize:
-        type: integer
-        format: int32
-        description: The initial disk capacity size (in GB)
-      leasedays:
-        type: integer
-        format: int32
-        description: The lease
-      environment_type:
-        type: string
-        description: the target environment
-      description:
-        type: string
 ```
-
-
