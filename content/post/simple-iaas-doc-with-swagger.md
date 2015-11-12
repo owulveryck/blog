@@ -9,6 +9,7 @@ tags:
 - documentation
 - JSON
 - REST
+- simple-iaas
 title: Simple IaaS API documentation with swagger
 type: post
 ---
@@ -290,4 +291,4 @@ Once the API is fully implemented, any client binding may also be generated with
 
 No not hesitate to clone the source code from [github](https://github.com/owulveryck/example-iaas) and test the swagger.yaml file in the editor to see how the bindings are generated
 
-
+You can find all the codes in the github repository [here](https://github.com/owulveryck/example-iaas) in the branch `simple-iaas-api-documentation-with-swagger`

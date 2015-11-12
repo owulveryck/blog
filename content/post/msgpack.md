@@ -8,7 +8,8 @@ tags = [
     "go",
     "API",
     "REST",
-    "msgpack"
+    "msgpack",
+    "simple-iaas"
 ]
 +++
 
@@ -213,4 +214,4 @@ That's all folks! What's left:
 * To implement the swagger interface and documentation of the API
 * Whatever fancy stuff you may want from a production ready interface.
 
-You can find all the codes in the github repository of this blog [here](https://github.com/owulveryck/blog/examples/simple_iaas)
+You can find all the codes in the github repository [here](https://github.com/owulveryck/example-iaas) in the branch `iaas-like-restfull-api-based-on-microservices`
