@@ -2,7 +2,7 @@
 author: Olivier Wulveryck
 date: 2015-11-11T14:24:43+01:00
 description: Experience with swagger-ui as a documentation tool for the simple iaas api
-draft: true
+draft: false
 tags:
 - swagger
 - api
@@ -281,5 +281,13 @@ Et voilà!
 <img class="img-square img-responsive" src="/assets/images/swagger.png" alt="Result"/>
 </center>
 
-# One more thing: how to test
+# Final word
+
+As you can see, there is a "Try out" button, which triggers a `curl` command... Very helpful to enter a test driver development mode.
+
+On top of that swagger is really helpful and may be a great tool to synthesize the need of a client in term of an interface.
+Once the API is fully implemented, any client binding may also be generated with the swagger framework.
+
+No not hesitate to clone the source code from [github](https://github.com/owulveryck/example-iaas) and test the swagger.yaml file in the editor to see how the bindings are generated
+
 
