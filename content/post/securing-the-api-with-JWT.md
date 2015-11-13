@@ -8,12 +8,12 @@ tags:
 - go
 - API
 - simple_iaas
-title: Securing the API with JWT (in GO)
+title: Securing the API (in GO)
 type: post
 ---
 
 I've created a [couple of posts](http://blog.owulveryck.info/tags/simple-iaas/) about creating an API (mainly in GO).
-By now, the API is open. Now I will implement a basic authentication mechanism with a little help from [JWT](http://jwt.io)
+By now, the API is open. Now I will implement a basic authentication and accreditation mechanism with a little help from [JWT](http://jwt.io)
 
 # What is a Json Web Token
 
@@ -31,5 +31,7 @@ It is a [widely spread mechanism](https://www.google.fr/trends/explore#q=json%20
 
 _Note:_  JWT is not an authentication framework by itself, and in this post I will assume that the authentication is done via a webservice
 that will simply reply `true` or `false` to authorize the user to use the API.
+
+# Defining the user and the authentication API
 
 
