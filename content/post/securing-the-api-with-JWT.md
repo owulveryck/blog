@@ -29,7 +29,7 @@ According to the [RFC 7519](https://tools.ietf.org/html/rfc7519), it is a
 
 It is a [widely spread mechanism](https://www.google.fr/trends/explore#q=json%20web%20token) to access web services.
 
-_Note_ JWT is not an authentication framework by itself, and in this post I will assume that the authentication is done via a webservice
+_Note:_  JWT is not an authentication framework by itself, and in this post I will assume that the authentication is done via a webservice
 that will simply reply `true` or `false` to authorize the user to use the API.
 
 
