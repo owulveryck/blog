@@ -119,9 +119,11 @@ driver = sql
 Keystone supports authentication plugins; those plugins are specified in the `[auth]` section.
 In my test, the `password` plugin will be used.
 
+I define the Entrypoint as _PasswordEntryPoint_ (I will explain its usage later)
+
 ```
 [auth]
 methods = password
+password = PasswordEntryPoint
 ```
-
 
