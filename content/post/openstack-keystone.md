@@ -27,4 +27,11 @@ I would like to evalute its identity service named [keystone](http://docs.openst
 
 _Note_ : I will consider that the openstack keystone is installed. As I don't want to rewrite an installation procedure as many exists already on the web.
 
-# Configuration
+# My goal
+
+My goal is to have a webservice that will protect the scopes of my IAAS. 
+I may declare two users:
+
+- One may list the nodes via a GET request
+- The other one may also create and destroy nodes via POST and DELETE request
+
