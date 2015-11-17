@@ -195,3 +195,6 @@ id_mapping              request_token           whitelisted_config
 sqlite> .quit
 ```
 
+## Interacting with openstack
+
+A tools called [python-openstackclient](http://docs.openstack.org/developer/python-openstackclient/command-list.html) is available in my ubuntu release and will be used for testing purpose
