@@ -221,7 +221,7 @@ export OS_IDENTITY_API_VERSION=3
 
 Then we create the user: 
 ```
-openstack  user create olivier
+openstack user create olivier
 'links'
 ```
 
@@ -235,10 +235,11 @@ Repeat User Password:
 
 And see if it's actually here:
 ```
-openstack  user list
+openstack user list
 +----------------------------------+---------+
 | ID                               | Name    |
 +----------------------------------+---------+
 | c80f5244c7d3486fbf4059b7197b4770 | olivier |
 +----------------------------------+---------+
 ```
+
