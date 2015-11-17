@@ -25,3 +25,6 @@ The management can then be done via a Web based interface or via a bunch of REST
 
 I would like to evalute its identity service named [keystone](http://docs.openstack.org/developer/keystone/) and use it as a AuthN and AuthZ backend for my simple_iaas example.
 
+_Note_ : I will consider that the openstack keystone is installed. As I don't want to rewrite an installation procedure as many exists already on the web.
+
+# Configuration
