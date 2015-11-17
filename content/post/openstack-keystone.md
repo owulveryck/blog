@@ -70,7 +70,7 @@ This file is called `keystone-paste.ini`. I won't touch it and use the provided 
 
 which sounds ok and a `curl` call to the endpoint reply at least something:
 
-```shell
+```json
 $ curl -s http://localhost:5000/v3 | jsonformat
 {
   "version": {
@@ -95,4 +95,33 @@ $ curl -s http://localhost:5000/v3 | jsonformat
 
 ## The keystone configuration
 
-The proper keystone configuration is done in the file `keystone.conf`
+The proper keystone configuration is done in the file `keystone.conf`. This configuration file is decomposed into different sections as explained in the documentation.
+
+### The general configuration (Default section)
+The will use all the default values for the General configuration (the [DEFAULT] section). This means that this section may be empty or full of comments.
+
+### The assignment configuration
+In this section, we choose the driver for the assignment service.
+This purpose of this service is
+
+> [to] provide data about roules and role assignments 
+> to the entities managed by the Identity and Resource services
+
+(source [Keystone architecture](http://docs.openstack.org/developer/keystone/architecture.html))
+
+I plan to use a SQL backend instead of a LDAP for my tests, so the configuration may be:
+```
+[assignment]
+driver = sql
+```
+
+### The authentication plugin configuration
+Keystone supports authentication plugins; those plugins are specified in the `[auth]` section.
+In my test, the `password` plugin will be used.
+
+```
+[auth]
+methods = password
+```
+
+
