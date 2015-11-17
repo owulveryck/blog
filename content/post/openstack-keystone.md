@@ -98,7 +98,16 @@ $ curl -s http://localhost:5000/v3 | jsonformat
 The proper keystone configuration is done in the file `keystone.conf`. This configuration file is decomposed into different sections as explained in the documentation.
 
 ### The general configuration (Default section)
-The will use all the default values for the General configuration (the [DEFAULT] section). This means that this section may be empty or full of comments.
+I will only set the `admin token` randomly as it will be used to create the users, roles and so on.
+
+Let's generate a token with `openssl rand -hex 10` and report it to my configuration:
+```
+[DEFAULT]
+admin_token = 8a0b4eacc6a81c3bc5aa
+```
+
+The rest will use all the default values for the General configuration (the [DEFAULT] section). This means that this section may be empty or full of comments.
+
 
 ### The assignment configuration
 In this section, we choose the driver for the assignment service.
@@ -197,4 +206,39 @@ sqlite> .quit
 
 ## Interacting with openstack
 
-A tools called [python-openstackclient](http://docs.openstack.org/developer/python-openstackclient/command-list.html) is available in my ubuntu release and will be used for testing purpose
+A tools called [python-openstackclient](http://docs.openstack.org/developer/python-openstackclient/command-list.html) is available in my ubuntu release and will be used for testing purpose.
+
+The binary provided is `openstack` (`dpkg-query -L python-openstackclient | grep bin`)
+
+### Creating a user
+
+We need to define a couple of environment variables to be able to connect to the keystone server:
+```
+export OS_TOKEN=8a0b4eacc6a81c3bc5aa # The value of admin_token defined in the keystone.conf
+export OS_URL=http://localhost:35357/v2.0 # This is the default value if not overridden by the directive admin_endpoint
+export OS_IDENTITY_API_VERSION=3
+```
+
+Then we create the user: 
+```
+openstack  user create olivier
+'links'
+```
+
+Then set its password:
+```
+openstack user set --password-prompt olivier
+User Password:
+Repeat User Password:
+'users'
+```
+
+And see if it's actually here:
+```
+openstack  user list
++----------------------------------+---------+
+| ID                               | Name    |
++----------------------------------+---------+
+| c80f5244c7d3486fbf4059b7197b4770 | olivier |
++----------------------------------+---------+
+```
