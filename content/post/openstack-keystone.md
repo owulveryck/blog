@@ -73,29 +73,23 @@ which sounds ok and a `curl` call to the endpoint reply at least something:
 ```shell
 $ curl -s http://localhost:5000/v3 | jsonformat
 {
-    "version": {
-            "id": "v3.4",
-                "links": [
-                {
-                            "href": "http://localhost:5000/v3/",
-                                    "rel": "self"
-                                          
-                }
-                    
-                ],
-                "media-types": [
-                {
-                            "base": "application/json",
-                                    "type": "application/vnd.openstack.identity-v3+json"
-                                          
-                }
-                    
-                ],
-                    "status": "stable",
-                        "updated": "2015-03-30T00:00:00Z"
-                          
-    }
-
+  "version": {
+    "id": "v3.4",
+    "links": [
+      {
+        "href": "http://localhost:5000/v3/",
+        "rel": "self"
+      }
+    ],
+    "media-types": [
+      {
+        "base": "application/json",
+        "type": "application/vnd.openstack.identity-v3+json"
+      }
+    ],
+    "status": "stable",
+    "updated": "2015-03-30T00:00:00Z"
+  }
 }
 ```
 
