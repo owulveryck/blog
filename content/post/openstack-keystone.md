@@ -25,7 +25,7 @@ The management can then be done via a Web based interface or via a bunch of REST
 
 I would like to evaluate its identity service named [keystone](http://docs.openstack.org/developer/keystone/) and use it as a AuthN and AuthZ backend for my simple_iaas example.
 
-_Note_ : I will consider that the openstack keystone is installed. As I don't want to rewrite an installation procedure as many exists already on the web.
+_Note_ : I will consider that the openstack keystone is installed. As I don't want to rewrite an installation procedure as many exists already on the web. For my tests, I'm using an keystone installation from sources in a Ubuntu VM
 
 # My goal
 
@@ -119,11 +119,79 @@ driver = sql
 Keystone supports authentication plugins; those plugins are specified in the `[auth]` section.
 In my test, the `password` plugin will be used.
 
-I define the Entrypoint as _PasswordEntryPoint_ (I will explain its usage later)
-
 ```
 [auth]
 methods = password
-password = PasswordEntryPoint
+```
+
+### The credentials
+The credentials are stored in a sql database as well:
+
+```
+[credential]
+driver = sql
+```
+
+### The DB configuration
+For my tests I will use a sqlite database as configured in this section:
+```
+[database]
+sqlite_db = oslo.sqlite
+sqlite_synchronous = true
+backend = sqlalchemy
+connection = sqlite:////var/lib/keystone/keystone.db
+
+```
+
+## Restart the keystone server and play 
+
+
+```
+# service keystone restart
+# service keystone status
+● keystone.service - OpenStack Identity service
+   Loaded: loaded (/lib/systemd/system/keystone.service; enabled; vendor preset: enabled)
+   Active: active (running) since Tue 2015-11-17 14:47:06 GMT; 3s ago
+  Process: 15505 ExecStartPre=/bin/chown keystone:keystone /var/lock/keystone /var/log/keystone /var/lib/keystone (code=exited, status=0/SUCCESS)
+  Process: 15502 ExecStartPre=/bin/mkdir -p /var/lock/keystone /var/log/keystone /var/lib/keystone (code=exited, status=0/SUCCESS)
+ Main PID: 15508 (keystone-all)
+   CGroup: /system.slice/keystone.service
+           ├─15508 /usr/bin/python /usr/bin/keystone-all --config-file=/etc/keystone/keystone.conf --log-file=/var/log/keystone/keystone.log
+           ├─15523 /usr/bin/python /usr/bin/keystone-all --config-file=/etc/keystone/keystone.conf --log-file=/var/log/keystone/keystone.log
+           ├─15524 /usr/bin/python /usr/bin/keystone-all --config-file=/etc/keystone/keystone.conf --log-file=/var/log/keystone/keystone.log
+           ├─15525 /usr/bin/python /usr/bin/keystone-all --config-file=/etc/keystone/keystone.conf --log-file=/var/log/keystone/keystone.log
+           └─15526 /usr/bin/python /usr/bin/keystone-all --config-file=/etc/keystone/keystone.conf --log-file=/var/log/keystone/keystone.log
+
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.479 15508 INFO oslo_service.service [-] Started child 15523
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.482 15508 INFO oslo_service.service [-] Started child 15524
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.486 15508 INFO keystone.common.environment.eventlet_server [-] Starting /usr/bin/keystone-all on 0.0.0.0:5000
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.490 15508 INFO oslo_service.service [-] Starting 2 workers
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.491 15523 INFO eventlet.wsgi.server [-] (15523) wsgi starting up on http://0.0.0.0:35357/
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.493 15508 INFO oslo_service.service [-] Started child 15525
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.499 15524 INFO eventlet.wsgi.server [-] (15524) wsgi starting up on http://0.0.0.0:35357/
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.502 15508 INFO oslo_service.service [-] Started child 15526
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.506 15525 INFO eventlet.wsgi.server [-] (15525) wsgi starting up on http://0.0.0.0:5000/
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.510 15526 INFO eventlet.wsgi.server [-] (15526) wsgi starting up on http://0.0.0.0:5000/
+```
+
+so far so good... let's check if the DB is here now:
+
+```
+# sqlite3 /var/lib/keystone/keystone.db
+SQLite version 3.8.11.1 2015-07-29 20:00:57
+Enter ".help" for usage hints.
+sqlite> .tables
+access_token            identity_provider       revocation_event
+assignment              idp_remote_ids          role
+config_register         mapping                 sensitive_config
+consumer                migrate_version         service
+credential              policy                  service_provider
+domain                  policy_association      token
+endpoint                project                 trust
+endpoint_group          project_endpoint        trust_role
+federation_protocol     project_endpoint_group  user
+group                   region                  user_group_membership
+id_mapping              request_token           whitelisted_config
+sqlite> .quit
 ```
 
