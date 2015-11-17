@@ -18,5 +18,10 @@ topics:
 type: post
 ---
 
+In the cloud computing, alongside of the hosting monsters such as amazon or google, there is the [Openstack Platform](https://www.openstack.org).
 
+Openstack is not a single software, it is more a galaxy of components aim to control the infrastructure, such as hardware pools, storage, network.
+The management can then be done via a Web based interface or via a bunch of RESTful API.
+
+I would like to evalute its identity service named [keystone](http://docs.openstack.org/developer/keystone/) and use it as a AuthN and AuthZ backend for my simple_iaas example.
 
