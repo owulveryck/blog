@@ -94,3 +94,5 @@ $ curl -s http://localhost:5000/v3 | jsonformat
 ```
 
 ## The keystone configuration
+
+The proper keystone configuration is done in the file `keystone.conf`
