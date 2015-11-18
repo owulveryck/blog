@@ -35,6 +35,8 @@ I may declare two users:
 - One may list the nodes via a GET request
 - The other one may also create and destroy nodes via POST and DELETE request
 
+This post is about setting up keystone so I can use it as a lab to understand the concepts and maybe achieve my goal with it.
+
 # Let's go 
 
 I won't use any external web server. Instead I will rely on the builtin Eventlet based web server.
@@ -365,6 +367,11 @@ openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-pass
 Bingo!!! 
 
 # Conclusion
+
+That's enough information for this first post about OpenStack keystine.
+By now, I will continue the investigations and use this installation as a _lab_ to understand the full concepts of this identity management software.
+
+For the moment, this product let me a bitter taste.
 
 I may not have understood all the concepts behind the scene, but I can say that this product, at least in the current release, is by far too complex and has too much contributors to evaluate it in a simple way.
 Therefore, the quite complete but messy documentation, a mix in the releases and some major incompatibilities in the tools using V2.0 and V3 gave me a bad impression.
