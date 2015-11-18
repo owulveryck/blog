@@ -2,7 +2,7 @@
 author: Olivier Wulveryck
 date: 2015-11-17T10:05:42Z
 description: Playing with openstack keystone
-draft: true
+draft: false
 keywords:
 - openstack
 - keystone
