@@ -212,21 +212,38 @@ The binary provided is `openstack` (`dpkg-query -L python-openstackclient | grep
 
 ### Creating a user
 
-We need to define a couple of environment variables to be able to connect to the keystone server:
+We need to define a couple of environment variables to be able to connect to the keystone server with the `root` power:
+
+I will create a simple file that I will source when I need to interact as admin of keystone
 ```
-export OS_TOKEN=8a0b4eacc6a81c3bc5aa # The value of admin_token defined in the keystone.conf
-export OS_URL=http://localhost:35357/v2.0 # This is the default value if not overridden by the directive admin_endpoint
+cat << EOF > admin.sh
+# The value of admin_token defined in the keystone.conf
+export OS_TOKEN=8a0b4eacc6a81c3bc5aa 
+# This is the default value if not overridden by the directive admin_endpoint
+export OS_URL=http://localhost:35357/v2.0 
 export OS_IDENTITY_API_VERSION=3
+EOF
+```
+
+and another file to unset those variables:
+```
+cat << EOF > noadmin.sh 
+unset OS_TOKEN
+unset OS_URL
+unset OS_IDENTITY_API_VERSION
+EOF
 ```
 
 Then we create the user: 
 ```
+source admin.sh
 openstack user create olivier
 'links'
 ```
 
 Then set its password:
 ```
+source admin.sh
 openstack user set --password-prompt olivier
 User Password:
 Repeat User Password:
@@ -235,6 +252,7 @@ Repeat User Password:
 
 And see if it's actually here:
 ```
+source admin.sh
 openstack user list
 +----------------------------------+---------+
 | ID                               | Name    |
@@ -251,6 +269,7 @@ openstack user list
 
 Let's first get the role list
 ```
+source admin.sh
 openstack role list
 +----------------------------------+----------+
 | ID                               | Name     |
@@ -263,6 +282,7 @@ openstack role list
 And add the admin right to the user `olivier` for the project `demo`
 
 ```
+source admin.sh
 openstack role add --user olivier --project 0e07a734d54e4f3799a31768b13a38c2 admin
 ```
 
@@ -276,18 +296,21 @@ I may now be able to generate an access token
 Let's try:
 
 ```
+source noadmin.sh
 openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-project-name demo token issue
 Expecting to find domain in project - the server could not comply with the request since it is either malformed or otherwise incorrect. The client is assumed to be in error. (HTTP 400) (Request-ID: req-09cad46b-9a5f-4b0f-8f2b-82b4442ed999)
 ```
 
 Ok, now add the domain:
 ```
+source noadmin.sh
 openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-project-name demo --os-domain-name default token issue
 Authentication cannot be scoped to multiple targets. Pick one of: project, domain, trust or unscoped
 ```
 
 Too bad, remove the project...
 ```
+source noadmin.sh
 openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-domain-name default token issue
 The request you have made requires authentication. (HTTP 401) (Request-ID: req-59c39895-8e96-42c4-b5c5-1477001da618)
 ```
@@ -299,7 +322,47 @@ Still no luck... Google gave me a lot of answers, but I couldn't figure whether 
 * a bad usage of the tools
 * a totally bad apprehension of the product
 
-I may continue to experiment, but I'm far from my goal actually, and I hate the idea of being lost.
+I may continue to experiment, but I'm far from my goal actually, and I hate the idea of being lost. no help from Google, so DIY method:
+
+* openstack client in debug mode with --debug
+* keystone in debug with a `debug=true` directive in `keystone.conf`
+
+The message is now clear:
+```
+2015-11-18 10:37:33.337 7164 WARNING keystone.common.wsgi [req-27dadee6-51d9-475d-a426-99e3b4f77f4a - - - - -] Authorization failed. User c80f5244c7d3486fbf4059b7197b4770 has no access to domain default
+```
+So let's re-set the password, juste in case, as done in the previous section of this post and try again:
+
+```
+source noadmin.sh
+openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-project-name demo --os-domain-name default token issue
+...
+Unauthorized: User c80f5244c7d3486fbf4059b7197b4770 has no access to domain default (Disable debug mode to suppress these details.)
+```
+
+Ok, let's add `olivier` as admin of the Default domain:
+
+```
+source admin.sh
+openstack role add --user olivier --domain Default admin
+```
+
+And try again:
+
+```
+source noadmin.sh
+openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-domain-name Default token issue
++-----------+----------------------------------+
+| Field     | Value                            |
++-----------+----------------------------------+
+| domain_id | default                          |
+| expires   | 2015-11-18T11:44:23.325817Z      |
+| id        | 0525e008619748848735d9122f8f2e81 |
+| user_id   | c80f5244c7d3486fbf4059b7197b4770 |
++-----------+----------------------------------+
+```
+
+Bingo!!! 
 
 # Conclusion
 
