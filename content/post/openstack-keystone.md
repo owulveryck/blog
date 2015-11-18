@@ -25,7 +25,7 @@ The management can then be done via a Web based interface or via a bunch of REST
 
 I would like to evaluate its identity service named [keystone](http://docs.openstack.org/developer/keystone/) and use it as a AuthN and AuthZ backend for my simple_iaas example.
 
-_Note_ : I will consider that the openstack keystone is installed. As I don't want to rewrite an installation procedure as many exists already on the web. For my tests, I'm using an keystone installation from sources in a Ubuntu VM
+_Note_ : I will consider that the openstack keystone is installed (The release I'm using is _liberty_). As I don't want to rewrite an installation procedure as many exists already on the web. For my tests, I'm using an keystone installation from sources in a Ubuntu VM
 
 # My goal
 
@@ -243,23 +243,66 @@ openstack user list
 +----------------------------------+---------+
 ```
 
+### Creating a project
+
+`openstack project create --description 'demo project' demo`
+
+### Assigning the admin role
+
+Let's first get the role list
+```
+openstack role list
++----------------------------------+----------+
+| ID                               | Name     |
++----------------------------------+----------+
+| 5f772b617b5d4758badb7746934124e8 | admin    |
+| 9fe2ff9ee4384b1894a90878d3e92bab | _member_ |
++----------------------------------+----------+
+```
+
+And add the admin right to the user `olivier` for the project `demo`
+
+```
+openstack role add --user olivier --project 0e07a734d54e4f3799a31768b13a38c2 admin
+```
+
 ## Getting a token
 
 ### With the openstack tool 
 
-### With curl
+I've a default domain, I've setup a demo project, and assigne the my user the admin role for testing purpose.
+I may now be able to generate an access token
+
+Let's try:
+
 ```
-curl -i -H "Content-Type: application/json"  -d '
-{ "auth": {
-"identity": {
-    "methods": ["password"],
-    "password": {
-      "user": {
-        "name": "admin",
-        "domain": { "id": "default"  },
-        "password": "adminpwd"
-      }
-    }
-  }
-} }' http://localhost:5000/v3/auth/tokens ; echo
+openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-project-name demo token issue
+Expecting to find domain in project - the server could not comply with the request since it is either malformed or otherwise incorrect. The client is assumed to be in error. (HTTP 400) (Request-ID: req-09cad46b-9a5f-4b0f-8f2b-82b4442ed999)
 ```
+
+Ok, now add the domain:
+```
+openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-project-name demo --os-domain-name default token issue
+Authentication cannot be scoped to multiple targets. Pick one of: project, domain, trust or unscoped
+```
+
+Too bad, remove the project...
+```
+openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-domain-name default token issue
+The request you have made requires authentication. (HTTP 401) (Request-ID: req-59c39895-8e96-42c4-b5c5-1477001da618)
+```
+
+Still no luck... Google gave me a lot of answers, but I couldn't figure whether it was:
+
+* a bug
+* a misconfiguration of the service
+* a bad usage of the tools
+* a totally bad apprehension of the product
+
+I may continue to experiment, but I'm far from my goal actually, and I hate the idea of being lost.
+
+# Conclusion
+
+I may not have understood all the concepts behind the scene, but I can say that this product, at least in the current release, is by far too complex and has too much contributors to evaluate it in a simple way.
+Therefore, the quite complete but messy documentation, a mix in the releases and some major incompatibilities in the tools using V2.0 and V3 gave me a bad impression.
+The tool may be useful, but the TCO sounds high and the entry ticket is not negligeable.
