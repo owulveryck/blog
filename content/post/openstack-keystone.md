@@ -333,7 +333,7 @@ The message is now clear:
 ```
 2015-11-18 10:37:33.337 7164 WARNING keystone.common.wsgi [req-27dadee6-51d9-475d-a426-99e3b4f77f4a - - - - -] Authorization failed. User c80f5244c7d3486fbf4059b7197b4770 has no access to domain default
 ```
-So let's re-set the password, juste in case, as done in the previous section of this post and try again:
+So let's re-set the password, just in case, as done in the previous section of this post and try again:
 
 ```
 source noadmin.sh
@@ -368,11 +368,11 @@ Bingo!!!
 
 # Conclusion
 
-That's enough information for this first post about OpenStack keystine.
+That's enough information for this first post about OpenStack keystone.
 By now, I will continue the investigations and use this installation as a _lab_ to understand the full concepts of this identity management software.
 
-For the moment, this product let me a bitter taste.
+I leave my test with a bitter taste.
 
 I may not have understood all the concepts behind the scene, but I can say that this product, at least in the current release, is by far too complex and has too much contributors to evaluate it in a simple way.
 Therefore, the quite complete but messy documentation, a mix in the releases and some major incompatibilities in the tools using V2.0 and V3 gave me a bad impression.
-The tool may be useful, but the TCO sounds high and the entry ticket is not negligeable.
+The tool may be useful, but the TCO sounds high and the entry ticket is not negligible.
