@@ -59,8 +59,7 @@ Then I should perform requests on this graph. For example I could ask:
 * _What are the steps to go from stop to delete_
 * ...
 
-That would be the premise of a TOSCA orchestrator.
-
+and that would be **the premise of a TOSCA orchestrator**.
 
 ## The digraph go code
 
