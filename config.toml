@@ -46,11 +46,11 @@ disqusShortname = "owulveryck"
 
 # Sidebar social links.
     github = "owulveryck" # Your Github profile ID
-    bitbucket = "" # Your Bitbucket profile ID
+    #bitbucket = "" # Your Bitbucket profile ID
     linkedin = "olivierwulveryck" # Your LinkedIn profile ID (from public URL)
     googleplus = "olivier.wulveryck" # Your Google+ profile ID
-    facebook = "" # Your Facebook profile ID
+    #facebook = "" # Your Facebook profile ID
     twitter = "owulveryck" # Your Twitter profile ID
-    youtube = ""  # Your Youtube channel ID
+    #youtube = ""  # Your Youtube channel ID
     flattr = "owulveryck"  # populate with your flattr uid
 
