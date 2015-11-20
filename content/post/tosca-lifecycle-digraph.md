@@ -42,14 +42,17 @@ As an example, the very famous ELK suite may be described in a TOSCA way as writ
 While I was learnig GO, I have developped a [TOSCA lib](https://github.com/owulveryck/toscalib) and a [TOSCA processor](https://github.com/owulveryck/toscaviewer) which are, by far, not _idiomatic GO_.
 
 Here are two screenshots of the rendering in a web page made with my tool (and the graphviz product):
-<table class="table-responsive">
-<td>
 <img class="img-responsive" src="/assets/images/toscaviewer_template_def.png" alt="Tosca view ofthe single instance wordpress"/>
-</td><td>
 <img class="img-responsive" src="/assets/images/toscaviewer_licecycle_def.png" alt="Lifecycle representation of the single wordpress instance representation"/>
-</td>
-</table>
-What I would like to do now, is to extract the _lifecycle_ of an application and represent it in a directed graph. 
+
+The TOSCA file is parsed with the help of the `TOSCALIB` and then it may fill two adjacency matrix.
+
+- The first one will represent the nodes
+- The second one will be focused on the lifecycles of the nodes.
+
+The [graphviz](http://graphviz.org) take care of the digraph representation.
+
+What I would like to do now, is a little bit more: I would like to play with the graph and query it
 Then I should perform requests on this graph. For example I could ask:
 
 * _What are the steps to go from the state Initial of the application, to the state running_ ?
@@ -58,12 +61,6 @@ Then I should perform requests on this graph. For example I could ask:
 
 That would be the premise of a TOSCA orchestrator.
 
-## The base of the work.
-
-The TOSCA file is parsed with the help of the `TOSCALIB` and then it may fill two adjacency matrix.
-
-- The first one will represent the nodes
-- The second one will be focused on the lifecycles of the nodes.
 
 ## The digraph go code
 
