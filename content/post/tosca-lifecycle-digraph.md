@@ -39,8 +39,16 @@ As an example, the very famous ELK suite may be described in a TOSCA way as writ
 
 <img class="img-square img-responsive" src="http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01_files/image037.jpg" alt="ELK representation"/>
 
-While I was learnig GO, I have developped a [TOSCA lib](https://github.com/owulveryck/toscalib) and a [TOSCA processos](https://github.com/owulveryck/toscaviewer) which are by far not _idiomatic GO_.
+While I was learnig GO, I have developped a [TOSCA lib](https://github.com/owulveryck/toscalib) and a [TOSCA processor](https://github.com/owulveryck/toscaviewer) which are, by far, not _idiomatic GO_.
 
+Here are two screenshots of the rendering in a web page made with my tool (and the graphviz product):
+<table>
+<td>
+<img class="img-responsive" src="/assets/images/toscaviewer_template_def.png" alt="Tosca view ofthe single instance wordpress"/>
+</td><td>
+<img class="img-responsive" src="/assets/images/toscaviewer_licecycle_def.png" alt="Lifecycle representation of the single wordpress instance representation"/>
+</td>
+</table>
 What I would like to do now, is to extract the _lifecycle_ of an application and represent it in a directed graph. 
 Then I should perform requests on this graph. For example I could ask:
 
@@ -73,3 +81,4 @@ var toscaTemplate toscalib.ToscaDefinition
 err = toscaTemplate.Parse(file)
 ...
 ```
+
