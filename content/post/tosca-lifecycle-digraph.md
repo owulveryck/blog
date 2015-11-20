@@ -50,7 +50,7 @@ The TOSCA file is parsed with the help of the `TOSCALIB` and then it may fill tw
 - The first one will represent the nodes
 - The second one will be focused on the lifecycles of the nodes.
 
-The [graphviz](http://graphviz.org) take care of the digraph representation.
+The [graphviz](http://graphviz.org) take care of the (di)graph representation.
 
 What I would like to do now, is a little bit more: I would like to play with the graph and query it
 Then I should perform requests on this graph. For example I could ask:
