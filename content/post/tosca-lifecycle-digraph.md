@@ -64,4 +64,12 @@ I need to dig a little bit in the code to see how the graph is represented.
 
 # Let's go 
 
+I consider that the yaml file is read and that a [ToscaDefinition](http://godoc.org/github.com/owulveryck/toscalib/#ToscaDefinition) structure has been filled.
 
+```golang
+...
+var toscaTemplate toscalib.ToscaDefinition
+...
+err = toscaTemplate.Parse(file)
+...
+```
