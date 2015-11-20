@@ -42,7 +42,7 @@ As an example, the very famous ELK suite may be described in a TOSCA way as writ
 While I was learnig GO, I have developped a [TOSCA lib](https://github.com/owulveryck/toscalib) and a [TOSCA processor](https://github.com/owulveryck/toscaviewer) which are, by far, not _idiomatic GO_.
 
 Here are two screenshots of the rendering in a web page made with my tool (and the graphviz product):
-<table>
+<table class="table-responsive">
 <td>
 <img class="img-responsive" src="/assets/images/toscaviewer_template_def.png" alt="Tosca view ofthe single instance wordpress"/>
 </td><td>
