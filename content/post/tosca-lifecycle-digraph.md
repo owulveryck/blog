@@ -49,7 +49,7 @@ Here are two screenshots of the rendering in a web page made with my tool (and t
 
 
 *The graph representation of a lifecycle of _Single instance wordpress_*
-<img class="img-responsive" src="/assets/images/toscaviewer_licecycle_def.png" alt="Lifecycle representation of the single wordpress instance representation"/>
+<img class="img-responsive" src="/assets/images/toscaviewer_lifecycle_def.png" alt="Lifecycle representation of the single wordpress instance representation"/>
 <hr/>
 
 The TOSCA file is parsed with the help of the `TOSCALIB` and then it may fill two adjacency matrix.
