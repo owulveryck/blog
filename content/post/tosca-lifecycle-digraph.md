@@ -2,7 +2,7 @@
 author: Olivier Wulveryck
 date: 2015-11-20T10:09:30Z
 description: A tosca lifecycle represented as a digraph
-draft: true
+draft: false
 tags:
 - TOSCA
 - Digraph
