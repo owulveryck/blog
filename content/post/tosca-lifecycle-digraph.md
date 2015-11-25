@@ -186,7 +186,7 @@ I've extracted the YAML and placed in in the file [tosca_single_instance_wordpre
 
 Let's query the nodes first:
 ```shell
-./digraph nodes < tosca_single_instance_wordpress.yaml
+curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
 mysql_database:Configure
 mysql_database:Create
 mysql_database:Start
@@ -210,7 +210,7 @@ so far, so good...
 Now, I can I go from a `Server:Create` to a running instance `wordpress:Start`
 
 ```
-./digraph somepath server:Create wordpress:Start  < tosca_single_instance_wordpress.yaml
+curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph somepath server:Create wordpress:Start
 server:Create
 server:Configure
 server:Start
