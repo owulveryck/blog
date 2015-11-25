@@ -215,17 +215,16 @@ func digraph(cmd string, args []string) error {
 		}
 
 	case "nodes":
-		keys := make([]int, len(ids))
-		for k := range ids {
-			keys = append(keys, k)
+		if len(args) != 0 {
+			return fmt.Errorf("usage: nodes")
 
 		}
-		sort.Ints(keys)
-
-		for _, k := range keys {
-			fmt.Println("Key:", k, "Value:", ids[k])
+		nodes := make(nodeset)
+		for label := range g {
+			nodes[label] = true
 
 		}
+		nodes.sort().println("\n")
 
 	default:
 		return fmt.Errorf("no such command %q", cmd)
