@@ -169,7 +169,16 @@ func digraph(cmd string, args []string) error {
 		ids[template.GetStopIndex()] = fmt.Sprintf("%v:Stop", node)
 	}
 
+	adjacencyMatrix := toscaTemplate.AdjacencyMatrix
 	//g.addEdges(node)
+	row, col := adjacencyMatrix.Dims()
+	for r := 1; r < row; r++ {
+		for c := 1; c < col; c++ {
+			if adjacencyMatrix.At(r, c) == 1 {
+				g.addEdges(ids[r], ids[c])
+			}
+		}
+	}
 	// Parse the command line.
 	switch cmd {
 	case "somepath":
