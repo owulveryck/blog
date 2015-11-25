@@ -175,6 +175,7 @@ I have a github repo with the source.
 It is go-gettable visual
 ```
 go get github.com/owulveryck/digraph
+cd $GOPATH/src/github.com/owulveryck/digraph && go build
 ```
 
 # Example
