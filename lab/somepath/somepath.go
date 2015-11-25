@@ -18,6 +18,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"github.com/owulveryck/toscalib"
 	"io"
 	"os"
 	"sort"
@@ -144,11 +145,31 @@ func parse(rd io.Reader) (graph, error) {
 
 func digraph(cmd string, args []string) error {
 	// Parse the input graph.
-	g, err := parse(stdin)
+	var toscaTemplate toscalib.ToscaDefinition
+	err := toscaTemplate.Parse(stdin)
 	if err != nil {
 		return err
 	}
+	g := make(graph)
+	// a map containing the ID and the corresponding action
+	ids := make(map[int]string)
+	// Fill in the graph with the toscaTemplate via the adjacency matrix
+	for node, template := range toscaTemplate.TopologyTemplate.NodeTemplates {
+		// Find the edges of the current node and add them to the graph
 
+		ids[template.GetConfigureIndex()] = fmt.Sprintf("%v:Configure", node)
+		ids[template.GetCreateIndex()] = fmt.Sprintf("%v:Create", node)
+		ids[template.GetDeleteIndex()] = fmt.Sprintf("%v:Delete", node)
+		ids[template.GetInitialIndex()] = fmt.Sprintf("%v:Initial", node)
+		ids[template.GetPostConfigureSourceIndex()] = fmt.Sprintf("%v:PostConfigureSource", node)
+		ids[template.GetPostConfigureTargetIndex()] = fmt.Sprintf("%v:PostconfigureTarget", node)
+		ids[template.GetPreConfigureSourceIndex()] = fmt.Sprintf("%v:PreConfigureSource", node)
+		ids[template.GetPreConfigureTargetIndex()] = fmt.Sprintf("%v:PreConfigureTarget", node)
+		ids[template.GetStartIndex()] = fmt.Sprintf("%v:Start", node)
+		ids[template.GetStopIndex()] = fmt.Sprintf("%v:Stop", node)
+	}
+
+	//g.addEdges(node)
 	// Parse the command line.
 	switch cmd {
 	case "somepath":
@@ -182,6 +203,19 @@ func digraph(cmd string, args []string) error {
 		}
 		if !visit(make(nodelist, 0, 100), from) {
 			return fmt.Errorf("no path from %q to %q", args[0], args[1])
+		}
+
+	case "nodes":
+		var keys []int
+		for k := range ids {
+			keys = append(keys, k)
+
+		}
+		sort.Ints(keys)
+
+		for _, k := range keys {
+			fmt.Println("Key:", k, "Value:", ids[k])
+
 		}
 
 	default:
