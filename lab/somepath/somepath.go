@@ -206,7 +206,7 @@ func digraph(cmd string, args []string) error {
 		}
 
 	case "nodes":
-		var keys []int
+		keys := make([]int, len(ids))
 		for k := range ids {
 			keys = append(keys, k)
 
