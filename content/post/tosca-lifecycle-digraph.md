@@ -172,7 +172,7 @@ func parse(rd io.Reader) (graph, error) {
 # Grab the source and compile it
 
 I have a github repo with the source.
-It is go-gettable visual
+It is go-gettable 
 ```
 go get github.com/owulveryck/digraph
 cd $GOPATH/src/github.com/owulveryck/digraph && go build
