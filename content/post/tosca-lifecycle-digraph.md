@@ -178,6 +178,8 @@ go get github.com/owulveryck/digraph
 cd $GOPATH/src/github.com/owulveryck/digraph && go build
 ```
 
+**EDIT** As I continue to work on this tool, I have created a "blog" branch in the github which holds the version related to this post
+
 # Example
 
 I will use the the same example as described below: the single instance wordpress.
