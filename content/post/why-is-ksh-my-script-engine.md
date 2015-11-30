@@ -78,7 +78,8 @@ ksh =>
 68.50    0.042059          84       500           clone
 ```
 
-# Getopts
+# Getopts the small man 
+
 
 A few month back, I wanted to use the `getopts` builtin in a script. As usual, I did _RTFM_.
 Here is the extract of the man page of ksh93 relative to the getopts function:
@@ -118,6 +119,10 @@ This particular sentence, in the middle of the documentation peaked my interest
 > The option -? causes getopts to generate a usage message on standard error.
 
 What? We can generate usage with getopts? 
+
+Cool, any script should be documented, but any documentation should not be difficult to implement.
+
+<img class="img-responsive center-block" src="http://imgs.xkcd.com/comics/manuals.png"> 
 
 I did googled and found this 
 [web page](http://docstore.mik.ua/orelly/unix3/korn/appb_11.htm) which is an extract from this book [Learning the Korn Shell](http://shop.oreilly.com/product/9780596001957.do)
