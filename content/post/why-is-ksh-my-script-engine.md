@@ -1,7 +1,7 @@
 ---
 author: Olivier Wulveryck
 date: 2015-11-30T13:17:41Z
-description: KSH getopts as a documentation of the script
+description: Two reasons why I usually use KSH93 as my script engine
 draft: true
 keywords:
 - ksh
@@ -13,15 +13,19 @@ tags:
 - shell
 - getopts
 - man
-title: KSH getopts, the unknown builtin documentation tool
+title: KSH93 cool features for scripting
 type: post
 ---
 
-[B.11. Using getopts](http://docstore.mik.ua/orelly/unix3/korn/appb_11.htm)
+# Read loop, and forks...
 
-## Extract of the man page
 
-The `man ksh93` does explain the `getopts` builtin and its associate options:
+
+# Getopts
+
+A few month back, I wanted to use the `getopts` builtin in a script. As usual, I did _RTFM_.
+Here is the extract of the man page of ksh93 relative to the getopts function:
+
 
 <pre>
 <B>getopts</B> [ <B>-a</B> <I>name</I> ] <I>optstring vname</I> [ <I>arg</I> ... ]
@@ -52,6 +56,16 @@ The exit status is non-zero when there are no more options.
 The option <B>#</B> can only be specified as the first option. 
 </pre>
 
+This particular sentence, in the middle of the documentation peaked my interest
+
+> The option -? causes getopts to generate a usage message on standard error.
+
+What? We can generate usage with getopts? 
+
+I did googled and found this 
+[web page](http://docstore.mik.ua/orelly/unix3/korn/appb_11.htm) which is an extract from this book [Learning the Korn Shell](http://shop.oreilly.com/product/9780596001957.do)
+
+Sounds cool, let's see how it works in the real life
 ## An example
 
 ### The script
@@ -72,7 +86,7 @@ USAGE+="[u:user]:[user to run the command as:=$USER?Use the name of the user you
 USAGE+="[e:env]:[environnement:=$ENV?environnement to use (eg: dev, prod) ]"
 USAGE+="[p:path]:[Execution PATH:=$MPATH?prefix of the chroot]"
 USAGE+="[+EXAMPLE?$0 action2]"
-USAGE+='[+SEE ALSO?My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh-getopts-the-unknown-builtin-documentation-tool]'
+USAGE+='[+SEE ALSO?My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting]'
 USAGE+="[+BUGS?A few, maybe...]"
 
 ### Option Checking
@@ -115,7 +129,7 @@ EXAMPLE
   ./manheader.ksh action2
 
 SEE ALSO
-  My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh-getopts-the-unknown-builtin-documentation-tool
+  My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting
 
 BUGS
   A few, maybe...
