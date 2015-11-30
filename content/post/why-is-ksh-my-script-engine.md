@@ -10,6 +10,7 @@ keywords:
 - man
 tags:
 - ksh
+- bash
 - shell
 - getopts
 - man
@@ -19,7 +20,63 @@ type: post
 
 # Read loop, and forks...
 
+```shell
+$ cat test                                                                                                         
+for i in $(seq 1 500)
+do
+    echo $i | read a
+    echo -ne "$a\r"
+done
+echo ""
+```
 
+```shell
+for i in bash zsh ksh                                                                                         
+do
+    echo "$i =>"
+    eval time $i test
+done
+```
+
+```shell
+bash =>
+
+bash test  0,17s user 0,86s system 95% cpu 1,079 total
+zsh =>
+500
+zsh test  0,08s user 0,46s system 82% cpu 0,648 total
+ksh =>
+500
+ksh test  0,07s user 0,46s system 65% cpu 0,819 total
+```
+
+
+
+On voit que bash ne donne pas le resultat escompté, la commande read a ingurgité la sortie standard de exec, mais comme le shell a vu un pipe, il a bêtement forké... et donc, en retournant au shell courant, on a perdu notre $a....
+
+ksh et zsh sont un peu plus malin, ils ont vu que l'appel après le pipe était une fonction "builtin", donc ils n'ont pas forké... Ce qui, en plus de donner le résultat attentu, fait gagner du temps et des ressources...
+
+```shell
+$ for i in bash zsh ksh                                                                                         
+do
+    echo "$i =>"
+    strace -c  $i  test 2>&1 | egrep "clone|calls"
+done
+```
+
+
+
+```shell
+bash =>
+% time     seconds  usecs/call     calls    errors syscall
+56.05    0.067081          67      1001           clone
+zsh =>
+% time     seconds  usecs/call     calls    errors syscall
+71.57    0.057681         115       501           clone
+ksh =>
+% time     seconds  usecs/call     calls    errors syscall
+68.50    0.042059          84       500           clone
+```
 
 # Getopts
 
