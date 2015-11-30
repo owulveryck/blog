@@ -123,6 +123,8 @@ What? We can generate usage with getopts?
 Cool, any script should be documented, but any documentation should not be difficult to implement.
 
 <img class="img-responsive center-block" src="http://imgs.xkcd.com/comics/manuals.png"> 
+<center>_https://xkcd.com/1343/_</center>
+
 
 I did googled and found this 
 [web page](http://docstore.mik.ua/orelly/unix3/korn/appb_11.htm) which is an extract from this book [Learning the Korn Shell](http://shop.oreilly.com/product/9780596001957.do)
