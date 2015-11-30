@@ -18,7 +18,21 @@ title: KSH93 cool features for scripting
 type: post
 ---
 
-# Read loop, and forks...
+From time to time, I'm envolved into a tolling conversation when any linux kiddie tells me:
+
+_Bash is really the superior shell_ 
+
+I totally disagree, but as I'm getting older, I don't argue anymore.
+
+Anyway, I this post I will expose two arguments, or I should say two reasons, why I usually use `ksh93` to run my scripts.
+
+**Note** I'm really talking about the engine of the script, (the shebang definition). 
+My `$SHELL` for interactivity is `zsh` because it's efficient enough
+and it has a bunch of really cool features I won't discuss in this post (maybe later)
+
+# Read, loops, forks and efficiency...
+
+
 
 ```shell
 $ cat test                                                                                                         
@@ -78,8 +92,7 @@ ksh =>
 68.50    0.042059          84       500           clone
 ```
 
-# Getopts the small man 
-
+# The KSH93 Getopts unknown feature
 
 A few month back, I wanted to use the `getopts` builtin in a script. As usual, I did _RTFM_.
 Here is the extract of the man page of ksh93 relative to the getopts function:
@@ -170,6 +183,8 @@ ACTION=$1
 ```
 ### The invocation
 
+Here are two _singing_ examples of the usage output (sorry, I'm tired)
+#### _Ballad of a thin man_
 ```shell
 $ ./manheader.ksh --man
 NAME
@@ -203,6 +218,9 @@ IMPLEMENTATION
   author          Olivier Wulveryck
   copyright       Copyright (C) My Blog
 ```
+
+#### I'm gonna try _with a little help (from my friends)_
+
 ```shell
 $ ./manheader.ksh --help
 Usage: ./manheader.ksh [ options ]
