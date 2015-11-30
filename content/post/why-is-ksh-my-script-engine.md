@@ -32,7 +32,13 @@ and it has a bunch of really cool features I won't discuss in this post (maybe l
 
 # Read, loops, forks and efficiency...
 
+More than 10 years ago, as I was working for a project at IBM, my excellent team leader told me about this book: 
+[Unix Power Tools](http://shop.oreilly.com/product/9780596003302.do). I did learn a lot with it.
 
+And one feature I've always used is the `while read` loop.
+
+## The use cas
+Let's take this script as example:
 
 ```shell
 $ cat test                                                                                                         
@@ -44,31 +50,36 @@ done
 echo ""
 ```
 
+It simply iterate 500 times and display the counter on the screen.
+
+## The result of execution
+
+Let's execute it in different shells
+
 ```shell
 for i in bash zsh ksh                                                                                         
 do
     echo "$i =>"
-    eval time $i test
+    eval $i test
 done
-```
-
-```shell
 bash =>
 
-bash test  0,17s user 0,86s system 95% cpu 1,079 total
 zsh =>
 500
-zsh test  0,08s user 0,46s system 82% cpu 0,648 total
 ksh =>
 500
-ksh test  0,07s user 0,46s system 65% cpu 0,819 total
 ```
 
+Bash is the only one which does not display the expected result.
+The explanation is that the shell sees a pipe and the fork the process. The assignation to the variable `a` is in another context and therefore, 
+when the father wants to display `$a` in the current shell, the variable is empty.
 
+Wait, but why does `ksh` (and `zsh`) do display the correct result ? 
+Simply because ksh and zsh have noticed that the command after the pipe was a builtin, and therefore that it was unuseful to fork.
 
-On voit que bash ne donne pas le resultat escompté, la commande read a ingurgité la sortie standard de exec, mais comme le shell a vu un pipe, il a bêtement forké... et donc, en retournant au shell courant, on a perdu notre $a....
+### Strace to the rescue...
 
-ksh et zsh sont un peu plus malin, ils ont vu que l'appel après le pipe était une fonction "builtin", donc ils n'ont pas forké... Ce qui, en plus de donner le résultat attentu, fait gagner du temps et des ressources...
+To proove it, let's check for syscall with the `strace` tool, and count how many clones and calls are performed: 
 
 ```shell
 $ for i in bash zsh ksh                                                                                         
@@ -76,11 +87,6 @@ do
     echo "$i =>"
     strace -c  $i  test 2>&1 | egrep "clone|calls"
 done
-```
-
-
-
-```shell
 bash =>
 % time     seconds  usecs/call     calls    errors syscall
 56.05    0.067081          67      1001           clone
@@ -92,9 +98,35 @@ ksh =>
 68.50    0.042059          84       500           clone
 ```
 
+## Efficiency
+
+Of course this as an impact on performances, because fork are expensive, let's query the execution time:
+
+```shell
+for i in bash zsh ksh                                                                                         
+do
+    echo "$i =>"
+    eval time $i test
+done
+bash =>
+
+bash test  0,17s user 0,86s system 95% cpu 1,079 total
+zsh =>
+500
+zsh test  0,08s user 0,46s system 82% cpu 0,648 total
+ksh =>
+500
+ksh test  0,07s user 0,46s system 65% cpu 0,819 total
+```
+
+This sounds clear to me...
+
+
 # The KSH93 Getopts unknown feature
 
-A few month back, I wanted to use the `getopts` builtin in a script. As usual, I did _RTFM_.
+Another cool feature I've discovered recently is the little addon of the getopts feature.
+
+I wanted to use the `getopts` builtin in a script. As usual, I did _RTFM_ (because I never know when to use colon arguments etc...).
 Here is the extract of the man page of ksh93 relative to the getopts function:
 
 
@@ -142,8 +174,8 @@ Cool, any script should be documented, but any documentation should not be diffi
 I did googled and found this 
 [web page](http://docstore.mik.ua/orelly/unix3/korn/appb_11.htm) which is an extract from this book [Learning the Korn Shell](http://shop.oreilly.com/product/9780596001957.do)
 
-Sounds cool, let's see how it works in the real life
-## An example
+An example is sometimes better than an explanation (and the book is complete on this subject)
+## The example
 
 ### The script
 ```shell
@@ -186,12 +218,12 @@ ACTION=$1
 Here are two _singing_ examples of the usage output (sorry, I'm tired)
 #### _Ballad of a thin man_
 ```shell
-$ ./manheader.ksh --man
+$ ./blog.ksh --man
 NAME
-  ./manheader.ksh --- The Example Script
+  ./blog.ksh --- The Example Script
 
 SYNOPSIS
-  ./manheader.ksh [ options ]
+  ./blog.ksh [ options ]
 
 DESCRIPTION
   The description of the script
@@ -205,7 +237,7 @@ OPTIONS
                   prefix of the chroot The default value is /tmp.
 
 EXAMPLE
-  ./manheader.ksh action2
+  ./blog.ksh action2
 
 SEE ALSO
   My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting
@@ -222,8 +254,8 @@ IMPLEMENTATION
 #### I'm gonna try _with a little help (from my friends)_
 
 ```shell
-$ ./manheader.ksh --help
-Usage: ./manheader.ksh [ options ]
+$ ./blog.ksh --help
+Usage: ./blog.ksh [ options ]
 OPTIONS
   -u, --user=user to run the command as
                   Use the name of the user you want to sudo to: The default value is owulveryck.
@@ -236,7 +268,13 @@ OPTIONS
 And let's try with an invalid option...
 
 ```shell
-  ./manheader.ksh -t
-./manheader.ksh: -t: unknown option
-Usage: ./manheader.ksh [-u user to run the command as] [-e environnement] [-p Execution PATH]
+  ./blog.ksh -t
+./blog.ksh: -t: unknown option
+Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Execution PATH]
 ```
+
+# Conclusion
+
+By now, KSH93 remains my favorite engine for shell scripts, but is sometimes replaced by ZSH.
+
+Actually, ZSH seems as "smart" and efficient, but this `getopts` feature is really nice for any script aim to be discributed widely.
