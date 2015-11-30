@@ -37,7 +37,7 @@ More than 10 years ago, as I was working for a project at IBM, my excellent team
 
 And one feature I've always used is the `while read` loop.
 
-## The use cas
+## The use case
 Let's take this script as example:
 
 ```shell
