@@ -18,21 +18,22 @@ title: KSH93 cool features for scripting
 type: post
 ---
 
-From time to time, I'm envolved into a tolling conversation when any linux kiddie tells me:
+From time to time, I'm involved into a trolling conversation when any linux kiddie tells me:
 
 _Bash is really the superior shell_ 
 
 I totally disagree, but as I'm getting older, I don't argue anymore.
 
-Anyway, I this post I will expose two arguments, or I should say two reasons, why I usually use `ksh93` to run my scripts.
+Anyway, in this post I will expose two arguments, or I should say two reasons, why I usually use `ksh93` to run my scripts.
 
 **Note** I'm really talking about the engine of the script, (the shebang definition). 
+I'm used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
 My `$SHELL` for interactivity is `zsh` because it's efficient enough
 and it has a bunch of really cool features I won't discuss in this post (maybe later)
 
 # Read, loops, forks and efficiency...
 
-More than 10 years ago, as I was working for a project at IBM, my excellent team leader told me about this book: 
+More than 10 years ago, as I was working for a project at IBM, my excellent team leader told me to refer to this book: 
 [Unix Power Tools](http://shop.oreilly.com/product/9780596003302.do). I did learn a lot with it.
 
 And one feature I've always used is the `while read` loop.
@@ -75,11 +76,11 @@ The explanation is that the shell sees a pipe and the fork the process. The assi
 when the father wants to display `$a` in the current shell, the variable is empty.
 
 Wait, but why does `ksh` (and `zsh`) do display the correct result ? 
-Simply because ksh and zsh have noticed that the command after the pipe was a builtin, and therefore that it was unuseful to fork.
+Simply because ksh and zsh have noticed that the command after the pipe was a builtin, and therefore that it was un-useful to fork.
 
 ### Strace to the rescue...
 
-To proove it, let's check for syscall with the `strace` tool, and count how many clones and calls are performed: 
+To prove it, let's check for syscalls with the `strace` tool, and count how many clones and calls are performed: 
 
 ```shell
 $ for i in bash zsh ksh                                                                                         
@@ -97,6 +98,8 @@ ksh =>
 % time     seconds  usecs/call     calls    errors syscall
 68.50    0.042059          84       500           clone
 ```
+
+_quod erat demonstrandum_, twice as much clone in bash thant in ksh|zsh.
 
 ## Efficiency
 
@@ -126,7 +129,8 @@ This sounds clear to me...
 
 Another cool feature I've discovered recently is the little addon of the getopts feature.
 
-I wanted to use the `getopts` builtin in a script. As usual, I did _RTFM_ (because I never know when to use colon arguments etc...).
+I wanted to use the `getopts` built in in a script. As usual, I did _RTFM_ (because I never know when to use colon etc.).
+
 Here is the extract of the man page of ksh93 relative to the getopts function:
 
 
@@ -277,4 +281,4 @@ Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Executi
 
 By now, KSH93 remains my favorite engine for shell scripts, but is sometimes replaced by ZSH.
 
-Actually, ZSH seems as "smart" and efficient, but this `getopts` feature is really nice for any script aim to be discributed widely.
+Actually, ZSH seems as "smart" and efficient, but this `getopts` feature is really nice for any script aim to be distributed widely.
