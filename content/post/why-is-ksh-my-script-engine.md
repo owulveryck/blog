@@ -2,7 +2,7 @@
 author: Olivier Wulveryck
 date: 2015-11-30T13:17:41Z
 description: Two reasons why I usually use KSH93 as my script engine
-draft: true
+draft: false
 keywords:
 - ksh
 - shell
