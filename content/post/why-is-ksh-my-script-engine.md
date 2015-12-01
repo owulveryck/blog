@@ -1,7 +1,7 @@
 ---
 author: Olivier Wulveryck
 date: 2015-11-30T13:17:41Z
-description: Two reasons why I usually use KSH93 as my script engine
+description: Two reasons why I usually use KSH93 as script engine
 draft: false
 keywords:
 - ksh
