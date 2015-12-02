@@ -12,36 +12,40 @@ type Message struct {
 }
 
 func main() {
-	n := 3
+	n := 6
 	cs := make([]<-chan Message, n)
 	for i := 0; i < n; i++ {
-		cs[i] = boring(fmt.Sprintf("Boring:%v", i))
+		cs[i] = runme(fmt.Sprintf("[%v]", i), time.Duration(rand.Intn(1e3))*time.Millisecond)
 	}
 
-	c := fanIn(cs...)
-	for i := 0; i < n; i++ {
-		msg := <-c
-		msg.wait <- true
-		fmt.Println(msg.str)
-
+	for {
+		for j := 0; j < n; j++ {
+			select {
+			case cmd := <-cs[j]:
+				fmt.Println(cmd)
+				// task j is done... Let's trigger the other one
+			default:
+			}
+		}
 	}
 	fmt.Println("This is the end!")
 }
 
-func boring(msg string) <-chan Message {
+func runme(cmd string, duration time.Duration) <-chan Message {
 	c := make(chan Message)
 	waitForIt := make(chan bool) // Shared between all messages.
 	go func() {
-		for i := 0; ; i++ {
-			c <- Message{fmt.Sprintf("%s: %d", msg, i), waitForIt}
-			fmt.Printf("%v: %d WAITING\n", msg, i)
-			time.Sleep(time.Duration(rand.Intn(1e3)) * time.Millisecond)
-			fmt.Printf("%v: %d DONE\n", msg, i)
-			<-waitForIt
-		}
+		//for i := 0; ; i++ {
+		//c <- Message{fmt.Sprintf("%s: %d", cmd, i), waitForIt}
+		time.Sleep(duration)
+		fmt.Printf("%v done\n", cmd)
+		c <- Message{cmd, waitForIt}
+		//<-waitForIt
+		//}
 	}()
 	return c
 }
+
 func fanIn(inputs ...<-chan Message) <-chan Message { // HL
 	c := make(chan Message)
 	for i := range inputs {
