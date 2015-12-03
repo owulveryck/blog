@@ -42,13 +42,24 @@ func main() {
 		}()
 	}
 	c := fanIn(cs...)
+	timeout := time.After(5 * time.Second)
 	for {
-		node := <-c
-		if node.run == true {
-			fmt.Printf("%v has finished\n", node.id)
-			// 0 its row in the matrix
-			for c := 0; c < n; c++ {
-				m.Set(node.id, c, 0)
+		select {
+		case node := <-c:
+			if node.run == true {
+				fmt.Printf("%v has finished\n", node.id)
+				// 0 its row in the matrix
+				for c := 0; c < n; c++ {
+					m.Set(node.id, c, 0)
+				}
+			}
+		case <-timeout:
+			fmt.Println("Timeout")
+			return
+		default:
+			if mat64.Sum(m) == 0 {
+				fmt.Println("All done!")
+				return
 			}
 		}
 	}
