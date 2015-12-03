@@ -21,11 +21,11 @@ Today I would like to imagine a graph as a workflow of execution. Every node wou
 # The use case 
 If we consider this very simple graph (example taken from the french wikipedia page)
 
-<img class="img-responsive" src="/assets/images/digraph1.png" alt="digraph example"/>
+<img class="img-responsive" src="/assets/images/digraph1.png" alt="digraph example"/> 
 
 its corresponding adjacency matrix is:
 
- <img class="img-responsive" src="/assets/images/matrix1.png" alt="Adjacency matrix"/>
+<img class="img-responsive" src="/assets/images/matrix1.png" alt="Adjacency matrix"/>
 
 its dimension is 8x8
 
@@ -71,6 +71,7 @@ to keep it simple, I won't use a `list` or a `slice` to represent the matrix, bu
 A slice may be more efficient, but by now it is not an issue. 
 
 On top of that, I may need later to transpose or look for eigenvalues, and this package does implement the correct method to do so.
+For clarity of the description, I didn't use a `float64` array to initialize the matrix.
 
 ```golang
 // Allocate a zeroed array of size 8×8
