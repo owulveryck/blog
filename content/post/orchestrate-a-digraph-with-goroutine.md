@@ -47,23 +47,25 @@ Every goroutine will then check in the adjacency matrix, whether it has predeces
 Once the execution of task is over, the goroutine will then feed another channel to tell the conductor that its job is done. and then the conductor will broadcast the information.
 
 * __(1)__ The conductors feed the nodes with the matrix
-<img class="img-responsive" src="/assets/images/digraph_step1.png" alt="digraph example"/> 
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot"><img class="img-responsive" src="/assets/images/digraph_step1.png" alt="digraph example"/></a>
 * __(2)__ Every node get the data and analyse the matrix
-<img class="img-responsive" src="/assets/images/digraph_step2.png" alt="digraph example"/> 
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot"><img class="img-responsive" src="/assets/images/digraph_step2.png" alt="digraph example"/> </a>
 * __(3)__ Nodes 3, 5 and 7 have no predecessor, they can run
-<img class="img-responsive" src="/assets/images/digraph_step3.png" alt="digraph example"/> 
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot"><img class="img-responsive" src="/assets/images/digraph_step3.png" alt="digraph example"/> </a>
 * __(4)__ Nodes 3 and 5 are done, they informs the conductor
-<img class="img-responsive" src="/assets/images/digraph_step4.png" alt="digraph example"/> 
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot"><img class="img-responsive" src="/assets/images/digraph_step4.png" alt="digraph example"/> </a>
 * __(5)__ conductor update the matrix
-<img class="img-responsive" src="/assets/images/digraph_step5.png" alt="digraph example"/> 
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot"><img class="img-responsive" src="/assets/images/digraph_step5.png" alt="digraph example"/> </a>
 * __(6)__ The conductor feeds the nodes with the matrix
-<img class="img-responsive" src="/assets/images/digraph_step6.png" alt="digraph example"/> 
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot"><img class="img-responsive" src="/assets/images/digraph_step6.png" alt="digraph example"/> </a>
 * __(7)__ The nodes analyse the matrix
-<img class="img-responsive" src="/assets/images/digraph_step7.png" alt="digraph example"/> 
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot"><img class="img-responsive" src="/assets/images/digraph_step7.png" alt="digraph example"/> </a>
 * __(8)__ Node 2 can run...
-<img class="img-responsive" src="/assets/images/digraph_step8.png" alt="digraph example"/> 
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot"><img class="img-responsive" src="/assets/images/digraph_step8.png" alt="digraph example"/> </a>
+
 ## The representation of the use case in go
 
+### Data representation
 to keep it simple, I won't use a `list` or a `slice` to represent the matrix, but instead I will rely on the [package mat64](https://godoc.org/github.com/gonum/matrix/mat64).
 
 A slice may be more efficient, but by now it is not an issue. 
@@ -82,6 +84,7 @@ fa := mat64.Formatted(m, mat64.Prefix("    "))
 fmt.Printf("\nm = %v\n\n", fa)
 ```
 
+### The code
 
 # References
 
