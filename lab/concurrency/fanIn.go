@@ -77,6 +77,7 @@ func run(id int, duration time.Duration) <-chan Message {
 				c <- Message{id, run, waitForIt}
 			}
 		}
+		close(c)
 	}()
 	return c
 }
