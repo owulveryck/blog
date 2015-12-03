@@ -18,20 +18,38 @@ They have changed the world a lot. From the simple representation to bayesian ne
 
 Today I would like to imagine a graph as a workflow of execution. Every node would be considered as runable. And every  edge would be a dependency.
 
-If we consider this very simple graph:
+# The use case 
+If we consider this very simple graph (example taken from the french wikipedia page)
 
-* A -> B
-* A -> C
-* B -> C
+<img class="img-responsive" src="https://upload.wikimedia.org/wikipedia/commons/0/07/Grafodirigido.jpg" alt="digraph example"/>
 
-The workflow is simply: 
+its corresponding adjacency matrix is:
 
-* A can run
-* B can run if A is done
-* C can run if A and B are done
+ <img class="img-responsive" src="/assets/images/matrix1.png" alt="Adjacency matrix"/>
 
-# The adjacency matrix
+its dimension is 8x8
 
+# Let's GO
+
+## The matrix representation
+
+to keep it simple, I won't use a `list` or a `slice` to represent the matrix, but instead i will rely on the [package mat64](https://godoc.org/github.com/gonum/matrix/mat64).
+
+A slice may be more efficient, but by now it is not an issue. 
+
+On top of that, I may need later to transpose or look for eigenvalues, and this package does implement the correct method to do so.
+
+```golang
+// Allocate a zeroed array of size 8×8
+m := mat64.NewDense(8, 8, nil)
+m.Set(0, 1, 1); m.Set(0, 4, 1) // First row
+m.Set(1, 6, 1); m.Set(1, 6, 1) // second row
+m.Set(3, 2, 1); m.Set(3, 6, 1) // fourth row
+m.Set(5, 0, 1); m.Set(5, 1, 1); m.Set(5, 2, 1) // fifth row
+m.Set(7, 6, 1) // seventh row
+fa := mat64.Formatted(m, mat64.Prefix("    "))
+fmt.Printf("\nm = %v\n\n", fa)
+```
 
 
 # References
