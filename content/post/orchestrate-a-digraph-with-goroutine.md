@@ -42,9 +42,13 @@ Every single goroutine will be initially launched and then wait for an informati
 It will have an input communication channel, and a _conductor_ will feed this channel with enough information for the goroutine to decides whether it should run or not. 
 This information is simply the adjacency matrix up-to-date. That means that is a node is done, its value is set to zero.
 
-Every goroutine will then check in the adjacency matrix, whether it has predecessor and therefor will execute the step or not.
+Every goroutine will then check in the adjacency matrix, whether it has predecessor (that means if the corresponding vector is null, or every digit in column N is 0) and therefore will execute the step or not.
 
 Once the execution of task is over, the goroutine will then feed another channel to tell the conductor that its job is done. and then the conductor will broadcast the information.
+
+### Example
+
+In our example, nodes _3_, _5_, and _7_ do not have any predecessor, so they will be able to run first.
 
 * __(1)__ The conductors feed the nodes with the matrix
 
@@ -54,7 +58,7 @@ Once the execution of task is over, the goroutine will then feed another channel
 
 <a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step2.png" alt="digraph example"/> </a>
 
-* __(3)__ Nodes 3, 5 and 7 have no predecessor, they can run
+* __(3)__ Nodes 3, 5 and 7 have no predecessor (their column in the matrix sums to zero): they can run
 
 <a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step3.png" alt="digraph example"/> </a>
 
@@ -62,7 +66,7 @@ Once the execution of task is over, the goroutine will then feed another channel
 
 <a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step4.png" alt="digraph example"/> </a>
 
-* __(5)__ conductor update the matrix
+* __(5)__ conductor update the matrix. It fills the rows 3 and 5 with zeros (actually rows 4 and 6, because our first node is 0)
 
 <a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step5.png" alt="digraph example"/> </a>
 
