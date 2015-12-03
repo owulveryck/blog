@@ -21,7 +21,7 @@ Today I would like to imagine a graph as a workflow of execution. Every node wou
 # The use case 
 If we consider this very simple graph (example taken from the french wikipedia page)
 
-<img class="img-responsive" src="https://upload.wikimedia.org/wikipedia/commons/0/07/Grafodirigido.jpg" alt="digraph example"/>
+<img class="img-responsive" src="/assets/images/digraph1.png" alt="digraph example"/>
 
 its corresponding adjacency matrix is:
 
@@ -37,13 +37,11 @@ For the lab, I will consider that each node has to do a simple task which is to 
 
 Every node will be run in a `goroutine`. That is a point. But how do I deal with concurrency ?
 
-Every single goroutine will be launched and wait.
+Every single goroutine will be initially launched and then wait for an information.
 
 It will have an input communication channel, and a _conductor_ will feed this channel with enough information for the goroutine to decides whether it should run or not.
 
 Once the execution of task is over, the goroutine will then feed another channel to tell the conductor that its job is done. and then the conductor will broadcast the information.
-
-
 
 ## The representation of the use case in go
 
