@@ -31,7 +31,7 @@ its dimension is 8x8
 
 # Let's GO
 
-## The matrix representation
+## The representation of the use case in go
 
 to keep it simple, I won't use a `list` or a `slice` to represent the matrix, but instead i will rely on the [package mat64](https://godoc.org/github.com/gonum/matrix/mat64).
 
@@ -55,4 +55,3 @@ fmt.Printf("\nm = %v\n\n", fa)
 # References
 
 * [Go Concurrency Patterns (Rob Pike)](https://talks.golang.org/2012/concurrency.slide)
-
