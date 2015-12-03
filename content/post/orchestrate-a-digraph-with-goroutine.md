@@ -14,9 +14,9 @@ type: post
 ---
 
 I've read a lot about graph theory recently.
-They have changed the world a lot. From the simple representation to bayesian network via Markov chains, the applications are numerous.
+They have changed the world a lot. From the simple representation to Bayesian network via Markov chains, the applications are numerous.
 
-Today I would like to imagine a graph as a workflow of execution. Every node would be considered as runable. And every  edge would be a dependency.
+Today I would like to imagine a graph as a workflow of execution. Every node would be considered as runnable. And every  edge would be a dependency.
 
 # The use case 
 If we consider this very simple graph (example taken from the french wikipedia page)
@@ -29,11 +29,19 @@ its corresponding adjacency matrix is:
 
 its dimension is 8x8
 
+For the lab, I will consider that each node has to do a simple task which is to wait for a random number of millisecond (such as Rob Pike's _boring_ function, see references)
+
 # Let's GO
+
+## How will it work
+
+Every node will be run in a `goroutine`. That is a point. But how do I deal with concurrency ?
+
+
 
 ## The representation of the use case in go
 
-to keep it simple, I won't use a `list` or a `slice` to represent the matrix, but instead i will rely on the [package mat64](https://godoc.org/github.com/gonum/matrix/mat64).
+to keep it simple, I won't use a `list` or a `slice` to represent the matrix, but instead I will rely on the [package mat64](https://godoc.org/github.com/gonum/matrix/mat64).
 
 A slice may be more efficient, but by now it is not an issue. 
 
