@@ -37,6 +37,12 @@ For the lab, I will consider that each node has to do a simple task which is to 
 
 Every node will be run in a `goroutine`. That is a point. But how do I deal with concurrency ?
 
+Every single goroutine will be launched and wait.
+
+It will have an input communication channel, and a _conductor_ will feed this channel with enough information for the goroutine to decides whether it should run or not.
+
+Once the execution of task is over, the goroutine will then feed another channel to tell the conductor that its job is done. and then the conductor will broadcast the information.
+
 
 
 ## The representation of the use case in go
