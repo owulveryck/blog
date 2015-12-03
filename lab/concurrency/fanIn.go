@@ -9,7 +9,7 @@ import (
 
 type Message struct {
 	str  string
-	wait chan bool
+	wait chan mat64.Dense
 }
 
 func main() {
@@ -50,7 +50,7 @@ func main() {
 
 func runme(cmd string, duration time.Duration) <-chan Message {
 	c := make(chan Message)
-	waitForIt := make(chan bool) // Shared between all messages.
+	waitForIt := make(chan mat64.Dense) // Shared between all messages.
 	go func() {
 		//for i := 0; ; i++ {
 		//c <- Message{fmt.Sprintf("%s: %d", cmd, i), waitForIt}
