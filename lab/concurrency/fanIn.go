@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gonum/matrix/mat64"
 	"math/rand"
 	"time"
 )
@@ -12,6 +13,22 @@ type Message struct {
 }
 
 func main() {
+	// Allocate a zeroed array of size 8×8
+	m := mat64.NewDense(8, 8, nil)
+	m.Set(0, 1, 1)
+	m.Set(0, 4, 1) // First row
+	m.Set(1, 6, 1)
+	m.Set(1, 6, 1) // second row
+	m.Set(3, 2, 1)
+	m.Set(3, 6, 1) // fourth row
+	m.Set(5, 0, 1)
+	m.Set(5, 1, 1)
+	m.Set(5, 2, 1) // fifth row
+	m.Set(7, 6, 1) // seventh row
+	fa := mat64.Formatted(m, mat64.Prefix("    "))
+	// Display the matrix
+	fmt.Printf("\nm = %v\n\n", fa)
+
 	n := 6
 	cs := make([]<-chan Message, n)
 	for i := 0; i < n; i++ {
