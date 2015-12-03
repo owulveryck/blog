@@ -1,4 +1,6 @@
 digraph g {
+
+    node [ shape = polygon, sides = 4 ]
     edge [color=green]
     conductor -> 0
     conductor -> 1

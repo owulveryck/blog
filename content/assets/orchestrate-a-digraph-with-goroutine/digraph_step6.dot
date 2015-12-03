@@ -1,4 +1,5 @@
 digraph g {
+    node [ shape = polygon, sides = 4 ]
     7 [color=green]
     3 [color=grey]
     5 [color=grey]

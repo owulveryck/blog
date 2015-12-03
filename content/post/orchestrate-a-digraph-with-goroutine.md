@@ -47,21 +47,36 @@ Every goroutine will then check in the adjacency matrix, whether it has predeces
 Once the execution of task is over, the goroutine will then feed another channel to tell the conductor that its job is done. and then the conductor will broadcast the information.
 
 * __(1)__ The conductors feed the nodes with the matrix
-<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot"><img class="img-responsive" src="/assets/images/digraph_step1.png" alt="digraph example"/></a>
+
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step1.png" alt="digraph example"/></a>
+
 * __(2)__ Every node get the data and analyse the matrix
-<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot"><img class="img-responsive" src="/assets/images/digraph_step2.png" alt="digraph example"/> </a>
+
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step2.png" alt="digraph example"/> </a>
+
 * __(3)__ Nodes 3, 5 and 7 have no predecessor, they can run
-<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot"><img class="img-responsive" src="/assets/images/digraph_step3.png" alt="digraph example"/> </a>
+
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step3.png" alt="digraph example"/> </a>
+
 * __(4)__ Nodes 3 and 5 are done, they informs the conductor
-<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot"><img class="img-responsive" src="/assets/images/digraph_step4.png" alt="digraph example"/> </a>
+
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step4.png" alt="digraph example"/> </a>
+
 * __(5)__ conductor update the matrix
-<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot"><img class="img-responsive" src="/assets/images/digraph_step5.png" alt="digraph example"/> </a>
+
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step5.png" alt="digraph example"/> </a>
+
 * __(6)__ The conductor feeds the nodes with the matrix
-<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot"><img class="img-responsive" src="/assets/images/digraph_step6.png" alt="digraph example"/> </a>
+
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step6.png" alt="digraph example"/> </a>
+
 * __(7)__ The nodes analyse the matrix
-<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot"><img class="img-responsive" src="/assets/images/digraph_step7.png" alt="digraph example"/> </a>
+
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step7.png" alt="digraph example"/> </a>
+
 * __(8)__ Node 2 can run...
-<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot"><img class="img-responsive" src="/assets/images/digraph_step8.png" alt="digraph example"/> </a>
+
+<a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step8.png" alt="digraph example"/> </a>
 
 ## The representation of the use case in go
 
