@@ -46,24 +46,22 @@ Every goroutine will then check in the adjacency matrix, whether it has predeces
 
 Once the execution of task is over, the goroutine will then feed another channel to tell the conductor that its job is done. and then the conductor will broadcast the information.
 
-
-<table class="table-responsive">
-    <td>(1) The conductor feed the nodes with the matrix</td>
-    <td> <img class="img-responsive" src="/assets/images/digraph_step1.png" alt="digraph example"/> </td>
-</table>
-<table class="tableèresponsive">
-    <td>(2) Every node get the data and analyse the matrix</td>
-    <td> <img class="img-responsive" src="/assets/images/digraph_step2.png" alt="digraph example"/> </td>
-</table>
-<table class="tableèresponsive">
-    <td>(3) Nodes 3, 5 and 7 have no predecessor, they can run</td>
-    <td> <img class="img-responsive" src="/assets/images/digraph_step3.png" alt="digraph example"/> </td>
-</table>
-<table class="table-responsive">
-    <td>(3) Nodes 3 is done, it informs the conductor</td>
-    <td> <img class="img-responsive" src="/assets/images/digraph_step4.png" alt="digraph example"/> </td>
-</table>
-
+* __(1)__ The conductors feed the nodes with the matrix
+<img class="img-responsive" src="/assets/images/digraph_step1.png" alt="digraph example"/> 
+* __(2)__ Every node get the data and analyse the matrix
+<img class="img-responsive" src="/assets/images/digraph_step2.png" alt="digraph example"/> 
+* __(3)__ Nodes 3, 5 and 7 have no predecessor, they can run
+<img class="img-responsive" src="/assets/images/digraph_step3.png" alt="digraph example"/> 
+* __(4)__ Nodes 3 and 5 are done, they informs the conductor
+<img class="img-responsive" src="/assets/images/digraph_step4.png" alt="digraph example"/> 
+* __(5)__ conductor update the matrix
+<img class="img-responsive" src="/assets/images/digraph_step5.png" alt="digraph example"/> 
+* __(6)__ The conductor feeds the nodes with the matrix
+<img class="img-responsive" src="/assets/images/digraph_step6.png" alt="digraph example"/> 
+* __(7)__ The nodes analyse the matrix
+<img class="img-responsive" src="/assets/images/digraph_step7.png" alt="digraph example"/> 
+* __(8)__ Node 2 can run...
+<img class="img-responsive" src="/assets/images/digraph_step8.png" alt="digraph example"/> 
 ## The representation of the use case in go
 
 to keep it simple, I won't use a `list` or a `slice` to represent the matrix, but instead I will rely on the [package mat64](https://godoc.org/github.com/gonum/matrix/mat64).

@@ -1,4 +1,8 @@
 digraph g {
+    7 [color=green]
+    3 [color=grey]
+    5 [color=grey]
+    edge [color=green]
     conductor -> 0
     conductor -> 1
     conductor -> 2
