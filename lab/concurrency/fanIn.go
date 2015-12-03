@@ -8,7 +8,8 @@ import (
 )
 
 type Message struct {
-	str  string
+	id   int
+	run  bool
 	wait chan mat64.Dense
 }
 
@@ -29,18 +30,29 @@ func main() {
 	// Display the matrix
 	fmt.Printf("\nm = %v\n\n", fa)
 
-	n := 6
+	n, _ := m.Dims()
 	cs := make([]<-chan Message, n)
 	for i := 0; i < n; i++ {
-		cs[i] = runme(fmt.Sprintf("[%v]", i), time.Duration(rand.Intn(1e3))*time.Millisecond)
+		cs[i] = runme(i, time.Duration(rand.Intn(1e3))*time.Millisecond)
 	}
 
 	for {
 		for j := 0; j < n; j++ {
 			select {
-			case cmd := <-cs[j]:
-				fmt.Println(cmd)
-				// task j is done... Let's trigger the other one
+			case node := <-cs[j]:
+				// Task J has spoken, let's see if it's done
+				fmt.Printf("%v told us something...", j)
+				if node.run == true {
+					fmt.Printf("it has finished\n")
+					// 0 its row in the matrix
+					for c := 0; c < n; c++ {
+						m.Set(j, c, 0)
+					}
+					// Now send back the matrix to everybody
+				} else {
+					fmt.Printf("nothing important\n")
+				}
+				node.wait <- *m
 			default:
 			}
 		}
@@ -48,22 +60,33 @@ func main() {
 	fmt.Println("This is the end!")
 }
 
-func runme(cmd string, duration time.Duration) <-chan Message {
+func runme(id int, duration time.Duration) <-chan Message {
 	c := make(chan Message)
 	waitForIt := make(chan mat64.Dense) // Shared between all messages.
 	go func() {
-		//for i := 0; ; i++ {
-		//c <- Message{fmt.Sprintf("%s: %d", cmd, i), waitForIt}
-		time.Sleep(duration)
-		fmt.Printf("%v done\n", cmd)
-		c <- Message{cmd, waitForIt}
-		//<-waitForIt
-		//}
+		for {
+			run := false
+			c <- Message{id, run, waitForIt}
+			m := <-waitForIt
+			s, _ := m.Dims()
+			run = true
+			for i := 0; i < s; i++ {
+				if m.At(i, id) == 1 {
+					run = false
+				}
+			}
+			if run == true {
+				fmt.Printf("I am %v, and I am running\n", id)
+				time.Sleep(duration)
+				// Now send the message that I'm done...
+				c <- Message{id, run, waitForIt}
+			}
+		}
 	}()
 	return c
 }
 
-func fanIn(inputs ...<-chan Message) <-chan Message { // HL
+func fanIn(inputs ...<-chan Message) <-chan Message {
 	c := make(chan Message)
 	for i := range inputs {
 		input := inputs[i] // New instance of 'input' for each loop.
