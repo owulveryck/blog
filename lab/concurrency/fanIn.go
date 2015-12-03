@@ -34,26 +34,22 @@ func main() {
 	cs := make([]<-chan Message, n)
 	for i := 0; i < n; i++ {
 		cs[i] = runme(i, time.Duration(rand.Intn(1e3))*time.Millisecond)
+		node := <-cs[i]
+		go func() {
+			for {
+				node.wait <- *m
+			}
+		}()
 	}
 
+	c := fanIn(cs...)
 	for {
-		for j := 0; j < n; j++ {
-			select {
-			case node := <-cs[j]:
-				// Task J has spoken, let's see if it's done
-				fmt.Printf("%v told us something...", j)
-				if node.run == true {
-					fmt.Printf("it has finished\n")
-					// 0 its row in the matrix
-					for c := 0; c < n; c++ {
-						m.Set(j, c, 0)
-					}
-					// Now send back the matrix to everybody
-				} else {
-					fmt.Printf("nothing important\n")
-				}
-				node.wait <- *m
-			default:
+		node := <-c
+		if node.run == true {
+			fmt.Printf("%v has finished\n", node.id)
+			// 0 its row in the matrix
+			for c := 0; c < n; c++ {
+				m.Set(node.id, c, 0)
 			}
 		}
 	}
@@ -64,8 +60,8 @@ func runme(id int, duration time.Duration) <-chan Message {
 	c := make(chan Message)
 	waitForIt := make(chan mat64.Dense) // Shared between all messages.
 	go func() {
-		for {
-			run := false
+		run := false
+		for run == false {
 			c <- Message{id, run, waitForIt}
 			m := <-waitForIt
 			s, _ := m.Dims()
