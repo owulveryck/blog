@@ -39,9 +39,30 @@ Every node will be run in a `goroutine`. That is a point. But how do I deal with
 
 Every single goroutine will be initially launched and then wait for an information.
 
-It will have an input communication channel, and a _conductor_ will feed this channel with enough information for the goroutine to decides whether it should run or not.
+It will have an input communication channel, and a _conductor_ will feed this channel with enough information for the goroutine to decides whether it should run or not. 
+This information is simply the adjacency matrix up-to-date. That means that is a node is done, its value is set to zero.
+
+Every goroutine will then check in the adjacency matrix, whether it has predecessor and therefor will execute the step or not.
 
 Once the execution of task is over, the goroutine will then feed another channel to tell the conductor that its job is done. and then the conductor will broadcast the information.
+
+
+<table class="table-responsive">
+    <td>(1) The conductor feed the nodes with the matrix</td>
+    <td> <img class="img-responsive" src="/assets/images/digraph_step1.png" alt="digraph example"/> </td>
+</table>
+<table class="tableèresponsive">
+    <td>(2) Every node get the data and analyse the matrix</td>
+    <td> <img class="img-responsive" src="/assets/images/digraph_step2.png" alt="digraph example"/> </td>
+</table>
+<table class="tableèresponsive">
+    <td>(3) Nodes 3, 5 and 7 have no predecessor, they can run</td>
+    <td> <img class="img-responsive" src="/assets/images/digraph_step3.png" alt="digraph example"/> </td>
+</table>
+<table class="table-responsive">
+    <td>(3) Nodes 3 is done, it informs the conductor</td>
+    <td> <img class="img-responsive" src="/assets/images/digraph_step4.png" alt="digraph example"/> </td>
+</table>
 
 ## The representation of the use case in go
 

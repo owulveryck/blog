@@ -1,0 +1,21 @@
+digraph g {
+    0 [color=orange]
+    1 [color=orange]
+    2 [color=orange]
+    3 [color=orange]
+    4 [color=orange]
+    5 [color=orange]
+    6 [color=orange]
+    7 [color=orange]
+    subgraph A {
+        edge [dir=none, color=grey]
+        conductor -> 0 
+        conductor -> 1
+        conductor -> 2
+        conductor -> 3
+        conductor -> 4
+        conductor -> 5
+        conductor -> 6
+        conductor -> 7
+    }
+}
