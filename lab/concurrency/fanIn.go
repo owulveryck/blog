@@ -33,7 +33,7 @@ func main() {
 	n, _ := m.Dims()
 	cs := make([]<-chan Message, n)
 	for i := 0; i < n; i++ {
-		cs[i] = runme(i, time.Duration(rand.Intn(1e3))*time.Millisecond)
+		cs[i] = run(i, time.Duration(rand.Intn(1e3))*time.Millisecond)
 		node := <-cs[i]
 		go func() {
 			for {
@@ -41,7 +41,6 @@ func main() {
 			}
 		}()
 	}
-
 	c := fanIn(cs...)
 	for {
 		node := <-c
@@ -56,7 +55,7 @@ func main() {
 	fmt.Println("This is the end!")
 }
 
-func runme(id int, duration time.Duration) <-chan Message {
+func run(id int, duration time.Duration) <-chan Message {
 	c := make(chan Message)
 	waitForIt := make(chan mat64.Dense) // Shared between all messages.
 	go func() {
