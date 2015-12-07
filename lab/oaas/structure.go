@@ -1,7 +1,8 @@
 package main
 
 import (
-//"encoding/json"
+	"encoding/json"
+	"fmt"
 )
 
 type Input struct {
@@ -21,5 +22,37 @@ type Node struct {
 }
 
 func main() {
-
+	test := Input{"Test",
+		[]int{0, 1, 0, 0, 1, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 1, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 1, 0, 0, 0, 1, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			1, 1, 1, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 1, 0,
+		},
+		[]Node{
+			{0, "a", "ansible", "myplaybook.yml", nil, nil, nil},
+			{1, "b", "ansible", "myplaybook1.yml", nil, nil,
+				map[string]string{
+					"output1": "",
+				},
+			},
+			{2, "c", "ansible", "myplaybook2.yml", nil,
+				map[string]string{
+					"b": "output1",
+				}, nil},
+			{3, "d", "ansible", "myplaybook3.yml", nil, nil, nil},
+			{4, "e", "ansible", "myplaybook4.yml", nil, nil, nil},
+			{5, "f", "ansible", "myplaybook5.yml", nil, nil, nil},
+			{6, "g", "ansible", "myplaybook6.yml", nil, nil, nil},
+			{7, "h", "ansible", "myplaybook7.yml", nil, nil, nil},
+		},
+	}
+	o, err := json.MarshalIndent(test, "  ", "  ")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("%s\n", o)
 }
