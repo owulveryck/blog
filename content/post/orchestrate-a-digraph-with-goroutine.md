@@ -9,7 +9,7 @@ draft: false
 tags:
 - golang
 - digraph
-title: Orchestrate a digraph with goroutine
+title: Orchestrate a digraph with goroutine, a concurrent orchestrator
 type: post
 ---
 
@@ -17,6 +17,8 @@ I've read a lot about graph theory recently.
 They have changed the world a lot. From the simple representation to Bayesian network via Markov chains, the applications are numerous.
 
 Today I would like to imagine a graph as a workflow of execution. Every node would be considered as runnable. And every  edge would be a dependency.
+
+It is an important framework that may be used to as an orchestrator for any model, and of course I am a lot thinkingabout __TOSCA__
 
 # The use case 
 If we consider this very simple graph (example taken from the french wikipedia page)
@@ -104,8 +106,146 @@ fa := mat64.Formatted(m, mat64.Prefix("    "))
 fmt.Printf("\nm = %v\n\n", fa)
 ```
 
-### The code
+### The node execution function (_run_)
+The node execution is performed by a `run` function that takes two arguments: 
 
-# References
+* The ID of the node
+* The duration of the sleep it performs...
+
+This function returns a channel that will be used to exchange a `Message`
+```golang
+func run(id int, duration time.Duration) <-chan Message { }
+```
+
+A `Message` is a structure that will holds:
+
+* the id of the node who have issued the message
+* a boolean which act as a flag that says whether it has already run
+* a wait channel which take a matrix as argument. This channel acts as the communication back mechanism from the conductor to the node
+
+
+```golang
+type Message struct {
+	id   int
+	run  bool
+	wait chan mat64.Dense
+}
+```
+
+The run function will launch a goroutine which will remain active thanks to a loop.
+It allows the run function to finish an returns the channel as soon as possible to it can be used by the conductor.
+
+### The conductor
+
+The conductor will be executed inside the main function in our example.
+
+The first step is to launch as many `run` function as needed.
+
+There is no need to launch them in separate goroutines, because, as explained before, 
+the run function will returns the channel immediately because the intelligence is living in a goroutine already.
+
+```golang
+for i := 0; i < n; i++ { // n is the dimension of the matrix
+    cs[i] = run(i, time.Duration(rand.Intn(1e3))*time.Millisecond)
+    ...
+```
+
+Then, as we have launched our workers, and as the communication channel exists, we should launch `n` "angel" goroutines, that will take care of
+sending back the matrix to all the workers.
+
+```golang
+    ...
+	node := <-cs[i]
+	go func() {
+		for {
+			node.wait <- *m
+		}
+	}()
+}
+```
+
+Then we shall collect all the messages sent back by the goroutines to treat them and update the matrix as soon as a goroutine has finished.
+I will use the `fanIn` function as described by _Rob Pike_ in the IO Takl of 2012 (see references) and then go in a `for loop` to get the results
+as soon as they arrived:
+
+```golang
+c := fanIn(cs...)
+timeout := time.After(5 * time.Second)
+for {
+    select {
+    case node := <-c:
+        if node.run == true {
+            fmt.Printf("%v has finished\n", node.id)
+            // 0 its row in the matrix
+            for c := 0; c < n; c++ {
+                m.Set(node.id, c, 0)
+            }
+        }
+    case <-timeout:
+        fmt.Println("Timeout")
+        return
+    default:
+        if mat64.Sum(m) == 0 {
+            fmt.Println("All done!")
+            return
+        }
+    }
+}
+fmt.Println("This is the end!")
+```
+
+__Note__ I have set up a timeout, just in case ([reference](https://talks.golang.org/2012/concurrency.slide#36))...
+__Note2__ I do not talk about the fanIn funtion which is described [here](https://talks.golang.org/2012/concurrency.slide#28)
+
+## The test
+
+Here is what I got when I launch the test:
+
+```
+go run orchestrator.go 
+I am 7, and I am running
+I am 3, and I am running
+I am 5, and I am running
+3 has finished
+5 has finished
+I am 2, and I am running
+I am 0, and I am running
+0 has finished
+I am 1, and I am running
+I am 4, and I am running
+4 has finished
+7 has finished
+2 has finished
+1 has finished
+All done!
+```
+
+Pretty cool
+
+The complete source can be found [here](https://github.com/owulveryck/gorchestrator).
+
+If you want to play: download go, setup a directory and a `$GOPATH` then simply
+
+```
+go get github.com/owulveryck/gorchestrator
+cd $GOPATH/src/github.com/owulveryck/gorchestrator
+go run orchestrator.go
+```
+
+# Conclusions
+
+I'm really happy about this implementation. It is clear and concise, and no too far to be idiomatic go.
+
+What I would like to do now:
+
+* Read a TOSCA file (again) and pass the adjacency matrix to the orchestrator. That would do a complete orchestrator for cheap.
+* Re-use an old implemenation of the [toscaviewer](https://github.com/owulveryck/toscaviewer).
+The idea is to implement a web server that serves the matrix as a json stream. This json will be used to update the SVG (via jquery),
+and then we would be able to see the progession in a graphical way.
+
+
+__STAY TUNED!!!__
+
+### References
 
 * [Go Concurrency Patterns (Rob Pike)](https://talks.golang.org/2012/concurrency.slide)
