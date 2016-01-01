@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://blog.owulveryck.info/post/</link>
+    <link>http://dev.owulveryck.info/blog/post/</link>
     <description>Recent content in Posts on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015</copyright>
     <lastBuildDate>Wed, 02 Dec 2015 14:24:21 +0000</lastBuildDate>
-    <atom:link href="http://blog.owulveryck.info/post/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://dev.owulveryck.info/blog/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Orchestrate a digraph with goroutine, a concurrent orchestrator</title>
-      <link>http://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</link>
+      <link>http://dev.owulveryck.info/blog/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</link>
       <pubDate>Wed, 02 Dec 2015 14:24:21 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</guid>
       <description>
 
 &lt;p&gt;I&amp;rsquo;ve read a lot about graph theory recently.
@@ -31,11 +31,11 @@ They have changed the world a lot. From the simple representation to Bayesian ne
 
 &lt;p&gt;If we consider this very simple graph (example taken from the french wikipedia page)&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;its corresponding adjacency matrix is:&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/matrix1.png&#34; alt=&#34;Adjacency matrix&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/matrix1.png&#34; alt=&#34;Adjacency matrix&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;its dimension is 8x8&lt;/p&gt;
 
@@ -64,49 +64,49 @@ This information is simply the adjacency matrix up-to-date. That means that is a
 &lt;li&gt;&lt;strong&gt;(1)&lt;/strong&gt; The conductors feed the nodes with the matrix&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(2)&lt;/strong&gt; Every node get the data and analyse the matrix&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step2.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step2.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(3)&lt;/strong&gt; Nodes 3, 5 and 7 have no predecessor (their column in the matrix sums to zero): they can run&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step3.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step3.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(4)&lt;/strong&gt; Nodes 3 and 5 are done, they informs the conductor&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step4.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step4.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(5)&lt;/strong&gt; conductor update the matrix. It fills the rows 3 and 5 with zeros (actually rows 4 and 6, because our first node is 0)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step5.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step5.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(6)&lt;/strong&gt; The conductor feeds the nodes with the matrix&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step6.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step6.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(7)&lt;/strong&gt; The nodes analyse the matrix&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step7.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step7.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(8)&lt;/strong&gt; Node 2 can run&amp;hellip;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step8.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step8.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;the-representation-of-the-use-case-in-go:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;The representation of the use case in go&lt;/h2&gt;
 
@@ -279,10 +279,10 @@ and then we would be able to see the progession in a graphical way.&lt;/li&gt;
     
     <item>
       <title>KSH93 cool features for scripting</title>
-      <link>http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting/</link>
+      <link>http://dev.owulveryck.info/blog/2015/11/30/ksh93-cool-features-for-scripting/</link>
       <pubDate>Mon, 30 Nov 2015 13:17:41 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/11/30/ksh93-cool-features-for-scripting/</guid>
       <description>
 
 &lt;p&gt;From time to time, I&amp;rsquo;m involved into a trolling conversation when any linux kiddie tells me:&lt;/p&gt;
@@ -551,10 +551,10 @@ Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Executi
     
     <item>
       <title>TOSCA lifecycle as a digraph</title>
-      <link>http://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/</link>
+      <link>http://dev.owulveryck.info/blog/2015/11/20/tosca-lifecycle-as-a-digraph/</link>
       <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/11/20/tosca-lifecycle-as-a-digraph/</guid>
       <description>
 
 &lt;h1 id=&#34;about-tosca:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;About TOSCA&lt;/h1&gt;
@@ -593,10 +593,10 @@ To be clear, It may act on the hosting and execution plan of the application, an
 &lt;hr/&gt;
 
 &lt;p&gt;&lt;em&gt;The graph representation of a &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/toscaviewer_template_def.png&#34; alt=&#34;Tosca view ofthe single instance wordpress&#34;/&gt;&lt;/p&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/toscaviewer_template_def.png&#34; alt=&#34;Tosca view ofthe single instance wordpress&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;The graph representation of a lifecycle of &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/toscaviewer_lifecycle_def.png&#34; alt=&#34;Lifecycle representation of the single wordpress instance representation&#34;/&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/toscaviewer_lifecycle_def.png&#34; alt=&#34;Lifecycle representation of the single wordpress instance representation&#34;/&gt;
 &lt;hr/&gt;&lt;/p&gt;
 
 &lt;p&gt;The TOSCA file is parsed with the help of the &lt;code&gt;TOSCALIB&lt;/code&gt; and then it fills an adjacency matrix (see &lt;a href=&#34;https://godoc.org/github.com/owulveryck/toscalib#ToscaDefinition.FillAdjacencyMatrix&#34;&gt;FillAdjacencyMatrix&lt;/a&gt;)&lt;/p&gt;
@@ -791,10 +791,10 @@ wordpress:Start
     
     <item>
       <title>Playing with (Openstack) Keystone</title>
-      <link>http://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone/</link>
+      <link>http://dev.owulveryck.info/blog/2015/11/17/playing-with-openstack-keystone/</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/11/17/playing-with-openstack-keystone/</guid>
       <description>
 
 &lt;p&gt;In the cloud computing, alongside of the hosting monsters such as amazon or google, there is the &lt;a href=&#34;https://www.openstack.org&#34;&gt;Openstack Platform&lt;/a&gt;.&lt;/p&gt;
@@ -1163,10 +1163,10 @@ The tool may be useful, but the TCO sounds high and the entry ticket is not negl
     
     <item>
       <title>Simple IaaS API documentation with swagger</title>
-      <link>http://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger/</link>
+      <link>http://dev.owulveryck.info/blog/2015/11/11/simple-iaas-api-documentation-with-swagger/</link>
       <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/11/11/simple-iaas-api-documentation-with-swagger/</guid>
       <description>
 
 &lt;p&gt;In a &lt;a href=&#34;http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/&#34;&gt;previous post&lt;/a&gt; I have explained how to develop a very simple API server.&lt;/p&gt;
@@ -1432,7 +1432,7 @@ The loop used in the &lt;code&gt;router.go&lt;/code&gt; is using the &lt;code&gt
 &lt;p&gt;&lt;em&gt;Et voilà!&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;center&gt;
-&lt;img class=&#34;img-square img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/swagger.png&#34; alt=&#34;Result&#34;/&gt;
+&lt;img class=&#34;img-square img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/swagger.png&#34; alt=&#34;Result&#34;/&gt;
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;final-word:6885d873cca9f64e761bb42572892f34&#34;&gt;Final word&lt;/h1&gt;
@@ -1452,10 +1452,10 @@ Once the API is fully implemented, any client binding may also be generated with
     
     <item>
       <title>IaaS-like RESTfull API based on microservices</title>
-      <link>http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/</link>
+      <link>http://dev.owulveryck.info/blog/2015/11/10/iaas-like-restfull-api-based-on-microservices/</link>
       <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/11/10/iaas-like-restfull-api-based-on-microservices/</guid>
       <description>
 
 &lt;h1 id=&#34;abstracts:1574d51e403296c43e921da78612bc7c&#34;&gt;Abstracts&lt;/h1&gt;
@@ -1663,10 +1663,10 @@ ok
     
     <item>
       <title>Developping &#34;Google Apps&#34; on my Chromebook</title>
-      <link>http://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/</link>
+      <link>http://dev.owulveryck.info/blog/2015/10/26/developping-google-apps-on-my-chromebook/</link>
       <pubDate>Mon, 26 Oct 2015 10:41:57 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/10/26/developping-google-apps-on-my-chromebook/</guid>
       <description>
 
 &lt;p&gt;It is a week now that I&amp;rsquo;m playing with my chromebook.
@@ -1782,10 +1782,10 @@ INFO     2015-10-26 15:48:16,701 api_server.py:651] Saving search indexes
     
     <item>
       <title>Simple polling, a cloud native app - part 1</title>
-      <link>http://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1/</link>
+      <link>http://dev.owulveryck.info/blog/2015/10/23/simple-polling-a-cloud-native-app---part-1/</link>
       <pubDate>Fri, 23 Oct 2015 09:54:27 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/10/23/simple-polling-a-cloud-native-app---part-1/</guid>
       <description>
 
 &lt;p&gt;In this series of posts I&amp;rsquo;ll explain how to setup a simple polling app, the cloud way.
@@ -1907,10 +1907,10 @@ Hello, world!
     
     <item>
       <title>Ruby / ZeroMQ / GO</title>
-      <link>http://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/</link>
+      <link>http://dev.owulveryck.info/blog/2015/10/22/ruby-/-zeromq-/-go/</link>
       <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/10/22/ruby-/-zeromq-/-go/</guid>
       <description>
 
 &lt;h1 id=&#34;abtract:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Abtract&lt;/h1&gt;
@@ -2118,10 +2118,10 @@ Indeed, I&amp;rsquo;ve found an &lt;a href=&#34;https://github.com/chuckremes/ff
     
     <item>
       <title>Welcome</title>
-      <link>http://blog.owulveryck.info/2015/10/22/welcome/</link>
+      <link>http://dev.owulveryck.info/blog/2015/10/22/welcome/</link>
       <pubDate>Thu, 22 Oct 2015 15:59:07 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/10/22/welcome/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/10/22/welcome/</guid>
       <description>&lt;p&gt;You are in a place where a new technical blog will stand soon.&lt;/p&gt;
 </description>
     </item>

@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tosca on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://blog.owulveryck.info/tags/tosca/</link>
+    <link>http://dev.owulveryck.info/blog/tags/tosca/</link>
     <description>Recent content in Tosca on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015</copyright>
     <lastBuildDate>Fri, 20 Nov 2015 10:09:30 +0000</lastBuildDate>
-    <atom:link href="http://blog.owulveryck.info/tags/tosca/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://dev.owulveryck.info/blog/tags/tosca/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>TOSCA lifecycle as a digraph</title>
-      <link>http://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/</link>
+      <link>http://dev.owulveryck.info/blog/2015/11/20/tosca-lifecycle-as-a-digraph/</link>
       <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/11/20/tosca-lifecycle-as-a-digraph/</guid>
       <description>
 
 &lt;h1 id=&#34;about-tosca:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;About TOSCA&lt;/h1&gt;
@@ -56,10 +56,10 @@ To be clear, It may act on the hosting and execution plan of the application, an
 &lt;hr/&gt;
 
 &lt;p&gt;&lt;em&gt;The graph representation of a &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/toscaviewer_template_def.png&#34; alt=&#34;Tosca view ofthe single instance wordpress&#34;/&gt;&lt;/p&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/toscaviewer_template_def.png&#34; alt=&#34;Tosca view ofthe single instance wordpress&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;The graph representation of a lifecycle of &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/toscaviewer_lifecycle_def.png&#34; alt=&#34;Lifecycle representation of the single wordpress instance representation&#34;/&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/toscaviewer_lifecycle_def.png&#34; alt=&#34;Lifecycle representation of the single wordpress instance representation&#34;/&gt;
 &lt;hr/&gt;&lt;/p&gt;
 
 &lt;p&gt;The TOSCA file is parsed with the help of the &lt;code&gt;TOSCALIB&lt;/code&gt; and then it fills an adjacency matrix (see &lt;a href=&#34;https://godoc.org/github.com/owulveryck/toscalib#ToscaDefinition.FillAdjacencyMatrix&#34;&gt;FillAdjacencyMatrix&lt;/a&gt;)&lt;/p&gt;

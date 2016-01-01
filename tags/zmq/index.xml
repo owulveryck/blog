@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Zmq on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://blog.owulveryck.info/tags/zmq/</link>
+    <link>http://dev.owulveryck.info/blog/tags/zmq/</link>
     <description>Recent content in Zmq on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015</copyright>
     <lastBuildDate>Thu, 22 Oct 2015 20:40:36 +0200</lastBuildDate>
-    <atom:link href="http://blog.owulveryck.info/tags/zmq/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://dev.owulveryck.info/blog/tags/zmq/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Ruby / ZeroMQ / GO</title>
-      <link>http://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/</link>
+      <link>http://dev.owulveryck.info/blog/2015/10/22/ruby-/-zeromq-/-go/</link>
       <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/10/22/ruby-/-zeromq-/-go/</guid>
       <description>
 
 &lt;h1 id=&#34;abtract:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Abtract&lt;/h1&gt;

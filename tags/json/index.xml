@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Json on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://blog.owulveryck.info/tags/json/</link>
+    <link>http://dev.owulveryck.info/blog/tags/json/</link>
     <description>Recent content in Json on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015</copyright>
     <lastBuildDate>Wed, 11 Nov 2015 14:24:43 +0100</lastBuildDate>
-    <atom:link href="http://blog.owulveryck.info/tags/json/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://dev.owulveryck.info/blog/tags/json/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Simple IaaS API documentation with swagger</title>
-      <link>http://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger/</link>
+      <link>http://dev.owulveryck.info/blog/2015/11/11/simple-iaas-api-documentation-with-swagger/</link>
       <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/11/11/simple-iaas-api-documentation-with-swagger/</guid>
       <description>
 
 &lt;p&gt;In a &lt;a href=&#34;http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/&#34;&gt;previous post&lt;/a&gt; I have explained how to develop a very simple API server.&lt;/p&gt;
@@ -283,7 +283,7 @@ The loop used in the &lt;code&gt;router.go&lt;/code&gt; is using the &lt;code&gt
 &lt;p&gt;&lt;em&gt;Et voilà!&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;center&gt;
-&lt;img class=&#34;img-square img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/swagger.png&#34; alt=&#34;Result&#34;/&gt;
+&lt;img class=&#34;img-square img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/swagger.png&#34; alt=&#34;Result&#34;/&gt;
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;final-word:6885d873cca9f64e761bb42572892f34&#34;&gt;Final word&lt;/h1&gt;

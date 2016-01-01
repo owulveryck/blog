@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Msgpack on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://blog.owulveryck.info/tags/msgpack/</link>
+    <link>http://dev.owulveryck.info/blog/tags/msgpack/</link>
     <description>Recent content in Msgpack on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015</copyright>
     <lastBuildDate>Tue, 10 Nov 2015 08:56:36 +0100</lastBuildDate>
-    <atom:link href="http://blog.owulveryck.info/tags/msgpack/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://dev.owulveryck.info/blog/tags/msgpack/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>IaaS-like RESTfull API based on microservices</title>
-      <link>http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/</link>
+      <link>http://dev.owulveryck.info/blog/2015/11/10/iaas-like-restfull-api-based-on-microservices/</link>
       <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/11/10/iaas-like-restfull-api-based-on-microservices/</guid>
       <description>
 
 &lt;h1 id=&#34;abstracts:1574d51e403296c43e921da78612bc7c&#34;&gt;Abstracts&lt;/h1&gt;

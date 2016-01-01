@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Golang on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://blog.owulveryck.info/tags/golang/</link>
+    <link>http://dev.owulveryck.info/blog/tags/golang/</link>
     <description>Recent content in Golang on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015</copyright>
     <lastBuildDate>Wed, 02 Dec 2015 14:24:21 +0000</lastBuildDate>
-    <atom:link href="http://blog.owulveryck.info/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://dev.owulveryck.info/blog/tags/golang/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Orchestrate a digraph with goroutine, a concurrent orchestrator</title>
-      <link>http://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</link>
+      <link>http://dev.owulveryck.info/blog/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</link>
       <pubDate>Wed, 02 Dec 2015 14:24:21 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</guid>
       <description>
 
 &lt;p&gt;I&amp;rsquo;ve read a lot about graph theory recently.
@@ -31,11 +31,11 @@ They have changed the world a lot. From the simple representation to Bayesian ne
 
 &lt;p&gt;If we consider this very simple graph (example taken from the french wikipedia page)&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;its corresponding adjacency matrix is:&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/matrix1.png&#34; alt=&#34;Adjacency matrix&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/matrix1.png&#34; alt=&#34;Adjacency matrix&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;its dimension is 8x8&lt;/p&gt;
 
@@ -64,49 +64,49 @@ This information is simply the adjacency matrix up-to-date. That means that is a
 &lt;li&gt;&lt;strong&gt;(1)&lt;/strong&gt; The conductors feed the nodes with the matrix&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(2)&lt;/strong&gt; Every node get the data and analyse the matrix&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step2.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step2.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(3)&lt;/strong&gt; Nodes 3, 5 and 7 have no predecessor (their column in the matrix sums to zero): they can run&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step3.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step3.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(4)&lt;/strong&gt; Nodes 3 and 5 are done, they informs the conductor&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step4.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step4.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(5)&lt;/strong&gt; conductor update the matrix. It fills the rows 3 and 5 with zeros (actually rows 4 and 6, because our first node is 0)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step5.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step5.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(6)&lt;/strong&gt; The conductor feeds the nodes with the matrix&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step6.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step6.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(7)&lt;/strong&gt; The nodes analyse the matrix&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step7.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step7.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(8)&lt;/strong&gt; Node 2 can run&amp;hellip;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step8.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step8.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;the-representation-of-the-use-case-in-go:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;The representation of the use case in go&lt;/h2&gt;
 
@@ -279,10 +279,10 @@ and then we would be able to see the progession in a graphical way.&lt;/li&gt;
     
     <item>
       <title>TOSCA lifecycle as a digraph</title>
-      <link>http://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/</link>
+      <link>http://dev.owulveryck.info/blog/2015/11/20/tosca-lifecycle-as-a-digraph/</link>
       <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/</guid>
+      <guid>http://dev.owulveryck.info/blog/2015/11/20/tosca-lifecycle-as-a-digraph/</guid>
       <description>
 
 &lt;h1 id=&#34;about-tosca:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;About TOSCA&lt;/h1&gt;
@@ -321,10 +321,10 @@ To be clear, It may act on the hosting and execution plan of the application, an
 &lt;hr/&gt;
 
 &lt;p&gt;&lt;em&gt;The graph representation of a &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/toscaviewer_template_def.png&#34; alt=&#34;Tosca view ofthe single instance wordpress&#34;/&gt;&lt;/p&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/toscaviewer_template_def.png&#34; alt=&#34;Tosca view ofthe single instance wordpress&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;The graph representation of a lifecycle of &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/toscaviewer_lifecycle_def.png&#34; alt=&#34;Lifecycle representation of the single wordpress instance representation&#34;/&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/toscaviewer_lifecycle_def.png&#34; alt=&#34;Lifecycle representation of the single wordpress instance representation&#34;/&gt;
 &lt;hr/&gt;&lt;/p&gt;
 
 &lt;p&gt;The TOSCA file is parsed with the help of the &lt;code&gt;TOSCALIB&lt;/code&gt; and then it fills an adjacency matrix (see &lt;a href=&#34;https://godoc.org/github.com/owulveryck/toscalib#ToscaDefinition.FillAdjacencyMatrix&#34;&gt;FillAdjacencyMatrix&lt;/a&gt;)&lt;/p&gt;
