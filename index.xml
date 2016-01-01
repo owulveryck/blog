@@ -1,0 +1,2206 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Olivier Wulveryck&#39;s Tech Blog</title>
+    <link>http://blog.owulveryck.info/</link>
+    <description>Recent content on Olivier Wulveryck&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved - 2015</copyright>
+    <lastBuildDate>Wed, 02 Dec 2015 14:24:21 +0000</lastBuildDate>
+    <atom:link href="http://blog.owulveryck.info/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Orchestrate a digraph with goroutine, a concurrent orchestrator</title>
+      <link>http://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</link>
+      <pubDate>Wed, 02 Dec 2015 14:24:21 +0000</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</guid>
+      <description>
+
+&lt;p&gt;I&amp;rsquo;ve read a lot about graph theory recently.
+They have changed the world a lot. From the simple representation to Bayesian network via Markov chains, the applications are numerous.&lt;/p&gt;
+
+&lt;p&gt;Today I would like to imagine a graph as a workflow of execution. Every node would be considered as runnable. And every  edge would be a dependency.&lt;/p&gt;
+
+&lt;p&gt;It is an important framework that may be used to as an orchestrator for any model, and of course I am a lot thinkingabout &lt;strong&gt;TOSCA&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;the-use-case:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;The use case&lt;/h1&gt;
+
+&lt;p&gt;If we consider this very simple graph (example taken from the french wikipedia page)&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;its corresponding adjacency matrix is:&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/matrix1.png&#34; alt=&#34;Adjacency matrix&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;its dimension is 8x8&lt;/p&gt;
+
+&lt;p&gt;For the lab, I will consider that each node has to do a simple task which is to wait for a random number of millisecond (such as Rob Pike&amp;rsquo;s &lt;em&gt;boring&lt;/em&gt; function, see references)&lt;/p&gt;
+
+&lt;h1 id=&#34;let-s-go:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;Let&amp;rsquo;s GO&lt;/h1&gt;
+
+&lt;h2 id=&#34;how-will-it-work:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;How will it work&lt;/h2&gt;
+
+&lt;p&gt;Every node will be run in a &lt;code&gt;goroutine&lt;/code&gt;. That is a point. But how do I deal with concurrency ?&lt;/p&gt;
+
+&lt;p&gt;Every single goroutine will be initially launched and then wait for an information.&lt;/p&gt;
+
+&lt;p&gt;It will have an input communication channel, and a &lt;em&gt;conductor&lt;/em&gt; will feed this channel with enough information for the goroutine to decides whether it should run or not.
+This information is simply the adjacency matrix up-to-date. That means that is a node is done, its value is set to zero.&lt;/p&gt;
+
+&lt;p&gt;Every goroutine will then check in the adjacency matrix, whether it has predecessor (that means if the corresponding vector is null, or every digit in column N is 0) and therefore will execute the step or not.&lt;/p&gt;
+
+&lt;p&gt;Once the execution of task is over, the goroutine will then feed another channel to tell the conductor that its job is done. and then the conductor will broadcast the information.&lt;/p&gt;
+
+&lt;h3 id=&#34;example:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;Example&lt;/h3&gt;
+
+&lt;p&gt;In our example, nodes &lt;em&gt;3&lt;/em&gt;, &lt;em&gt;5&lt;/em&gt;, and &lt;em&gt;7&lt;/em&gt; do not have any predecessor, so they will be able to run first.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(1)&lt;/strong&gt; The conductors feed the nodes with the matrix&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(2)&lt;/strong&gt; Every node get the data and analyse the matrix&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step2.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(3)&lt;/strong&gt; Nodes 3, 5 and 7 have no predecessor (their column in the matrix sums to zero): they can run&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step3.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(4)&lt;/strong&gt; Nodes 3 and 5 are done, they informs the conductor&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step4.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(5)&lt;/strong&gt; conductor update the matrix. It fills the rows 3 and 5 with zeros (actually rows 4 and 6, because our first node is 0)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step5.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(6)&lt;/strong&gt; The conductor feeds the nodes with the matrix&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step6.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(7)&lt;/strong&gt; The nodes analyse the matrix&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step7.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(8)&lt;/strong&gt; Node 2 can run&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://blog.owulveryck.info/assets/images/digraph_step8.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-representation-of-the-use-case-in-go:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;The representation of the use case in go&lt;/h2&gt;
+
+&lt;h3 id=&#34;data-representation:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;Data representation&lt;/h3&gt;
+
+&lt;p&gt;to keep it simple, I won&amp;rsquo;t use a &lt;code&gt;list&lt;/code&gt; or a &lt;code&gt;slice&lt;/code&gt; to represent the matrix, but instead I will rely on the &lt;a href=&#34;https://godoc.org/github.com/gonum/matrix/mat64&#34;&gt;package mat64&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;A slice may be more efficient, but by now it is not an issue.&lt;/p&gt;
+
+&lt;p&gt;On top of that, I may need later to transpose or look for eigenvalues, and this package does implement the correct method to do so.
+For clarity of the description, I didn&amp;rsquo;t use a &lt;code&gt;float64&lt;/code&gt; array to initialize the matrix.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;// Allocate a zeroed array of size 8×8
+m := mat64.NewDense(8, 8, nil)
+m.Set(0, 1, 1); m.Set(0, 4, 1) // First row
+m.Set(1, 6, 1); m.Set(1, 6, 1) // second row
+m.Set(3, 2, 1); m.Set(3, 6, 1) // fourth row
+m.Set(5, 0, 1); m.Set(5, 1, 1); m.Set(5, 2, 1) // fifth row
+m.Set(7, 6, 1) // seventh row
+fa := mat64.Formatted(m, mat64.Prefix(&amp;quot;    &amp;quot;))
+fmt.Printf(&amp;quot;\nm = %v\n\n&amp;quot;, fa)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;the-node-execution-function-run:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;The node execution function (&lt;em&gt;run&lt;/em&gt;)&lt;/h3&gt;
+
+&lt;p&gt;The node execution is performed by a &lt;code&gt;run&lt;/code&gt; function that takes two arguments:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The ID of the node&lt;/li&gt;
+&lt;li&gt;The duration of the sleep it performs&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This function returns a channel that will be used to exchange a &lt;code&gt;Message&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;func run(id int, duration time.Duration) &amp;lt;-chan Message { }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A &lt;code&gt;Message&lt;/code&gt; is a structure that will holds:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;the id of the node who have issued the message&lt;/li&gt;
+&lt;li&gt;a boolean which act as a flag that says whether it has already run&lt;/li&gt;
+&lt;li&gt;a wait channel which take a matrix as argument. This channel acts as the communication back mechanism from the conductor to the node&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;type Message struct {
+	id   int
+	run  bool
+	wait chan mat64.Dense
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The run function will launch a goroutine which will remain active thanks to a loop.
+It allows the run function to finish an returns the channel as soon as possible to it can be used by the conductor.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-conductor:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;The conductor&lt;/h3&gt;
+
+&lt;p&gt;The conductor will be executed inside the main function in our example.&lt;/p&gt;
+
+&lt;p&gt;The first step is to launch as many &lt;code&gt;run&lt;/code&gt; function as needed.&lt;/p&gt;
+
+&lt;p&gt;There is no need to launch them in separate goroutines, because, as explained before,
+the run function will returns the channel immediately because the intelligence is living in a goroutine already.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;for i := 0; i &amp;lt; n; i++ { // n is the dimension of the matrix
+    cs[i] = run(i, time.Duration(rand.Intn(1e3))*time.Millisecond)
+    ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, as we have launched our workers, and as the communication channel exists, we should launch &lt;code&gt;n&lt;/code&gt; &amp;ldquo;angel&amp;rdquo; goroutines, that will take care of
+sending back the matrix to all the workers.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;    ...
+	node := &amp;lt;-cs[i]
+	go func() {
+		for {
+			node.wait &amp;lt;- *m
+		}
+	}()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then we shall collect all the messages sent back by the goroutines to treat them and update the matrix as soon as a goroutine has finished.
+I will use the &lt;code&gt;fanIn&lt;/code&gt; function as described by &lt;em&gt;Rob Pike&lt;/em&gt; in the IO Takl of 2012 (see references) and then go in a &lt;code&gt;for loop&lt;/code&gt; to get the results
+as soon as they arrived:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;c := fanIn(cs...)
+timeout := time.After(5 * time.Second)
+for {
+    select {
+    case node := &amp;lt;-c:
+        if node.run == true {
+            fmt.Printf(&amp;quot;%v has finished\n&amp;quot;, node.id)
+            // 0 its row in the matrix
+            for c := 0; c &amp;lt; n; c++ {
+                m.Set(node.id, c, 0)
+            }
+        }
+    case &amp;lt;-timeout:
+        fmt.Println(&amp;quot;Timeout&amp;quot;)
+        return
+    default:
+        if mat64.Sum(m) == 0 {
+            fmt.Println(&amp;quot;All done!&amp;quot;)
+            return
+        }
+    }
+}
+fmt.Println(&amp;quot;This is the end!&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; I have set up a timeout, just in case (&lt;a href=&#34;https://talks.golang.org/2012/concurrency.slide#36&#34;&gt;reference&lt;/a&gt;)&amp;hellip;
+&lt;strong&gt;Note2&lt;/strong&gt; I do not talk about the fanIn funtion which is described &lt;a href=&#34;https://talks.golang.org/2012/concurrency.slide#28&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-test:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;The test&lt;/h2&gt;
+
+&lt;p&gt;Here is what I got when I launch the test:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;go run orchestrator.go 
+I am 7, and I am running
+I am 3, and I am running
+I am 5, and I am running
+3 has finished
+5 has finished
+I am 2, and I am running
+I am 0, and I am running
+0 has finished
+I am 1, and I am running
+I am 4, and I am running
+4 has finished
+7 has finished
+2 has finished
+1 has finished
+All done!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pretty cool&lt;/p&gt;
+
+&lt;p&gt;The complete source can be found &lt;a href=&#34;https://github.com/owulveryck/gorchestrator&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you want to play: download go, setup a directory and a &lt;code&gt;$GOPATH&lt;/code&gt; then simply&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;go get github.com/owulveryck/gorchestrator
+cd $GOPATH/src/github.com/owulveryck/gorchestrator
+go run orchestrator.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;conclusions:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;Conclusions&lt;/h1&gt;
+
+&lt;p&gt;I&amp;rsquo;m really happy about this implementation. It is clear and concise, and no too far to be idiomatic go.&lt;/p&gt;
+
+&lt;p&gt;What I would like to do now:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Read a TOSCA file (again) and pass the adjacency matrix to the orchestrator. That would do a complete orchestrator for cheap.&lt;/li&gt;
+&lt;li&gt;Re-use an old implemenation of the &lt;a href=&#34;https://github.com/owulveryck/toscaviewer&#34;&gt;toscaviewer&lt;/a&gt;.
+The idea is to implement a web server that serves the matrix as a json stream. This json will be used to update the SVG (via jquery),
+and then we would be able to see the progession in a graphical way.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;STAY TUNED!!!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;references:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;References&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://talks.golang.org/2012/concurrency.slide&#34;&gt;Go Concurrency Patterns (Rob Pike)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>KSH93 cool features for scripting</title>
+      <link>http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting/</link>
+      <pubDate>Mon, 30 Nov 2015 13:17:41 +0000</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting/</guid>
+      <description>
+
+&lt;p&gt;From time to time, I&amp;rsquo;m involved into a trolling conversation when any linux kiddie tells me:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Bash is really the superior shell&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;I totally disagree, but as I&amp;rsquo;m getting older, I don&amp;rsquo;t argue anymore.&lt;/p&gt;
+
+&lt;p&gt;Anyway, in this post I will expose two arguments, or I should say two reasons, why I usually use &lt;code&gt;ksh93&lt;/code&gt; to run my scripts.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; I&amp;rsquo;m really talking about the engine of the script, (the shebang definition).
+I&amp;rsquo;m used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
+My &lt;code&gt;$SHELL&lt;/code&gt; for interactivity is &lt;code&gt;zsh&lt;/code&gt; because it&amp;rsquo;s efficient enough
+and it has a bunch of really cool features I won&amp;rsquo;t discuss in this post (maybe later)&lt;/p&gt;
+
+&lt;h1 id=&#34;read-loops-forks-and-efficiency:492220ebbfd063710e57a4727b3232af&#34;&gt;Read, loops, forks and efficiency&amp;hellip;&lt;/h1&gt;
+
+&lt;p&gt;More than 10 years ago, as I was working for a project at IBM, my excellent team leader told me to refer to this book:
+&lt;a href=&#34;http://shop.oreilly.com/product/9780596003302.do&#34;&gt;Unix Power Tools&lt;/a&gt;. I did learn a lot with it.&lt;/p&gt;
+
+&lt;p&gt;And one feature I&amp;rsquo;ve always used is the &lt;code&gt;while read&lt;/code&gt; loop.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-use-case:492220ebbfd063710e57a4727b3232af&#34;&gt;The use case&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take this script as example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cat test                                                                                                         
+for i in $(seq 1 500)
+do
+    echo $i | read a
+    echo -ne &amp;quot;$a\r&amp;quot;
+done
+echo &amp;quot;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It simply iterate 500 times and display the counter on the screen.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-result-of-execution:492220ebbfd063710e57a4727b3232af&#34;&gt;The result of execution&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s execute it in different shells&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;for i in bash zsh ksh                                                                                         
+do
+    echo &amp;quot;$i =&amp;gt;&amp;quot;
+    eval $i test
+done
+bash =&amp;gt;
+
+zsh =&amp;gt;
+500
+ksh =&amp;gt;
+500
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Bash is the only one which does not display the expected result.
+The explanation is that the shell sees a pipe and the fork the process. The assignation to the variable &lt;code&gt;a&lt;/code&gt; is in another context and therefore,
+when the father wants to display &lt;code&gt;$a&lt;/code&gt; in the current shell, the variable is empty.&lt;/p&gt;
+
+&lt;p&gt;Wait, but why does &lt;code&gt;ksh&lt;/code&gt; (and &lt;code&gt;zsh&lt;/code&gt;) do display the correct result ?
+Simply because ksh and zsh have noticed that the command after the pipe was a builtin, and therefore that it was un-useful to fork.&lt;/p&gt;
+
+&lt;h3 id=&#34;strace-to-the-rescue:492220ebbfd063710e57a4727b3232af&#34;&gt;Strace to the rescue&amp;hellip;&lt;/h3&gt;
+
+&lt;p&gt;To prove it, let&amp;rsquo;s check for syscalls with the &lt;code&gt;strace&lt;/code&gt; tool, and count how many clones and calls are performed:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ for i in bash zsh ksh                                                                                         
+do
+    echo &amp;quot;$i =&amp;gt;&amp;quot;
+    strace -c  $i  test 2&amp;gt;&amp;amp;1 | egrep &amp;quot;clone|calls&amp;quot;
+done
+bash =&amp;gt;
+% time     seconds  usecs/call     calls    errors syscall
+56.05    0.067081          67      1001           clone
+zsh =&amp;gt;
+% time     seconds  usecs/call     calls    errors syscall
+71.57    0.057681         115       501           clone
+ksh =&amp;gt;
+% time     seconds  usecs/call     calls    errors syscall
+68.50    0.042059          84       500           clone
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;quod erat demonstrandum&lt;/em&gt;, twice as much clone in bash thant in ksh|zsh.&lt;/p&gt;
+
+&lt;h2 id=&#34;efficiency:492220ebbfd063710e57a4727b3232af&#34;&gt;Efficiency&lt;/h2&gt;
+
+&lt;p&gt;Of course this as an impact on performances, because fork are expensive, let&amp;rsquo;s query the execution time:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;for i in bash zsh ksh                                                                                         
+do
+    echo &amp;quot;$i =&amp;gt;&amp;quot;
+    eval time $i test
+done
+bash =&amp;gt;
+
+bash test  0,17s user 0,86s system 95% cpu 1,079 total
+zsh =&amp;gt;
+500
+zsh test  0,08s user 0,46s system 82% cpu 0,648 total
+ksh =&amp;gt;
+500
+ksh test  0,07s user 0,46s system 65% cpu 0,819 total
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This sounds clear to me&amp;hellip;&lt;/p&gt;
+
+&lt;h1 id=&#34;the-ksh93-getopts-unknown-feature:492220ebbfd063710e57a4727b3232af&#34;&gt;The KSH93 Getopts unknown feature&lt;/h1&gt;
+
+&lt;p&gt;Another cool feature I&amp;rsquo;ve discovered recently is the little addon of the getopts feature.&lt;/p&gt;
+
+&lt;p&gt;I wanted to use the &lt;code&gt;getopts&lt;/code&gt; built in in a script. As usual, I did &lt;em&gt;RTFM&lt;/em&gt; (because I never know when to use colon etc.).&lt;/p&gt;
+
+&lt;p&gt;Here is the extract of the man page of ksh93 relative to the getopts function:&lt;/p&gt;
+
+&lt;pre&gt;
+&lt;B&gt;getopts&lt;/B&gt; [ &lt;B&gt;-a&lt;/B&gt; &lt;I&gt;name&lt;/I&gt; ] &lt;I&gt;optstring vname&lt;/I&gt; [ &lt;I&gt;arg&lt;/I&gt; ... ]
+
+Checks &lt;I&gt;arg&lt;/I&gt; for legal options.  If &lt;I&gt;arg&lt;/I&gt; is omitted, the positional parameters are used.
+
+An option argument begins with a &lt;B&gt;+&lt;/B&gt; or a &lt;B&gt;-&lt;/B&gt;.  An option not beginning with &lt;B&gt;+&lt;/B&gt; or &lt;B&gt;-&lt;/B&gt; or the argument &lt;B&gt;--&lt;/B&gt; ends the options.
+Options beginning with &lt;B&gt;+&lt;/B&gt; are only recognized when &lt;I&gt;optstring&lt;/I&gt; begins with a &lt;B&gt;+&lt;/B&gt;.
+
+&lt;I&gt;optstring&lt;/I&gt; contains the letters that &lt;B&gt;getopts&lt;/B&gt; recognizes.
+If a letter is followed by a &lt;B&gt;:&lt;/B&gt;, that option is expected to have an argument.
+The options can be separated from the argument by blanks.
+The option &lt;B&gt;-?&lt;/B&gt; causes &lt;B&gt;getopts&lt;/B&gt; to generate a usage message on standard error.
+The &lt;B&gt;-a&lt;/B&gt; argument can be used to specify the name to use for the usage message, which defaults to &lt;B&gt;$0&lt;/B&gt;.
+
+&lt;B&gt;getopts&lt;/B&gt; places the next option letter it finds inside variable &lt;I&gt;vname&lt;/I&gt; each time it is invoked.
+The option letter will be prepended with a &lt;B&gt;+&lt;/B&gt; when &lt;I&gt;arg&lt;/I&gt; begins with a &lt;B&gt;+&lt;/B&gt;.
+The index of the next &lt;I&gt;arg&lt;/I&gt; is stored in &lt;FONT SIZE=&#34;-1&#34;&gt;&lt;B&gt;OPTIND&lt;/B&gt;.
+&lt;/FONT&gt; The option argument, if any, gets stored in &lt;FONT SIZE=&#34;-1&#34;&gt;&lt;B&gt;OPTARG&lt;/B&gt;.  &lt;/FONT&gt; 
+
+A leading &lt;B&gt;:&lt;/B&gt; in &lt;I&gt;optstring&lt;/I&gt; causes &lt;B&gt;getopts&lt;/B&gt; to store the letter of an invalid option in &lt;FONT SIZE=&#34;-1&#34;&gt;&lt;B&gt;OPTARG&lt;/B&gt;, &lt;/FONT&gt;
+and to set &lt;I&gt;vname&lt;/I&gt; to &lt;B&gt;?&lt;/B&gt; for an unknown option and to &lt;B&gt;:&lt;/B&gt; when a required option argument is missing.
+Otherwise, &lt;B&gt;getopts&lt;/B&gt; prints an error message.
+The exit status is non-zero when there are no more options.
+
+&lt;P&gt; There is no way to specify any of the options &lt;B&gt;:&lt;/B&gt;, &lt;B&gt;+&lt;/B&gt;, &lt;B&gt;-&lt;/B&gt;, &lt;B&gt;?&lt;/B&gt;, &lt;B&gt;[&lt;/B&gt;, and &lt;B&gt;]&lt;/B&gt;.
+
+The option &lt;B&gt;#&lt;/B&gt; can only be specified as the first option. 
+&lt;/pre&gt;
+
+&lt;p&gt;This particular sentence, in the middle of the documentation peaked my interest&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The option -? causes getopts to generate a usage message on standard error.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;What? We can generate usage with getopts?&lt;/p&gt;
+
+&lt;p&gt;Cool, any script should be documented, but any documentation should not be difficult to implement.&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&#34;img-responsive center-block&#34; src=&#34;http://imgs.xkcd.com/comics/manuals.png&#34;&gt;
+&lt;center&gt;&lt;em&gt;&lt;a href=&#34;https://xkcd.com/1343/&#34;&gt;https://xkcd.com/1343/&lt;/a&gt;&lt;/em&gt;&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;I did googled and found this
+&lt;a href=&#34;http://docstore.mik.ua/orelly/unix3/korn/appb_11.htm&#34;&gt;web page&lt;/a&gt; which is an extract from this book &lt;a href=&#34;http://shop.oreilly.com/product/9780596001957.do&#34;&gt;Learning the Korn Shell&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;An example is sometimes better than an explanation (and the book is complete on this subject)&lt;/p&gt;
+
+&lt;h2 id=&#34;the-example:492220ebbfd063710e57a4727b3232af&#34;&gt;The example&lt;/h2&gt;
+
+&lt;h3 id=&#34;the-script:492220ebbfd063710e57a4727b3232af&#34;&gt;The script&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;#!/bin/ksh
+
+ENV=dev
+MPATH=/tmp
+##
+### Man usage and co...
+
+USAGE=&amp;quot;[-?The example script v1.0]&amp;quot;
+USAGE+=&amp;quot;[-author?Olivier Wulveryck]&amp;quot;
+USAGE+=&amp;quot;[-copyright?Copyright (C) My Blog]&amp;quot;
+USAGE+=&amp;quot;[+NAME?$0 --- The Example Script]&amp;quot;
+USAGE+=&amp;quot;[+DESCRIPTION?The description of the script]&amp;quot;
+USAGE+=&amp;quot;[u:user]:[user to run the command as:=$USER?Use the name of the user you want to sudo to: ]&amp;quot;
+USAGE+=&amp;quot;[e:env]:[environnement:=$ENV?environnement to use (eg: dev, prod) ]&amp;quot;
+USAGE+=&amp;quot;[p:path]:[Execution PATH:=$MPATH?prefix of the chroot]&amp;quot;
+USAGE+=&amp;quot;[+EXAMPLE?$0 action2]&amp;quot;
+USAGE+=&#39;[+SEE ALSO?My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting]&#39;
+USAGE+=&amp;quot;[+BUGS?A few, maybe...]&amp;quot;
+
+### Option Checking
+
+while getopts &amp;quot;$USAGE&amp;quot; optchar ; do
+    case $optchar in
+        u)  USER=$OPTARG
+        ;;
+        e)  ENV=$OPTARG
+        ;;
+        p)  PATH=$OPTARG
+        ;;
+    esac
+done
+shift OPTIND-1
+ACTION=$1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;the-invocation:492220ebbfd063710e57a4727b3232af&#34;&gt;The invocation&lt;/h3&gt;
+
+&lt;p&gt;Here are two &lt;em&gt;singing&lt;/em&gt; examples of the usage output (sorry, I&amp;rsquo;m tired)&lt;/p&gt;
+
+&lt;h4 id=&#34;ballad-of-a-thin-man:492220ebbfd063710e57a4727b3232af&#34;&gt;&lt;em&gt;Ballad of a thin man&lt;/em&gt;&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ ./blog.ksh --man
+NAME
+  ./blog.ksh --- The Example Script
+
+SYNOPSIS
+  ./blog.ksh [ options ]
+
+DESCRIPTION
+  The description of the script
+
+OPTIONS
+  -u, --user=user to run the command as
+                  Use the name of the user you want to sudo to: The default value is owulveryck.
+  -e, --env=environnement
+                  environnement to use (eg: dev, prod) The default value is dev.
+  -p, --path=Execution PATH
+                  prefix of the chroot The default value is /tmp.
+
+EXAMPLE
+  ./blog.ksh action2
+
+SEE ALSO
+  My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting
+
+BUGS
+  A few, maybe...
+
+IMPLEMENTATION
+  version         The example script v1.0
+  author          Olivier Wulveryck
+  copyright       Copyright (C) My Blog
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;i-m-gonna-try-with-a-little-help-from-my-friends:492220ebbfd063710e57a4727b3232af&#34;&gt;I&amp;rsquo;m gonna try &lt;em&gt;with a little help (from my friends)&lt;/em&gt;&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ ./blog.ksh --help
+Usage: ./blog.ksh [ options ]
+OPTIONS
+  -u, --user=user to run the command as
+                  Use the name of the user you want to sudo to: The default value is owulveryck.
+  -e, --env=environnement
+                  environnement to use (eg: dev, prod) The default value is dev.
+  -p, --path=Execution PATH
+                  prefix of the chroot The default value is /tmp.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And let&amp;rsquo;s try with an invalid option&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;  ./blog.ksh -t
+./blog.ksh: -t: unknown option
+Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Execution PATH]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;conclusion:492220ebbfd063710e57a4727b3232af&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;By now, KSH93 remains my favorite engine for shell scripts, but is sometimes replaced by ZSH.&lt;/p&gt;
+
+&lt;p&gt;Actually, ZSH seems as &amp;ldquo;smart&amp;rdquo; and efficient, but this &lt;code&gt;getopts&lt;/code&gt; feature is really nice for any script aim to be distributed widely.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>TOSCA lifecycle as a digraph</title>
+      <link>http://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/</link>
+      <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/</guid>
+      <description>
+
+&lt;h1 id=&#34;about-tosca:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;About TOSCA&lt;/h1&gt;
+
+&lt;p&gt;The &lt;a href=&#34;https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=tosca&#34;&gt;TOSCA&lt;/a&gt; acronym stands for
+&lt;em&gt;Topology and Orchestration Specification for Cloud Applications&lt;/em&gt;. It&amp;rsquo;s an &lt;a href=&#34;https://www.oasis-open.org&#34;&gt;OASIS&lt;/a&gt; standard.&lt;/p&gt;
+
+&lt;p&gt;The purpose of the TOSCA project is to represent an application by its topology and formalize it using the TOSCA grammar.&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simp$le-Profile-YAML-v1.0-csprd01.html&#34;&gt;[TOSCA-Simple-Profile-YAML-v1.0]&lt;/a&gt;
+current specification in YAML introduces the following concepts.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;TOSCA YAML service template: A YAML document artifact containing a (TOSCA) service template that represents a Cloud application.&lt;/li&gt;
+&lt;li&gt;TOSCA processor: An engine or tool that is capable of parsing and interpreting a TOSCA YAML service template for a particular purpose. For example, the purpose could be validation, translation or visual rendering.&lt;/li&gt;
+&lt;li&gt;TOSCA orchestrator (also called orchestration engine): A TOSCA processor that interprets a TOSCA YAML service template then instantiates and deploys the described application in a Cloud.&lt;/li&gt;
+&lt;li&gt;TOSCA generator: A tool that generates a TOSCA YAML service template. An example of generator is a modeling tool capable of generating or editing a TOSCA YAML service template (often such a tool would also be a TOSCA processor).&lt;/li&gt;
+&lt;li&gt;TOSCA archive (or TOSCA Cloud Service Archive, or “CSAR”): a package artifact that contains a TOSCA YAML service template and other artifacts usable by a TOSCA orchestrator to deploy an application.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;my-work-with-tosca:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;My work with TOSCA&lt;/h2&gt;
+
+&lt;p&gt;I do believe that TOSCA may be a very good leverage to port a &amp;ldquo;legacy application&amp;rdquo; (aka &lt;em&gt;born in the datacenter&lt;/em&gt; application) into a cloud ready application without rewriting it completely to be cloud compliant.
+To be clear, It may act on the hosting and execution plan of the application, and not on the application itself.&lt;/p&gt;
+
+&lt;p&gt;A single wordpress installation in a TOSCA way as written &lt;a href=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html#_Toc430015847&#34;&gt;here&lt;/a&gt; is represented like that&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&#34;img-square img-responsive&#34; src=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01_files/image035.png&#34; alt=&#34;Single Wordpress representation&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;While I was learnig GO, I have developped a &lt;a href=&#34;https://github.com/owulveryck/toscalib&#34;&gt;TOSCA lib&lt;/a&gt; and a &lt;a href=&#34;https://github.com/owulveryck/toscaviewer&#34;&gt;TOSCA processor&lt;/a&gt; which are, by far, not &lt;em&gt;idiomatic GO&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here are two screenshots of the rendering in a web page made with my tool (and the graphviz product):&lt;/p&gt;
+
+&lt;hr/&gt;
+
+&lt;p&gt;&lt;em&gt;The graph representation of a &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/toscaviewer_template_def.png&#34; alt=&#34;Tosca view ofthe single instance wordpress&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;The graph representation of a lifecycle of &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/toscaviewer_lifecycle_def.png&#34; alt=&#34;Lifecycle representation of the single wordpress instance representation&#34;/&gt;
+&lt;hr/&gt;&lt;/p&gt;
+
+&lt;p&gt;The TOSCA file is parsed with the help of the &lt;code&gt;TOSCALIB&lt;/code&gt; and then it fills an adjacency matrix (see &lt;a href=&#34;https://godoc.org/github.com/owulveryck/toscalib#ToscaDefinition.FillAdjacencyMatrix&#34;&gt;FillAdjacencyMatrix&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&#34;http://graphviz.org&#34;&gt;graphviz&lt;/a&gt; take care of the (di)graph representation.&lt;/p&gt;
+
+&lt;p&gt;What I would like to do now, is a little bit more: I would like to play with the graph and query it
+Then I should perform requests on this graph. For example I could ask:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;What are the steps to go from the state Initial of the application, to the state running&lt;/em&gt; ?&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;What are the steps to go from stop to delete&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;and that would be &lt;strong&gt;the premise of a TOSCA orchestrator&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-digraph-go-code:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;The digraph go code&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve recently discoverd the &lt;a href=&#34;https://github.com/golang/tools/tree/master/cmd/digraph&#34;&gt;digraph&lt;/a&gt; tool, that I will use for querying the graphs.
+The &lt;code&gt;digraph&lt;/code&gt; is represented as a map with a node as a key and its immediates successors as values:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;// A graph maps nodes to the non-nil set of their immediate successors.
+type graph map[string]nodeset
+
+type nodeset map[string]bool
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;from-tosca-to-digraph:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;From TOSCA to digraph&lt;/h2&gt;
+
+&lt;p&gt;What I must do is to parse the adjacency matrix, get the &amp;ldquo;lifecycle action&amp;rdquo; related to the id and fill the graph g.&lt;/p&gt;
+
+&lt;h1 id=&#34;let-s-go:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;Let&amp;rsquo;s go&lt;/h1&gt;
+
+&lt;p&gt;Considering the digraph code, what I need to do is simply to override the &lt;code&gt;parse&lt;/code&gt; method.&lt;/p&gt;
+
+&lt;h2 id=&#34;principle:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;Principle&lt;/h2&gt;
+
+&lt;p&gt;I will fill the &lt;code&gt;graph&lt;/code&gt; with a string composed of &lt;em&gt;nodename:action&lt;/em&gt; as key.
+For example, if I need to do a &amp;ldquo;Configure&amp;rdquo; action of node &amp;ldquo;A&amp;rdquo; after a &amp;ldquo;Start&amp;rdquo; action on node &amp;ldquo;B&amp;rdquo;, I will have the following entry in the map:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;g[&amp;quot;B:Start&amp;quot;] = &amp;quot;A:Configure&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So What I need to do is to parse the adjjacency matrix, do a matching with the row id and the &amp;ldquo;node:action&amp;rdquo; name, and fill the &lt;code&gt;graph g&lt;/code&gt; with the matching of the corresponding &amp;ldquo;node:action&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;I will fill a &lt;code&gt;map&lt;/code&gt; with the id of the node:action as key and the corresponding label as values:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gloang&#34;&gt;for node, template := range toscaTemplate.TopologyTemplate.NodeTemplates {
+        ids[template.GetConfigureIndex()] = fmt.Sprintf(&amp;quot;%v:Configure&amp;quot;, node)
+        ids[template.GetCreateIndex()] = fmt.Sprintf(&amp;quot;%v:Create&amp;quot;, node)
+        ids[template.GetDeleteIndex()] = fmt.Sprintf(&amp;quot;%v:Delete&amp;quot;, node)
+        ids[template.GetInitialIndex()] = fmt.Sprintf(&amp;quot;%v:Initial&amp;quot;, node)
+        ids[template.GetPostConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PostConfigureSource&amp;quot;, node)
+        ids[template.GetPostConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PostconfigureTarget&amp;quot;, node)
+        ids[template.GetPreConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureSource&amp;quot;, node)
+        ids[template.GetPreConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureTarget&amp;quot;, node)
+        ids[template.GetStartIndex()] = fmt.Sprintf(&amp;quot;%v:Start&amp;quot;, node)
+        ids[template.GetStopIndex()] = fmt.Sprintf(&amp;quot;%v:Stop&amp;quot;, node)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then I can easily fill the &lt;code&gt;graph g&lt;/code&gt; from the adjacency matrix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gloang&#34;&gt;row, col := toscaTemplate.AdjacencyMatrix.Dims()
+        for r := 1; r &amp;lt; row; r++ {
+                for c := 1; c &amp;lt; col; c++ {
+                        if adjacencyMatrix.At(r, c) == 1 {
+                                g.addEdges(ids[r], ids[c])
+                        }
+                }
+        }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s it&lt;/p&gt;
+
+&lt;h1 id=&#34;the-final-function:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;The final function&lt;/h1&gt;
+
+&lt;p&gt;Here is the final parse function&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;func parse(rd io.Reader) (graph, error) {
+        g := make(graph)
+        // Parse the input graph.
+        var toscaTemplate toscalib.ToscaDefinition
+        err := toscaTemplate.Parse(rd)
+        if err != nil {
+                return nil, err
+        }
+        // a map containing the ID and the corresponding action
+        ids := make(map[int]string)
+        // Fill in the graph with the toscaTemplate via the adjacency matrix
+        for node, template := range toscaTemplate.TopologyTemplate.NodeTemplates {
+                // Find the edges of the current node and add them to the graph
+
+                ids[template.GetConfigureIndex()] = fmt.Sprintf(&amp;quot;%v:Configure&amp;quot;, node)
+                ids[template.GetCreateIndex()] = fmt.Sprintf(&amp;quot;%v:Create&amp;quot;, node)
+                ids[template.GetDeleteIndex()] = fmt.Sprintf(&amp;quot;%v:Delete&amp;quot;, node)
+                ids[template.GetInitialIndex()] = fmt.Sprintf(&amp;quot;%v:Initial&amp;quot;, node)
+                ids[template.GetPostConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PostConfigureSource&amp;quot;, node)
+                ids[template.GetPostConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PostconfigureTarget&amp;quot;, node)
+                ids[template.GetPreConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureSource&amp;quot;, node)
+                ids[template.GetPreConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureTarget&amp;quot;, node)
+                ids[template.GetStartIndex()] = fmt.Sprintf(&amp;quot;%v:Start&amp;quot;, node)
+                ids[template.GetStopIndex()] = fmt.Sprintf(&amp;quot;%v:Stop&amp;quot;, node)
+        }
+
+        row, col := toscaTemplate.AdjacencyMatrix.Dims()
+        for r := 1; r &amp;lt; row; r++ {
+                for c := 1; c &amp;lt; col; c++ {
+                        if adjacencyMatrix.At(r, c) == 1 {
+                                g.addEdges(ids[r], ids[c])
+                        }
+                }
+        }
+        return g, nil
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;grab-the-source-and-compile-it:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;Grab the source and compile it&lt;/h1&gt;
+
+&lt;p&gt;I have a github repo with the source.
+It is go-gettable&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;go get github.com/owulveryck/digraph
+cd $GOPATH/src/github.com/owulveryck/digraph &amp;amp;&amp;amp; go build
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;EDIT&lt;/strong&gt; As I continue to work on this tool, I have created a &amp;ldquo;blog&amp;rdquo; branch in the github which holds the version related to this post&lt;/p&gt;
+
+&lt;h1 id=&#34;example:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;Example&lt;/h1&gt;
+
+&lt;p&gt;I will use the the same example as described below: the single instance wordpress.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve extracted the YAML and placed in in the file &lt;a href=&#34;https://github.com/owulveryck/toscaviewer/blob/master/examples/tosca_single_instance_wordpress.yaml&#34;&gt;tosca_single_instance_wordpress.yaml&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s query the nodes first:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
+mysql_database:Configure
+mysql_database:Create
+mysql_database:Start
+mysql_dbms:Configure
+mysql_dbms:Create
+mysql_dbms:Start
+server:Configure
+server:Create
+server:Start
+webserver:Configure
+webserver:Create
+webserver:Start
+wordpress:Configure
+wordpress:Create
+wordpress:Start
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;so far, so good&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;Now, I can I go from a &lt;code&gt;Server:Create&lt;/code&gt; to a running instance &lt;code&gt;wordpress:Start&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph somepath server:Create wordpress:Start
+server:Create
+server:Configure
+server:Start
+mysql_dbms:Create
+mysql_dbms:Configure
+mysql_dbms:Start
+mysql_database:Create
+mysql_database:Configure
+mysql_database:Start
+wordpress:Create
+wordpress:Configure
+wordpress:Start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Cool!&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;The tool sounds ok. What I may add:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a command to display the full lifecycle (finding the entry and the exit points in the matrix and call somepath with it)&lt;/li&gt;
+&lt;li&gt;get the tosca &lt;code&gt;artifacts&lt;/code&gt; and display them instead of the label to generate a deployment plan&lt;/li&gt;
+&lt;li&gt;execute the command in &lt;code&gt;goroutines&lt;/code&gt; to make them concurrent&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And of course validate any other TOSCA definition to go through a bug hunting party&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Playing with (Openstack) Keystone</title>
+      <link>http://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone/</link>
+      <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone/</guid>
+      <description>
+
+&lt;p&gt;In the cloud computing, alongside of the hosting monsters such as amazon or google, there is the &lt;a href=&#34;https://www.openstack.org&#34;&gt;Openstack Platform&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Openstack is not a single software, it is more a galaxy of components aim to control the infrastructure, such as hardware pools, storage, network.
+The management can then be done via a Web based interface or via a bunch of RESTful API.&lt;/p&gt;
+
+&lt;p&gt;I would like to evaluate its identity service named &lt;a href=&#34;http://docs.openstack.org/developer/keystone/&#34;&gt;keystone&lt;/a&gt; and use it as a AuthN and AuthZ backend for my simple_iaas example.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; : I will consider that the openstack keystone is installed (The release I&amp;rsquo;m using is &lt;em&gt;liberty&lt;/em&gt;). As I don&amp;rsquo;t want to rewrite an installation procedure as many exists already on the web. For my tests, I&amp;rsquo;m using an keystone installation from sources in a Ubuntu VM&lt;/p&gt;
+
+&lt;h1 id=&#34;my-goal:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;My goal&lt;/h1&gt;
+
+&lt;p&gt;My goal is to have a webservice that will protect the scopes of my IAAS.
+I may declare two users:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;One may list the nodes via a GET request&lt;/li&gt;
+&lt;li&gt;The other one may also create and destroy nodes via POST and DELETE request&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This post is about setting up keystone so I can use it as a lab to understand the concepts and maybe achieve my goal with it.&lt;/p&gt;
+
+&lt;h1 id=&#34;let-s-go:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;Let&amp;rsquo;s go&lt;/h1&gt;
+
+&lt;p&gt;I won&amp;rsquo;t use any external web server. Instead I will rely on the builtin Eventlet based web server.&lt;/p&gt;
+
+&lt;p&gt;The documentation says it is deprecated, indeed I will use it for testing purpose, so that will do the job.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-wsgi-pipeline-configuration:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;The WSGI pipeline configuration&lt;/h2&gt;
+
+&lt;p&gt;To be honest, I don&amp;rsquo;t know anything about the python ecosystem. And as it is my blog, I will write anything I&amp;rsquo;ve learned from this experience&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;So:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;WSGI is a gateway interface for python, and my understanding is that it&amp;rsquo;s like the good old CGI we used in the beginning of this century;&lt;/li&gt;
+&lt;li&gt;Is is configured by a ini file based on &lt;a href=&#34;http://pythonpaste.org/&#34;&gt;Paste&lt;/a&gt; and especially &lt;em&gt;Paste Deploy&lt;/em&gt; which is a system made for loading and configuring WSGI components.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The WSGI interface is configured by a ini file as written in the &lt;a href=&#34;http://docs.openstack.org/developer/keystone/configuration.html&#34;&gt;Openstack keystone documentation&lt;/a&gt;.
+This file is called &lt;code&gt;keystone-paste.ini&lt;/code&gt;. I won&amp;rsquo;t touch it and use the provided one. It sounds ok and when I start the service with &lt;code&gt;keystone-all&lt;/code&gt; I can see in the logs:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-logs&#34;&gt;2015-11-17 10:05:04.918 7068 INFO oslo_service.service [-] Starting 2 workers
+2015-11-17 10:05:04.920 7068 INFO oslo_service.service [-] Started child 7082
+2015-11-17 10:05:04.922 7068 INFO oslo_service.service [-] Started child 7083
+2015-11-17 10:05:04.925 7082 INFO eventlet.wsgi.server [-] (7082) wsgi starting up on http://0.0.0.0:35357/
+2015-11-17 10:05:04.927 7068 INFO keystone.common.environment.eventlet_server [-] Starting /usr/bin/keystone-all on 0.0.0.0:5000
+2015-11-17 10:05:04.927 7068 INFO oslo_service.service [-] Starting 2 workers
+2015-11-17 10:05:04.930 7068 INFO oslo_service.service [-] Started child 7084
+2015-11-17 10:05:04.934 7083 INFO eventlet.wsgi.server [-] (7083) wsgi starting up on http://0.0.0.0:35357/
+2015-11-17 10:05:04.936 7068 INFO oslo_service.service [-] Started child 7085
+2015-11-17 10:05:04.940 7085 INFO eventlet.wsgi.server [-] (7085) wsgi starting up on http://0.0.0.0:5000/
+2015-11-17 10:05:04.941 7084 INFO eventlet.wsgi.server [-] (7084) wsgi starting up on http://0.0.0.0:5000/
+2015-11-17 10:17:01.005 7085 INFO keystone.common.wsgi [-] GET http://localhost:5000/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;which sounds ok and a &lt;code&gt;curl&lt;/code&gt; call to the endpoint reply at least something:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;$ curl -s http://localhost:5000/v3 | jsonformat
+{
+  &amp;quot;version&amp;quot;: {
+    &amp;quot;id&amp;quot;: &amp;quot;v3.4&amp;quot;,
+    &amp;quot;links&amp;quot;: [
+      {
+        &amp;quot;href&amp;quot;: &amp;quot;http://localhost:5000/v3/&amp;quot;,
+        &amp;quot;rel&amp;quot;: &amp;quot;self&amp;quot;
+      }
+    ],
+    &amp;quot;media-types&amp;quot;: [
+      {
+        &amp;quot;base&amp;quot;: &amp;quot;application/json&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;application/vnd.openstack.identity-v3+json&amp;quot;
+      }
+    ],
+    &amp;quot;status&amp;quot;: &amp;quot;stable&amp;quot;,
+    &amp;quot;updated&amp;quot;: &amp;quot;2015-03-30T00:00:00Z&amp;quot;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;the-keystone-configuration:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;The keystone configuration&lt;/h2&gt;
+
+&lt;p&gt;The proper keystone configuration is done in the file &lt;code&gt;keystone.conf&lt;/code&gt;. This configuration file is decomposed into different sections as explained in the documentation.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-general-configuration-default-section:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;The general configuration (Default section)&lt;/h3&gt;
+
+&lt;p&gt;I will only set the &lt;code&gt;admin token&lt;/code&gt; randomly as it will be used to create the users, roles and so on.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s generate a token with &lt;code&gt;openssl rand -hex 10&lt;/code&gt; and report it to my configuration:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[DEFAULT]
+admin_token = 8a0b4eacc6a81c3bc5aa
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The rest will use all the default values for the General configuration (the [DEFAULT] section). This means that this section may be empty or full of comments.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-assignment-configuration:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;The assignment configuration&lt;/h3&gt;
+
+&lt;p&gt;In this section, we choose the driver for the assignment service.
+This purpose of this service is&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;[to] provide data about roules and role assignments
+to the entities managed by the Identity and Resource services&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;(source &lt;a href=&#34;http://docs.openstack.org/developer/keystone/architecture.html&#34;&gt;Keystone architecture&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;I plan to use a SQL backend instead of a LDAP for my tests, so the configuration may be:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[assignment]
+driver = sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;the-authentication-plugin-configuration:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;The authentication plugin configuration&lt;/h3&gt;
+
+&lt;p&gt;Keystone supports authentication plugins; those plugins are specified in the &lt;code&gt;[auth]&lt;/code&gt; section.
+In my test, the &lt;code&gt;password&lt;/code&gt; plugin will be used.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[auth]
+methods = password
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;the-credentials:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;The credentials&lt;/h3&gt;
+
+&lt;p&gt;The credentials are stored in a sql database as well:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[credential]
+driver = sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;the-db-configuration:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;The DB configuration&lt;/h3&gt;
+
+&lt;p&gt;For my tests I will use a sqlite database as configured in this section:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[database]
+sqlite_db = oslo.sqlite
+sqlite_synchronous = true
+backend = sqlalchemy
+connection = sqlite:////var/lib/keystone/keystone.db
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;restart-the-keystone-server-and-play:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;Restart the keystone server and play&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;# service keystone restart
+# service keystone status
+● keystone.service - OpenStack Identity service
+   Loaded: loaded (/lib/systemd/system/keystone.service; enabled; vendor preset: enabled)
+   Active: active (running) since Tue 2015-11-17 14:47:06 GMT; 3s ago
+  Process: 15505 ExecStartPre=/bin/chown keystone:keystone /var/lock/keystone /var/log/keystone /var/lib/keystone (code=exited, status=0/SUCCESS)
+  Process: 15502 ExecStartPre=/bin/mkdir -p /var/lock/keystone /var/log/keystone /var/lib/keystone (code=exited, status=0/SUCCESS)
+ Main PID: 15508 (keystone-all)
+   CGroup: /system.slice/keystone.service
+           ├─15508 /usr/bin/python /usr/bin/keystone-all --config-file=/etc/keystone/keystone.conf --log-file=/var/log/keystone/keystone.log
+           ├─15523 /usr/bin/python /usr/bin/keystone-all --config-file=/etc/keystone/keystone.conf --log-file=/var/log/keystone/keystone.log
+           ├─15524 /usr/bin/python /usr/bin/keystone-all --config-file=/etc/keystone/keystone.conf --log-file=/var/log/keystone/keystone.log
+           ├─15525 /usr/bin/python /usr/bin/keystone-all --config-file=/etc/keystone/keystone.conf --log-file=/var/log/keystone/keystone.log
+           └─15526 /usr/bin/python /usr/bin/keystone-all --config-file=/etc/keystone/keystone.conf --log-file=/var/log/keystone/keystone.log
+
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.479 15508 INFO oslo_service.service [-] Started child 15523
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.482 15508 INFO oslo_service.service [-] Started child 15524
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.486 15508 INFO keystone.common.environment.eventlet_server [-] Starting /usr/bin/keystone-all on 0.0.0.0:5000
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.490 15508 INFO oslo_service.service [-] Starting 2 workers
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.491 15523 INFO eventlet.wsgi.server [-] (15523) wsgi starting up on http://0.0.0.0:35357/
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.493 15508 INFO oslo_service.service [-] Started child 15525
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.499 15524 INFO eventlet.wsgi.server [-] (15524) wsgi starting up on http://0.0.0.0:35357/
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.502 15508 INFO oslo_service.service [-] Started child 15526
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.506 15525 INFO eventlet.wsgi.server [-] (15525) wsgi starting up on http://0.0.0.0:5000/
+Nov 17 14:47:08 UBUNTU keystone[15508]: 2015-11-17 14:47:08.510 15526 INFO eventlet.wsgi.server [-] (15526) wsgi starting up on http://0.0.0.0:5000/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;so far so good&amp;hellip; let&amp;rsquo;s check if the DB is here now:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# sqlite3 /var/lib/keystone/keystone.db
+SQLite version 3.8.11.1 2015-07-29 20:00:57
+Enter &amp;quot;.help&amp;quot; for usage hints.
+sqlite&amp;gt; .tables
+access_token            identity_provider       revocation_event
+assignment              idp_remote_ids          role
+config_register         mapping                 sensitive_config
+consumer                migrate_version         service
+credential              policy                  service_provider
+domain                  policy_association      token
+endpoint                project                 trust
+endpoint_group          project_endpoint        trust_role
+federation_protocol     project_endpoint_group  user
+group                   region                  user_group_membership
+id_mapping              request_token           whitelisted_config
+sqlite&amp;gt; .quit
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;interacting-with-openstack:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;Interacting with openstack&lt;/h2&gt;
+
+&lt;p&gt;A tools called &lt;a href=&#34;http://docs.openstack.org/developer/python-openstackclient/command-list.html&#34;&gt;python-openstackclient&lt;/a&gt; is available in my ubuntu release and will be used for testing purpose.&lt;/p&gt;
+
+&lt;p&gt;The binary provided is &lt;code&gt;openstack&lt;/code&gt; (&lt;code&gt;dpkg-query -L python-openstackclient | grep bin&lt;/code&gt;)&lt;/p&gt;
+
+&lt;h3 id=&#34;creating-a-user:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;Creating a user&lt;/h3&gt;
+
+&lt;p&gt;We need to define a couple of environment variables to be able to connect to the keystone server with the &lt;code&gt;root&lt;/code&gt; power:&lt;/p&gt;
+
+&lt;p&gt;I will create a simple file that I will source when I need to interact as admin of keystone&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cat &amp;lt;&amp;lt; EOF &amp;gt; admin.sh
+# The value of admin_token defined in the keystone.conf
+export OS_TOKEN=8a0b4eacc6a81c3bc5aa 
+# This is the default value if not overridden by the directive admin_endpoint
+export OS_URL=http://localhost:35357/v2.0 
+export OS_IDENTITY_API_VERSION=3
+EOF
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and another file to unset those variables:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cat &amp;lt;&amp;lt; EOF &amp;gt; noadmin.sh 
+unset OS_TOKEN
+unset OS_URL
+unset OS_IDENTITY_API_VERSION
+EOF
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then we create the user:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source admin.sh
+openstack user create olivier
+&#39;links&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then set its password:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source admin.sh
+openstack user set --password-prompt olivier
+User Password:
+Repeat User Password:
+&#39;users&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And see if it&amp;rsquo;s actually here:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source admin.sh
+openstack user list
++----------------------------------+---------+
+| ID                               | Name    |
++----------------------------------+---------+
+| c80f5244c7d3486fbf4059b7197b4770 | olivier |
++----------------------------------+---------+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;creating-a-project:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;Creating a project&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;openstack project create --description &#39;demo project&#39; demo&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;assigning-the-admin-role:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;Assigning the admin role&lt;/h3&gt;
+
+&lt;p&gt;Let&amp;rsquo;s first get the role list&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source admin.sh
+openstack role list
++----------------------------------+----------+
+| ID                               | Name     |
++----------------------------------+----------+
+| 5f772b617b5d4758badb7746934124e8 | admin    |
+| 9fe2ff9ee4384b1894a90878d3e92bab | _member_ |
++----------------------------------+----------+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And add the admin right to the user &lt;code&gt;olivier&lt;/code&gt; for the project &lt;code&gt;demo&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source admin.sh
+openstack role add --user olivier --project 0e07a734d54e4f3799a31768b13a38c2 admin
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;getting-a-token:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;Getting a token&lt;/h2&gt;
+
+&lt;h3 id=&#34;with-the-openstack-tool:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;With the openstack tool&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;ve a default domain, I&amp;rsquo;ve setup a demo project, and assigne the my user the admin role for testing purpose.
+I may now be able to generate an access token&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s try:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source noadmin.sh
+openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-project-name demo token issue
+Expecting to find domain in project - the server could not comply with the request since it is either malformed or otherwise incorrect. The client is assumed to be in error. (HTTP 400) (Request-ID: req-09cad46b-9a5f-4b0f-8f2b-82b4442ed999)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, now add the domain:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source noadmin.sh
+openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-project-name demo --os-domain-name default token issue
+Authentication cannot be scoped to multiple targets. Pick one of: project, domain, trust or unscoped
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Too bad, remove the project&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source noadmin.sh
+openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-domain-name default token issue
+The request you have made requires authentication. (HTTP 401) (Request-ID: req-59c39895-8e96-42c4-b5c5-1477001da618)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Still no luck&amp;hellip; Google gave me a lot of answers, but I couldn&amp;rsquo;t figure whether it was:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a bug&lt;/li&gt;
+&lt;li&gt;a misconfiguration of the service&lt;/li&gt;
+&lt;li&gt;a bad usage of the tools&lt;/li&gt;
+&lt;li&gt;a totally bad apprehension of the product&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I may continue to experiment, but I&amp;rsquo;m far from my goal actually, and I hate the idea of being lost. no help from Google, so DIY method:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;openstack client in debug mode with &amp;ndash;debug&lt;/li&gt;
+&lt;li&gt;keystone in debug with a &lt;code&gt;debug=true&lt;/code&gt; directive in &lt;code&gt;keystone.conf&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The message is now clear:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015-11-18 10:37:33.337 7164 WARNING keystone.common.wsgi [req-27dadee6-51d9-475d-a426-99e3b4f77f4a - - - - -] Authorization failed. User c80f5244c7d3486fbf4059b7197b4770 has no access to domain default
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So let&amp;rsquo;s re-set the password, just in case, as done in the previous section of this post and try again:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source noadmin.sh
+openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-project-name demo --os-domain-name default token issue
+...
+Unauthorized: User c80f5244c7d3486fbf4059b7197b4770 has no access to domain default (Disable debug mode to suppress these details.)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, let&amp;rsquo;s add &lt;code&gt;olivier&lt;/code&gt; as admin of the Default domain:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source admin.sh
+openstack role add --user olivier --domain Default admin
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And try again:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source noadmin.sh
+openstack --os-auth-url http://localhost:5000/v3 --os-username olivier --os-password olivier --os-auth-type=password --os-domain-name Default token issue
++-----------+----------------------------------+
+| Field     | Value                            |
++-----------+----------------------------------+
+| domain_id | default                          |
+| expires   | 2015-11-18T11:44:23.325817Z      |
+| id        | 0525e008619748848735d9122f8f2e81 |
+| user_id   | c80f5244c7d3486fbf4059b7197b4770 |
++-----------+----------------------------------+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Bingo!!!&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion:e7ff3708e26e119eac842592ed6ec8d5&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;That&amp;rsquo;s enough information for this first post about OpenStack keystone.
+By now, I will continue the investigations and use this installation as a &lt;em&gt;lab&lt;/em&gt; to understand the full concepts of this identity management software.&lt;/p&gt;
+
+&lt;p&gt;I leave my test with a bitter taste.&lt;/p&gt;
+
+&lt;p&gt;I may not have understood all the concepts behind the scene, but I can say that this product, at least in the current release, is by far too complex and has too much contributors to evaluate it in a simple way.
+Therefore, the quite complete but messy documentation, a mix in the releases and some major incompatibilities in the tools using V2.0 and V3 gave me a bad impression.
+The tool may be useful, but the TCO sounds high and the entry ticket is not negligible.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Simple IaaS API documentation with swagger</title>
+      <link>http://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger/</link>
+      <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger/</guid>
+      <description>
+
+&lt;p&gt;In a &lt;a href=&#34;http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/&#34;&gt;previous post&lt;/a&gt; I have explained how to develop a very simple API server.&lt;/p&gt;
+
+&lt;p&gt;Without the associated documentation, the API will be useless. Let&amp;rsquo;s see how we can use &lt;a href=&#34;https://github.com/swagger-api/swagger-ui&#34;&gt;swagger-ui&lt;/a&gt;
+in this project to generate a beautiful documentation.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; I&amp;rsquo;m blogging and experimenting, of course, in the &amp;ldquo;real&amp;rdquo; life, it&amp;rsquo;s a lot better to code the API interface before implementing the middleware.&lt;/p&gt;
+
+&lt;h1 id=&#34;about-swagger:6885d873cca9f64e761bb42572892f34&#34;&gt;About Swagger&lt;/h1&gt;
+
+&lt;p&gt;Swagger is a framework. On top of the swagger project is composed of several tools.&lt;/p&gt;
+
+&lt;p&gt;The entry point is to write the API interface using the &lt;a href=&#34;http://swagger.io/specification/&#34;&gt;Swagger Formal Specification&lt;/a&gt;. I will the use the &lt;a href=&#34;https://github.com/swagger-api/swagger-ui&#34;&gt;swagger-ui&lt;/a&gt; to display the documentation.
+The swagger-ui can be modified and recompiled, but I won&amp;rsquo;t do it (as I don&amp;rsquo;t want to play with nodejs). Instead I will rely on the &amp;ldquo;dist&amp;rdquo; part which can be used &amp;ldquo;as-is&amp;rdquo;&lt;/p&gt;
+
+&lt;h1 id=&#34;defining-the-api-interface-with-swagger:6885d873cca9f64e761bb42572892f34&#34;&gt;Defining the API interface with Swagger&lt;/h1&gt;
+
+&lt;h2 id=&#34;header-and-specification-version:6885d873cca9f64e761bb42572892f34&#34;&gt;Header and specification version:&lt;/h2&gt;
+
+&lt;p&gt;Swagger comes with an editor which can be used &lt;a href=&#34;http://editor.swagger.io/#/&#34;&gt;online&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I will use swagger spec 2.0, as I don&amp;rsquo;t see any good reason not to do so. Moreover, I will describe the API using the &lt;code&gt;YAML&lt;/code&gt; format instead of the JSON format to be human-friendly.&lt;/p&gt;
+
+&lt;p&gt;Indeed, in my &lt;code&gt;YAML&lt;/code&gt; skeleton the header of my specs will then look like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;swagger: &#39;2.0&#39;
+info:
+  version: 1.0.0
+    title: &#39;Very Simple IAAS&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;the-node-creation-a-post-method:6885d873cca9f64e761bb42572892f34&#34;&gt;The node creation: a POST method&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s document the Node creation (as it is the method that we have implemented before).&lt;/p&gt;
+
+&lt;p&gt;The node creation is a &lt;code&gt;POST&lt;/code&gt; method, that produces a JSON in output with the request ID of the node created.&lt;/p&gt;
+
+&lt;p&gt;The responses code may be:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;202 : if the request has been taken in account&lt;/li&gt;
+&lt;li&gt;400 : when the request is not formatted correctly&lt;/li&gt;
+&lt;li&gt;500 : if any unhanldled exception occurred&lt;/li&gt;
+&lt;li&gt;502 : if the backend is not accessible (either the RPC server or the backend)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;So far, the YAML spec will look like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;paths:
+  /v1/nodes:
+    post:
+      description: Create a node
+      produces:
+        - application/json
+      responses:
+        202:
+          description: A request ID.
+        400:
+          description: |
+            When the request is malformated or when mandatory arguments are missing
+        500:
+          desctiption: Unhandled error
+        502:
+          description: Execution backend not available
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So far so good, let&amp;rsquo;s continue with the input payload. The payload will be formatted in JSON, so I add this directive to the model:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-YAML&#34;&gt;consumes:
+  - application/json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&amp;rsquo;ve decided in my previous post that 6 parameters were needed:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;the kind of os&lt;/li&gt;
+&lt;li&gt;the size of the machine&lt;/li&gt;
+&lt;li&gt;the initial disk size allocated&lt;/li&gt;
+&lt;li&gt;the lease (in days)&lt;/li&gt;
+&lt;li&gt;the environment&lt;/li&gt;
+&lt;li&gt;the description&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All the parameters will compose a payload and therefore will be present in the body of the request.
+The YAML representation of the parameters array is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-YAML&#34;&gt;parameters:
+  - name: kind
+    in: body
+    description: &amp;quot;The OS type&amp;quot;
+    required: true
+  - name: size 
+    in: body
+    description: &amp;quot;The size of the (virtual) Machine&amp;quot;
+    required: true
+  - name: disksize
+    in: body
+    description: &amp;quot;The initial disk capacity allocated&amp;quot;
+    required: true
+  - name: leasedays
+    in: body
+    description: &amp;quot;The lease (in days)&amp;quot;
+    required: true
+  - name: environment_type
+    in: body
+    description: &amp;quot;The target environment&amp;quot;
+  - name: description
+    in: body
+    description: &amp;quot;The target environment&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Sounds ok, but when I test this implementation in the swagger editor for validation, I get this error:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Swagger Error
+Data does not match any schemas from &#39;oneOf&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;STFWing and RTFMing&amp;hellip;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;in the &lt;a href=&#34;http://swagger.io/specification/#parameterObject&#34;&gt;Specifications&lt;/a&gt;, I have found this line:&lt;/p&gt;
+
+&lt;p&gt;&lt;html&gt;
+If &lt;a href=&#34;#parameterIn&#34;&gt;&lt;code&gt;in&lt;/code&gt;&lt;/a&gt; is &lt;code&gt;&amp;ldquo;body&amp;rdquo;&lt;/code&gt;:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Field Name&lt;/th&gt;
+&lt;th style=&#34;text-align: center;&#34;&gt;Type&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;a name=&#34;parameterSchema&#34;&gt;&lt;/a&gt;schema&lt;/td&gt;
+&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;#schemaObject&#34;&gt;Schema Object&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;&lt;stwrong&gt;Required.&lt;/strong&gt; The schema defining the type used for the body parameter.&lt;/td&gt;
+&lt;/table&gt;
+&lt;/html&gt;&lt;/p&gt;
+
+&lt;p&gt;Therefore, I should set a schema object for every parameter in order to define its type. In this example, I don&amp;rsquo;t want to go too deeply into the swagger specification, so I won&amp;rsquo;t define any type.&lt;/p&gt;
+
+&lt;p&gt;So I have tested the following:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-YAML&#34;&gt;parameters:
+  - name: kind
+    in: body
+    description: &amp;quot;The OS type&amp;quot;
+    required: true
+    schema:
+      type: string
+  - name: size 
+    in: body
+    description: &amp;quot;The size of the (virtual) Machine&amp;quot;
+    required: true
+    schema:
+      type: string
+    ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And again, I had a validation error from the editor:&lt;/p&gt;
+
+&lt;p&gt;&lt;span class=&#34;icon&#34;&gt;✖&lt;/span&gt; Swagger Error&lt;/h5&gt;&lt;p class=&#34;error-description&#34; ng-bind-html=&#34;error.description&#34;&gt;Operation cannot have multiple body parameters&lt;/p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;RTFMing&amp;hellip;&lt;/em&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Body - The payload that&amp;rsquo;s appended to the HTTP request.
+Since there can only be one payload, there can only be one body parameter.
+The name of the body parameter has no effect on the parameter itself and is used for documentation purposes only.
+Since Form parameters are also in the payload, body and form parameters cannot exist together for the same operation.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;What I must do, is to create a custom type &lt;em&gt;nodeRequest&lt;/em&gt; with the input fields as properties and reference it in the body.&lt;/p&gt;
+
+&lt;p&gt;Here is the complete structure:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-YAML&#34;&gt;parameters:
+  - name: nodeRequest 
+    in: body
+    description: a node request
+    required: true
+    schema:
+        $ref: &#39;#/definitions/NodeRequest&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the proper NodeRequest definition in the &lt;em&gt;definition&lt;/em&gt; area:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-YAML&#34;&gt;definitions:
+  NodeRequest:
+    description: A Node Request object
+    properties:
+      kind:
+        type: string
+        description: The OS type
+      size:
+        type: string
+        description: The size of the (virtual) machine
+      disksize:
+        type: integer
+        format: int32
+        description: The initial disk capacity size (in GB)
+      leasedays:
+        type: integer
+        format: int32
+        description: The lease
+      environment_type:
+        type: string
+        description: the target environment
+      description:
+        type: string
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;OK ! The swagger file is valid&amp;hellip; Now let&amp;rsquo;s glue it together with swagger-ui and serve it from the GO API server I have developed before&lt;/p&gt;
+
+&lt;h1 id=&#34;integrating-swagger-ui:6885d873cca9f64e761bb42572892f34&#34;&gt;Integrating swagger-ui&lt;/h1&gt;
+
+&lt;p&gt;As written in the README in the github of the project, swagger-ui can be used &amp;ldquo;as-is&amp;rdquo; using the files in the &lt;em&gt;dist&lt;/em&gt; folder. Let&amp;rsquo;s get the files from github:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;/tmp #  git clone https://github.com/swagger-api/swagger-ui.git
+Cloning into &#39;swagger-ui&#39;...
+remote: Counting objects: 7292, done.
+remote: Compressing objects: 100% (33/33), done.
+remote: Total 7292 (delta 8), reused 0 (delta 0), pack-reused 7256
+Receiving objects: 100% (7292/7292), 19.20 MiB | 1021.00 KiB/s, done.
+Resolving deltas: 100% (3628/3628), done.
+Checking connectivity... done.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s checkout our project:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;/tmp # git clone https://github.com/owulveryck/example-iaas.git 
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and move the &lt;code&gt;dist&lt;/code&gt; folder into the project:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mv /tmp/swagger-ui/dist /tmp/example-iaas
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;adding-a-route-to-the-go-server-to-serve-the-static-files:6885d873cca9f64e761bb42572892f34&#34;&gt;Adding a route to the GO server to serve the static files&lt;/h2&gt;
+
+&lt;p&gt;I cannot simply add a route in the &lt;code&gt;routes.go&lt;/code&gt; file for this very simple reason:
+The loop used in the &lt;code&gt;router.go&lt;/code&gt; is using the &lt;code&gt;Path&lt;/code&gt; method, and to serve the content of the directory, I need to use the &lt;code&gt;PathPrefix&lt;/code&gt; method (see &lt;a href=&#34;http://www.gorillatoolkit.org/pkg/mux#Route.PathPrefix&#34;&gt;The Gorilla Documentation&lt;/a&gt; for more information).&lt;/p&gt;
+
+&lt;p&gt;To serve the content, I add this entry to the muxrouter in the &lt;code&gt;router.go&lt;/code&gt; file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;router.
+       Methods(&amp;quot;GET&amp;quot;).
+       PathPrefix(&amp;quot;/apidocs&amp;quot;).
+       Name(&amp;quot;Apidocs&amp;quot;).
+       Handler(http.StripPrefix(&amp;quot;/apidocs&amp;quot;, http.FileServer(http.Dir(&amp;quot;./dist&amp;quot;))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then I start the server and point my browser to &lt;a href=&#34;http://localhost:8080/apidocs..&#34;&gt;http://localhost:8080/apidocs..&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Wait, nothing is displayed&amp;hellip;&lt;/p&gt;
+
+&lt;h1 id=&#34;the-final-test:6885d873cca9f64e761bb42572892f34&#34;&gt;The final test&lt;/h1&gt;
+
+&lt;p&gt;As I serve the files from the &lt;code&gt;./dist&lt;/code&gt; directory, what I need to do is to move my &lt;code&gt;swagger.yaml&lt;/code&gt; spec file into the dist subfolder and tell swagger to read it.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Et voilà!&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img class=&#34;img-square img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/swagger.png&#34; alt=&#34;Result&#34;/&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;final-word:6885d873cca9f64e761bb42572892f34&#34;&gt;Final word&lt;/h1&gt;
+
+&lt;p&gt;As you can see, there is a &amp;ldquo;Try out&amp;rdquo; button, which triggers a &lt;code&gt;curl&lt;/code&gt; command&amp;hellip; Very helpful to enter a test driven development mode.&lt;/p&gt;
+
+&lt;p&gt;On top of that swagger is really helpful and may be a great tool to synthesize the need of a client in term of an interface.
+Once the API is fully implemented, any client binding may also be generated with the swagger framework.&lt;/p&gt;
+
+&lt;p&gt;No not hesitate to clone the source code from &lt;a href=&#34;https://github.com/owulveryck/example-iaas&#34;&gt;github&lt;/a&gt; and test the swagger.yaml file in the editor to see how the bindings are generated&lt;/p&gt;
+
+&lt;p&gt;You can find all the codes in the github repository &lt;a href=&#34;https://github.com/owulveryck/example-iaas&#34;&gt;here&lt;/a&gt; in the branch &lt;code&gt;simple-iaas-api-documentation-with-swagger&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The final YAML file can be found &lt;a href=&#34;https://github.com/owulveryck/example-iaas/blob/simple-iaas-api-documentation-with-swagger/swagger.yaml&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>IaaS-like RESTfull API based on microservices</title>
+      <link>http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/</link>
+      <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/</guid>
+      <description>
+
+&lt;h1 id=&#34;abstracts:1574d51e403296c43e921da78612bc7c&#34;&gt;Abstracts&lt;/h1&gt;
+
+&lt;p&gt;Recently, I&amp;rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.&lt;/p&gt;
+
+&lt;p&gt;I am reading more and more about the &amp;ldquo;API economy&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve also seen this excellent video made by &lt;a href=&#34;https://www.youtube.com/watch?v=tIm8UkSf6RA&amp;amp;list=PLDWZ5uzn69ezRJYeWxYNRMYebvf8DerHd&#34;&gt;Mat Ryer&lt;/a&gt; about how to code an API in GO and why go would be the perfect language to code such a portal.&lt;/p&gt;
+
+&lt;p&gt;The problem I&amp;rsquo;m facing is that in the organization I&amp;rsquo;m working for, the developments are heterogeneous and therefore you can find &lt;em&gt;ruby&lt;/em&gt; teams as well as &lt;em&gt;python&lt;/em&gt; teams and myself as a &lt;em&gt;go&lt;/em&gt; team (That will change in the future anyway)
+The key point is that I would like my middleware to serve as an entry point to the services provided by the department.&lt;/p&gt;
+
+&lt;p&gt;We (as an &amp;ldquo;ops&amp;rdquo; team) would then be able to present the interface via, for example, a &lt;a href=&#34;http://swagger.io&#34;&gt;swagger&lt;/a&gt; like interface, take care of the API and do whatever RPC to any submodule.&lt;/p&gt;
+
+&lt;h1 id=&#34;an-example-a-iaas-like-interface:1574d51e403296c43e921da78612bc7c&#34;&gt;An example: a IAAS like interface&lt;/h1&gt;
+
+&lt;p&gt;Let&amp;rsquo;s consider a node compute lifecycle.&lt;/p&gt;
+
+&lt;p&gt;What I&amp;rsquo;d like to be able to do is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;to create a node&lt;/li&gt;
+&lt;li&gt;to update a node (maybe)&lt;/li&gt;
+&lt;li&gt;to delete a node&lt;/li&gt;
+&lt;li&gt;to get the status of the node&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;the-backend:1574d51e403296c43e921da78612bc7c&#34;&gt;The backend&lt;/h2&gt;
+
+&lt;p&gt;The backend is whatever service, able to create a node, such as openstack, vmware vcac, juju, &amp;hellip;
+Thoses services usually provide RESTfull API.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve seen in my experience, that usually, the API are given with a library in a so called &amp;ldquo;modern language&amp;rdquo;.
+This aim to simplify the development of the clients.
+Sometimes this library may also be developed by an internal team that will take care of the maintenance.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-library:1574d51e403296c43e921da78612bc7c&#34;&gt;The library&lt;/h2&gt;
+
+&lt;p&gt;In my example, we will consider that the library is a simple &lt;em&gt;gem&lt;/em&gt; file developed in ruby.
+Therefore, our service will be a simple server that will get RPC calls, call the good method in the &lt;em&gt;gemfile&lt;/em&gt;
+and that will, &lt;em&gt;in fine&lt;/em&gt; transfer it to the backend.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-restfull-api:1574d51e403296c43e921da78612bc7c&#34;&gt;The RestFull API.&lt;/h2&gt;
+
+&lt;p&gt;I will use the example described &lt;a href=&#34;http://thenewstack.io/make-a-restful-json-api-go/&#34;&gt;here&lt;/a&gt; as a basis for this post.
+Of course there are many other examples and excellent go packages that may be used, but according to Mat Ryer, I will stick to the idiomatic approach.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-glue-msgpack-rpc:1574d51e403296c43e921da78612bc7c&#34;&gt;The glue: MSGPACK-RPC&lt;/h2&gt;
+
+&lt;p&gt;There are several methods for RPC-ing between different languages. Ages ago, there was xml-rpc; then there has been json-rpc;
+I will use &lt;a href=&#34;https://github.com/msgpack-rpc/msgpack-rpc&#34;&gt;msgpack-rpc&lt;/a&gt; which is a binary, json base codec.
+The communication between the Go client and the ruby server will be done over TCP via HTTP for example.&lt;/p&gt;
+
+&lt;p&gt;Later on, outside of the scope of this post, I may use ZMQ (as I have already blogged about 0MQ communication between those languages).&lt;/p&gt;
+
+&lt;h1 id=&#34;the-implementation-of-the-client-the-go-part:1574d51e403296c43e921da78612bc7c&#34;&gt;The implementation of the Client (the go part)&lt;/h1&gt;
+
+&lt;p&gt;I will describe here the node creation via a POST method, and consider that the other methods could be implemented in a similar way.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-signature-of-the-node-creation:1574d51e403296c43e921da78612bc7c&#34;&gt;The signature of the node creation&lt;/h2&gt;
+
+&lt;p&gt;Here is the expected signature for creating a compute element:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;kind&amp;quot;:&amp;quot;linux&amp;quot;,
+    &amp;quot;size&amp;quot;:&amp;quot;S&amp;quot;,
+    &amp;quot;disksize&amp;quot;:20,
+    &amp;quot;leasedays&amp;quot;:1,
+    &amp;quot;environment_type&amp;quot;:&amp;quot;dev&amp;quot;,
+    &amp;quot;description&amp;quot;:&amp;quot;my_description&amp;quot;,
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The corresponding GO structure is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type NodeRequest struct {
+    Kind string `json:&amp;quot;kind&amp;quot;` // Node kind (eg linux)
+    Size string `json:&amp;quot;size&amp;quot;` // size
+    Disksize         int    `json:&amp;quot;disksize&amp;quot;`
+    Leasedays        int    `json:&amp;quot;leasedays&amp;quot;`
+    EnvironmentType  string `json:&amp;quot;environment_type&amp;quot;`
+    Description      string `json:&amp;quot;description&amp;quot;`
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;the-route:1574d51e403296c43e921da78612bc7c&#34;&gt;The route&lt;/h2&gt;
+
+&lt;p&gt;The Middleware is using the &lt;a href=&#34;http://www.gorillatoolkit.org/pkg/mux&#34;&gt;gorilla mux package&lt;/a&gt;.
+According the description, I will add an entry in the routes array (into the &lt;em&gt;routes.go&lt;/em&gt; file):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;Route{
+    &amp;quot;NodeCreate&amp;quot;,
+    &amp;quot;POST&amp;quot;,
+    &amp;quot;/v1/nodes&amp;quot;,
+    NodeCreate,
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; : I am using a prefix &lt;code&gt;/v1&lt;/code&gt; for my API, for exploitation purpose.&lt;/p&gt;
+
+&lt;p&gt;I will then create the corresponding handler in the file with this signature&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func NodeCreate(w http.ResponseWriter, r *http.Request){
+    var nodeRequest NodeRequest
+    body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+    if err != nil {
+        panic(err)
+    }
+    if err := r.Body.Close(); err != nil {
+        panic(err)
+    }
+    if err := json.Unmarshal(body, &amp;amp;nodeRequest); err != nil {
+        w.Header().Set(&amp;quot;Content-Type&amp;quot;, &amp;quot;application/json; charset=UTF-8&amp;quot;)
+        w.WriteHeader(http.StatusBadRequest) // unprocessable entity
+        if err := json.NewEncoder(w).Encode(err); err != nil {
+            panic(err)
+        }
+    }    
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s in this function that will be implemented RPC (client part). To keep it simple at the beginning,
+I will instantiate a TCP connection on every call.
+Don&amp;rsquo;t throw things at me, that will be changed later following the advice of Mat Ryer.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-implementation-of-the-handler:1574d51e403296c43e921da78612bc7c&#34;&gt;The implementation of the handler&lt;/h2&gt;
+
+&lt;h3 id=&#34;the-effective-remote-procedure-call:1574d51e403296c43e921da78612bc7c&#34;&gt;The effective remote procedure call&lt;/h3&gt;
+
+&lt;p&gt;To use &lt;em&gt;msgpack&lt;/em&gt; I need to import the go implementation &lt;code&gt;github.com/msgpack-rpc/msgpack-rpc-go/rpc&lt;/code&gt;.
+This library will take care of the encoding/decoding of the messages.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s dial the RPC server and call the &lt;code&gt;NodeCreate&lt;/code&gt; method with, as argument, the information we had from the JSON input&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;    conn, err := net.Dial(&amp;quot;tcp&amp;quot;, &amp;quot;127.0.0.1:18800&amp;quot;)
+    if err != nil {
+        fmt.Println(&amp;quot;fail to connect to server.&amp;quot;)
+        return
+    }
+    client := rpc.NewSession(conn, true)
+    retval, err := client.Send(&amp;quot;NodeCreate&amp;quot;, nodeRequest.Kind, nodeRequest.Size, nodeRequest.Disksize, nodeRequest.Leasedays, nodeRequest.EnvironmentType, nodeRequest.Description)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    fmt.Println(retval)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;the-rpc-server-the-ruby-part:1574d51e403296c43e921da78612bc7c&#34;&gt;The RPC server (the ruby part)&lt;/h1&gt;
+
+&lt;p&gt;This part is written in ruby, and will take care of the effective node creation.
+At first, we should install the GEM file with the command &lt;code&gt;gem install msgpack-rpc&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;require &#39;msgpack/rpc&#39;
+class MyHandler
+    def NodeCreate(kind, size, disksize, leasedays, environmenttype, description) 
+        print &amp;quot;Creating the node with parameters: &amp;quot;,kind, size, disksize, leasedays, environmenttype, description
+        return &amp;quot;ok&amp;quot;
+    end
+end
+svr = MessagePack::RPC::Server.new
+svr.listen(&#39;0.0.0.0&#39;, 18800, MyHandler.new)
+svr.run
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;let-s-test-it:1574d51e403296c43e921da78612bc7c&#34;&gt;let&amp;rsquo;s test it&lt;/h1&gt;
+
+&lt;p&gt;Launch the RPC server:
+&lt;code&gt;ruby server.rb&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Then launch the API rest server&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;go run *go&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Then perform a POST request&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;curl -X POST -H &#39;Content-Type:application/json&#39; -H &#39;Accept:application/json&#39; -d &#39;{&amp;quot;kind&amp;quot;:&amp;quot;linux&amp;quot;,&amp;quot;size&amp;quot;:&amp;quot;S&amp;quot;,&amp;quot;disksize&amp;quot;:20,&amp;quot;leasedays&amp;quot;:1,&amp;quot;environment_type&amp;quot;:&amp;quot;dev&amp;quot;,&amp;quot;description&amp;quot;:&amp;quot;my_description&amp;quot;}&#39; -k http://localhost:8080/v1/nodes
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It should write something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015/11/10 13:56:51 POST        /v1/nodes       NodeCreate      2.520673ms
+ok
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And something like this in the output of the ruby code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Creating the node with parameters: linux S 20 1 dev my_description
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s all folks! What&amp;rsquo;s left:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;To implement the other methods to be &amp;ldquo;&lt;a href=&#34;https://en.wikipedia.org/wiki/Create,_read,_update_and_delete&#34;&gt;CRUD&lt;/a&gt;&amp;rdquo; compliant&lt;/li&gt;
+&lt;li&gt;To implement an authentication and accreditation mechanism (JWT, Oauth, ?)&lt;/li&gt;
+&lt;li&gt;To change the implementation of the RPC client to use a pool instead of a single connection&lt;/li&gt;
+&lt;li&gt;To implement the swagger interface and documentation of the API&lt;/li&gt;
+&lt;li&gt;Whatever fancy stuff you may want from a production ready interface.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can find all the codes in the github repository &lt;a href=&#34;https://github.com/owulveryck/example-iaas&#34;&gt;here&lt;/a&gt; in the branch &lt;code&gt;iaas-like-restfull-api-based-on-microservices&lt;/code&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Developping &#34;Google Apps&#34; on my Chromebook</title>
+      <link>http://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/</link>
+      <pubDate>Mon, 26 Oct 2015 10:41:57 +0000</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/</guid>
+      <description>
+
+&lt;p&gt;It is a week now that I&amp;rsquo;m playing with my chromebook.
+I really enjoy this little internet Terminal.&lt;/p&gt;
+
+&lt;p&gt;I &amp;ldquo;geeked&amp;rdquo; it a little bit and I installed my favorites dev tools eg:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://gist.github.com/johnbender/5018685&#34;&gt;The solarized theme for the terminal&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;zsh&lt;/code&gt; with &lt;a href=&#34;https://github.com/robbyrussell/oh-my-zsh&#34;&gt;Oh-my-zsh&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tmux&lt;/code&gt; (stared with &lt;code&gt;tmux -2&lt;/code&gt; to get 256 colors)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;vim&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;a &lt;code&gt;Go&lt;/code&gt; compiler&lt;/li&gt;
+&lt;li&gt;The &lt;a href=&#34;http://gohugo.io/overview/quickstart/&#34;&gt;&lt;code&gt;HUGO&lt;/code&gt;&lt;/a&gt; tool to write this blog.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All of it has been installed thanks to the &amp;ldquo;brew&amp;rdquo; package manager and following &lt;a href=&#34;https://github.com/Homebrew/linuxbrew/wiki/Chromebook-Install-Instructions&#34;&gt;those instructions&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;google-development-environment:c2a993a17c1354c5732b21a838c0a0c3&#34;&gt;Google Development Environment&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve installed the Google Development Environement as described &lt;a href=&#34;https://cloud.google.com/appengine/docs/go/gettingstarted/devenvironment&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Python 2.7 is a requirements so I &lt;code&gt;brewed it&lt;/code&gt; without any noticeable issue.&lt;/p&gt;
+
+&lt;p&gt;When I wanted to serve locally my very first Google App developement, I ran into the following error:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ go app serve $GOPATH/src/myapp
+...
+ImportError: No module named _sqlite3
+error while running dev_appserver.py: exit status 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Too bad. I&amp;rsquo;ve read that this module should be built with python, but a even a &lt;code&gt;find /&lt;/code&gt; (I know it&amp;rsquo;s evil) didn&amp;rsquo;t return me any occurence.&lt;/p&gt;
+
+&lt;p&gt;So, I have:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Googled&lt;/li&gt;
+&lt;li&gt;reinstalled sqlite with &lt;code&gt;brew reinstall sqlite&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;reinstalled python with &lt;code&gt;brew reinstall python&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;played with brew link, unlink and so&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Still no luck!&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve also tried the compilation with a &lt;code&gt;verbose&lt;/code&gt; option, and I the log file, there is an explicit message:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Python build finished, but the necessary bits to build these modules were not found:
+_bsddb  _sqlite3_tkinter
+...
+To find the necessary bits, look in setup.py in detect_modules() for the modules name.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s where I am now, stuck with a stupid python error. I&amp;rsquo;d like the folks at google to provide a pure go developement enrironement that would avoid the bootstraping problems.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ll post an update as soon as I have solved this issue !&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;EDIT&lt;/em&gt;:&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve had a look in the &lt;code&gt;setup.py&lt;/code&gt; file. To compile the sqlite extension, it looks into the following paths:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;...
+sqlite_incdir = sqlite_libdir = None
+sqlite_inc_paths = [ &#39;/usr/include&#39;,
+                     &#39;/usr/include/sqlite&#39;,
+                     &#39;/usr/include/sqlite3&#39;,
+                     &#39;/usr/local/include&#39;,
+                     &#39;/usr/local/include/sqlite&#39;,
+                     &#39;/usr/local/include/sqlite3&#39;,
+                   ]
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But in my configuration, the libraries are present in &lt;code&gt;/usr/local/linuxbrew/*&lt;/code&gt;. Hence, simply linking the include and libs did the trick&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m now facing another error when I try to run the &lt;code&gt;goapp serve&lt;/code&gt; command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;...
+AttributeError: &#39;module&#39; object has no attribute &#39;poll&#39;
+error while running dev_appserver.py: exit status 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Google told me, that on OSX the poll system call is broken and has been disabled.
+As brew is mainly developped on MacOS, that may be the reason&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve recompiled the python with the &lt;code&gt;--with-poll&lt;/code&gt; option and that did the trick.&lt;/p&gt;
+
+&lt;h2 id=&#34;finally:c2a993a17c1354c5732b21a838c0a0c3&#34;&gt;Finally&lt;/h2&gt;
+
+&lt;p&gt;Here are my options for compiling python:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ brew reinstall python --with-brewed-openssl --with-brewed-sqlite --with-poll 
+...
+Warning: The given option --with-poll enables a somewhat broken poll() on OS X (https://bugs.python.org/issue5154)  Formula git:(master)).
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the &lt;code&gt;goapp serve&lt;/code&gt; is finally working on my Chromebook:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ goapp serve /home/chronos/user/GOPROJECTS/src/github.com/owulveryck/google-app-example/
+INFO     2015-10-26 15:48:04,840 devappserver2.py:763] Skipping SDK update check.
+INFO     2015-10-26 15:48:04,935 api_server.py:205] Starting API server at: http://localhost:54116
+INFO     2015-10-26 15:48:06,092 dispatcher.py:197] Starting module &amp;quot;default&amp;quot; running at: http://localhost:8080
+INFO     2015-10-26 15:48:06,096 admin_server.py:116] Starting admin server at: http://localhost:8000
+INFO     2015-10-26 15:48:16,700 shutdown.py:45] Shutting down.
+INFO     2015-10-26 15:48:16,701 api_server.py:648] Applying all pending transactions and saving the datastore
+INFO     2015-10-26 15:48:16,701 api_server.py:651] Saving search indexes
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Simple polling, a cloud native app - part 1</title>
+      <link>http://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1/</link>
+      <pubDate>Fri, 23 Oct 2015 09:54:27 +0100</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1/</guid>
+      <description>
+
+&lt;p&gt;In this series of posts I&amp;rsquo;ll explain how to setup a simple polling app, the cloud way.
+This app, written in go, will be hosted on a PAAS, and I&amp;rsquo;ve chosen the &lt;a href=&#34;https://cloud.google.com/appengine/docs&#34;&gt;Google App Engine&lt;/a&gt; for convenience.&lt;/p&gt;
+
+&lt;p&gt;I will not explain in this post how to setup the Development environment as it is described &lt;a href=&#34;https://cloud.google.com/appengine/docs/go/gettingstarted/devenvironment&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;a-word-about-the-hosting:154917605c8b60fbfe1ec11d0e3a2450&#34;&gt;A word about the Hosting&lt;/h1&gt;
+
+&lt;p&gt;Google Apps Engine is a cloud service aim to host applications without worrying about scalability, and technical architecture of the hosting environement.
+The application is seen as a web service and proxyfied and load balanced in several compute nodes.
+The storage service is provided via a schemaless NoSQL datastore, featuring:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;high availability&lt;/li&gt;
+&lt;li&gt;consistency&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;and basically all the strong features you would expect from a decent production ready database provider.&lt;/p&gt;
+
+&lt;p&gt;To be simple: Take care of the functionnality of your app and respect the cloud principles (see for example the &lt;a href=&#34;http://12factor.net&#34;&gt;12factor.net&lt;/a&gt; ), and google will take care that it can run in the best conditions.&lt;/p&gt;
+
+&lt;h1 id=&#34;the-principles-of-the-application:154917605c8b60fbfe1ec11d0e3a2450&#34;&gt;The principles of the application&lt;/h1&gt;
+
+&lt;p&gt;The application is composed of a stateless engine, a data bucket and some web pages for the presentation.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-engine:154917605c8b60fbfe1ec11d0e3a2450&#34;&gt;The engine&lt;/h2&gt;
+
+&lt;p&gt;The engine is the core of the application. It is the &amp;ldquo;computational element&amp;rdquo; that will take care of the inputs of the user and interact with the storage.
+It is a &lt;a href=&#34;http://golang.org&#34;&gt;GO&lt;/a&gt; developement.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-bucket:154917605c8b60fbfe1ec11d0e3a2450&#34;&gt;The bucket&lt;/h2&gt;
+
+&lt;p&gt;It is the data warehouse. It will store the participant name and its answer. It will be NoSQL based, the key will be the username and the value its answer.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-web-pages:154917605c8b60fbfe1ec11d0e3a2450&#34;&gt;The web pages&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;the question &amp;ldquo;will you participate&amp;rdquo; and a form input where you will be able to write your name and three buttons &amp;ldquo;yes&amp;rdquo;, &amp;ldquo;no&amp;rdquo; and &amp;ldquo;&amp;ldquo;maybe&amp;rdquo;&amp;ldquo;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;Will you participate 
++------------------+  +-----+ +-----+ +-------+
+|  Your name       |  | YES | |  NO | | Maybe |
++------------------+  +-----+ +-----+ +-------+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;a simple table with two columns:&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;One will hold the participant name&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;The other one will display its response&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;+---------------------+-------+
+|  John doe           | YES   |
++---------------------+-------+
+|  Johnny Vacances    | NO    |
++---------------------+-------+
+|  Foo Bar            | YES   |
++---------------------+-------+
+|  Toto Titi          | NO    |
++---------------------+-------+
+|  Pascal Obistro     | YES   |
++---------------------+-------+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;setting-up-the-development-environment:154917605c8b60fbfe1ec11d0e3a2450&#34;&gt;Setting up the development environment&lt;/h1&gt;
+
+&lt;p&gt;First, we will create a directory that will host the sources of our application in our &lt;code&gt;GOPATH/src&lt;/code&gt;.
+&lt;em&gt;Note&lt;/em&gt;: For convenience I&amp;rsquo;ve created a github repo named &amp;ldquo;google-app-example&amp;rdquo; to host the complete source.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ mkdir -p $GOPATH/src/github.com/owulveryck/google-app-example
+~ cd $GOPATH/src/github.com/owulveryck/google-app-example
+~ git init
+~ git remote add origin https://github.com/owulveryck/google-app-example
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;hello-world:154917605c8b60fbfe1ec11d0e3a2450&#34;&gt;Hello World!&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s create the hello world first to validate the whole development chain.
+As written in the doc, create the two files &lt;code&gt;hello.go&lt;/code&gt; and &lt;code&gt;app.yaml&lt;/code&gt;.
+Obviously the &lt;code&gt;simple-polling.go&lt;/code&gt; file will hold the code of the application. Let&amp;rsquo;s focus a bit on the &lt;em&gt;app.yaml&lt;/em&gt; file.
+The documentation of the &lt;em&gt;app.yaml&lt;/em&gt; file is &lt;a href=&#34;https://cloud.google.com/appengine/docs/go/config/appconfig&#34;&gt;here&lt;/a&gt;. The goal of this file is to specifiy the runtime configuration of the engine.
+This simple file replace the &amp;ldquo;integration&amp;rdquo; task for an application typed &amp;ldquo;born in the datacenter&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;Here is my app.yaml&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;application: simple-polling
+version: 1
+runtime: go
+api_version: go1
+
+handlers:
+- url: /.*
+  script: _go_app
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And then we try our application with the command &lt;code&gt;goapp serve $GOPATH/src/github.com/owulveryck/google-app-example/&lt;/code&gt;
+which should display something similar to:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;INFO     2015-10-26 21:02:10,295 devappserver2.py:763] Skipping SDK update check.
+INFO     2015-10-26 21:02:10,468 api_server.py:205] Starting API server at: http://localhost:52457
+INFO     2015-10-26 21:02:12,011 dispatcher.py:197] Starting module &amp;quot;default&amp;quot; running at: http://localhost:8080
+INFO     2015-10-26 21:02:12,014 admin_server.py:116] Starting admin server at: http://localhost:8000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then I can open my browser (or curl) and point it to &lt;a href=&#34;http://localhost:8080&#34;&gt;http://localhost:8080&lt;/a&gt; to see my brand new &amp;ldquo;Hello World!&amp;rdquo; displayed&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ curl http://localhost:8080
+Hello, world!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This ends the part 1 of this serie of articles.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ruby / ZeroMQ / GO</title>
+      <link>http://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/</link>
+      <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/</guid>
+      <description>
+
+&lt;h1 id=&#34;abtract:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Abtract&lt;/h1&gt;
+
+&lt;p&gt;I really like go as a programming language. It is a good tool to develop web restful API service.&lt;/p&gt;
+
+&lt;p&gt;On the other hand, ruby and its framework rails has also been wildly used to achieve the same goal.&lt;/p&gt;
+
+&lt;p&gt;Therefore we may be facing a &amp;ldquo;legacy&amp;rdquo; ruby developpement that we would like to connect to our brand new go framework.
+0MQ may be a perfect choice for intefacing the two languages.&lt;/p&gt;
+
+&lt;p&gt;Anyway, it is, at least, a good experience to do a little bit of code to make them communicate.&lt;/p&gt;
+
+&lt;h1 id=&#34;zeromq:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;ZeroMQ&lt;/h1&gt;
+
+&lt;p&gt;I will use the ZeroMQ version 4 as it is the latest available one.
+On top of that, I can see in the &lt;a href=&#34;http://zeromq.org/docs:changes-4-0-0&#34;&gt;release notes&lt;/a&gt; that there is an implementation of a strong encryption, and I may use it later on&lt;/p&gt;
+
+&lt;h1 id=&#34;go:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Go&lt;/h1&gt;
+
+&lt;h2 id=&#34;installation-of-the-library:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Installation of the library&lt;/h2&gt;
+
+&lt;p&gt;As written in the README file, I try a &lt;code&gt;go get&lt;/code&gt; installation on my chromebook.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ go get github.com/pebbe/zmq4
+# pkg-config --cflags libzmq
+Package libzmq was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libzmq.pc&#39;
+to the PKG_CONFIG_PATH environment variable
+No package &#39;libzmq&#39; found
+pkg-config: exit status 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The go binding is not a pure go implementation, and it still needs the C library of zmq.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s &lt;em&gt;brew installing&lt;/em&gt; it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~  brew install zmq
+==&amp;gt; Downloading http://download.zeromq.org/zeromq-4.1.3.tar.gz
+######################################################################## 100.0%
+==&amp;gt; ./configure --prefix=/usr/local/linuxbrew/Cellar/zeromq/4.1.3 --without-libsodium
+==&amp;gt; make
+==&amp;gt; make install
+/usr/local/linuxbrew/Cellar/zeromq/4.1.3: 63 files, 3.5M, built in 73 seconds
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s do the go-get again:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ go get github.com/pebbe/zmq4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;so far so good. Now let&amp;rsquo;s test the installation with a &amp;ldquo;hello world&amp;rdquo; example.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/examples&#34;&gt;examples directory&lt;/a&gt; contains a go implementation of all the example of the ZMQ book
+I will use the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/examples/hwclient.go&#34;&gt;hello world client&lt;/a&gt; and the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/examples/hwserver.go&#34;&gt;hello world server&lt;/a&gt; for my tests&lt;/p&gt;
+
+&lt;p&gt;The hello world client/server is implementing a Request-Reply patternt and are communicating via a TCP socket.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The server is the &lt;em&gt;replier&lt;/em&gt; and is listening on the TCP port 5555&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;...
+func main() {
+    //  Socket to talk to clients
+    responder, _ := zmq.NewSocket(zmq.REP)
+    defer responder.Close()
+    responder.Bind(&amp;quot;tcp://*:5555&amp;quot;)
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The client is the &lt;em&gt;requester&lt;/em&gt; and is dialing the same TCP port&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;...
+func main() {
+    //  Socket to talk to server
+    fmt.Println(&amp;quot;Connecting to hello world server...&amp;quot;)
+    requester, _ := zmq.NewSocket(zmq.REQ)
+    defer requester.Close()
+    requester.Connect(&amp;quot;tcp://localhost:5555&amp;quot;)
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, the client is sending (requesting) a &lt;em&gt;hello&lt;/em&gt; message, and the server is replying a &lt;em&gt;world&lt;/em&gt; message.&lt;/p&gt;
+
+&lt;h2 id=&#34;running-the-example:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Running the example&lt;/h2&gt;
+
+&lt;p&gt;First, start the server:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ cd $GOPATH/src/github.com/pebbe/zmq4/examples
+~ go run hwserver.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then the client&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ cd $GOPATH/src/github.com/pebbe/zmq4/examples
+~ go run hwclient.go
+Connecting to hello world server...
+Sending  Hello 0
+Received  World
+Sending  Hello 1
+Received  World
+Sending  Hello 2
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;ruby:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Ruby&lt;/h1&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s implement a Ruby client.&lt;/p&gt;
+
+&lt;h2 id=&#34;installation-of-the-library-1:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Installation of the library&lt;/h2&gt;
+
+&lt;p&gt;a &lt;em&gt;gem install&lt;/em&gt; is supposed to do the trick:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ gem install zmq
+Building native extensions.  This could take a while...
+ERROR:  Error installing zmq:
+ERROR: Failed to build gem native extension.
+
+/usr/local/linuxbrew/opt/ruby/bin/ruby -r ./siteconf20151022-23021-1ehwusq.rb extconf.rb
+    checking for zmq.h... yes
+    checking for zmq_init() in -lzmq... yes
+    Cool, I found your zmq install...
+    creating Makefile
+
+    make &amp;quot;DESTDIR=&amp;quot; clean
+
+    make &amp;quot;DESTDIR=&amp;quot;
+    compiling rbzmq.c
+    rbzmq.c: In function &#39;socket_getsockopt&#39;:
+    rbzmq.c:968:7: error: &#39;ZMQ_RECOVERY_IVL_MSEC&#39; undeclared (first use in this function)
+        case ZMQ_RECOVERY_IVL_MSEC:
+        ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Arg!, something went wrong. It looks like there is a version mismatch between th libzmq brew installed and the version expected by the gem
+The &lt;em&gt;zmq&lt;/em&gt; gem seems a bit old and there is a &lt;em&gt;FFI&lt;/em&gt; ruby extension with a more active developement.&lt;/p&gt;
+
+&lt;p&gt;Moreover, I have found []the perfect website for the ruby-and-zmq-ignorant(&lt;a href=&#34;https://github.com/andrewvc/learn-ruby-zeromq&#34;&gt;https://github.com/andrewvc/learn-ruby-zeromq&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;As written in the doc, let&amp;rsquo;s install the needed gems via &lt;code&gt;gem install ffi ffi-rzmq zmqmachine&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;let-s-try-the-lib:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Let&amp;rsquo;s try the lib&lt;/h2&gt;
+
+&lt;p&gt;Ok, it is now time to run an example&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;require &#39;rubygems&#39;
+require &#39;ffi-rzmq&#39;
+def error_check(rc)
+    if ZMQ::Util.resultcode_ok?(rc)
+        false
+    else
+        STDERR.puts &amp;quot;Operation failed, errno [#{ZMQ::Util.errno}] description [#{ZMQ::Util.error_string}]&amp;quot;
+        caller(1).each { |callstack| STDERR.puts(callstack)  }
+        true
+    end
+end
+
+ctx = ZMQ::Context.create(1)
+STDERR.puts &amp;quot;Failed to create a Context&amp;quot; unless ctx
+
+req_sock = ctx.socket(ZMQ::REQ)
+rc = req_sock.connect(&#39;tcp://127.0.0.1:5555&#39;)
+STDERR.puts &amp;quot;Failed to connect REQ socket&amp;quot; unless ZMQ::Util.resultcode_ok?(rc)
+
+2.times do
+    rc = req_sock.send_string(&#39;Ruby says Hello&#39;)
+    break if error_check(rc)
+
+    rep = &#39;&#39;
+    rc = req_sock.recv_string(rep)
+    break if error_check(rc)
+    puts &amp;quot;Received reply &#39;#{rep}&#39;&amp;quot;
+end
+error_check(req_sock.close)
+
+ctx.terminate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Running this example with a simple &lt;code&gt;ruby client.rb&lt;/code&gt; command leads to the following errors:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ruby client.rb
+Assertion failed: check () (src/msg.cpp:248)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But, my GO server is receiving the messages:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ go run hwserver.go
+Received  Ruby says Hello
+Received  Ruby says Hello
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;end-of-show:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;End of show&lt;/h1&gt;
+
+&lt;p&gt;That&amp;rsquo;s it for now. I think I&amp;rsquo;m facing a bug in the ruby implementation of the libzmq I&amp;rsquo;m using.
+Indeed, I&amp;rsquo;ve found an &lt;a href=&#34;https://github.com/chuckremes/ffi-rzmq/issues/118&#34;&gt;issue&lt;/a&gt;&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;I will check again later, or I will try on another environement but the essential is here.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Welcome</title>
+      <link>http://blog.owulveryck.info/2015/10/22/welcome/</link>
+      <pubDate>Thu, 22 Oct 2015 15:59:07 +0100</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/2015/10/22/welcome/</guid>
+      <description>&lt;p&gt;You are in a place where a new technical blog will stand soon.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>About me</title>
+      <link>http://blog.owulveryck.info/about/</link>
+      <pubDate>Wed, 21 Oct 2015 21:19:59 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/about/</guid>
+      <description>&lt;div class=&#34;container&#34;&gt;
+  &lt;div class=&#34;row&#34;&gt;
+    &lt;div class=&#34; col-lg-offset-3 col-lg-6&#34;&gt;
+      &lt;div class=&#34;panel panel-default&#34;&gt;
+        &lt;div class=&#34;panel-body&#34;&gt;
+          &lt;div class=&#34;row&#34;&gt;
+            &lt;div class=&#34;col-lg-12&#34;&gt;
+              &lt;div class=&#34;row&#34;&gt;
+                &lt;div class=&#34;col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6&#34;&gt;
+                    &lt;img class=&#34;img-square img-responsive&#34;
+                    src=&#34;http://blog.owulveryck.info/assets/images/profile_pic.png&#34;&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;row&#34;&gt;
+            &lt;div class=&#34;col-lg-12&#34;&gt;
+              &lt;div class=&#34;row&#34;&gt;
+                &lt;div class=&#34;text-center col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-6 col-lg-offset-3 col-lg-6&#34;&gt;
+                  &lt;div class=&#34;&#34;&gt;
+                    &lt;h2&gt; &lt;span itemprop=&#34;name&#34;&gt;Olivier Wulveryck&lt;/span&gt;&lt;/h2&gt;
+                    &lt;p itemprop=&#34;jobTitle&#34;&gt;IT profesionnal&lt;/p&gt;
+                    &lt;p&gt;
+                      &lt;i class=&#34;fa fa-map-marker&#34;&gt;&lt;/i&gt; &lt;span itemprop=&#34;addressRegion&#34;&gt;Lille, France&lt;/span&gt;
+                    &lt;/p&gt;
+                    &lt;p itemprop=&#34;email&#34;&gt; &lt;i class=&#34;fa fa-envelope&#34;&gt;&amp;nbsp;&lt;/i&gt; &lt;a href=&#34;mailto:olivier.wulveryck@gmail.com&#34;&gt;olivier.wulveryck@gmail.com&lt;/a&gt; &lt;/p&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+              &lt;div class=&#34;col-lg-12 centered-text&#34;&gt;
+              To summarize my professional character I would say: I like to understand &#34;how things works&#34; in order to make them work in best conditions of reliability and security.
+                &lt;br/&gt;
+              I like to exchange with people smarter than I am
+              &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;panel-footer&#34;&gt;
+          &lt;div class=&#34;row&#34;&gt;
+            &lt;div id=&#34;social-links&#34; class=&#34; col-lg-12&#34;&gt;
+                &lt;div class=&#34;row&#34;&gt;
+                  &lt;div class=&#34;col-xs-6 col-sm-3 col-md-2 col-lg-3 social-btn-holder&#34;&gt;
+                        &lt;a title=&#34;Twitter&#34; class=&#34;btn btn-social btn-block btn-twitter&#34;
+                            target=&#34;_BLANK&#34; href=&#34;http://twitter.com/owulveryck&#34;&gt;
+                            &lt;i class=&#34;fa fa-twitter&#34;&gt;&lt;/i&gt; /owulveryck
+                        &lt;/a&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&#34;col-xs-6 col-sm-3 col-md-2 col-lg-3 social-btn-holder&#34;&gt;
+                        &lt;a title=&#34;LinkedIn&#34; class=&#34;btn btn-social btn-block btn-linkedin&#34;
+                            target=&#34;_BLANK&#34; href=&#34;https://www.linkedin.com/in/olivierwulveryck&#34;&gt;
+                            &lt;i class=&#34;fa fa-linkedin&#34;&gt;&lt;/i&gt; /owulveryck
+                        &lt;/a&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&#34;col-xs-6 col-sm-3 col-md-2 col-lg-3 social-btn-holder&#34;&gt;
+                        &lt;a title=&#34;GitHub&#34; class=&#34;btn btn-social btn-block btn-github&#34;
+                            target=&#34;_BLANK&#34; href=&#34;http://github.com/owulveryck&#34;&gt;
+                            &lt;i class=&#34;fa fa-github&#34;&gt;&lt;/i&gt; /owulveryck
+                        &lt;/a&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

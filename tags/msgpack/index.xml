@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Msgpack on Olivier Wulveryck&#39;s Tech Blog</title>
+    <link>http://blog.owulveryck.info/tags/msgpack/</link>
+    <description>Recent content in Msgpack on Olivier Wulveryck&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved - 2015</copyright>
+    <lastBuildDate>Tue, 10 Nov 2015 08:56:36 +0100</lastBuildDate>
+    <atom:link href="http://blog.owulveryck.info/tags/msgpack/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>IaaS-like RESTfull API based on microservices</title>
+      <link>http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/</link>
+      <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/</guid>
+      <description>
+
+&lt;h1 id=&#34;abstracts:1574d51e403296c43e921da78612bc7c&#34;&gt;Abstracts&lt;/h1&gt;
+
+&lt;p&gt;Recently, I&amp;rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.&lt;/p&gt;
+
+&lt;p&gt;I am reading more and more about the &amp;ldquo;API economy&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve also seen this excellent video made by &lt;a href=&#34;https://www.youtube.com/watch?v=tIm8UkSf6RA&amp;amp;list=PLDWZ5uzn69ezRJYeWxYNRMYebvf8DerHd&#34;&gt;Mat Ryer&lt;/a&gt; about how to code an API in GO and why go would be the perfect language to code such a portal.&lt;/p&gt;
+
+&lt;p&gt;The problem I&amp;rsquo;m facing is that in the organization I&amp;rsquo;m working for, the developments are heterogeneous and therefore you can find &lt;em&gt;ruby&lt;/em&gt; teams as well as &lt;em&gt;python&lt;/em&gt; teams and myself as a &lt;em&gt;go&lt;/em&gt; team (That will change in the future anyway)
+The key point is that I would like my middleware to serve as an entry point to the services provided by the department.&lt;/p&gt;
+
+&lt;p&gt;We (as an &amp;ldquo;ops&amp;rdquo; team) would then be able to present the interface via, for example, a &lt;a href=&#34;http://swagger.io&#34;&gt;swagger&lt;/a&gt; like interface, take care of the API and do whatever RPC to any submodule.&lt;/p&gt;
+
+&lt;h1 id=&#34;an-example-a-iaas-like-interface:1574d51e403296c43e921da78612bc7c&#34;&gt;An example: a IAAS like interface&lt;/h1&gt;
+
+&lt;p&gt;Let&amp;rsquo;s consider a node compute lifecycle.&lt;/p&gt;
+
+&lt;p&gt;What I&amp;rsquo;d like to be able to do is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;to create a node&lt;/li&gt;
+&lt;li&gt;to update a node (maybe)&lt;/li&gt;
+&lt;li&gt;to delete a node&lt;/li&gt;
+&lt;li&gt;to get the status of the node&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;the-backend:1574d51e403296c43e921da78612bc7c&#34;&gt;The backend&lt;/h2&gt;
+
+&lt;p&gt;The backend is whatever service, able to create a node, such as openstack, vmware vcac, juju, &amp;hellip;
+Thoses services usually provide RESTfull API.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve seen in my experience, that usually, the API are given with a library in a so called &amp;ldquo;modern language&amp;rdquo;.
+This aim to simplify the development of the clients.
+Sometimes this library may also be developed by an internal team that will take care of the maintenance.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-library:1574d51e403296c43e921da78612bc7c&#34;&gt;The library&lt;/h2&gt;
+
+&lt;p&gt;In my example, we will consider that the library is a simple &lt;em&gt;gem&lt;/em&gt; file developed in ruby.
+Therefore, our service will be a simple server that will get RPC calls, call the good method in the &lt;em&gt;gemfile&lt;/em&gt;
+and that will, &lt;em&gt;in fine&lt;/em&gt; transfer it to the backend.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-restfull-api:1574d51e403296c43e921da78612bc7c&#34;&gt;The RestFull API.&lt;/h2&gt;
+
+&lt;p&gt;I will use the example described &lt;a href=&#34;http://thenewstack.io/make-a-restful-json-api-go/&#34;&gt;here&lt;/a&gt; as a basis for this post.
+Of course there are many other examples and excellent go packages that may be used, but according to Mat Ryer, I will stick to the idiomatic approach.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-glue-msgpack-rpc:1574d51e403296c43e921da78612bc7c&#34;&gt;The glue: MSGPACK-RPC&lt;/h2&gt;
+
+&lt;p&gt;There are several methods for RPC-ing between different languages. Ages ago, there was xml-rpc; then there has been json-rpc;
+I will use &lt;a href=&#34;https://github.com/msgpack-rpc/msgpack-rpc&#34;&gt;msgpack-rpc&lt;/a&gt; which is a binary, json base codec.
+The communication between the Go client and the ruby server will be done over TCP via HTTP for example.&lt;/p&gt;
+
+&lt;p&gt;Later on, outside of the scope of this post, I may use ZMQ (as I have already blogged about 0MQ communication between those languages).&lt;/p&gt;
+
+&lt;h1 id=&#34;the-implementation-of-the-client-the-go-part:1574d51e403296c43e921da78612bc7c&#34;&gt;The implementation of the Client (the go part)&lt;/h1&gt;
+
+&lt;p&gt;I will describe here the node creation via a POST method, and consider that the other methods could be implemented in a similar way.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-signature-of-the-node-creation:1574d51e403296c43e921da78612bc7c&#34;&gt;The signature of the node creation&lt;/h2&gt;
+
+&lt;p&gt;Here is the expected signature for creating a compute element:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;kind&amp;quot;:&amp;quot;linux&amp;quot;,
+    &amp;quot;size&amp;quot;:&amp;quot;S&amp;quot;,
+    &amp;quot;disksize&amp;quot;:20,
+    &amp;quot;leasedays&amp;quot;:1,
+    &amp;quot;environment_type&amp;quot;:&amp;quot;dev&amp;quot;,
+    &amp;quot;description&amp;quot;:&amp;quot;my_description&amp;quot;,
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The corresponding GO structure is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type NodeRequest struct {
+    Kind string `json:&amp;quot;kind&amp;quot;` // Node kind (eg linux)
+    Size string `json:&amp;quot;size&amp;quot;` // size
+    Disksize         int    `json:&amp;quot;disksize&amp;quot;`
+    Leasedays        int    `json:&amp;quot;leasedays&amp;quot;`
+    EnvironmentType  string `json:&amp;quot;environment_type&amp;quot;`
+    Description      string `json:&amp;quot;description&amp;quot;`
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;the-route:1574d51e403296c43e921da78612bc7c&#34;&gt;The route&lt;/h2&gt;
+
+&lt;p&gt;The Middleware is using the &lt;a href=&#34;http://www.gorillatoolkit.org/pkg/mux&#34;&gt;gorilla mux package&lt;/a&gt;.
+According the description, I will add an entry in the routes array (into the &lt;em&gt;routes.go&lt;/em&gt; file):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;Route{
+    &amp;quot;NodeCreate&amp;quot;,
+    &amp;quot;POST&amp;quot;,
+    &amp;quot;/v1/nodes&amp;quot;,
+    NodeCreate,
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; : I am using a prefix &lt;code&gt;/v1&lt;/code&gt; for my API, for exploitation purpose.&lt;/p&gt;
+
+&lt;p&gt;I will then create the corresponding handler in the file with this signature&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func NodeCreate(w http.ResponseWriter, r *http.Request){
+    var nodeRequest NodeRequest
+    body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+    if err != nil {
+        panic(err)
+    }
+    if err := r.Body.Close(); err != nil {
+        panic(err)
+    }
+    if err := json.Unmarshal(body, &amp;amp;nodeRequest); err != nil {
+        w.Header().Set(&amp;quot;Content-Type&amp;quot;, &amp;quot;application/json; charset=UTF-8&amp;quot;)
+        w.WriteHeader(http.StatusBadRequest) // unprocessable entity
+        if err := json.NewEncoder(w).Encode(err); err != nil {
+            panic(err)
+        }
+    }    
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s in this function that will be implemented RPC (client part). To keep it simple at the beginning,
+I will instantiate a TCP connection on every call.
+Don&amp;rsquo;t throw things at me, that will be changed later following the advice of Mat Ryer.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-implementation-of-the-handler:1574d51e403296c43e921da78612bc7c&#34;&gt;The implementation of the handler&lt;/h2&gt;
+
+&lt;h3 id=&#34;the-effective-remote-procedure-call:1574d51e403296c43e921da78612bc7c&#34;&gt;The effective remote procedure call&lt;/h3&gt;
+
+&lt;p&gt;To use &lt;em&gt;msgpack&lt;/em&gt; I need to import the go implementation &lt;code&gt;github.com/msgpack-rpc/msgpack-rpc-go/rpc&lt;/code&gt;.
+This library will take care of the encoding/decoding of the messages.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s dial the RPC server and call the &lt;code&gt;NodeCreate&lt;/code&gt; method with, as argument, the information we had from the JSON input&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;    conn, err := net.Dial(&amp;quot;tcp&amp;quot;, &amp;quot;127.0.0.1:18800&amp;quot;)
+    if err != nil {
+        fmt.Println(&amp;quot;fail to connect to server.&amp;quot;)
+        return
+    }
+    client := rpc.NewSession(conn, true)
+    retval, err := client.Send(&amp;quot;NodeCreate&amp;quot;, nodeRequest.Kind, nodeRequest.Size, nodeRequest.Disksize, nodeRequest.Leasedays, nodeRequest.EnvironmentType, nodeRequest.Description)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    fmt.Println(retval)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;the-rpc-server-the-ruby-part:1574d51e403296c43e921da78612bc7c&#34;&gt;The RPC server (the ruby part)&lt;/h1&gt;
+
+&lt;p&gt;This part is written in ruby, and will take care of the effective node creation.
+At first, we should install the GEM file with the command &lt;code&gt;gem install msgpack-rpc&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;require &#39;msgpack/rpc&#39;
+class MyHandler
+    def NodeCreate(kind, size, disksize, leasedays, environmenttype, description) 
+        print &amp;quot;Creating the node with parameters: &amp;quot;,kind, size, disksize, leasedays, environmenttype, description
+        return &amp;quot;ok&amp;quot;
+    end
+end
+svr = MessagePack::RPC::Server.new
+svr.listen(&#39;0.0.0.0&#39;, 18800, MyHandler.new)
+svr.run
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;let-s-test-it:1574d51e403296c43e921da78612bc7c&#34;&gt;let&amp;rsquo;s test it&lt;/h1&gt;
+
+&lt;p&gt;Launch the RPC server:
+&lt;code&gt;ruby server.rb&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Then launch the API rest server&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;go run *go&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Then perform a POST request&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;curl -X POST -H &#39;Content-Type:application/json&#39; -H &#39;Accept:application/json&#39; -d &#39;{&amp;quot;kind&amp;quot;:&amp;quot;linux&amp;quot;,&amp;quot;size&amp;quot;:&amp;quot;S&amp;quot;,&amp;quot;disksize&amp;quot;:20,&amp;quot;leasedays&amp;quot;:1,&amp;quot;environment_type&amp;quot;:&amp;quot;dev&amp;quot;,&amp;quot;description&amp;quot;:&amp;quot;my_description&amp;quot;}&#39; -k http://localhost:8080/v1/nodes
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It should write something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015/11/10 13:56:51 POST        /v1/nodes       NodeCreate      2.520673ms
+ok
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And something like this in the output of the ruby code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Creating the node with parameters: linux S 20 1 dev my_description
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s all folks! What&amp;rsquo;s left:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;To implement the other methods to be &amp;ldquo;&lt;a href=&#34;https://en.wikipedia.org/wiki/Create,_read,_update_and_delete&#34;&gt;CRUD&lt;/a&gt;&amp;rdquo; compliant&lt;/li&gt;
+&lt;li&gt;To implement an authentication and accreditation mechanism (JWT, Oauth, ?)&lt;/li&gt;
+&lt;li&gt;To change the implementation of the RPC client to use a pool instead of a single connection&lt;/li&gt;
+&lt;li&gt;To implement the swagger interface and documentation of the API&lt;/li&gt;
+&lt;li&gt;Whatever fancy stuff you may want from a production ready interface.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can find all the codes in the github repository &lt;a href=&#34;https://github.com/owulveryck/example-iaas&#34;&gt;here&lt;/a&gt; in the branch &lt;code&gt;iaas-like-restfull-api-based-on-microservices&lt;/code&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tosca on Olivier Wulveryck&#39;s Tech Blog</title>
+    <link>http://blog.owulveryck.info/tags/tosca/</link>
+    <description>Recent content in Tosca on Olivier Wulveryck&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved - 2015</copyright>
+    <lastBuildDate>Fri, 20 Nov 2015 10:09:30 +0000</lastBuildDate>
+    <atom:link href="http://blog.owulveryck.info/tags/tosca/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>TOSCA lifecycle as a digraph</title>
+      <link>http://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/</link>
+      <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>http://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/</guid>
+      <description>
+
+&lt;h1 id=&#34;about-tosca:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;About TOSCA&lt;/h1&gt;
+
+&lt;p&gt;The &lt;a href=&#34;https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=tosca&#34;&gt;TOSCA&lt;/a&gt; acronym stands for
+&lt;em&gt;Topology and Orchestration Specification for Cloud Applications&lt;/em&gt;. It&amp;rsquo;s an &lt;a href=&#34;https://www.oasis-open.org&#34;&gt;OASIS&lt;/a&gt; standard.&lt;/p&gt;
+
+&lt;p&gt;The purpose of the TOSCA project is to represent an application by its topology and formalize it using the TOSCA grammar.&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simp$le-Profile-YAML-v1.0-csprd01.html&#34;&gt;[TOSCA-Simple-Profile-YAML-v1.0]&lt;/a&gt;
+current specification in YAML introduces the following concepts.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;TOSCA YAML service template: A YAML document artifact containing a (TOSCA) service template that represents a Cloud application.&lt;/li&gt;
+&lt;li&gt;TOSCA processor: An engine or tool that is capable of parsing and interpreting a TOSCA YAML service template for a particular purpose. For example, the purpose could be validation, translation or visual rendering.&lt;/li&gt;
+&lt;li&gt;TOSCA orchestrator (also called orchestration engine): A TOSCA processor that interprets a TOSCA YAML service template then instantiates and deploys the described application in a Cloud.&lt;/li&gt;
+&lt;li&gt;TOSCA generator: A tool that generates a TOSCA YAML service template. An example of generator is a modeling tool capable of generating or editing a TOSCA YAML service template (often such a tool would also be a TOSCA processor).&lt;/li&gt;
+&lt;li&gt;TOSCA archive (or TOSCA Cloud Service Archive, or “CSAR”): a package artifact that contains a TOSCA YAML service template and other artifacts usable by a TOSCA orchestrator to deploy an application.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;my-work-with-tosca:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;My work with TOSCA&lt;/h2&gt;
+
+&lt;p&gt;I do believe that TOSCA may be a very good leverage to port a &amp;ldquo;legacy application&amp;rdquo; (aka &lt;em&gt;born in the datacenter&lt;/em&gt; application) into a cloud ready application without rewriting it completely to be cloud compliant.
+To be clear, It may act on the hosting and execution plan of the application, and not on the application itself.&lt;/p&gt;
+
+&lt;p&gt;A single wordpress installation in a TOSCA way as written &lt;a href=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html#_Toc430015847&#34;&gt;here&lt;/a&gt; is represented like that&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&#34;img-square img-responsive&#34; src=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01_files/image035.png&#34; alt=&#34;Single Wordpress representation&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;While I was learnig GO, I have developped a &lt;a href=&#34;https://github.com/owulveryck/toscalib&#34;&gt;TOSCA lib&lt;/a&gt; and a &lt;a href=&#34;https://github.com/owulveryck/toscaviewer&#34;&gt;TOSCA processor&lt;/a&gt; which are, by far, not &lt;em&gt;idiomatic GO&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here are two screenshots of the rendering in a web page made with my tool (and the graphviz product):&lt;/p&gt;
+
+&lt;hr/&gt;
+
+&lt;p&gt;&lt;em&gt;The graph representation of a &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/toscaviewer_template_def.png&#34; alt=&#34;Tosca view ofthe single instance wordpress&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;The graph representation of a lifecycle of &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;http://blog.owulveryck.info/assets/images/toscaviewer_lifecycle_def.png&#34; alt=&#34;Lifecycle representation of the single wordpress instance representation&#34;/&gt;
+&lt;hr/&gt;&lt;/p&gt;
+
+&lt;p&gt;The TOSCA file is parsed with the help of the &lt;code&gt;TOSCALIB&lt;/code&gt; and then it fills an adjacency matrix (see &lt;a href=&#34;https://godoc.org/github.com/owulveryck/toscalib#ToscaDefinition.FillAdjacencyMatrix&#34;&gt;FillAdjacencyMatrix&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&#34;http://graphviz.org&#34;&gt;graphviz&lt;/a&gt; take care of the (di)graph representation.&lt;/p&gt;
+
+&lt;p&gt;What I would like to do now, is a little bit more: I would like to play with the graph and query it
+Then I should perform requests on this graph. For example I could ask:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;What are the steps to go from the state Initial of the application, to the state running&lt;/em&gt; ?&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;What are the steps to go from stop to delete&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;and that would be &lt;strong&gt;the premise of a TOSCA orchestrator&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-digraph-go-code:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;The digraph go code&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve recently discoverd the &lt;a href=&#34;https://github.com/golang/tools/tree/master/cmd/digraph&#34;&gt;digraph&lt;/a&gt; tool, that I will use for querying the graphs.
+The &lt;code&gt;digraph&lt;/code&gt; is represented as a map with a node as a key and its immediates successors as values:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;// A graph maps nodes to the non-nil set of their immediate successors.
+type graph map[string]nodeset
+
+type nodeset map[string]bool
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;from-tosca-to-digraph:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;From TOSCA to digraph&lt;/h2&gt;
+
+&lt;p&gt;What I must do is to parse the adjacency matrix, get the &amp;ldquo;lifecycle action&amp;rdquo; related to the id and fill the graph g.&lt;/p&gt;
+
+&lt;h1 id=&#34;let-s-go:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;Let&amp;rsquo;s go&lt;/h1&gt;
+
+&lt;p&gt;Considering the digraph code, what I need to do is simply to override the &lt;code&gt;parse&lt;/code&gt; method.&lt;/p&gt;
+
+&lt;h2 id=&#34;principle:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;Principle&lt;/h2&gt;
+
+&lt;p&gt;I will fill the &lt;code&gt;graph&lt;/code&gt; with a string composed of &lt;em&gt;nodename:action&lt;/em&gt; as key.
+For example, if I need to do a &amp;ldquo;Configure&amp;rdquo; action of node &amp;ldquo;A&amp;rdquo; after a &amp;ldquo;Start&amp;rdquo; action on node &amp;ldquo;B&amp;rdquo;, I will have the following entry in the map:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;g[&amp;quot;B:Start&amp;quot;] = &amp;quot;A:Configure&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So What I need to do is to parse the adjjacency matrix, do a matching with the row id and the &amp;ldquo;node:action&amp;rdquo; name, and fill the &lt;code&gt;graph g&lt;/code&gt; with the matching of the corresponding &amp;ldquo;node:action&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;I will fill a &lt;code&gt;map&lt;/code&gt; with the id of the node:action as key and the corresponding label as values:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gloang&#34;&gt;for node, template := range toscaTemplate.TopologyTemplate.NodeTemplates {
+        ids[template.GetConfigureIndex()] = fmt.Sprintf(&amp;quot;%v:Configure&amp;quot;, node)
+        ids[template.GetCreateIndex()] = fmt.Sprintf(&amp;quot;%v:Create&amp;quot;, node)
+        ids[template.GetDeleteIndex()] = fmt.Sprintf(&amp;quot;%v:Delete&amp;quot;, node)
+        ids[template.GetInitialIndex()] = fmt.Sprintf(&amp;quot;%v:Initial&amp;quot;, node)
+        ids[template.GetPostConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PostConfigureSource&amp;quot;, node)
+        ids[template.GetPostConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PostconfigureTarget&amp;quot;, node)
+        ids[template.GetPreConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureSource&amp;quot;, node)
+        ids[template.GetPreConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureTarget&amp;quot;, node)
+        ids[template.GetStartIndex()] = fmt.Sprintf(&amp;quot;%v:Start&amp;quot;, node)
+        ids[template.GetStopIndex()] = fmt.Sprintf(&amp;quot;%v:Stop&amp;quot;, node)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then I can easily fill the &lt;code&gt;graph g&lt;/code&gt; from the adjacency matrix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gloang&#34;&gt;row, col := toscaTemplate.AdjacencyMatrix.Dims()
+        for r := 1; r &amp;lt; row; r++ {
+                for c := 1; c &amp;lt; col; c++ {
+                        if adjacencyMatrix.At(r, c) == 1 {
+                                g.addEdges(ids[r], ids[c])
+                        }
+                }
+        }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s it&lt;/p&gt;
+
+&lt;h1 id=&#34;the-final-function:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;The final function&lt;/h1&gt;
+
+&lt;p&gt;Here is the final parse function&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;func parse(rd io.Reader) (graph, error) {
+        g := make(graph)
+        // Parse the input graph.
+        var toscaTemplate toscalib.ToscaDefinition
+        err := toscaTemplate.Parse(rd)
+        if err != nil {
+                return nil, err
+        }
+        // a map containing the ID and the corresponding action
+        ids := make(map[int]string)
+        // Fill in the graph with the toscaTemplate via the adjacency matrix
+        for node, template := range toscaTemplate.TopologyTemplate.NodeTemplates {
+                // Find the edges of the current node and add them to the graph
+
+                ids[template.GetConfigureIndex()] = fmt.Sprintf(&amp;quot;%v:Configure&amp;quot;, node)
+                ids[template.GetCreateIndex()] = fmt.Sprintf(&amp;quot;%v:Create&amp;quot;, node)
+                ids[template.GetDeleteIndex()] = fmt.Sprintf(&amp;quot;%v:Delete&amp;quot;, node)
+                ids[template.GetInitialIndex()] = fmt.Sprintf(&amp;quot;%v:Initial&amp;quot;, node)
+                ids[template.GetPostConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PostConfigureSource&amp;quot;, node)
+                ids[template.GetPostConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PostconfigureTarget&amp;quot;, node)
+                ids[template.GetPreConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureSource&amp;quot;, node)
+                ids[template.GetPreConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureTarget&amp;quot;, node)
+                ids[template.GetStartIndex()] = fmt.Sprintf(&amp;quot;%v:Start&amp;quot;, node)
+                ids[template.GetStopIndex()] = fmt.Sprintf(&amp;quot;%v:Stop&amp;quot;, node)
+        }
+
+        row, col := toscaTemplate.AdjacencyMatrix.Dims()
+        for r := 1; r &amp;lt; row; r++ {
+                for c := 1; c &amp;lt; col; c++ {
+                        if adjacencyMatrix.At(r, c) == 1 {
+                                g.addEdges(ids[r], ids[c])
+                        }
+                }
+        }
+        return g, nil
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;grab-the-source-and-compile-it:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;Grab the source and compile it&lt;/h1&gt;
+
+&lt;p&gt;I have a github repo with the source.
+It is go-gettable&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;go get github.com/owulveryck/digraph
+cd $GOPATH/src/github.com/owulveryck/digraph &amp;amp;&amp;amp; go build
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;EDIT&lt;/strong&gt; As I continue to work on this tool, I have created a &amp;ldquo;blog&amp;rdquo; branch in the github which holds the version related to this post&lt;/p&gt;
+
+&lt;h1 id=&#34;example:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;Example&lt;/h1&gt;
+
+&lt;p&gt;I will use the the same example as described below: the single instance wordpress.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve extracted the YAML and placed in in the file &lt;a href=&#34;https://github.com/owulveryck/toscaviewer/blob/master/examples/tosca_single_instance_wordpress.yaml&#34;&gt;tosca_single_instance_wordpress.yaml&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s query the nodes first:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
+mysql_database:Configure
+mysql_database:Create
+mysql_database:Start
+mysql_dbms:Configure
+mysql_dbms:Create
+mysql_dbms:Start
+server:Configure
+server:Create
+server:Start
+webserver:Configure
+webserver:Create
+webserver:Start
+wordpress:Configure
+wordpress:Create
+wordpress:Start
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;so far, so good&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;Now, I can I go from a &lt;code&gt;Server:Create&lt;/code&gt; to a running instance &lt;code&gt;wordpress:Start&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph somepath server:Create wordpress:Start
+server:Create
+server:Configure
+server:Start
+mysql_dbms:Create
+mysql_dbms:Configure
+mysql_dbms:Start
+mysql_database:Create
+mysql_database:Configure
+mysql_database:Start
+wordpress:Create
+wordpress:Configure
+wordpress:Start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Cool!&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;The tool sounds ok. What I may add:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a command to display the full lifecycle (finding the entry and the exit points in the matrix and call somepath with it)&lt;/li&gt;
+&lt;li&gt;get the tosca &lt;code&gt;artifacts&lt;/code&gt; and display them instead of the label to generate a deployment plan&lt;/li&gt;
+&lt;li&gt;execute the command in &lt;code&gt;goroutines&lt;/code&gt; to make them concurrent&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And of course validate any other TOSCA definition to go through a bug hunting party&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
