@@ -27,8 +27,11 @@ Here are the informations of my new box:
 ~ uname -a
 FreeBSD localhost 10.2-RELEASE-p9 FreeBSD 10.2-RELEASE-p9 #0: Thu Jan 14 01:32:46 UTC 2016
 root@amd64-builder.daemonology.net:/usr/obj/usr/src/sys/GENERIC  amd64
-```)  ~  mkdir /usr/local/etc/openvpn)  ~  cp /usr/local/share/examples/openvpn/sample-config-files/server.conf /usr/local/etc/openvpn/server.conf
+```
 
+## ZFS
+
+My root is a ZFS pool named `zroot`
 
 # Basic installation
 
@@ -98,3 +101,21 @@ cd /usr/local/etc/openvpn/easy-rsa/
 ./build-key chromebook
 ```
 
+# Rescue...
+
+Of course, I forgot one rue in my pf.conf and therefore I could not access to my box anymore
+
+## Maganer
+Boot into rescue mode
+
+```shell
+rescue-bsd# zpool import zroot
+rescue-bsd# zpool list
+internal error: failed to initialize ZFS library
+```
+
+That's because I did import the zroot into /
+
+```shell
+zpool import -o altroot=/mnt zroot
+```
