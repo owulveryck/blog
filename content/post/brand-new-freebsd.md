@@ -101,6 +101,59 @@ cd /usr/local/etc/openvpn/easy-rsa/
 ./build-key chromebook
 ```
 
+Then generate the `ovpn` config file
+
+```shell
+export CLIENTNAME=chromebook
+cp /usr/local/share/examples/openvpn/sample-config-files/client.conf ./client.conf
+# Modifying remote...
+printf "\n<ca>\n" >> ./client.conf && \
+cat ./ca.crt >> ./client.conf && \
+printf "</ca>\n" >> ./client.conf && \
+printf "\n<cert>" >> ./client.conf && \
+grep -v '^ ' ./$CLIENTNAME.crt | grep -v 'Certificate' >> ./client.conf && \
+printf "</cert>\n" >> ./client.conf && \
+printf "\n<key>\n" >> ./client.conf && \
+cat ./$CLIENTNAME.key >> ./client.conf && \
+printf "</key>\n" >> client.conf
+mv client.conf $CLIENTNAME.ovpn
+```
+
+### Firewall
+
+#### Firewall and routing
+
+```shell
+# default openvpn settings for the client network
+vpnclients = "10.8.0.0/24"
+#put your wan interface here (it will almost certainly be different)
+wanint = "em0"
+# put your tunnel interface here, it is usually tun0
+vpnint = "tun0"
+# OpenVPN by default runs on udp port 1194
+udpopen = "{1194}"
+icmptypes = "{echoreq, unreach}"
+
+set skip on lo
+# the essential line
+nat on $wanint inet from $vpnclients to any -> $wanint
+
+block in
+pass in on $wanint proto udp from any to $wanint port $udpopen 
+pass in on $wanint proto tcp from any to $wanint port 22 
+# the following two lines could be made stricter if you don't trust the clients
+pass out quick 
+pass in on $vpnint from any to any
+pass in inet proto icmp all icmp-type $icmptypes
+```
+
+```shell
+~ /etc/rc.conf
+...
+openvpn_enable="YES"
+openvpn_configfile="/usr/local/etc/openvpn/server.conf"
+```
+
 # Rescue...
 
 Of course, I forgot one rue in my pf.conf and therefore I could not access to my box anymore
