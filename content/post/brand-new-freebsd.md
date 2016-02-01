@@ -37,9 +37,6 @@ My root is a ZFS pool named `zroot`
 
 This box is a `10.2 release` therefore it uses the "new" `pkg` tool instead of the legacy `pkg_*` tools.
 
-## Configuration of `pkg`
-
-
 ## ZSH
 
 ### Installation
@@ -107,16 +104,16 @@ Then generate the `ovpn` config file
 export CLIENTNAME=chromebook
 cp /usr/local/share/examples/openvpn/sample-config-files/client.conf ./client.conf
 # Modifying remote...
-printf "\n<ca>\n" >> ./client.conf && \
-cat ./ca.crt >> ./client.conf && \
-printf "</ca>\n" >> ./client.conf && \
-printf "\n<cert>" >> ./client.conf && \
-grep -v '^ ' ./$CLIENTNAME.crt | grep -v 'Certificate' >> ./client.conf && \
-printf "</cert>\n" >> ./client.conf && \
-printf "\n<key>\n" >> ./client.conf && \
-cat ./$CLIENTNAME.key >> ./client.conf && \
-printf "</key>\n" >> client.conf
-mv client.conf $CLIENTNAME.ovpn
+cp client.conf $CLIENTNAME.ovpn
+printf "\n<ca>\n" >> ./$CLIENTNAME.ovpn && \
+cat ./ca.crt >> ./$CLIENTNAME.ovpn && \
+printf "</ca>\n" >> ./$CLIENTNAME.ovpn && \
+printf "\n<cert>" >> ./$CLIENTNAME.ovpn && \
+grep -v '^ ' ./$CLIENTNAME.crt | grep -v 'Certificate' >> ./$CLIENTNAME.ovpn && \
+printf "</cert>\n" >> ./$CLIENTNAME.ovpn && \
+printf "\n<key>\n" >> ./$CLIENTNAME.ovpn && \
+cat ./$CLIENTNAME.key >> ./$CLIENTNAME.ovpn && \
+printf "</key>\n" >> $CLIENTNAME.ovpn
 ```
 
 ### Firewall
