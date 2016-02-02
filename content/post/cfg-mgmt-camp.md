@@ -94,3 +94,28 @@ Sensitive :
 * when were serets used?
 * what is the attack surface ?
 * what do we do in the event of compromise?
+
+## Goals of vault:
+
+* single source for secrets, certificates
+* programmatic application access (automated)
+* operator access (manual)
+* practical security
+* modern data center friendly(private or cloud, commodity hardware, highly available, etc.)
+
+
+
+
+MK :Everything is about resuse
+
+
+self-healing infrastrycture
+
+# Container and metadata
+containers labels
+
+The power of system packages lies not in the file format but in the *metadata*
+
+## Standards : the power of agreement
+
+Without complete metadata we can't trust the tools built on top
