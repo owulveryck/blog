@@ -22,9 +22,11 @@ Beyond the technical demonstrations and the experience sharing, I did spot a bun
 
 Among them, thoses that actually comes to me are:
 
-* `You don't need configuration management, what you need is a description of the topology of your application` (Mark Shuttleworth in its talk _The magic of modeling_)
-* `You don't need orchestration, what you need is choreography` (julian dunn)
-* `What we need is a new way to do configuration management` (james)
+> You don't need configuration management, what you need is a description of the topology of your application (Mark Shuttleworth in its talk _The magic of modeling_)
+
+> You don't need orchestration, what you need is choreography (julian dunn)
+
+> What we need is a new way to do configuration management (james)
 
 Here is what I may tell you about thoses poins:
 
