@@ -20,7 +20,7 @@ topics:
 type: post
 ---
 
-I've had the oportunity to attend the configuration management camp in Gent (be) for its 2016 edition.
+I've had the oportunity to attend the [configuration management camp](http://cfgmgmtcamp.eu/) in Gent (be) for its 2016 edition.
 
 I really enjoyed those two days of talks, watching the folks to expose different ideas of what could be the future
 of the infrastructure and deployment engineering. 
@@ -86,6 +86,6 @@ I can say that 80% of the customers will only need 20% of the standard.
 On top of that, Tosca is young, and I could not find any decent tool to orchestrate and deploy an application. 
 Big companies claim their compliance with the standard, but actually very few of them (if any) does really implement it.
 
-# The need of orchestration
+# The need for orchestration
 As seen before, a Tosca file would need a tool to transform it to a rela application.
 This tool is **an orchestrator**.
