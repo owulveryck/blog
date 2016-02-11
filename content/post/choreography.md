@@ -30,7 +30,8 @@ Among them, those that comes to me spontaneously are:
 
 > You don't need configuration management, what you need is a description of the topology of your application - *[Mark Shuttleworth](http://www.markshuttleworth.com/biography)* in its keynote _The magic of modeling_
 
-> You don't need orchestration, what you need is choreography - Exposed by _[Julian Dunn](https://www.linkedin.com/in/julian)_ (you can find a retranscription [here on youtube](https://www.youtube.com/watch?v=kfF9IATUask))
+> You don't need orchestration, what you need is choreography - Exposed by _[Julian Dunn](https://www.linkedin.com/in/julian)_
+(you can find a retranscription [here on youtube](https://www.youtube.com/watch?v=kfF9IATUask))
 
 > What we need is a new way to do configuration management - _[James Shubin](https://www.linkedin.com/in/james-shubin-74a89a44)_, see [his blog post](https://ttboj.wordpress.com/2016/01/18/next-generation-configuration-mgmt/) which ispired my project [khoreia](http://github.com/owulveryck/khoreia)
 
@@ -75,7 +76,7 @@ TOSCA is __THE DSL__ for representing the topology of an application.
 What's good about Tosca is its goal:
 
 It describes a standard for representing a cloud application. It is written by the Oasis and therefore most of the big brand in IT may be aware of its existence
-The promise is that if you describe any application with Tosca, it could be deployed on any plateform, with a descent __orchestrator__.
+The promise is that if you describe any application with Tosca, it could be deployed on any plateform, with a decent __orchestrator__.
 
 ### ...and cons
 But... Tosca is complex.
