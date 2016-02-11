@@ -197,9 +197,3 @@ So what is the execution plan.
 
 
 
-![score](https://archive.org/download/music-score/music-score.jpg)
-
-## The execution plan
-So what is the execution plan.
-
-
