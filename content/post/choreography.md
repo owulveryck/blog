@@ -34,6 +34,35 @@ Among them, those that comes to me spontaneously are:
 
 > What we need is a new way to do configuration management - _James Shubin_, see [his blog post](https://ttboj.wordpress.com/2016/01/18/next-generation-configuration-mgmt/) which ispired me
 
+I came back home very excited about this.
+
+### From system configuration management...
+
+I did system administration and engineering for years. Configuration management was the answer to the growing of the infrastructure.
+Config management allowed us to
+
+- Get the systems reliable
+- Get the best efficiency possible from the infrastructure
+- Maintain a low TCO
+...
+
+It was all "system centric", so the application could be deposed and run in best conditions.
+
+### ... to application full description
+
+A couple of years ago, maybe because of the DevOps movement, my missions were getting more and more application centric (which is good). 
+Actually infrastructure has not been considered as a needed cost anymore.
+
+Thanks to _Agility_, _DevOps_, and the emergent notion of product (as opposed to project), **Application and infrastructure are now seen as a whole**.  
+
+Therefore, the setup of the application must not rely only on programmed configuration management tools anymore, but on its complete **topology**
+
+
+
+
+
+
+
 Here is what I may tell you about thoses poins:
 
 # You don't need configuration management...
