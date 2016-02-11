@@ -88,19 +88,3 @@ Big companies claim their compliance with the standard, but actually very few of
 # The need of orchestration
 As seen before, a Tosca file would need a tool to transform it to a rela application.
 This tool is **an orchestrator**.
-
-
-
-
-Here is what I may tell you about thoses poins:
-
-# You don't need configuration management...
-
-## What we need is a description of the application
-
-Mark Shuttleworth did a very cool introduction keynote.
-Its purpose was to introduce `juju`; but the fact is that juju is an answer to modern needs.
-
-## And an orchestrator to materialize the model
-
-# Actually, what we need is choreography
