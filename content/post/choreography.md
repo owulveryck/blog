@@ -140,3 +140,8 @@ So what is the execution plan.
 
 
 
+# khoreia
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/l96uFQUrcp8" frameborder="0" allowfullscreen></iframe>
+</center>
+
