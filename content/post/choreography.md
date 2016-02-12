@@ -131,8 +131,6 @@ The tool should be called __conductor__, because what is does actually is to con
 represented by the topology, but by its 'score': its execution plan, and the purpose of the 'orchestrator' is to make every node to play its part
 so the application symphony could be rendered in best condition of reliability and efficiency...
 
-![score](https://archive.org/download/music-score/music-score.jpg)
-
 Wait, that was the promise of the configuration management tools, isn't it?
 
 ## The execution plan
