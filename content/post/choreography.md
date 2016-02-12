@@ -47,10 +47,10 @@ Let's take a look at the trends from 3 major tools categorized as "configuration
 | Puppet      | 2005       |
 | Chef        | 2009       |
 
-The "interest" for those tools as seen by google can be represented this way.
+The "interest" for those tools as seen by google is be represented like this:
 
 <center>
-<script type="text/javascript" src="//www.google.com/trends/embed.js?hl=fr&q=/m/0k0vzjb,+/m/03d3cjz,+/m/05zxlz3&date=1/2014+25m&cmpt=q&tz=Etc/GMT-1&tz=Etc/GMT-1&content=1&cid=TIMESERIES_GRAPH_0&export=5&w=800&h=350"></script>
+<script type="text/javascript" src="//www.google.com/trends/embed.js?hl=en&q=/m/0k0vzjb,+/m/03d3cjz,+/m/05zxlz3,+/m/0hn8c6s&date=1/2014+25m&cmpt=q&tz=Etc/GMT-1&tz=Etc/GMT-1&content=1&cid=TIMESERIES_GRAPH_0&export=5&w=700&h=350"></script>
 </center>
 
 As we can see, ansible seems to be the emergent technology. Of course its acquisition by redhat in late 2015 may have boosted a bit the trends,
@@ -60,15 +60,18 @@ Why did a newcomer such as ansible did present such interest?
 
 Because ansible is not exactly a configuration management tool, it is **an orchestrator** (see [the ansible webpage](https://www.ansible.com/orchestration))
 
-According to _Rogger's theory_  about diffusion of innovation, and regarding the trends, I think that it is accurate to say
-If we correlate the google treds with the market shares, It's easy to find that ansible is a tool that will soon be adopted by the late majority
-
+According to [Rogger's theory](https://en.wikipedia.org/wiki/Diffusion_of_innovations) about the diffusion of innovation, and regarding the trends, I think that it is accurate to say
+that the position of ansible is near the "late majority"
+<center>
 ![Diffusion of ideas](https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Diffusionofideas.PNG/330px-Diffusionofideas.PNG)
+</center>
 
 What does this mean ?
 
-It means that people do feel the need for orchestration, and via orchestration, they may feel the need for representing their product.
-It is now *architecture as data*
+To me,it means that people do feel the need for orchestration, and via orchestration, they may feel the need for representing their product.
+It is now *architecture as data*.
+
+That's what I've understood from the speech of the __innovators__ .
 
 ### From system configuration management...
 
@@ -93,9 +96,10 @@ Therefore, the setup of the application must not rely only on programmed configu
 
 # The self-sufficient application
 
-Some times ago, I wrote a pulse article because I wanted to lay down on paper what I thought about the future of application deployment.
+Some times ago, I wrote article published on [pulse](https://www.linkedin.com/pulse/from-integration-self-sufficient-application-olivier-wulveryck?trk=prof-post) because I wanted to lay down on paper what I thought about the future of application deployment.
 I've described some layers of the application.
 I kept on studying, and with a some help from my colleagues and friends, I've  finally been able to put a word on those ideas I had in mind.
+
 This word is **Topology**
 
 ## and then came TOSCA
