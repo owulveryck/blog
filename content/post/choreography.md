@@ -134,19 +134,20 @@ TOSCA is __THE DSL__ for representing the topology of an application.
 ### Pros...
 What's good about Tosca is its goal:
 
-It describes a standard for representing a cloud application. It is written by the Oasis and therefore most of the big brand in IT may be aware of its existence
+It describes a standard for representing a cloud application. It is written by the Oasis consortium and 
+therefore most of the big brand in IT may be aware of its existence.
 The promise is that if you describe any application with Tosca, it could be deployed on any plateform, with a decent __orchestrator__.
 
 ### ...and cons
 But... Tosca is complex.
-IT's not that simple to write a Tosca file. The standard want to cover all the possible case, and according [Mr Pareto](https://en.wikipedia.org/wiki/Vilfredo_Pareto)'s law,
+IT's not that simple to write a Tosca representation. The standard wants to cover all the possible cases, and according [Pareto](https://en.wikipedia.org/wiki/Vilfredo_Pareto)'s law,
 I can say that 80% of the customers will only need 20% of the standard.
 
-On top of that, Tosca is young, and I could not find any decent tool to orchestrate and deploy an application. 
+On top of that, Tosca is young (by now, the YAML version is still in pre-release), and I could not find any decent tool to orchestrate and deploy an application. 
 Big companies claim their compliance with the standard, but actually very few of them (if any) does really implement it.
 
 ## Let's come back to orchestration (and real world)
-As seen before, a Tosca file would need a tool to transform it to a rela application.
+As seen before, a Tosca file would need a tool to transform it to a real application.
 This tool is **an orchestrator**.
 
 The tool should be called __conductor__, because what is does actually is to conduct the symphony, and yet in our context the symphony is not 
@@ -157,12 +158,73 @@ Wait, that was the promise of the configuration management tools, isn't it?
 
 ### The execution plan
 So what is the execution plan.
+An execution plan is a program. It describes exactly what needs to be done by systems.
+The execution plan is deterministic.
+
+With the description of the application, the execution plan, and the orchestration, the ultimate goal of automation seems fulfilled, indeed!
+We have a complete suite of tools that allows to describe the application and architecture base on its functions and it is possible to 
+generate and executes all the commands a computer **must** do to get things done.
+
+Why do we neeed more?
+Because now systems are so complex that we could not rely anymore on IT infrastructure to do exactly what we told it to.
+Mark Burgess, considered by a lot of people as a visionnay, wrote a book entitled: 
+[In Search of Certainty: The science of our information infrastructure](http://www.amazon.com/In-Search-Certainty-information-infrastructure/dp/1492389161)
+
+Julian Dunn told about it in its speech, and I've started reading IT.
+
+The conclusion is roughly: 
+
+_as we may not rely on command and control anymore, we should the system to work on its own to reach a level of stability_
+
+# Dancing, Choreography, Jazz ?
+
+
 
 
 
 
 # khoreia
+
+## Screencast: a little demo on distributed systems based on event on filesystems
+
+Here is a little screencast I made as a POC.
+Two machines are used relied by a VPN:
+
+- my chromebook, linux-based at home in france;
+- a FreeBSD server located in canada.
+
+both machines are part of an etcd cluster.
+The topology is composed of 8 nodes with dependencies which can be represented like this (same example as the one I used in a previous post):
+<img class="img-responsive" src="/blog/assets/images/digraph1.png" alt="digraph example"/> 
+
+The topology is described as a simple yaml file [here](https://github.com/owulveryck/khoreia/blob/master/samples/topology.yaml)
+
+Each node is fulfilling two methods:
+
+* Create
+* Configure
+
+And each method is implementing an interface composed of:
+
+* `Check()` which check whether the action has been release and the "role" is ok
+* `Do()` which actually implements the action
+
+### Example
+Each node will:
+
+1. **Wait for an event**
+2. call Create.Check() and Configure.Check().
+3. watch for events from their dependencies
+3. if an event is detected, call the appropriate Do() method
+
+### Engine
+The interfaces `Check()` and `Do()` may be implemented on different engines.
+
+For my demo, as suggested by James I'm using a "file engine" base on iNotify (linux) and kQueue (freebsd).
+
+The `Check()` method is watching the presence of a file. It sends the event "true" if the file is created of "false" if its deleted.
+The `Do()` method actually create an empty file.
+
 <center>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/l96uFQUrcp8" frameborder="0" allowfullscreen></iframe>
 </center>
-
