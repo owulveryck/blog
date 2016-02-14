@@ -174,21 +174,53 @@ Julian Dunn told about it in its speech, and I've started reading IT.
 
 The conclusion is roughly: 
 
-_as we may not rely on command and control anymore, we should the system to work on its own to reach a level of stability_
+_We may not rely on command and control anymore, we should make the system work on its own to reach a level of stability_
 
 # Dancing, Choreography, Jazz ?
 
+A solution to the orchestration SPOF and of the uncertainty of the infrastructure may be to implement a choreography. 
+Or to replace the symphony with a piece of jazz. 
+You give every attendee (dancer, jazzman or TOSCA node) the structure of the piece to play.
+And given the chords and the structure, they all react and do what they have committed to do.
 
+This should produce similar to the same mechanism controled by an orchestrator, but more fault tolerant.
+Actually, the brain will not have to take care of unpredicted event; each node will do so.
+The application has become self-aware.
 
+## Implementation: a distributed system
 
+This concept, described in so many sci-fi books, may becoome applicable because science formalized concensus algorithm such as
+paxo or raft.
+And even better, it is easy to find very good implementation of those concepts (for free)
 
+`etcd` from CoreOS is one of those tools.
+It is a service oriented key/value store, distributed on a cluster of machine.
 
-# khoreia
+It can be used as a communication based for a cluster of nodes composing a choreography.
 
-## Screencast: a little demo on distributed systems based on event on filesystems
+Even more, etcd clients have the ability to monitor an event allowing us to implement the self awareness of the application.
+
+## Proof of concept: khoreia
+
+khoreia is a little program I made in `go` that relies on the [etcd](http://github.com/coreos/eetcd) distributed system.
+Etcd itself is an implementation of the raft consensus algorithm. I do heavily adcice that you take a look at [this page](http://thesecretlivesofdata.com/raft/)
+for a complete and clear explanation.
+
+The khoreia single binary takes a topology description in yaml 
+(by now very simple, but sooner or later I may implement the TOSCA DSL, as I already
+have a [tosca library](http://github.com/owulveryck/toscalib)).
+
+Then it trigers the nodes and every node reacts on events.
+Regarding the events, it implements the expected lifecycle for the node.
+
+Without actually coding it, the complement lifecycle of the application is then applied.
+Even bette, the application is fault tolerant (if a check fails, the do method is called again) and the execution 
+is completly stateless because of the event based mechanism.
+
+### Screencast: a little demo on distributed systems based on event on filesystems
 
 Here is a little screencast I made as a POC.
-Two machines are used relied by a VPN:
+Two machines are used (linked by a VPN):
 
 - my chromebook, linux-based at home in france;
 - a FreeBSD server located in canada.
@@ -196,6 +228,8 @@ Two machines are used relied by a VPN:
 both machines are part of an etcd cluster.
 The topology is composed of 8 nodes with dependencies which can be represented like this (same example as the one I used in a previous post):
 <img class="img-responsive" src="/blog/assets/images/digraph1.png" alt="digraph example"/> 
+
+Nodes 0-3 are targeted on the chromebook while nodes 5-7 are targeted on the BSD machine.
 
 The topology is described as a simple yaml file [here](https://github.com/owulveryck/khoreia/blob/e32af3d77d0b57bf36b68a2460e5a47132f29118/samples/topology.yaml)
 
@@ -212,15 +246,14 @@ And each method is implementing an interface composed of:
 _Note_: The signature of the method is actually a bit different, and the go implementation involve channels, but I does not change the principle,
 so I've decided to omit that for clarity.
 
-### Example
+#### Example
 Each node will:
 
-1. **Wait for an event**
-2. call Create.Check() and Configure.Check().
-3. watch for events from their dependencies
+1. **Wait for an event** and call Create.Check() and Configure.Check().
+2. watch for events from their dependencies
 3. if an event is detected, call the appropriate Do() method
 
-### Engine
+#### Engine
 The interfaces `Check()` and `Do()` may be implemented on different engines.
 
 For my demo, as suggested by James I'm using a "file engine" base on iNotify (linux) and kQueue (freebsd).
@@ -233,6 +266,14 @@ The `Do()` method actually create an empty file.
 <iframe width="560" height="315" src="https://www.youtube.com/embed/l96uFQUrcp8" frameborder="0" allowfullscreen></iframe>
 </center>
 
-### Khoreia on github:
+#### Khoreia on github:
 
 [github.com/owulveryck/khoreia](http://github.com/owulveryck/khoreia)
+
+# Conclusion
+
+Self-awareness, self-healing, elasticity, modularity, ... with a choreography based configuration and deployement tools, standard application may get 
+new capabilities without totally rethinking their infrastructure.
+
+Some of the stuff that still need to be implemented are, for example,  the notion of interface and commitment of the node, and the notion of
+machine learning for every node to teach them how to react to different events in anefficient way.
