@@ -184,7 +184,7 @@ _We may not rely on command and control anymore, we should make the system work 
 
 # Dancing, Choreography, Jazz ?
 
-A solution to the orchestration SPOF and of the uncertainty of the infrastructure may be to implement a choreography. 
+A solution to the orchestration SPOF and of a a workaound for dealing with the uncertainty of the infrastructure may be to implement a choreography. 
 Or to replace the symphony with a piece of jazz. 
 You give every attendee (dancer, jazzman or TOSCA node) the structure of the piece to play.
 And given the chords and the structure, they all react and do what they have committed to do.
