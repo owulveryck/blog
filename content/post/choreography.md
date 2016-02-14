@@ -112,6 +112,7 @@ A couple of years ago, maybe because of the DevOps movement, my missions were ge
 Actually infrastructure has not been considered as a needed cost anymore.
 
 Thanks to _Agility_, _DevOps_, and the emergent notion of product (as opposed to project), **Application and infrastructure are now seen as a whole**.  
+(I'm talking of the application "born in the datacenter", it is different for those "born in the cloud")
 
 Therefore, the setup of the application must not rely only on programmed configuration management tools anymore, but on its complete **representation**
 
@@ -144,7 +145,7 @@ I can say that 80% of the customers will only need 20% of the standard.
 On top of that, Tosca is young, and I could not find any decent tool to orchestrate and deploy an application. 
 Big companies claim their compliance with the standard, but actually very few of them (if any) does really implement it.
 
-# Let's come back to the orchestration
+## Let's come back to the orchestration (and real world)
 As seen before, a Tosca file would need a tool to transform it to a rela application.
 This tool is **an orchestrator**.
 
@@ -154,7 +155,7 @@ so the application symphony could be rendered in best condition of reliability a
 
 Wait, that was the promise of the configuration management tools, isn't it?
 
-## The execution plan
+### The execution plan
 So what is the execution plan.
 
 
