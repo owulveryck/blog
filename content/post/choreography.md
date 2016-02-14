@@ -50,16 +50,23 @@ In the last part of this post, I will expose what I've understood of the concept
 Finally I will demonstrate the idea with a POC based on a developement on [the etcd product](https://github.com/coreos/etcd) from CoreOS.
 (and a youtube demo for those who don't want to `git clone...`)
 
-
 ## Configuration management and orchestration
 
-Let's take a look at the trends from 3 major tools categorized as "configuration management tools":
+Configuration management has been for a long time, a goal for IT automation. 
+Years ago, it allowed system engineers to control a huge park of machines while maintaining a TCO at a relatively decent level.
+
+Over the last decade, 4 major tools have emerged and are now part of most CTO common vocabulary.
+
+Let's take a look at the trends from 4 major tools categorized as "configuration management tools":
 
 | Tool        | Founded in |
 | ----------- |:----------:|
 | Ansible     | 2012       |
 | Puppet      | 2005       |
 | Chef        | 2009       |
+| Salt        | 2011       |
+
+_Note_: I do not represent CFEngine because it is doesn't seem not so widely used in dotcom companies (even if it seems to be a great tool and on a certain extent the father of the others)
 
 The "interest" for those tools as seen by google is be represented like this:
 
@@ -67,12 +74,12 @@ The "interest" for those tools as seen by google is be represented like this:
 <script type="text/javascript" src="//www.google.com/trends/embed.js?hl=en&q=/m/0k0vzjb,+/m/03d3cjz,+/m/05zxlz3,+/m/0hn8c6s&date=1/2014+25m&cmpt=q&tz=Etc/GMT-1&tz=Etc/GMT-1&content=1&cid=TIMESERIES_GRAPH_0&export=5&w=700&h=350"></script>
 </center>
 
-As we can see, ansible seems to be the emergent technology. Of course its acquisition by redhat in late 2015 may have boosted a bit the trends,
-but the idea remains.
+As we can see, ansible seems to be the emerging technology. Indeed its acquisition by redhat in late 2015 may have boosted a bit the trends, but anyway, the companies that do not implement infrastructure as code may seem to prefer this tool.
+Cause or consequence, Gartner has nominated Ansible as a _cool vendor_ for 2015 (according to Gartner, a Cool Vendor is an emerging and innovative vendor that has original, interesting, and unique technology with real market impact)
 
 Why did a newcomer such as ansible did present such interest?
 
-Because ansible is not exactly a configuration management tool, it is **an orchestrator** (see [the ansible webpage](https://www.ansible.com/orchestration))
+Beside its simplicity, Ansible is not exactly a configuration management tool, it is **an orchestrator** (see [the ansible webpage](https://www.ansible.com/orchestration))
 
 According to [Rogger's theory](https://en.wikipedia.org/wiki/Diffusion_of_innovations) about the diffusion of innovation, and regarding the trends, I think that it is accurate to say
 that the position of ansible is near the "late majority"
@@ -82,10 +89,10 @@ that the position of ansible is near the "late majority"
 
 What does this mean ?
 
-To me,it means that people do feel the need for orchestration, and via orchestration, they may feel the need for representing their product.
-It is now *architecture as data*.
+To me,it means that people do feel the need for orchestration, or if they don't feel it, they will thanks to Ansible. 
+Via orchestration, they may feel the need for representing their product.
 
-That's what I've understood from the speech of the __innovators__ .
+We are now talking about **infrastructure as data**; soon we will talk about **architecture as data**
 
 ### From system configuration management...
 
