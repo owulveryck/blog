@@ -209,6 +209,9 @@ And each method is implementing an interface composed of:
 * `Check()` which check whether the action has been release and the "role" is ok
 * `Do()` which actually implements the action
 
+_Note_: The signature of the method is actually a bit different, and the go implementation involve channels, but I does not change the principle,
+so I've decided to omit that for clarity.
+
 ### Example
 Each node will:
 
@@ -223,6 +226,7 @@ The interfaces `Check()` and `Do()` may be implemented on different engines.
 For my demo, as suggested by James I'm using a "file engine" base on iNotify (linux) and kQueue (freebsd).
 
 The `Check()` method is watching the presence of a file. It sends the event "true" if the file is created of "false" if its deleted.
+
 The `Do()` method actually create an empty file.
 
 <center>
