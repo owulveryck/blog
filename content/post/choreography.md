@@ -197,7 +197,7 @@ both machines are part of an etcd cluster.
 The topology is composed of 8 nodes with dependencies which can be represented like this (same example as the one I used in a previous post):
 <img class="img-responsive" src="/blog/assets/images/digraph1.png" alt="digraph example"/> 
 
-The topology is described as a simple yaml file [here](https://github.com/owulveryck/khoreia/blob/master/samples/topology.yaml)
+The topology is described as a simple yaml file [here](https://github.com/owulveryck/khoreia/blob/e32af3d77d0b57bf36b68a2460e5a47132f29118/samples/topology.yaml)
 
 Each node is fulfilling two methods:
 
