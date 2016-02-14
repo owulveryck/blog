@@ -1,20 +1,26 @@
 ---
 author: Olivier Wulveryck
 date: 2016-02-10T17:19:47+01:00
-description: What we need is Choreography
-draft: true
+description: From system configuration management to self aware application.
+  how did we pass from automation to infrastructure as data ?
+  what is the future of automation ?
+  In this post I describe some ideas I have collected about the principles that could lead
+  to self-aware application.
+  I will also present a proof of concept I made to illustrate those ideas.
+draft: false
 keywords:
 - choreography
 - orchestration
 - topology
 tags:
+- config management
 - choreography
 - orchestration
 - topology
 - TOSCA
 - go
 - khoreia
-title: What we need is choreography
+title: Configuration management, choreography and self-aware applications
 topics:
 - application deployement
 type: post
