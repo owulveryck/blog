@@ -145,7 +145,7 @@ I can say that 80% of the customers will only need 20% of the standard.
 On top of that, Tosca is young, and I could not find any decent tool to orchestrate and deploy an application. 
 Big companies claim their compliance with the standard, but actually very few of them (if any) does really implement it.
 
-## Let's come back to the orchestration (and real world)
+## Let's come back to orchestration (and real world)
 As seen before, a Tosca file would need a tool to transform it to a rela application.
 This tool is **an orchestrator**.
 
