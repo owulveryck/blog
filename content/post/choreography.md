@@ -20,13 +20,13 @@ topics:
 type: post
 ---
 
-I've had the oportunity to attend the [configuration management camp](http://cfgmgmtcamp.eu/) in Gent (be) for its 2016 edition.
+I've had the oportunity to attend the [configuration management camp](http://cfgmgmtcamp.eu/) in Gent (_be_) for its 2016 edition.
 
-I really enjoyed those two days of talks, watching the folks to expose different ideas of what could be the future
-of the infrastructure and deployment engineering. 
+I really enjoyed those two days of talks, watching people present different ideas of a possible future for
+the infrastructure and deployment engineering. 
 Beyond the technical demonstrations and the experience sharing, I've spotted a bunch of ideas
 
-Among them, those that comes to me spontaneously are:
+Among those, the onesthose that comes to me spontaneously are:
 
 > You don't need configuration management, what you need is a description of the topology of your application - *[Mark Shuttleworth](http://www.markshuttleworth.com/biography)* in its keynote _The magic of modeling_
 
@@ -36,6 +36,20 @@ Among them, those that comes to me spontaneously are:
 > What we need is a new way to do configuration management - _[James Shubin](https://www.linkedin.com/in/james-shubin-74a89a44)_, see [his blog post](https://ttboj.wordpress.com/2016/01/18/next-generation-configuration-mgmt/) which ispired my project [khoreia](http://github.com/owulveryck/khoreia)
 
 I came back home very excited about this.
+this post tries to expose my reflection and how I've implemented an idea (see it as a POC)t want to git clone...)t want to git clone...).
+I've passed some time to learn about TOSCA, and the to code an orchestrator. 
+
+In a first part I will expose why, according to me, the topological description of the application may be what
+company needs.
+
+Therefore, I will notice the need for orchestration tools.
+
+Even if the concepts remains actuals, the future may be an evolution of this mechanism of central command and control. 
+In the last part of this post, I will expose what I've understood of the concept of choreography so far.
+
+Finally I will demonstrate the idea with a POC based on a developement on [the etcd product](https://github.com/coreos/etcd) from CoreOS.
+(and a youtube demo for those who don't want to `git clone...`)
+
 
 ## Configuration management and orchestration
 
