@@ -26,7 +26,7 @@ topics:
 type: post
 ---
 
-I've had the oportunity to attend the [configuration management camp](http://cfgmgmtcamp.eu/) in Gent (_be_) for its 2016 edition.
+Thanks to the [company I'm working for (Techsys)](https://www.linkedin.com/company/techsys?trk=company_logo) I've had the oportunity to attend the [configuration management camp](http://cfgmgmtcamp.eu/) in Gent (_be_) for its 2016 edition.
 
 I really enjoyed those two days of talks, watching people present different ideas of a possible future for
 the infrastructure and deployment engineering. 
