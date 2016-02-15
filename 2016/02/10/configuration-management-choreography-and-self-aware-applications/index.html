@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="description" content="From system configuration management to self aware application. how did we pass from automation to infrastructure as data ? what is the future of automation ? In this post I describe some ideas I have collected about the principles that could lead to self-aware application. I will also present a proof of concept I made to illustrate those ideas." />
+<meta name="description" content="From system configuration management to self aware application. How did we pass from automation to infrastructure as data ? What is the future of automation ? In this post I describe some ideas I have collected about the principles that could lead to self-aware application. I will also present a proof of concept I made to illustrate those ideas." />
 
 <meta name="keywords" content="choreography, orchestration, topology, ">
 
@@ -26,7 +26,7 @@
 
 
 <meta property="og:type" content="article" />
-<meta property="og:description" content="From system configuration management to self aware application. how did we pass from automation to infrastructure as data ? what is the future of automation ? In this post I describe some ideas I have collected about the principles that could lead to self-aware application. I will also present a proof of concept I made to illustrate those ideas."/>
+<meta property="og:description" content="From system configuration management to self aware application. How did we pass from automation to infrastructure as data ? What is the future of automation ? In this post I describe some ideas I have collected about the principles that could lead to self-aware application. I will also present a proof of concept I made to illustrate those ideas."/>
 <meta property="og:article:published_time" content="2016-02-10T17:19:47&#43;01:00" />
 <meta property="og:article:modified_time" content="2016-02-10T17:19:47&#43;01:00" />
 
@@ -45,7 +45,7 @@
 <meta name="twitter:site" content="@owulveryck" />
 <meta name="twitter:creator" content="@owulveryck" />
 <meta name="twitter:title" content="Configuration management, choreography and self-aware applications" />
-<meta name="twitter:description" content="From system configuration management to self aware application. how did we pass from automation to infrastructure as data ? what is the future of automation ? In this post I describe some ideas I have collected about the principles that could lead to self-aware application. I will also present a proof of concept I made to illustrate those ideas." />
+<meta name="twitter:description" content="From system configuration management to self aware application. How did we pass from automation to infrastructure as data ? What is the future of automation ? In this post I describe some ideas I have collected about the principles that could lead to self-aware application. I will also present a proof of concept I made to illustrate those ideas." />
 <meta name="twitter:url" content="http://dev.owulveryck.info/blog/2016/02/10/configuration-management-choreography-and-self-aware-applications/" />
 <meta name="twitter:domain" content="http://dev.owulveryck.info/blog">
   
@@ -60,8 +60,8 @@
       "name": "http://profiles.google.com/+olivier.wulveryck?rel=author"
     },
     "datePublished": "2016-02-10",
-    "description": "From system configuration management to self aware application. how did we pass from automation to infrastructure as data ? what is the future of automation ? In this post I describe some ideas I have collected about the principles that could lead to self-aware application. I will also present a proof of concept I made to illustrate those ideas.",
-    "wordCount":  2033 
+    "description": "From system configuration management to self aware application. How did we pass from automation to infrastructure as data ? What is the future of automation ? In this post I describe some ideas I have collected about the principles that could lead to self-aware application. I will also present a proof of concept I made to illustrate those ideas.",
+    "wordCount":  2026 
   }
 </script>
 
@@ -172,7 +172,7 @@
     &middot; by Olivier Wulveryck
   
   &middot; Read in about 10 min
-  &middot; (2033 Words)
+  &middot; (2026 Words)
 </small>
 
 
@@ -205,25 +205,25 @@
   <div class="container content">
   
 
-<p>Thanks to the <a href="https://www.linkedin.com/company/techsys?trk=company_logo">company I&rsquo;m working for (Techsys)</a> I&rsquo;ve had the oportunity to attend the <a href="http://cfgmgmtcamp.eu/">configuration management camp</a> in Gent (<em>be</em>) for its 2016 edition.</p>
+<p>Thanks to the <a href="https://www.linkedin.com/company/techsys?trk=company_logo">company I&rsquo;m working for (Techsys)</a> I&rsquo;ve had the opportunity to attend the <a href="http://cfgmgmtcamp.eu/">configuration management camp</a> in Gent (<em>be</em>) for its 2016 edition.</p>
 
 <p>I really enjoyed those two days of talks, watching people present different ideas of a possible future for
 the infrastructure and deployment engineering.
 Beyond the technical demonstrations and the experience sharing, I&rsquo;ve spotted a bunch of ideas</p>
 
-<p>Among those, the onesthose that comes to me spontaneously are:</p>
+<p>Among all, those that comes to me spontaneously are:</p>
 
 <blockquote>
 <p>You don&rsquo;t need configuration management, what you need is a description of the topology of your application - <em><a href="http://www.markshuttleworth.com/biography">Mark Shuttleworth</a></em> in its keynote <em>The magic of modeling</em></p>
 
 <p>You don&rsquo;t need orchestration, what you need is choreography - Exposed by <em><a href="https://www.linkedin.com/in/julian">Julian Dunn</a></em>
-(you can find a retranscription <a href="https://www.youtube.com/watch?v=kfF9IATUask">here on youtube</a>)</p>
+(you can find a transcription <a href="https://www.youtube.com/watch?v=kfF9IATUask">here on youtube</a>)</p>
 
 <p>What we need is a new way to do configuration management - <em><a href="https://www.linkedin.com/in/james-shubin-74a89a44">James Shubin</a></em>, see <a href="https://ttboj.wordpress.com/2016/01/18/next-generation-configuration-mgmt/">his blog post</a> which ispired my project <a href="http://github.com/owulveryck/khoreia">khoreia</a></p>
 </blockquote>
 
 <p>I came back home very excited about this.
-this post tries to expose my reflection and how I&rsquo;ve implemented an idea (see it as a POC)t want to git clone&hellip;)t want to git clone&hellip;).
+This post tries to expose my reflection and how I&rsquo;ve implemented an idea (see it as a POC)
 I&rsquo;ve passed some time to learn about TOSCA, and the to code an orchestrator.</p>
 
 <p>In a first part I will expose why, according to me, the topological description of the application may be what
@@ -234,7 +234,7 @@ company needs.</p>
 <p>Even if the concepts remains actuals, the future may be an evolution of this mechanism of central command and control.
 In the last part of this post, I will expose what I&rsquo;ve understood of the concept of choreography so far.</p>
 
-<p>Finally I will demonstrate the idea with a POC based on a developement on <a href="https://github.com/coreos/etcd">the etcd product</a> from CoreOS.
+<p>Finally I will demonstrate the idea with a POC based on a development on <a href="https://github.com/coreos/etcd">the etcd product</a> from CoreOS.
 (and a youtube demo for those who don&rsquo;t want to <code>git clone...</code>)</p>
 
 <h2 id="configuration-management-and-orchestration:01ecc74d815319839ce50fcf86930ee5">Configuration management and orchestration</h2>
@@ -279,21 +279,21 @@ Years ago, it allowed system engineers to control a huge park of machines while 
 
 <p><em>Note</em>: I do not represent CFEngine because it is doesn&rsquo;t seem not so widely used in dotcom companies (even if it seems to be a great tool and on a certain extent the father of the others)</p>
 
-<p>The &ldquo;interest&rdquo; for those tools as seen by google is be represented like this:</p>
+<p>The &ldquo;interest&rdquo; for those tools as seen by Google is be represented like this:</p>
 
 <p><center>
 <script type="text/javascript" src="//www.google.com/trends/embed.js?hl=en&q=/m/0k0vzjb,+/m/03d3cjz,+/m/05zxlz3,+/m/0hn8c6s&date=1/2014+25m&cmpt=q&tz=Etc/GMT-1&tz=Etc/GMT-1&content=1&cid=TIMESERIES_GRAPH_0&export=5&w=700&h=350"></script>
 </center></p>
 
-<p>As we can see, ansible seems to be the emerging technology. Indeed its acquisition by redhat in late 2015 may have boosted a bit the trends, but anyway, the companies that do not implement infrastructure as code may seem to prefer this tool.
+<p>As we can see, Ansible seems to be the emerging technology. Indeed its acquisition by redhat in late 2015 may have boosted a bit the trends, but anyway, the companies that do not implement infrastructure as code may seem to prefer this tool.
 Cause or consequence, Gartner has nominated Ansible as a <em>cool vendor</em> for 2015 (according to Gartner, a Cool Vendor is an emerging and innovative vendor that has original, interesting, and unique technology with real market impact)</p>
 
-<p>Why did a newcomer such as ansible did present such interest?</p>
+<p>Why did a newcomer such as Ansible did present such interest?</p>
 
-<p>Beside its simplicity, Ansible is not exactly a configuration management tool, it is <strong>an orchestrator</strong> (see <a href="https://www.ansible.com/orchestration">the ansible webpage</a>)</p>
+<p>Beside its simplicity, Ansible is not exactly a configuration management tool, it is <strong>an orchestrator</strong> (see <a href="https://www.Ansible.com/orchestration">the Ansible webpage</a>)</p>
 
 <p>According to <a href="https://en.wikipedia.org/wiki/Diffusion_of_innovations">Rogger&rsquo;s theory</a> about the diffusion of innovation, and regarding the trends, I think that it is accurate to say
-that the position of ansible is near the &ldquo;late majority&rdquo;
+that the position of Ansible is near the &ldquo;late majority&rdquo;
 <center>
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Diffusionofideas.PNG/330px-Diffusionofideas.PNG" alt="Diffusion of ideas" />
 </center></p>
@@ -325,7 +325,7 @@ Config management allowed us to</p>
 Actually infrastructure has not been considered as a needed cost anymore.</p>
 
 <p>Thanks to <em>Agility</em>, <em>DevOps</em>, and the emergent notion of product (as opposed to project), <strong>Application and infrastructure are now seen as a whole</strong>.<br />
-(I&rsquo;m talking of the application &ldquo;born in the datacenter&rdquo;, it is different for those &ldquo;born in the cloud&rdquo;)</p>
+(I&rsquo;m talking of the application &ldquo;born in the data center&rdquo;, it is different for those &ldquo;born in the cloud&rdquo;)</p>
 
 <p>Therefore, the setup of the application must not rely only on programmed configuration management tools anymore, but on its complete <strong>representation</strong></p>
 
@@ -350,12 +350,12 @@ TOSCA is <strong>THE DSL</strong> for representing the topology of an applicatio
 
 <p>It describes a standard for representing a cloud application. It is written by the Oasis consortium and
 therefore most of the big brand in IT may be aware of its existence.
-The promise is that if you describe any application with Tosca, it could be deployed on any plateform, with a decent <strong>orchestrator</strong>.</p>
+The promise is that if you describe any application with Tosca, it could be deployed on any platform, with a decent <strong>orchestrator</strong>.</p>
 
 <h3 id="and-cons:01ecc74d815319839ce50fcf86930ee5">&hellip;and cons</h3>
 
 <p>But&hellip; Tosca is complex.
-IT&rsquo;s not that simple to write a Tosca representation. The standard wants to cover all the possible cases, and according <a href="https://en.wikipedia.org/wiki/Vilfredo_Pareto">Pareto</a>&rsquo;s law,
+It&rsquo;s not that simple to write a Tosca representation. The standard wants to cover all the possible cases, and according <a href="https://en.wikipedia.org/wiki/Vilfredo_Pareto">Pareto</a>&rsquo;s law,
 I can say that 80% of the customers will only need 20% of the standard.</p>
 
 <p>On top of that, Tosca is young (by now, the YAML version is still in pre-release), and I could not find any decent tool to orchestrate and deploy an application.
@@ -382,9 +382,9 @@ The execution plan is deterministic.</p>
 We have a complete suite of tools that allows to describe the application and architecture base on its functions and it is possible to
 generate and executes all the commands a computer <strong>must</strong> do to get things done.</p>
 
-<p>Why do we neeed more?
+<p>Why do we need more?
 Because now systems are so complex that we could not rely anymore on IT infrastructure to do exactly what we told it to.
-Mark Burgess, considered by a lot of people as a visionnay, wrote a book entitled:
+Mark Burgess, considered by a lot of people as a visionary, wrote a book entitled:
 <a href="http://www.amazon.com/In-Search-Certainty-information-infrastructure/dp/1492389161">In Search of Certainty: The science of our information infrastructure</a></p>
 
 <p>Julian Dunn told about it in its speech, and I&rsquo;ve started reading IT.</p>
@@ -395,18 +395,18 @@ Mark Burgess, considered by a lot of people as a visionnay, wrote a book entitle
 
 <h1 id="dancing-choreography-jazz:01ecc74d815319839ce50fcf86930ee5">Dancing, Choreography, Jazz ?</h1>
 
-<p>A solution to the orchestration SPOF and of a a workaound for dealing with the uncertainty of the infrastructure may be to implement a choreography.
+<p>A solution to the orchestration SPOF and  a workaround for dealing with the uncertainty of the infrastructure may be to implement a choreography.
 Or to replace the symphony with a piece of jazz.
 You give every attendee (dancer, jazzman or TOSCA node) the structure of the piece to play.
 And given the chords and the structure, they all react and do what they have committed to do.</p>
 
-<p>This should produce similar to the same mechanism controled by an orchestrator, but more fault tolerant.
+<p>This should produce similar to the same mechanism controlled by an orchestrator, but more fault tolerant.
 Actually, the brain will not have to take care of unpredicted event; each node will do so.
 The application has become self-aware.</p>
 
 <h2 id="implementation-a-distributed-system:01ecc74d815319839ce50fcf86930ee5">Implementation: a distributed system</h2>
 
-<p>This concept, described in so many sci-fi books, may becoome applicable because science formalized concensus algorithm such as
+<p>This concept, described in so many sci-fi books, may become applicable because science formalized consensus algorithm such as
 paxo or raft.
 And even better, it is easy to find very good implementation of those concepts (for free)</p>
 
@@ -420,19 +420,19 @@ It is a service oriented key/value store, distributed on a cluster of machine.</
 <h2 id="proof-of-concept-khoreia:01ecc74d815319839ce50fcf86930ee5">Proof of concept: khoreia</h2>
 
 <p>khoreia is a little program I made in <code>go</code> that relies on the <a href="http://github.com/coreos/eetcd">etcd</a> distributed system.
-Etcd itself is an implementation of the raft consensus algorithm. I do heavily adcice that you take a look at <a href="http://thesecretlivesofdata.com/raft/">this page</a>
+Etcd itself is an implementation of the raft consensus algorithm. I do heavily advice that you take a look at <a href="http://thesecretlivesofdata.com/raft/">this page</a>
 for a complete and clear explanation.</p>
 
 <p>The khoreia single binary takes a topology description in yaml
 (by now very simple, but sooner or later I may implement the TOSCA DSL, as I already
-have a <a href="http://github.com/owulveryck/toscalib">tosca library</a>).</p>
+have a <a href="http://github.com/owulveryck/toscalib">Tosca library</a>).</p>
 
-<p>Then it trigers the nodes and every node reacts on events.
-Regarding the events, it implements the expected lifecycle for the node.</p>
+<p>Then it triggers the nodes and every node reacts on events.
+Regarding the events, it implements the expected life cycle for the node.</p>
 
-<p>Without actually coding it, the complement lifecycle of the application is then applied.
-Even bette, the application is fault tolerant (if a check fails, the do method is called again) and the execution
-is completly stateless because of the event based mechanism.</p>
+<p>Without actually coding it, the complement life cycle of the application is then applied.
+Even better, the application is fault tolerant (if a check fails, the do method is called again) and the execution
+is completely stateless because of the event based mechanism.</p>
 
 <h3 id="screencast-a-little-demo-on-distributed-systems-based-on-event-on-filesystems:01ecc74d815319839ce50fcf86930ee5">Screencast: a little demo on distributed systems based on event on filesystems</h3>
 
@@ -440,11 +440,11 @@ is completly stateless because of the event based mechanism.</p>
 Two machines are used (linked by a VPN):</p>
 
 <ul>
-<li>my chromebook, linux-based at home in france;</li>
-<li>a FreeBSD server located in canada.</li>
+<li>my chromebook, linux-based at home in France;</li>
+<li>a FreeBSD server located in Canada.</li>
 </ul>
 
-<p>both machines are part of an etcd cluster.
+<p>Both machines are part of an etcd cluster.
 The topology is composed of 8 nodes with dependencies which can be represented like this (same example as the one I used in a previous post):
 <img class="img-responsive" src="/blog/assets/images/digraph1.png" alt="digraph example"/></p>
 
@@ -499,11 +499,11 @@ so I&rsquo;ve decided to omit that for clarity.</p>
 
 <h1 id="conclusion:01ecc74d815319839ce50fcf86930ee5">Conclusion</h1>
 
-<p>Self-awareness, self-healing, elasticity, modularity, &hellip; with a choreography based configuration and deployement tools, standard application may get
+<p>Self-awareness, self-healing, elasticity, modularity, &hellip; with a choreography based configuration and deployment tools, standard application may get
 new capabilities without totally rethinking their infrastructure.</p>
 
 <p>Some of the stuff that still need to be implemented are, for example,  the notion of interface and commitment of the node, and the notion of
-machine learning for every node to teach them how to react to different events in anefficient way.</p>
+machine learning for every node to teach them how to react to different events in an efficient way.</p>
 
 </div>
 

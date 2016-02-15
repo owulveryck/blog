@@ -2,8 +2,8 @@
 author: Olivier Wulveryck
 date: 2016-02-10T17:19:47+01:00
 description: From system configuration management to self aware application.
-  how did we pass from automation to infrastructure as data ?
-  what is the future of automation ?
+  How did we pass from automation to infrastructure as data ?
+  What is the future of automation ?
   In this post I describe some ideas I have collected about the principles that could lead
   to self-aware application.
   I will also present a proof of concept I made to illustrate those ideas.
@@ -22,27 +22,27 @@ tags:
 - khoreia
 title: Configuration management, choreography and self-aware applications
 topics:
-- application deployement
+- application deployment
 type: post
 ---
 
-Thanks to the [company I'm working for (Techsys)](https://www.linkedin.com/company/techsys?trk=company_logo) I've had the oportunity to attend the [configuration management camp](http://cfgmgmtcamp.eu/) in Gent (_be_) for its 2016 edition.
+Thanks to the [company I'm working for (Techsys)](https://www.linkedin.com/company/techsys?trk=company_logo) I've had the opportunity to attend the [configuration management camp](http://cfgmgmtcamp.eu/) in Gent (_be_) for its 2016 edition.
 
 I really enjoyed those two days of talks, watching people present different ideas of a possible future for
 the infrastructure and deployment engineering. 
 Beyond the technical demonstrations and the experience sharing, I've spotted a bunch of ideas
 
-Among those, the onesthose that comes to me spontaneously are:
+Among all, those that comes to me spontaneously are:
 
 > You don't need configuration management, what you need is a description of the topology of your application - *[Mark Shuttleworth](http://www.markshuttleworth.com/biography)* in its keynote _The magic of modeling_
 
 > You don't need orchestration, what you need is choreography - Exposed by _[Julian Dunn](https://www.linkedin.com/in/julian)_
-(you can find a retranscription [here on youtube](https://www.youtube.com/watch?v=kfF9IATUask))
+(you can find a transcription [here on youtube](https://www.youtube.com/watch?v=kfF9IATUask))
 
 > What we need is a new way to do configuration management - _[James Shubin](https://www.linkedin.com/in/james-shubin-74a89a44)_, see [his blog post](https://ttboj.wordpress.com/2016/01/18/next-generation-configuration-mgmt/) which ispired my project [khoreia](http://github.com/owulveryck/khoreia)
 
 I came back home very excited about this.
-this post tries to expose my reflection and how I've implemented an idea (see it as a POC)t want to git clone...)t want to git clone...).
+This post tries to expose my reflection and how I've implemented an idea (see it as a POC)
 I've passed some time to learn about TOSCA, and the to code an orchestrator. 
 
 In a first part I will expose why, according to me, the topological description of the application may be what
@@ -53,7 +53,7 @@ Therefore, I will notice the need for orchestration tools.
 Even if the concepts remains actuals, the future may be an evolution of this mechanism of central command and control. 
 In the last part of this post, I will expose what I've understood of the concept of choreography so far.
 
-Finally I will demonstrate the idea with a POC based on a developement on [the etcd product](https://github.com/coreos/etcd) from CoreOS.
+Finally I will demonstrate the idea with a POC based on a development on [the etcd product](https://github.com/coreos/etcd) from CoreOS.
 (and a youtube demo for those who don't want to `git clone...`)
 
 ## Configuration management and orchestration
@@ -74,21 +74,21 @@ Let's take a look at the trends from 4 major tools categorized as "configuration
 
 _Note_: I do not represent CFEngine because it is doesn't seem not so widely used in dotcom companies (even if it seems to be a great tool and on a certain extent the father of the others)
 
-The "interest" for those tools as seen by google is be represented like this:
+The "interest" for those tools as seen by Google is be represented like this:
 
 <center>
 <script type="text/javascript" src="//www.google.com/trends/embed.js?hl=en&q=/m/0k0vzjb,+/m/03d3cjz,+/m/05zxlz3,+/m/0hn8c6s&date=1/2014+25m&cmpt=q&tz=Etc/GMT-1&tz=Etc/GMT-1&content=1&cid=TIMESERIES_GRAPH_0&export=5&w=700&h=350"></script>
 </center>
 
-As we can see, ansible seems to be the emerging technology. Indeed its acquisition by redhat in late 2015 may have boosted a bit the trends, but anyway, the companies that do not implement infrastructure as code may seem to prefer this tool.
+As we can see, Ansible seems to be the emerging technology. Indeed its acquisition by redhat in late 2015 may have boosted a bit the trends, but anyway, the companies that do not implement infrastructure as code may seem to prefer this tool.
 Cause or consequence, Gartner has nominated Ansible as a _cool vendor_ for 2015 (according to Gartner, a Cool Vendor is an emerging and innovative vendor that has original, interesting, and unique technology with real market impact)
 
-Why did a newcomer such as ansible did present such interest?
+Why did a newcomer such as Ansible did present such interest?
 
-Beside its simplicity, Ansible is not exactly a configuration management tool, it is **an orchestrator** (see [the ansible webpage](https://www.ansible.com/orchestration))
+Beside its simplicity, Ansible is not exactly a configuration management tool, it is **an orchestrator** (see [the Ansible webpage](https://www.Ansible.com/orchestration))
 
 According to [Rogger's theory](https://en.wikipedia.org/wiki/Diffusion_of_innovations) about the diffusion of innovation, and regarding the trends, I think that it is accurate to say
-that the position of ansible is near the "late majority"
+that the position of Ansible is near the "late majority"
 <center>
 ![Diffusion of ideas](https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Diffusionofideas.PNG/330px-Diffusionofideas.PNG)
 </center>
@@ -118,7 +118,7 @@ A couple of years ago, maybe because of the DevOps movement, my missions were ge
 Actually infrastructure has not been considered as a needed cost anymore.
 
 Thanks to _Agility_, _DevOps_, and the emergent notion of product (as opposed to project), **Application and infrastructure are now seen as a whole**.  
-(I'm talking of the application "born in the datacenter", it is different for those "born in the cloud")
+(I'm talking of the application "born in the data center", it is different for those "born in the cloud")
 
 Therefore, the setup of the application must not rely only on programmed configuration management tools anymore, but on its complete **representation**
 
@@ -142,11 +142,11 @@ What's good about Tosca is its goal:
 
 It describes a standard for representing a cloud application. It is written by the Oasis consortium and 
 therefore most of the big brand in IT may be aware of its existence.
-The promise is that if you describe any application with Tosca, it could be deployed on any plateform, with a decent __orchestrator__.
+The promise is that if you describe any application with Tosca, it could be deployed on any platform, with a decent __orchestrator__.
 
 ### ...and cons
 But... Tosca is complex.
-IT's not that simple to write a Tosca representation. The standard wants to cover all the possible cases, and according [Pareto](https://en.wikipedia.org/wiki/Vilfredo_Pareto)'s law,
+It's not that simple to write a Tosca representation. The standard wants to cover all the possible cases, and according [Pareto](https://en.wikipedia.org/wiki/Vilfredo_Pareto)'s law,
 I can say that 80% of the customers will only need 20% of the standard.
 
 On top of that, Tosca is young (by now, the YAML version is still in pre-release), and I could not find any decent tool to orchestrate and deploy an application. 
@@ -171,9 +171,9 @@ With the description of the application, the execution plan, and the orchestrati
 We have a complete suite of tools that allows to describe the application and architecture base on its functions and it is possible to 
 generate and executes all the commands a computer **must** do to get things done.
 
-Why do we neeed more?
+Why do we need more?
 Because now systems are so complex that we could not rely anymore on IT infrastructure to do exactly what we told it to.
-Mark Burgess, considered by a lot of people as a visionnay, wrote a book entitled: 
+Mark Burgess, considered by a lot of people as a visionary, wrote a book entitled: 
 [In Search of Certainty: The science of our information infrastructure](http://www.amazon.com/In-Search-Certainty-information-infrastructure/dp/1492389161)
 
 Julian Dunn told about it in its speech, and I've started reading IT.
@@ -184,18 +184,18 @@ _We may not rely on command and control anymore, we should make the system work 
 
 # Dancing, Choreography, Jazz ?
 
-A solution to the orchestration SPOF and of a a workaound for dealing with the uncertainty of the infrastructure may be to implement a choreography. 
+A solution to the orchestration SPOF and  a workaround for dealing with the uncertainty of the infrastructure may be to implement a choreography. 
 Or to replace the symphony with a piece of jazz. 
 You give every attendee (dancer, jazzman or TOSCA node) the structure of the piece to play.
 And given the chords and the structure, they all react and do what they have committed to do.
 
-This should produce similar to the same mechanism controled by an orchestrator, but more fault tolerant.
+This should produce similar to the same mechanism controlled by an orchestrator, but more fault tolerant.
 Actually, the brain will not have to take care of unpredicted event; each node will do so.
 The application has become self-aware.
 
 ## Implementation: a distributed system
 
-This concept, described in so many sci-fi books, may becoome applicable because science formalized concensus algorithm such as
+This concept, described in so many sci-fi books, may become applicable because science formalized consensus algorithm such as
 paxo or raft.
 And even better, it is easy to find very good implementation of those concepts (for free)
 
@@ -209,29 +209,29 @@ Even more, etcd clients have the ability to monitor an event allowing us to impl
 ## Proof of concept: khoreia
 
 khoreia is a little program I made in `go` that relies on the [etcd](http://github.com/coreos/eetcd) distributed system.
-Etcd itself is an implementation of the raft consensus algorithm. I do heavily adcice that you take a look at [this page](http://thesecretlivesofdata.com/raft/)
+Etcd itself is an implementation of the raft consensus algorithm. I do heavily advice that you take a look at [this page](http://thesecretlivesofdata.com/raft/)
 for a complete and clear explanation.
 
 The khoreia single binary takes a topology description in yaml 
 (by now very simple, but sooner or later I may implement the TOSCA DSL, as I already
-have a [tosca library](http://github.com/owulveryck/toscalib)).
+have a [Tosca library](http://github.com/owulveryck/toscalib)).
 
-Then it trigers the nodes and every node reacts on events.
-Regarding the events, it implements the expected lifecycle for the node.
+Then it triggers the nodes and every node reacts on events.
+Regarding the events, it implements the expected life cycle for the node.
 
-Without actually coding it, the complement lifecycle of the application is then applied.
-Even bette, the application is fault tolerant (if a check fails, the do method is called again) and the execution 
-is completly stateless because of the event based mechanism.
+Without actually coding it, the complement life cycle of the application is then applied.
+Even better, the application is fault tolerant (if a check fails, the do method is called again) and the execution 
+is completely stateless because of the event based mechanism.
 
 ### Screencast: a little demo on distributed systems based on event on filesystems
 
 Here is a little screencast I made as a POC.
 Two machines are used (linked by a VPN):
 
-- my chromebook, linux-based at home in france;
-- a FreeBSD server located in canada.
+- my chromebook, linux-based at home in France;
+- a FreeBSD server located in Canada.
 
-both machines are part of an etcd cluster.
+Both machines are part of an etcd cluster.
 The topology is composed of 8 nodes with dependencies which can be represented like this (same example as the one I used in a previous post):
 <img class="img-responsive" src="/blog/assets/images/digraph1.png" alt="digraph example"/> 
 
@@ -278,8 +278,8 @@ The `Do()` method actually create an empty file.
 
 # Conclusion
 
-Self-awareness, self-healing, elasticity, modularity, ... with a choreography based configuration and deployement tools, standard application may get 
+Self-awareness, self-healing, elasticity, modularity, ... with a choreography based configuration and deployment tools, standard application may get 
 new capabilities without totally rethinking their infrastructure.
 
 Some of the stuff that still need to be implemented are, for example,  the notion of interface and commitment of the node, and the notion of
-machine learning for every node to teach them how to react to different events in anefficient way.
+machine learning for every node to teach them how to react to different events in an efficient way.

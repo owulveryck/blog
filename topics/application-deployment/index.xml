@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Topology on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://dev.owulveryck.info/blog/tags/topology/</link>
-    <description>Recent content in Topology on Olivier Wulveryck&#39;s Tech Blog</description>
+    <title>Application Deployment on Olivier Wulveryck&#39;s Tech Blog</title>
+    <link>http://dev.owulveryck.info/blog/topics/application-deployment/</link>
+    <description>Recent content in Application Deployment on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015</copyright>
     <lastBuildDate>Wed, 10 Feb 2016 17:19:47 +0100</lastBuildDate>
-    <atom:link href="http://dev.owulveryck.info/blog/tags/topology/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://dev.owulveryck.info/blog/topics/application-deployment/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Configuration management, choreography and self-aware applications</title>
