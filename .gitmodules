@@ -6,4 +6,7 @@
 	url = https://github.com/allnightgrocery/hugo-theme-blueberry-detox.git
 [submodule "themes/hugo-bootstrap"]
 	path = themes/hugo-bootstrap
-	url = https://github.com/mmrath/hugo-bootstrap
+	url = https://github.com/owulveryck/hugo-bootstrap
+[submodule "js/MathJax"]
+	path = js/MathJax
+	url = https://github.com/mathjax/MathJax.git
