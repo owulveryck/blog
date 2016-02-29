@@ -7,6 +7,6 @@
 [submodule "themes/hugo-bootstrap"]
 	path = themes/hugo-bootstrap
 	url = https://github.com/owulveryck/hugo-bootstrap
-[submodule "js/MathJax"]
-	path = js/MathJax
+[submodule "static/js/MathJax"]
+	path = static/js/MathJax
 	url = https://github.com/mathjax/MathJax.git
