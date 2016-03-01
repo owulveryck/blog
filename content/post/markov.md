@@ -62,15 +62,19 @@ In the previous example, we notice that spontaneously, our mindset is command an
 We didn't think at first of the probability of a failure; we may have in the code, if we were good coders, but in the theory that was not
 suppose to happen.
 
-But there is a _probability_ that could happen. By now, we are totally unable to quantify this probability, but it's non-nil.
+But there is a _probability_ that it could happen. By now, we are totally unable to quantify this probability, but it's non-nil.
 
 The only certainty we can get is the current states of the node. We cannot presume anything on how they came to ths state.
 
 This is exactly a hidden markov process.
 
+## HMM
+
+According to _Rabiner_ (see [A tutorial on Hidden Markov Models and selected applications in speech recognition](http://TODO)):
+
+> the first problem one faces is deciding what the states in the model correspond to, and the deciding how many states should be in the model.
 
 ## The obeservation sequence $O$
-
 
 When $a \ne 0$, there are two solutions to $\(ax^2 + bx + c = 0\)$ and they are
 $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
