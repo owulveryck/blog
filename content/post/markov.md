@@ -72,5 +72,22 @@ Let's represent it with GNU-R (see [this blog post](http://www.r-bloggers.com/ge
       Alpha     0    1     0
       Beta      0    0     1
       Gamma     0    0     0
+> svg("ExecutionPlan.svg")
+> plotmat(ExecutionPlan,pos = c(1,2), 
++         lwd = 1, box.lwd = 2, 
++         cex.txt = 0.8, 
++         box.size = 0.1, 
++         box.type = "circle", 
++         box.prop = 0.5,
++         box.col = "light yellow",
++         arr.length=.1,
++         arr.width=.1,
++         self.cex = .4,
++         self.shifty = -.01,
++         self.shiftx = .13,
++         main = "")
+> dev.off()
 ```
+which is represented by:
 
+![Representation](/blog/assets/images/ExecutionPlan.svg)
