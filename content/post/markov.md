@@ -40,10 +40,13 @@ to program it, is to let them know about the execution plan, and assume that eve
 What I would like to study is simply that deployement without knowing the deployement plan.
 The nodes would try to perform the task, and depending on the event they receive, they learn and enhance their probability of success.
 
-### Example
+### First problem
+
 
 First, I'm considering a single node $A$  which can be in three states $\alpha$, $\beta$ and $\gamma$.
 Let's $S$ be the set of states such as $S = \left\\{\alpha, \beta, \gamma\right\\}$
+
+#### Actually knowing what's expected
 
 The expected execution is: $ \alpha -> \beta -> \gamma$
 
@@ -57,7 +60,8 @@ P=\\begin\{pmatrix\}
 \\end\{pmatrix\}
 $$
 
-Let's represent it with GNU-R (see [this blog post](http://www.r-bloggers.com/getting-started-with-markov-chains/) for a very good explanation)
+Let's represent it with GNU-R (see [this blog post](http://www.r-bloggers.com/getting-started-with-markov-chains/) 
+for an introduction of markov reprentation with this software)
 
 ```R
 > library(expm)
@@ -91,3 +95,20 @@ Let's represent it with GNU-R (see [this blog post](http://www.r-bloggers.com/ge
 which is represented by:
 
 ![Representation](/blog/assets/images/ExecutionPlan.svg)
+
+#### Knowing part of the plan...
+
+
+Now let's consider a different scenario. I assume now that the only known hypothesis is that we cannot go
+from $\alpha$ to $\gamma$ and vice-versa, but for the rest, the execution may refer to this transition matrix:
+
+$
+P=\\begin\{pmatrix\}
+\frac{1}{2} & \frac{1}{2} & 0 \\\\
+\frac{1}{3} & \frac{1}{3} & \frac{1}{3}  \\\\
+0 & \frac{1}{2} & \frac{1}{2} 
+\\end\{pmatrix\}
+$
+which is represented this way ![Representation](/blog/assets/images/ExecutionPlan2.svg)
+
+
