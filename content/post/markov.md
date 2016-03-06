@@ -115,7 +115,7 @@ The transition matrix is regular - we can see, for example that $P^2$ contains a
 
 ```R
 > ExecutionPlan %^% 2
-          Alpha      Beta     Gamma
+                Alpha     Beta      Gamma
           Alpha 0.4166667 0.4166667 0.1666667
           Beta  0.2777778 0.4444444 0.2777778
           Gamma 0.1666667 0.4166667 0.4166667
