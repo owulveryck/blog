@@ -123,8 +123,77 @@ The transition matrix is regular - we can see, for example that $P^2$ contains a
 
 Therefore, Makov theorem says that:
 
-* as n approaches infinity, $P^n = S$ where $S$ is a matrix of the form $[v, v,...,v]$, where $v$ being a constant vector
-* let $X$ be any state vector, then we have $\lim_{n\to \infty}P^nX = p$ where $p$ is a fixed probability vector (the sum of its entries = 1), all whose entries are positives
+* as n approaches infinity, $P^n = S$ where $S$ is a matrix of the form $[\mathbf{v}, \mathbf{v},...,\mathbf{v}]$, where $\mathbf{v}$ being a constant vector
+* let $X$ be any state vector, then we have $\lim_{n\to \infty}P^nX = \mathbf{v}$ where $\mathbf{v}$ is a fixed probability vector (the sum of its entries = 1), all whose entries are positives
 
-So we can look for vector $p$ (also known as the **steady-state vector of the system**) to see if there is a good chance that our _finite state machine_ would converged to the desired state $\gamma$
+So we can look for vector $\mathbf{v}$ (also known as the **steady-state vector of the system**) to see if there is a good chance that our _finite state machine_ would converged to the desired state $\gamma$
 
+### Evaluation of the steady-state vector
+
+Now since $P^{n+1}=P*P^n$ and that both $P^{n+1}$ and $P^n$  approach $S$, we have $S=P*S$. 
+
+Note that any column of this matrix equation gives $P*\mathbf{v}=\mathbf{v}$. Therefore, the steady-state vector of a regular Markov chain with transition matrix $P$ is the unique probability vector $\mathbf{v}$ satisfying $P*\mathbf{v}=\mathbf{v}$.
+
+To find the steady state vector, we must solve the equation: $P*\mathbf{v}=\mathbf{v}$. $\mathbf{v}$ is actually an eigenvector for an eigenvalue $\lambda = 1$
+
+_Note from [wikipedia](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors)_
+
+> In linear algebra, an eigenvector or characteristic vector of a square matrix is a vector that does not change its direction under the associated linear transformation. 
+> In other words: if $v$ is a vector that is not zero, then it is an eigenvector of a square matrix $A$ if $Av$ is a scalar multiple of $v$. i
+> This condition could be written as the equation: $ Av = \lambda v$, where $\lambda$ is a scalar known as the eigenvalue or characteristic 
+> value associated with the eigenvector $v$
+
+To compute the eigenvector, we should find the solution to the equation $det(A-\lambda*I)=0$ where I is the identity matrix. Actually
+I don't know how to do it anymore, and I will simply use _R_'s _egen_ function:
+
+```
+> eigen(ExecutionPlan)
+$values
+[1]  1.0000000  0.5000000 -0.1666667
+
+$vectors
+          [,1]          [,2]       [,3]
+          [1,] 0.5773503  7.071068e-01  0.5144958
+          [2,] 0.5773503  1.107461e-16 -0.6859943
+          [3,] 0.5773503 -7.071068e-01  0.5144958
+
+> ExecutionPlan %^% 15
+        Alpha      Beta     Gamma
+Alpha 0.2857295 0.4285714 0.2856990
+Beta  0.2857143 0.4285714 0.2857143
+Gamma 0.2856990 0.4285714 0.2857295
+```
+
+Wait, it has found 3 eigenvalues, and one of those equals 1 which is coherent.
+But the eigen vector is not coherent at all with the evaluation of the matrix at step 15.
+
+According to [stackoverflow](http://stackoverflow.com/questions/14912279/how-to-obtain-right-eigenvectors-of-matrix-in-r) 
+that's because it computes the _right_ eigenvector and what I need is the _left_ eigenvector.
+
+Here is how to evaluate it.
+
+```
+> lefteigen  <-  function(A){
+       return(t(eigen(t(A))$vectors))
+}
+> lefteigen(ExecutionPlan)
+          [,1]          [,2]       [,3]
+          [1,] 0.4850713  7.276069e-01  0.4850713
+          [2,] 0.7071068 -3.016795e-16 -0.7071068
+          [3,] 0.4082483 -8.164966e-01  0.4082483
+```
+
+We now have the steady vector : $\mathbf{v} = \\begin\{pmatrix\}0.48 \\\\ 0.70 \\\\ 0.40\\end{pmatrix}$
+
+which simply means that according to our theory, our finite state machin will most likely end in state $\beta$.
+
+### Analysis
+
+The assumption I've made to establish the transition matrix was that a state could fail and that the whole machine could fall
+back to its previous state.
+
+What I would like to study now, is according to what the machine will learn, whether it's a good idea to continue or not.
+Let me explain:
+
+If I come back to the principle I've implemented in the last post, that is a state has two methods _check()_ and _do()_.
+I could launch them all, and obviously, $\beta.Do()$ and $\gamma.Do()$
