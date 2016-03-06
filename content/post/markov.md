@@ -132,9 +132,9 @@ So we can look for vector $\mathbf{v}$ (also known as the **steady-state vector 
 
 Now since $P^{n+1}=P*P^n$ and that both $P^{n+1}$ and $P^n$  approach $S$, we have $S=P*S$. 
 
-Note that any column of this matrix equation gives $P*\mathbf{v}=\mathbf{v}$. Therefore, the steady-state vector of a regular Markov chain with transition matrix $P$ is the unique probability vector $\mathbf{v}$ satisfying $P*\mathbf{v}=\mathbf{v}$.
+Note that any column of this matrix equation gives $P\mathbf{v}=\mathbf{v}$. Therefore, the steady-state vector of a regular Markov chain with transition matrix $P$ is the unique probability vector $\mathbf{v}$ satisfying $P\mathbf{v}=\mathbf{v}$.
 
-To find the steady state vector, we must solve the equation: $P*\mathbf{v}=\mathbf{v}$. $\mathbf{v}$ is actually an eigenvector for an eigenvalue $\lambda = 1$
+To find the steady state vector, we must solve the equation: $P\mathbf{v}=\mathbf{v}$. $\mathbf{v}$ is actually an eigenvector for an eigenvalue $\lambda = 1$
 
 _Note from [wikipedia](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors)_
 
@@ -143,7 +143,7 @@ _Note from [wikipedia](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvector
 > This condition could be written as the equation: $ Av = \lambda v$, where $\lambda$ is a scalar known as the eigenvalue or characteristic 
 > value associated with the eigenvector $v$
 
-To compute the eigenvector, we should find the solution to the equation $det(A-\lambda*I)=0$ where I is the identity matrix. Actually
+To compute the eigenvector, we should find the solution to the equation $det(A-\lambda I)=0$ where $I$ is the identity matrix. Actually
 I don't know how to do it anymore, and I will simply use _R_'s _egen_ function:
 
 ```
