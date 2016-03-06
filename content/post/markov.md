@@ -126,3 +126,7 @@ Therefore, Makov theorem says that:
 * as n approaches infinity, $P^n = S$ where $S$ is a matrix of the form $[v, v,...,v]$, where $v$ being a constant vector
 * let $X$ be any state vector, then we have $\lim_{n\to \infty}P^nX = p$ where $p$ is a fixed probability vector (the sum of its entries = 1), all whose entries are positives
 
+So we can look for vector $p$ (also known as the **steady-state vector of the system**) to see if there is a good chance that our _finite state machine_ would converged to the desired state $\gamma$
+
+
+
