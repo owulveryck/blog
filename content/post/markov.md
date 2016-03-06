@@ -78,18 +78,18 @@ for an introduction of markov reprentation with this software)
       Gamma     0    0     0
 > svg("ExecutionPlan.svg")
 > plotmat(ExecutionPlan,pos = c(1,2), 
-+         lwd = 1, box.lwd = 2, 
-+         cex.txt = 0.8, 
-+         box.size = 0.1, 
-+         box.type = "circle", 
-+         box.prop = 0.5,
-+         box.col = "light yellow",
-+         arr.length=.1,
-+         arr.width=.1,
-+         self.cex = .4,
-+         self.shifty = -.01,
-+         self.shiftx = .13,
-+         main = "")
+         lwd = 1, box.lwd = 2, 
+         cex.txt = 0.8, 
+         box.size = 0.1, 
+         box.type = "circle", 
+         box.prop = 0.5,
+         box.col = "light yellow",
+         arr.length=.1,
+         arr.width=.1,
+         self.cex = .4,
+         self.shifty = -.01,
+         self.shiftx = .13,
+         main = "")
 > dev.off()
 ```
 which is represented by:
@@ -111,7 +111,7 @@ P=\\begin\{pmatrix\}
 $
 which is represented this way ![Representation](/blog/assets/images/ExecutionPlan2.svg)
 
-The transition matrix is regular (we can see, for example that $P^2$ contains all non nil numbers:
+The transition matrix is regular - we can see, for example that $P^2$ contains all non nil numbers:
 
 ```R
 > ExecutionPlan %^% 2
@@ -127,6 +127,4 @@ Therefore, Makov theorem says that:
 * let $X$ be any state vector, then we have $\lim_{n\to \infty}P^nX = p$ where $p$ is a fixed probability vector (the sum of its entries = 1), all whose entries are positives
 
 So we can look for vector $p$ (also known as the **steady-state vector of the system**) to see if there is a good chance that our _finite state machine_ would converged to the desired state $\gamma$
-
-
 
