@@ -111,4 +111,18 @@ P=\\begin\{pmatrix\}
 $
 which is represented this way ![Representation](/blog/assets/images/ExecutionPlan2.svg)
 
+The transition matrix is regular (we can see, for example that $P^2$ contains all non nil numbers:
+
+```R
+> ExecutionPlan %^% 2
+          Alpha      Beta     Gamma
+          Alpha 0.4166667 0.4166667 0.1666667
+          Beta  0.2777778 0.4444444 0.2777778
+          Gamma 0.1666667 0.4166667 0.4166667
+```
+
+Therefore, Makov theorem says that:
+
+* as n approaches infinity, $P^n = S$ where $S$ is a matrix of the form $[v, v,...,v]$, where $v$ being a constant vector
+* let $X$ be any state vector, then we have $\lim_{n\to \infty}P^nX = p$ where $p$ is a fixed probability vector (the sum of its entries = 1), all whose entries are positives
 
