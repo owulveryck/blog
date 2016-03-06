@@ -3,12 +3,12 @@ author: Olivier Wulveryck
 date: 2016-02-29T20:55:01+01:00
 description: 
 draft: true
-keywords:
-- key
-- words
 tags:
-- one
-- two
+- R
+- Markov model
+- IA
+- Machine learning
+- eigenvectors
 title: Is there a Markov model hidden in the choreography?
 topics:
 - topic 1
