@@ -48,7 +48,7 @@ Let's $S$ be the set of states such as $S = \left\\{\alpha, \beta, \gamma\right\
 
 #### Actually knowing what's expected
 
-The expected execution is: $ \alpha -> \beta -> \gamma$
+The expected execution is: $ \alpha \mapsto \beta \mapsto \gamma$
 
 therefore, the transition matrix should be:
 
@@ -195,5 +195,8 @@ back to its previous state.
 What I would like to study now, is according to what the machine will learn, whether it's a good idea to continue or not.
 Let me explain:
 
-If I come back to the principle I've implemented in the last post, that is a state has two methods _check()_ and _do()_.
-I could launch them all, and obviously, $\beta.Do()$ and $\gamma.Do()$
+If I come back to the principle I've implemented in the last post (a state has two methods _check()_ and _do())_.
+
+Now we can consider a new set of states $S = \left\\{\alpha, \alpha', \beta, \beta', \gamma, \gamma' \right\\}$
+
+
