@@ -48,7 +48,7 @@ Let's $S$ be the set of states such as $S = \left\\{\alpha, \beta, \gamma\right\
 
 #### Actually knowing what's expected
 
-The expected execution is: $ \alpha -> \beta -> \gamma$
+The expected execution is: $ \alpha \mapsto \beta \mapsto \gamma$
 
 therefore, the transition matrix should be:
 
@@ -126,7 +126,7 @@ Therefore, Makov theorem says that:
 * as n approaches infinity, $P^n = S$ where $S$ is a matrix of the form $[\mathbf{v}, \mathbf{v},...,\mathbf{v}]$, where $\mathbf{v}$ being a constant vector
 * let $X$ be any state vector, then we have $\lim_{n\to \infty}P^nX = \mathbf{v}$ where $\mathbf{v}$ is a fixed probability vector (the sum of its entries = 1), all whose entries are positives
 
-So we can look for vector $\mathbf{v}$ (also known as the **steady-state vector of the system**) to see if there is a good chance that our _finite state machine_ would converged to the desired state $\gamma$
+So we can look for vector $\mathbf{v}$ (also known as the **steady-state vector of the system**) to see if there is a good chance that our _finite state machine_ would converged to the desired state $\gamma$.
 
 ### Evaluation of the steady-state vector
 
@@ -134,7 +134,7 @@ Now since $P^{n+1}=P*P^n$ and that both $P^{n+1}$ and $P^n$  approach $S$, we ha
 
 Note that any column of this matrix equation gives $P\mathbf{v}=\mathbf{v}$. Therefore, the steady-state vector of a regular Markov chain with transition matrix $P$ is the unique probability vector $\mathbf{v}$ satisfying $P\mathbf{v}=\mathbf{v}$.
 
-To find the steady state vector, we must solve the equation: $P\mathbf{v}=\mathbf{v}$. $\mathbf{v}$ is actually an eigenvector for an eigenvalue $\lambda = 1$
+To find the steady state vector, we must solve the equation: $P\mathbf{v}=\mathbf{v}$. $\mathbf{v}$ is actually an eigenvector for an eigenvalue $\lambda = 1$.
 
 _Note from [wikipedia](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors)_
 
@@ -144,7 +144,7 @@ _Note from [wikipedia](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvector
 > value associated with the eigenvector $v$
 
 To compute the eigenvector, we should find the solution to the equation $det(A-\lambda I)=0$ where $I$ is the identity matrix. Actually
-I don't know how to do it anymore, and I will simply use _R_'s _egen_ function:
+I don't know how to do it anymore, and I will simply use _R_'s _eigen_ function:
 
 ```
 > eigen(ExecutionPlan)
