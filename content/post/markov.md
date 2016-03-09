@@ -189,14 +189,24 @@ which simply means that according to our theory, our finite state machin will mo
 
 ### Analysis
 
-The assumption I've made to establish the transition matrix was that a state could fail and that the whole machine could fall
-back to its previous state.
+What did I learn ?
+Not that much actually. I've learned that given a transition matrix (a model) I could easily compute the probability of success.
+If I consider the finte state machine as the whole automator of deploiement, given the pobability of failure, I can predict
+if it's worth continuing the deploiement or not.
 
-What I would like to study now, is according to what the machine will learn, whether it's a good idea to continue or not.
-Let me explain:
+Cool, but far away from my goal: I want a distributed application to learn how to deploy, cure, and take care of itself with a single information: 
+its topology.
 
-If I come back to the principle I've implemented in the last post (a state has two methods _check()_ and _do())_.
+Back to real life, the model I've described in this post could be the observable states of the application (eg: $\alpha = initial$,$\beta = configured$, $\gamma=started$...)
 
-Now we can consider a new set of states $S = \left\\{\alpha, \alpha', \beta, \beta', \gamma, \gamma' \right\\}$
+Hence, the states of the components of the application are hidden from the model (and they must remain hidden, as I don't care observing them)
+
+And this is the proper definition of a __hidden markov model (HMM)__.
+So yes, there is a Markov model hidden in the choreography!
+
+I shall continue the study and learn how the signals sent from the compenent gives _evidences_ and do influence the Markov Model of my application.
+
+It's a matter of inference, I-maps, Bayesian networks, HMM.... It's about machine learning which is fascinating !
+
 
 
