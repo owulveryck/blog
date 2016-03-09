@@ -1,8 +1,14 @@
 ---
 author: Olivier Wulveryck
 date: 2016-02-29T20:55:01+01:00
-description: 
-draft: true
+description: I am convinced that the description of the topology of an application IS the way to handle it.
+  It can be used to deploy the application, to control it, and even to cure it.
+  I'm now interrested in the ability of the application to be self-aware.
+  In this post, I'm trying to organize my ideas about the Markov Model and how it can be
+  applied to the concept I'm describing.
+  It's not meant to be a tutorial (at all). The primary goal is to organize my own ideas and learn.
+  The secondary goal is, to find any other interseted person who'd like to discuss about this idea.
+draft: false
 tags:
 - R
 - Markov model
