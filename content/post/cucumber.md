@@ -8,6 +8,7 @@ keywords:
 - BDD
 - gherkin
 - cucumber
+- ruby
 title: Behaviour Driven Development with Gherkin and Cucumber (an introduction)
 topics:
 - BDD
@@ -16,12 +17,12 @@ type: post
 #### Opening remarks
 
 All my previous posts were about choreography, deployment, topology, and more recently about an attempt to include _AI_ in those systems.
-This post is a bit apart, because I'm facing a new challenge in my work which is to implement BDD in a _CI_ chain. Therefore, I'm using
+This post is a bit apart, because I'm facing a new challenge in my job which is to implement BDD in a _CI_ chain. Therefore, I'm using
 this blog as a reminder of what I did personally. The following of the _Markov_ saga will come again later.
 
 # Introduction
 
-Wikipedia defines the contract like this:
+Wikipedia defines the word contract like this:
 
 > A contract is a voluntary arrangement between two or more parties that is enforceable at law as a binding legal agreement.
 
