@@ -13,7 +13,7 @@ topics:
 - BDD
 type: post
 ---
-# opening remarks
+#### Opening remarks
 
 All my previous posts were about choreography, deployment, topology, and more recently about an attempt to include _AI_ in those systems.
 This post is a bit apart, because I'm facing a new challenge in my work which is to implement BDD in a _CI_ chain. Therefore, I'm using
@@ -39,7 +39,7 @@ dictate the expected behavior of the customer. But how often have you heard:
 There are laws that cannot be changed, but the contract between a customer and its provider could and should evolve.
 
 In IT, like everywhere else where a customer/provider relationship exists, a special need is formalized via specifications.
-Specifications ard hard to follow, but even more they're hard to evaluate.
+Specifications are hard to follow, but even more they're hard to evaluate.
 
 <center>
 ![Babies (xkcd)](http://imgs.xkcd.com/comics/babies.png)
@@ -47,7 +47,7 @@ Specifications ard hard to follow, but even more they're hard to evaluate.
 
 The __B__ehavior __D__riven __D__evelopment is the assurance that what we've made respect the contract that has been
 made with the customers and the providers.
-To do things right, this contract should be established at the very begining and every single item developped must be 
+To do things right, this contract should be established at the very beginning. Hence, every single item developed must be 
 performed with all the _features_ in mind.
 
 
