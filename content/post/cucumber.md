@@ -13,6 +13,11 @@ topics:
 - BDD
 type: post
 ---
+# opening remarks
+
+All my previous posts were about choreography, deployment, topology, and more recently about an attempt to include _AI_ in those systems.
+This post is a bit apart, because I'm facing a new challenge in my work which is to implement BDD in a _CI_ chain. Therefore, I'm using
+this blog as a reminder of what I did personally. The following of the _Markov_ saga will come again later.
 
 # Introduction
 
@@ -29,7 +34,7 @@ dictate the expected behavior of the customer. But how often have you heard:
 
 > "those computer stuffs are not for me"
 
-> "It has always been this way"
+> "we've always done it this way"
 
 There are laws that cannot be changed, but the contract between a customer and its provider could and should evolve.
 
@@ -40,7 +45,11 @@ Specifications ard hard to follow, but even more they're hard to evaluate.
 ![Babies (xkcd)](http://imgs.xkcd.com/comics/babies.png)
 </center>
 
-The __B__ehavior __D__riven __D__evelopment is 
+The __B__ehavior __D__riven __D__evelopment is the assurance that what we've made respect the contract that has been
+made with the customers and the providers.
+To do things right, this contract should be established at the very begining and every single item developped must be 
+performed with all the _features_ in mind.
+
 
 # Setup
 
