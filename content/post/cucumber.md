@@ -94,9 +94,22 @@ language is a better choice.
 
 Ruby is a scripting language and all the tests implemented here are neither dependent on the Ruby test framework nor on [RSpec](http://rspec.info/).
 
+I will write a script that will deploy an EC2 instance via vagrant-aws and install an openvpn instance on it.
+
 ## The scenario
 
-Assume that given an EC2 instance, I will use a script to launch a VPN and see if the VPN is accessible from my host.
+With my role of customer, the feature I'm expecting is:
+
+* Given the execution of the program, and waiting for it to be successful
+* Then I may be able to watch netflix US from France.
+
+As an architect the implementation I'm thinking of is
+* start an EC2 instance (I will not create it in this post)
+* register it to my DNS (with blog-test.owulveryck.info)
+* install openvpn
+* configure openvpn to make it accessible via blog-test.owulveryck.info 
+
+And as a developper, I'm thiking about using [vagrant-aws](https://github.com/mitchellh/vagrant-aws) to perform the tasks.
 
 ## The basic _feature_
 
