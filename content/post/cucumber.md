@@ -104,6 +104,22 @@ With my role of customer, the feature I'm expecting is:
 * Given the execution of the program, and waiting for it to be successful
 * Then I may be able to watch netflix US from France.
 
+The feature may be:
+
+```gherkin
+Feature: I want a program that
+  will simply allows me to watch netflix US
+
+  Scenario: I want to watch netflix
+     Given I am on my chromebook
+     And I have access to the shell
+     When I want to watch netflix
+     And I launch gonetflix.sh
+     And it displays ready
+     Then I open a navigator windows on http://www.netflix.com
+     And I can watch Grey's anatomy (which is not available in france)
+```
+
 #### The architect point of view
 As an architect the implementation I'm thinking of is
 
