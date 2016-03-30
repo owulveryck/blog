@@ -1,14 +1,15 @@
 ---
 author: Olivier Wulveryck
 date: 2016-03-25T13:39:35+01:00
-description: Some notes about Behaviour driver development, gherkin and Cucumber
+description: Some notes about Behaviour driver development, gherkin and Cucumber.
+  The example describes here will test a service on an AWS's EC2 instance.
 draft: true
 keywords:
-- ruby
+- EC2
 - BDD
-- gherkin
-- cucumber
-- ruby
+- Gherkin
+- Cucumber
+- Ruby
 title: Behaviour Driven Development with Gherkin and Cucumber (an introduction)
 topics:
 - BDD
