@@ -84,9 +84,17 @@ Nowadays there are many implementation of Gherkin parser for different languages
 # Let's play
 
 Let's see how we can implement a basic behaviour driver development with the help of cucumber and Ruby.
+The idea here is not to test a Ruby development, but instead to use ruby to validate a shell script.
+That's the main reason why I stick to Ruby (instead of GO which I know better). The Go implementation 
+([GoDoc](https://github.com/DATA-DOG/godog), [GoConvey](https://github.com/smartystreets/goconvey), ...) relies 
+on `go test` and therefore are related to a pure GO development. 
+Of course I could do a complement GO development to encapsulate my scripts, but that's not the point.
 
+Ruby is a scripting language and all the tests implemented here are neither dependent on the Ruby test framework nor on [RSpec](http://rspec.info/).
 
 ## The scenario
+
+Assume that given an EC2 instance, I will use a script to launch a VPN and see if the VPN is accessible from my host.
 
 ## The basic _features_
 
