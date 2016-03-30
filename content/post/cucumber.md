@@ -89,7 +89,8 @@ The idea here is not to test a Ruby development, but instead to use ruby to vali
 That's the main reason why I stick to Ruby (instead of GO which I know better). The Go implementation 
 ([GoDoc](https://github.com/DATA-DOG/godog), [GoConvey](https://github.com/smartystreets/goconvey), ...) relies 
 on `go test` and therefore are related to a pure GO development. 
-Of course I could do a complement GO development to encapsulate my scripts, but that's not the point.
+Of course I could do a complete GO development to encapsulate my scripts, but that's not the point; for my purpose, a scripting
+language is a better choice.
 
 Ruby is a scripting language and all the tests implemented here are neither dependent on the Ruby test framework nor on [RSpec](http://rspec.info/).
 
