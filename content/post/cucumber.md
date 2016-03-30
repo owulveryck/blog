@@ -98,17 +98,21 @@ I will write a script that will deploy an EC2 instance via vagrant-aws and insta
 
 ## The scenario
 
+#### The customer point of view
 With my role of customer, the feature I'm expecting is:
 
 * Given the execution of the program, and waiting for it to be successful
 * Then I may be able to watch netflix US from France.
 
+#### The architect point of view
 As an architect the implementation I'm thinking of is
+
 * start an EC2 instance (I will not create it in this post)
 * register it to my DNS (with blog-test.owulveryck.info)
 * install openvpn
 * configure openvpn to make it accessible via blog-test.owulveryck.info 
 
+#### The developer point of view
 And as a developper, I'm thiking about using [vagrant-aws](https://github.com/mitchellh/vagrant-aws) to perform the tasks.
 
 ## The basic _feature_
