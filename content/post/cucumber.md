@@ -58,7 +58,7 @@ In a continuous integration chain, this is an essential piece that can be use to
 
 ## Gherkin
 
-To express the specification in a way that can be both human and comuter readable, the easiest way is to use a special dedicated
+To express the specification in a way that can be both human and computer readable, the easiest way is to use a special dedicated
 language. 
 
 Such a language is known as [DSL](https://en.wikipedia.org/wiki/Domain-specific_language) ( Domain Specific Language). 
@@ -66,7 +66,7 @@ Such a language is known as [DSL](https://en.wikipedia.org/wiki/Domain-specific_
 [Gherkin](https://github.com/cucumber/cucumber/wiki/Gherkin) is a DSL that _lets you describe software's behaviour without dealing how that behaviour
 is implemented_
 
-The behaviour is a scenario detailed as a set of _features_. A feature is a human readable english 
+The behaviour is a scenario detailed as a set of _features_. A feature is a human readable English 
 (or another human language among 37 implemented languages) text file with a bunch of key words in it (eg: __Given__, __And__, __When__, __Then__,...).
 Those words do not only help the writer of the feature to organize its idea, but they are used by the Gherkin processor to localize the
 test of the feature in the code. Of course, there is no magic in it: the test must have been implemented manually.
