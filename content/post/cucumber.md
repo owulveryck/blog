@@ -97,7 +97,9 @@ Ruby is a scripting language and all the tests implemented here are neither depe
 
 Assume that given an EC2 instance, I will use a script to launch a VPN and see if the VPN is accessible from my host.
 
-## The basic _features_
+## The basic _feature_
+
+I will describe here a single feature, just for testing purpose.
 
 ## Setting up the Ruby environment 
 
