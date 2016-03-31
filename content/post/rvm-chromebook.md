@@ -2,7 +2,7 @@
 author: Olivier Wulveryck
 date: 2016-03-31T10:23:02+02:00
 description: How to setup RVM on an external drive on a chromebook
-draft: true
+draft: false
 keywords:
 - ruby
 - rvm
@@ -15,6 +15,13 @@ type: post
 ---
 
 # Introduction
+
+#### Opening remarks
+
+I'm not a Ruby developper, and I'm heavily discovering the ecosystem by now.
+Thoses are my notes, and if anything seems wrong to you, do not hesitate to send me remarks.
+
+#### The scenario
 
 For testing purpose, I wanted to play with vagrant-aws and more generally with ruby on my chromebook.
 
@@ -50,10 +57,12 @@ So my idea is to install the RVM suite onto a USB stick (because with me I don't
 ### Preparing the stick
 
 At first, the USB stick must be formatted in extendX (ext4) in order to be able to use symlinks, correct ownership etc.
-I didn't find any way to format the device withing chromeos. Therefore I've used another Linux box to `mkfx.ext4` it.
 
-__Note__: I've found that avoiding spaces in the volume name was a good idea; the command I've used to initialize the FS was
-`mkfs.ext4 -L Lexar /dev/sdb1` (Lexar is the brand of the key, easy to remember).
+```shell
+sudo mkfs.ext4 -L Lexar /dev/sda1
+```
+
+__Note__: I've found that avoiding spaces in the volume name was good for rvm.
 
 
 Once connected on the chromebook, it's automatically mounted on `/media/removable/Lexar`.
@@ -154,3 +163,64 @@ $ cd /media/removable/Lexar/tools/vagrant
 $ source .rcmrv
 $ gem install bundler -v 1.5.2
 ```
+
+### Compiling vagrant
+
+Back to the vagrant documentation, what I must do is now to "compile it". To do so, the advice is to run:
+
+```
+$ bundle _1.5.2_ install  
+```
+
+(just in case several bundler are present )
+
+I faced this error:
+
+```shell
+NoMethodError: undefined method `spec' for nil:NilClass
+Did you mean?  inspect
+An error occurred while installing vagrant (1.8.2.dev), and Bundler cannot continue.
+Make sure that `gem install vagrant -v '1.8.2.dev'` succeeds before bundling.
+```
+
+According to google, thismay be an issue with the version of bundler I'm using.
+As I cannot upgrade the bundler because of vagrant, I've devided to take a chance and use
+a lower version of Ruby
+
+```shell
+$ rvm install 2.2.0
+$ rvm --rvmrc --create 2.2.0@vagrant
+$ source .rvmrc
+# and reinstalling bundler
+$ gem install bundler -v 1.5.2            
+$ bundle _1.5.2_ install
+...
+Your bundle is complete!
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+```
+
+# Voilà!
+
+I can now use vagrant installed fully on the usb stick with
+
+```shell
+$ bundle _1.5.2_ exec vagrant
+Vagrant appears to be running in a Bundler environment. Your 
+existing Gemfile will be used. Vagrant will not auto-load any plugins
+installed with `vagrant plugin`. Vagrant will autoload any plugins in
+the 'plugins' group in your Gemfile. You can force Vagrant to take over
+with VAGRANT_FORCE_BUNDLER.
+
+You appear to be running Vagrant outside of the official installers.
+Note that the installers are what ensure that Vagrant has all required
+dependencies, and Vagrant assumes that these dependencies exist. By
+running outside of the installer environment, Vagrant may not function
+properly. To remove this warning, install Vagrant using one of the
+official packages from vagrantup.com.
+...
+```
+
+That's it for this post; next I will try to install vagrant-aws and play a little bit with it.
+
+stay tuned.
+
