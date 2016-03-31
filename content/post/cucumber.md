@@ -125,11 +125,11 @@ As an architect the implementation I'm thinking of is
 
 * start an EC2 instance (I will not create it in this post)
 * register it to my DNS (with blog-test.owulveryck.info)
-* install openvpn
-* configure openvpn to make it accessible via blog-test.owulveryck.info 
+* install OpenVPN
+* configure OpenVPN to make it accessible via blog-test.owulveryck.info 
 
 #### The developer point of view
-And as a developper, I'm thiking about using [vagrant-aws](https://github.com/mitchellh/vagrant-aws) to perform the tasks.
+And as a developer, I'm thinking about using [vagrant-aws](https://github.com/mitchellh/vagrant-aws) to perform the tasks.
 
 ## The basic _feature_
 
