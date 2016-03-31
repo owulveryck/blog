@@ -168,7 +168,7 @@ source "https://rubygems.org"
 gem 'cucumber'
 ```
 
-and the _install_ the bundle:
+and then _install_ the bundle:
 
 ```shell
 > bundle install
