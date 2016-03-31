@@ -13,7 +13,7 @@ tags:
 - Vagrant
 - Bundler
 - Chromebook
-title: RVM from an USB stick on a Chromebook
+title: RVM from a USB stick on a Chromebook
 topics:
 - topic 1
 type: post
