@@ -8,6 +8,11 @@ keywords:
 - rvm
 - Chromebook
 tags:
+- Ruby
+- Rvm
+- Vagrant
+- Bundler
+- Chromebook
 title: RVM from an USB stick on a Chromebook
 topics:
 - topic 1
