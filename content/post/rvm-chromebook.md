@@ -1,14 +1,14 @@
 ---
 author: Olivier Wulveryck
 date: 2016-03-31T10:23:02+02:00
-description: How to setup RVM on an external drive on a chromebook
+description: How to setup RVM on an external drive on a Chromebook
 draft: false
 keywords:
 - ruby
 - rvm
-- chromebook
+- Chromebook
 tags:
-title: RVM on an USB stick on a chromebook
+title: RVM on an USB stick on a Chromebook
 topics:
 - topic 1
 type: post
@@ -18,15 +18,15 @@ type: post
 
 #### Opening remarks
 
-I'm not a Ruby developper, and I'm heavily discovering the ecosystem by now.
-Thoses are my notes, and if anything seems wrong to you, do not hesitate to send me remarks.
+I'm not a Ruby developer, and I'm heavily discovering the ecosystem by now.
+This are my notes, and if anything seems wrong to you, do not hesitate to send me remarks.
 
 #### The scenario
 
-For testing purpose, I wanted to play with vagrant-aws and more generally with ruby on my chromebook.
+For testing purpose, I wanted to play with vagrant-aws and more generally with ruby on my Chromebook.
 
 Vagrant does not support _rubygems_ as installation method anymore ([see Mitchell Hashimoto's post](http://mitchellh.com/abandoning-rubygems))
-and of course, there is no binary distribution available for the chromebook.
+and of course, there is no binary distribution available for the Chromebook.
 
 So I have to install it from the sources.
 
@@ -34,11 +34,11 @@ The [documentation](https://github.com/mitchellh/vagrant/wiki/Installing-Vagrant
 
 * Do __NOT__ use the system Ruby - use a Ruby version manager like rvm, chruby, etc
 
-Alright, anyway I don't want to mess with my system and break homebrew, so using RVM seems to be a good idea.
+Alright, anyway I don't want to mess with my system and break Homebrew, so using RVM seems to be a good idea.
 
 ## Installing RVM
 
-The RVM installation is relativly easy; simply running `curl -sSL https://get.rvm.io | bash` does the trick.
+The RVM installation is relatively easy; simply running `curl -sSL https://get.rvm.io | bash` does the trick.
 And then those commands make ruby 2.3.0 available via rvm:
 
 ```
@@ -46,7 +46,7 @@ $ source ~/.rvm/scripts/rvm
 $ rvm install 2.3.0
 ```
 
-The supid trick here is that everything is installed in my $HOME directory, and as my chromebook is short on disk space: FS full !
+The stupid trick here is that everything is installed in my $HOME directory, and as my Chromebook is short on disk space: FS full !
 
 Too bad.
 
@@ -65,7 +65,7 @@ sudo mkfs.ext4 -L Lexar /dev/sda1
 __Note__: I've found that avoiding spaces in the volume name was good for rvm.
 
 
-Once connected on the chromebook, it's automatically mounted on `/media/removable/Lexar`.
+Once connected on the Chromebook, it's automatically mounted on `/media/removable/Lexar`.
 The problem are the options: 
 
 ```shell
@@ -146,7 +146,7 @@ $ git clone https://github.com/mitchellh/vagrant.git
 
 ### Preparing the rvm file for vagrant
 
-To use the ruby 2.3.0 (that I've installed before) with vagrant, I need to create a rvmrc in the vagrant directory:
+To use the ruby 2.3.0 (that I've installed before) with vagrant, I need to create a .rvmrc in the vagrant directory:
 
 ```
 $ cd /media/removable/Lexar/tools/vagrant
@@ -183,8 +183,8 @@ An error occurred while installing vagrant (1.8.2.dev), and Bundler cannot conti
 Make sure that `gem install vagrant -v '1.8.2.dev'` succeeds before bundling.
 ```
 
-According to google, thismay be an issue with the version of bundler I'm using.
-As I cannot upgrade the bundler because of vagrant, I've devided to take a chance and use
+According to google, this may be an issue with the version of bundler I'm using.
+As I cannot upgrade the bundler because of vagrant, I've decided to take a chance and use
 a lower version of Ruby
 
 ```shell
@@ -201,7 +201,7 @@ Use `bundle show [gemname]` to see where a bundled gem is installed.
 
 # Voilà!
 
-I can now use vagrant installed fully on the usb stick with
+I can now use vagrant installed fully on the USB stick with
 
 ```shell
 $ bundle _1.5.2_ exec vagrant
