@@ -1,6 +1,6 @@
 ---
 author: Olivier Wulveryck
-date: 2016-03-31T13:39:35+01:00
+date: 2016-03-31T23:39:35+01:00
 description: Some notes about Behaviour driver development, gherkin and Cucumber.
   The example describes here will test a service on an AWS's EC2 instance.
 draft: true
@@ -150,7 +150,7 @@ It may also be a good idea to use `bundle` if we plan to do further development 
 #### The test environment with bundler
 
 The whole development will run with the help of bundler (and RVM).
-See this [post]  vpn-blog rvm --rvmrc --create 2.2.0@vpn-blog](http://dev.owulveryck.info/blog/2016/03/31/rvm-from-an-usb-stick-on-a-chromebook/) for more explanation on
+See this [post](http://dev.owulveryck.info/blog/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/) for more explanation on
 how I set it up on my Chromebook.
 
 ```shell
@@ -165,13 +165,15 @@ Writing new Gemfile to /home/chronos/user/gherkin/Gemfile
 
 #### the _Gemfile_
 
-Let's add the cucumber dependency in the Gemfile:
+Let's add the cucumber, vagrant (as installed in a previous [post](http://dev.owulveryck.info/blog/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/) ),
+and vagrant-aws dependencies in the Gemfile:
 
 ```shell
 > cat Gemfile
 source "https://rubygems.org"
 
 gem "vagrant", :path => "/media/removable/Lexar/tools/vagrant"
+gem "vagrant-aws"
 gem "bundler", "1.5.2"
 gem "cucumber"
 ```
