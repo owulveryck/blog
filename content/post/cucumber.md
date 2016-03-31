@@ -149,10 +149,16 @@ It may also be a good idea to use `bundle` if we plan to do further development 
 
 #### The test environment with bundler
 
+The whole development will run with the help of bundler (and RVM).
+See this [post]  vpn-blog rvm --rvmrc --create 2.2.0@vpn-blog](http://dev.owulveryck.info/blog/2016/03/31/rvm-from-an-usb-stick-on-a-chromebook/) for more explanation on
+how I set it up on my Chromebook.
+
 ```shell
-> gem install bundler
-> mkdir gherkin-test
-> cd gherkin-test
+> mkdir /media/removable/Lexar/tools/vpn-blog
+> cd /media/removable/Lexar/tools/vpn-blog
+> rvmrc --create 2.2.0@vpn-blog
+> source .rvmrc
+> gem install bundler -v 1.5.2 
 > bundle init
 Writing new Gemfile to /home/chronos/user/gherkin/Gemfile
 ```
@@ -165,13 +171,15 @@ Let's add the cucumber dependency in the Gemfile:
 > cat Gemfile
 source "https://rubygems.org"
 
-gem 'cucumber'
+gem "vagrant", :path => "/media/removable/Lexar/tools/vagrant"
+gem "bundler", "1.5.2"
+gem "cucumber"
 ```
 
 and then _install_ the bundle:
 
 ```shell
-> bundle install
+> bundle _1.5.2_ install
 Resolving dependencies...
 Using builder 3.2.2
 Using gherkin 3.2.0
@@ -182,6 +190,7 @@ Using multi_test 0.1.2
 Using bundler 1.11.2
 Using cucumber-core 1.4.0
 Using cucumber 2.3.3
+...
 Bundle complete! 1 Gemfile dependency, 9 gems now installed.
 Use `bundle show [gemname]` to see where a bundled gem is installed.
 ```
@@ -189,17 +198,17 @@ Use `bundle show [gemname]` to see where a bundled gem is installed.
 And now let's run cucumber within the bundle:
 
 ```shell
-> bundle exec cucumber
+> bundle _1.5.2_ exec cucumber
 No such file or directory - features. You can use `cucumber --init` to get started.
 ```
 
-### The implementation of the tests
+### The skeleton of the tests
 
 First, as requested by cucumber, let's initialize a couple of files in the directory to be "cucumber compliant".
 Cucumber do have a helpful _init_ function. Let's run it now:
 
 ```shell
-bundle exec cucumber --init
+bundle _1.5.2_ exec cucumber --init
   create   features
   create   features/step_definitions
   create   features/support
