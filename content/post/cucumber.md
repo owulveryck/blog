@@ -3,7 +3,7 @@ author: Olivier Wulveryck
 date: 2016-03-31T23:39:35+01:00
 description: Some notes about Behaviour driver development, gherkin and Cucumber.
   The example describes here will test a service on an AWS's EC2 instance.
-draft: true
+draft: false
 keywords:
 - EC2
 - BDD
@@ -136,6 +136,11 @@ As an architect the implementation I'm thinking of is
 
 #### The developer point of view
 And as a developer, I'm thinking about using [vagrant-aws](https://github.com/mitchellh/vagrant-aws) to perform the tasks.
+All the implementation will be based on a Vagrant file and a provisioning script.
+The vagrant file will be evaluated by `vagrant up` on CLI (aka in the real world, by the end user) and 
+the same vagrant file will be evaluated within my cucumber scripts.
+
+__Therefore I can say that I am doing BDD/TDD for a configuration management and provisioning.__
 
 ## The basic _feature_
 
@@ -291,28 +296,79 @@ Feature: I want a program that
 
 Cool, the framework is ok. Now let's actually implement the scenario and the tests
 
-#### Implementation of the "Given" keyword
+#### Implementation of the "Given" keywords
 
-TODO:
+There is not much to say about the Given keyword. I can test that I am really on my Chromebook but that does not make any sense.
+I will skip this test by not implementing anything in the function.
+
+#### Implementation of the "When" keyword
+
+The actual execution of the "When" is the execution of the Vagrant file.
+It will start the EC2 instance and provision the VPN
+I also need to mount the VPN locally afterwards
 
 ```ruby
 #!/usr/bin/env ruby
 require "vagrant"
 
-# Example of emulating vagrant up with some code around it
-puts "About to run vagrant-up..."
+# Starting the EC2 instance (running the vagrantfile)
 env = Vagrant::Environment.new
 env.cli("up")
-puts "Finished running vagrant-up"
+# Starting OpenVPN locally
+`sudo openvpn --mktun --dev tun0 && sudo openvpn --config ~/Downloads/client.ovpn --dev tun0`
 ```
-#### Implementing the netflix test with selenium
+
+#### (trying to) Implement the netflix test with selenium
 
 To test the access, instead of faking my browser with curl, I will use the _selenium_ tool.
-So I add it to my _Gemfile_ and `bundle update` it:
+So I add it to my _Gemfile_ and `bundle update` it (informations comes from [this starterkit](https://github.com/jonathanchrisp/selenium-cucumber-ruby-kickstarter)):
 
 ```shell
 $ echo 'gem "selenium-cucumber"' >> Gemfile
+$ echo 'gem "selenium-webdriver"' >> Gemfile
+$ echo 'gem "require_all"' >> Gemfile
 $ bundle _1.5.2_ update 
+```
+
+Then I need to create a special file in the `support` subdirectory to define a bunch of objects:
+
+```ruby
+# cat features/support/env.rb
+require 'selenium-webdriver'
+require 'cucumber'
+
+require 'require_all'
+
+require_all 'lib'
+
+Before do |scenario|
+    @browser = Browser.new(ENV['DRIVER'])
+    @browser.delete_cookies
+end
+
+After do |scenario|
+    @browser.driver.quit
+end
+```
+
+I'm also adding the files from the starterkit in the ` lib` subdirectory.
+
+As I am developing on my Chromebook, I also need the [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
+
+__Too bad__ chromedriver relies on the libX11 that cannot be installed on my Chromebook / __end of show for selenium__
+on the Chromebook...  for now
+
+_Note_ I will continue with the development, but be aware that I won't be able to test it until I am on a true linux box with
+the chromedriver installed
+
+```ruby
+Then(/^I open a navigator windows on (.*?)$/) do |arg1|
+  @browser.open_page("http://www.netflix.com")
+end
+
+Then(/^I can watch Grey's anatomy \(which is not available in france\)$/) do
+  @browser.open_page("http://www.netflix.com/idtogreysanatomy")
+end
 ```
 
 ### The actual implementation of the scenario
@@ -372,3 +428,21 @@ Vagrant.configure("2") do |config|
   end
 end
 ```
+
+So all the rest in the basic implementation of the vagrant file and the provisioning.sh for the Openvpn configuration.
+but that goes far behind the topic of this post which was to introduce myself to BDD and TDD.
+
+# Conclusion
+
+I've learned a lot about the ruby and cucumber environment in this post.
+Too bad I couldn't end with a fully running example because of my Chromebook.
+
+Anyway the expected results were for me to:
+
+* learn about BDD
+* learn about cucumber
+* learn about Ruby
+* learn about vagrant
+
+I can say that I've reach my goals anyway. I will try to finish the implementation on a true Linux box locally, or on my 
+Macbook if I have time to do so.

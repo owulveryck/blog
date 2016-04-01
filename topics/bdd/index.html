@@ -5,7 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <title>Posts  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
+  <title>Bdd  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
@@ -19,9 +19,9 @@
 <link rel="author" href="http://plus.google.com/+olivier.wulveryck">
 
 
-<meta property="og:title" content="Posts  &middot; Olivier Wulveryck&#39;s Tech Blog ">
+<meta property="og:title" content="Bdd  &middot; Olivier Wulveryck&#39;s Tech Blog ">
 <meta property="og:site_name" content="Olivier Wulveryck&#39;s Tech Blog"/>
-<meta property="og:url" content="http://dev.owulveryck.info/blog/post/" />
+<meta property="og:url" content="http://dev.owulveryck.info/blog/topics/bdd/" />
 <meta property="og:locale" content="en-us">
 
 
@@ -29,9 +29,9 @@
 
 
 
-<link href="http://dev.owulveryck.info/blog/post/index.xml" rel="alternate" type="application/rss+xml" title="Posts" />
+<link href="http://dev.owulveryck.info/blog/topics/bdd/index.xml" rel="alternate" type="application/rss+xml" title="Bdd" />
 
-<link rel="canonical" href="http://dev.owulveryck.info/blog/post/" />
+<link rel="canonical" href="http://dev.owulveryck.info/blog/topics/bdd/" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://dev.owulveryck.info/blog/touch-icon-144-precomposed.png">
 <link href="http://dev.owulveryck.info/blog/favicon.png" rel="icon">
@@ -118,147 +118,63 @@
 </header>
 
 
-<div id="main-content" class="container">
-  <header>
-    <h1>Posts
+<section id="main-content" class="container main_content">
+  <header class="container">
+    <h1>Bdd
 </h1>
 
   </header>
   
+    <div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div>
-  <h2><a href="http://dev.owulveryck.info/blog/2015/10/26/developping-google-apps-on-my-chromebook/">Developping &#34;Google Apps&#34; on my Chromebook</a>
+  <h2><a href="http://dev.owulveryck.info/blog/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/">Behaviour Driven Development with Gherkin and Cucumber (an introduction)</a>
 </h2>
 
   <div class="margin-10">
     <small>
   <i class="fa fa-calendar"></i>
-  <time datetime="2015-10-26">26 Oct, 2015</time>
+  <time datetime="2016-03-31">31 Mar, 2016</time>
 </small>
 
     
   <i class="fa fa-tags"></i>
   
-  <a href="http://dev.owulveryck.info/blog/tags/chromebook" class="label label-primary">chromebook</a>
+  <a href="http://dev.owulveryck.info/blog/tags/ec2" class="label label-primary">EC2</a>
   
-  <a href="http://dev.owulveryck.info/blog/tags/configuration" class="label label-primary">configuration</a>
+  <a href="http://dev.owulveryck.info/blog/tags/bdd" class="label label-primary">BDD</a>
   
-
-
-  </div>
-</div>
-
-
+  <a href="http://dev.owulveryck.info/blog/tags/gherkin" class="label label-primary">Gherkin</a>
   
-    <div>
-  <h2><a href="http://dev.owulveryck.info/blog/2015/10/23/simple-polling-a-cloud-native-app---part-1/">Simple polling, a cloud native app - part 1</a>
-</h2>
-
-  <div class="margin-10">
-    <small>
-  <i class="fa fa-calendar"></i>
-  <time datetime="2015-10-23">23 Oct, 2015</time>
-</small>
-
-    
-
-  </div>
-</div>
-
-
+  <a href="http://dev.owulveryck.info/blog/tags/cucumber" class="label label-primary">Cucumber</a>
   
-    <div>
-  <h2><a href="http://dev.owulveryck.info/blog/2015/10/22/ruby-/-zeromq-/-go/">Ruby / ZeroMQ / GO</a>
-</h2>
-
-  <div class="margin-10">
-    <small>
-  <i class="fa fa-calendar"></i>
-  <time datetime="2015-10-22">22 Oct, 2015</time>
-</small>
-
-    
-  <i class="fa fa-tags"></i>
-  
-  <a href="http://dev.owulveryck.info/blog/tags/development" class="label label-primary">Development</a>
-  
-  <a href="http://dev.owulveryck.info/blog/tags/go" class="label label-primary">go</a>
-  
-  <a href="http://dev.owulveryck.info/blog/tags/ruby" class="label label-primary">ruby</a>
-  
-  <a href="http://dev.owulveryck.info/blog/tags/zmq" class="label label-primary">zmq</a>
+  <a href="http://dev.owulveryck.info/blog/tags/ruby" class="label label-primary">Ruby</a>
   
 
 
   </div>
 </div>
 
-
+    <p>
   
-    <div>
-  <h2><a href="http://dev.owulveryck.info/blog/2015/10/22/welcome/">Welcome</a>
-</h2>
+  
+    Some notes about Behaviour driver development, gherkin and Cucumber. The example describes here will test a service on an AWS&#39;s EC2 instance.
+  
 
-  <div class="margin-10">
-    <small>
-  <i class="fa fa-calendar"></i>
-  <time datetime="2015-10-22">22 Oct, 2015</time>
-</small>
 
-    
+</p>
+
+
+    <p class="lead"><a href="http://dev.owulveryck.info/blog/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/" class="btn btn-default">Read more &rarr;</a></p>
+
 
   </div>
 </div>
 
-
   
   
-<nav>
-  <ul class="pagination">
-    
 
-
-<li >
-  <a aria-label="First" href="http://dev.owulveryck.info/blog/post/">
-    <span aria-hidden="true">&laquo;&laquo;</span>
-  </a>
-</li>
-
-<li >
-  <a aria-label="Previous" href="http://dev.owulveryck.info/blog/post/">
-    <span aria-hidden="true">&laquo;</span>
-    </a>
-</li>
-
-<li >
-  <a href="http://dev.owulveryck.info/blog/post/">
-    1
-    </a>
-</li>
-
-<li  class="active" >
-  <a href="http://dev.owulveryck.info/blog/post/page/2/">
-    2
-    </a>
-</li>
-
-
-<li  class="disabled" >
-  <a aria-label="Next" href="#">
-    <span aria-hidden="true">&raquo;</span>
-    </a>
-</li>
-<li  class="disabled" >
-  <a aria-label="Last" href="http://dev.owulveryck.info/blog/post/page/2/">
-    <span aria-hidden="true">&raquo;&raquo;</span>
-  </a>
-</li>
-
-
-  </ul>
-</nav>
-
-
-</div>
+</section>
       <footer class="footer">
     <div class="container hidden-print">
     <div class="row">
