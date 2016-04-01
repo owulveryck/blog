@@ -285,6 +285,22 @@ Feature: I want a program that
 
 Cool, the framework is ok. Now let's actually implement the scenario and the tests
 
+#### Implementation of the "Given" keyword
+
+TODO:
+
+```ruby
+#!/usr/bin/env ruby
+require "vagrant"
+
+# Example of emulating vagrant up with some code around it
+puts "About to run vagrant-up..."
+env = Vagrant::Environment.new
+env.cli("up")
+puts "Finished running vagrant-up"
+```
+
+
 ### The actual implementation of the scenario
 
 What I need to do is to implement the scenario. Not the test scenario, the real one;
