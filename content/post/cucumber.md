@@ -94,7 +94,7 @@ language is a better choice.
 
 Ruby is a scripting language and all the tests implemented here are neither dependent on the Ruby test framework nor on [RSpec](http://rspec.info/).
 
-I will write a script that will deploy an EC2 instance via vagrant-aws and install an openvpn instance on it.
+I will write a script that will deploy an EC2 instance via vagrant-aws and install an Openvpn instance on it.
 
 ## The scenario
 
@@ -125,8 +125,8 @@ As an architect the implementation I'm thinking of is
 
 * start an EC2 instance (I will not create it in this post)
 * register it to my DNS (with blog-test.owulveryck.info)
-* install OpenVPN
-* configure OpenVPN to make it accessible via blog-test.owulveryck.info 
+* install Openvpn
+* configure Openvpn to make it accessible via blog-test.owulveryck.info 
 
 #### The developer point of view
 And as a developer, I'm thinking about using [vagrant-aws](https://github.com/mitchellh/vagrant-aws) to perform the tasks.
@@ -220,7 +220,7 @@ bundle _1.5.2_ exec cucumber --init
 ### The actual implementation of the scenario
 
 What I need to do is to implement the scenario. Not the test scenario, the real one;
-the one that will actually allows me to launch my ec2 instance, configure and start openvpn.
+the one that will actually allows me to launch my ec2 instance, configure and start Openvpn.
 
 As I said before, I will use vagrant-aws to do so.
 
@@ -228,7 +228,7 @@ __Note__ vagrant was depending on _bsdtar_, and I've had to install it manually 
 
 (`tar xzvf libarchive-3.1.2.tar.gz && ... && ./configure --prefix=/usr/local && make install clean`)
 
-#### Installling vagrant-aws plugin
+#### Installing vagrant-aws plugin
 
 The vagrant-aws plugin has been installed by the bundler because I've indicated it as a dependency in the Gemfile.
 But, I will have to have it as a requirement in the Vagrantfile because I'm not using the "official vagrant" and that
@@ -252,9 +252,9 @@ $ bundle _1.5.2_ exec vagrant box add dummy https://github.com/mitchellh/vagrant
 ==> box: Successfully added box 'dummy' (v0) for 'aws'!
 ```
 
-#### The Vragrantfile
+#### The Vagrantfile
 
-The initial vagrantfile looks like this:
+The initial Vagrantfile looks like this:
 
 ```ruby
 require "vagrant-aws"
