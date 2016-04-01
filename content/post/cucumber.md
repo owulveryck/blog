@@ -10,6 +10,12 @@ keywords:
 - Gherkin
 - Cucumber
 - Ruby
+tags:
+- EC2
+- BDD
+- Gherkin
+- Cucumber
+- Ruby
 title: Behaviour Driven Development with Gherkin and Cucumber (an introduction)
 topics:
 - BDD
