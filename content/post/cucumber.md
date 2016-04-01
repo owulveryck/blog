@@ -204,7 +204,7 @@ And now let's run cucumber within the bundle:
 No such file or directory - features. You can use `cucumber --init` to get started.
 ```
 
-### The skeleton of the tests
+### The skeleton of the test
 
 First, as requested by cucumber, let's initialize a couple of files in the directory to be "cucumber compliant".
 Cucumber do have a helpful _init_ function. Let's run it now:
@@ -215,4 +215,62 @@ bundle _1.5.2_ exec cucumber --init
   create   features/step_definitions
   create   features/support
   create   features/support/env.rb
+```
+
+### The actual implementation of the scenario
+
+What I need to do is to implement the scenario. Not the test scenario, the real one;
+the one that will actually allows me to launch my ec2 instance, configure and start openvpn.
+
+As I said before, I will use vagrant-aws to do so.
+
+__Note__ vagrant was depending on _bsdtar_, and I've had to install it manually from source:
+
+(`tar xzvf libarchive-3.1.2.tar.gz && ... && ./configure --prefix=/usr/local && make install clean`)
+
+#### Installling vagrant-aws plugin
+
+The vagrant-aws plugin has been installed by the bundler because I've indicated it as a dependency in the Gemfile.
+But, I will have to have it as a requirement in the Vagrantfile because I'm not using the "official vagrant" and that
+I am running in a bundler environment:
+
+> Vagrant's built-in bundler management mechanism is disabled because
+> Vagrant is running in an external bundler environment. In these
+> cases, plugin management does not work with Vagrant. To install
+> plugins, use your own Gemfile. To load plugins, either put the
+> plugins in the `plugins` group in your Gemfile or manually require
+> them in a Vagrantfile.
+
+#### Installing the base box 
+
+The documentation says that the quickest way to get started is to install the dummy box. 
+That's what I did:
+
+```shell
+$ bundle _1.5.2_ exec vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
+...
+==> box: Successfully added box 'dummy' (v0) for 'aws'!
+```
+
+#### The Vragrantfile
+
+The initial vagrantfile looks like this:
+
+```ruby
+require "vagrant-aws"
+Vagrant.configure("2") do |config|
+  config.vm.box = "dummy"
+
+  config.vm.provider :aws do |aws, override|
+    aws.access_key_id = "YOUR KEY"
+    aws.secret_access_key = "YOUR SECRET KEY"
+    aws.session_token = "SESSION TOKEN"
+    aws.keypair_name = "KEYPAIR NAME"
+
+    aws.ami = "ami-7747d01e"
+
+    override.ssh.username = "ubuntu"
+    override.ssh.private_key_path = "PATH TO YOUR PRIVATE KEY"
+  end
+end
 ```
