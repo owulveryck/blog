@@ -305,7 +305,15 @@ env = Vagrant::Environment.new
 env.cli("up")
 puts "Finished running vagrant-up"
 ```
+#### Implementing the netflix test with selenium
 
+To test the access, instead of faking my browser with curl, I will use the _selenium_ tool.
+So I add it to my _Gemfile_ and `bundle update` it:
+
+```shell
+$ echo 'gem "selenium-cucumber"' >> Gemfile
+$ bundle _1.5.2_ update 
+```
 
 ### The actual implementation of the scenario
 
