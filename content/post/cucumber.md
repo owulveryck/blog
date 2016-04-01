@@ -217,6 +217,74 @@ bundle _1.5.2_ exec cucumber --init
   create   features/support/env.rb
 ```
 
+#### Adding the _feature_ file
+
+In the _features/_ directory, I create a file `basic_feature.feature` which contains the YAML we wrote earlier, then I run cucumber again.
+
+```shell
+$ bundle _1.5.2_ exec cucumber
+Feature: I want a program that
+  will simply allows me to watch netflix US
+  
+  Scenario: I want to watch netflix                                   # features/basic_feature.feature:4
+    Given I am on my chromebook                                       # features/basic_feature.feature:5
+    And I have access to the shell                                    # features/basic_feature.feature:6
+    When I want to watch netflix                                      # features/basic_feature.feature:7
+    And I launch gonetflix.sh                                         # features/basic_feature.feature:8
+    And it displays ready                                             # features/basic_feature.feature:9
+    Then I open a navigator windows on http://www.netflix.com         # features/basic_feature.feature:10
+    And I can watch Grey's anatomy (which is not available in france) # features/basic_feature.feature:11
+                                
+1 scenario (1 undefined)
+7 steps (7 undefined)
+0m0.054s
+
+You can implement step definitions for undefined steps with these snippets:
+
+Given(/^I am on my chromebook$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+...
+```
+
+We notice that the feature has been read and understood correctly by cucumber.
+ON top of that Cucumber gives the skeleton of a ruby implementation for the tests.
+
+I will copy all the ruby code in its own file:
+
+```ruby
+# cat > features/step_definitions/tests.rb
+Given(/^I am on my chromebook$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+  end
+...
+```
+
+And run cucumber once more:
+
+```shell
+Feature: I want a program that
+  will simply allows me to watch netflix US
+
+  Scenario: I want to watch netflix                                   # features/basic_feature.feature:4
+      Given I am on my chromebook                                       # features/step_definitions/tests.rb:1
+        TODO (Cucumber::Pending)
+        ./features/step_definitions/tests.rb:2:in `/^I am on my chromebook$/'
+        features/basic_feature.feature:5:in `Given I am on my chromebook'
+      And I have access to the shell                                    # features/step_definitions/tests.rb:5
+      When I want to watch netflix                                      # features/step_definitions/tests.rb:9
+      And I launch gonetflix.sh                                         # features/step_definitions/tests.rb:13
+      And it displays ready                                             # features/step_definitions/tests.rb:17
+      Then I open a navigator windows on http://www.netflix.com         # features/step_definitions/tests.rb:21
+      And I can watch Grey's anatomy (which is not available in france) # features/step_definitions/tests.rb:25
+      
+1 scenario (1 pending)
+7 steps (6 skipped, 1 pending)
+0m0.041s`
+```
+
+Cool, the framework is ok. Now let's actually implement the scenario and the tests
+
 ### The actual implementation of the scenario
 
 What I need to do is to implement the scenario. Not the test scenario, the real one;
