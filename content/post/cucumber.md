@@ -120,7 +120,7 @@ Feature: I want a program that
      Given I am on my chromebook
      And I have access to the shell
      When I want to watch netflix
-     And I launch gonetflix.sh
+     And I launch a program from the command line
      And it displays ready
      Then I open a navigator windows on http://www.netflix.com
      And I can watch Grey's anatomy (which is not available in france)
@@ -236,7 +236,7 @@ Feature: I want a program that
     Given I am on my chromebook                                       # features/basic_feature.feature:5
     And I have access to the shell                                    # features/basic_feature.feature:6
     When I want to watch netflix                                      # features/basic_feature.feature:7
-    And I launch gonetflix.sh                                         # features/basic_feature.feature:8
+    And I launch a program on the command line                        # features/basic_feature.feature:8
     And it displays ready                                             # features/basic_feature.feature:9
     Then I open a navigator windows on http://www.netflix.com         # features/basic_feature.feature:10
     And I can watch Grey's anatomy (which is not available in france) # features/basic_feature.feature:11
