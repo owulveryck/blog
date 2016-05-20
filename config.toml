@@ -8,6 +8,13 @@ Copyright = "All rights reserved - 2015"
 # "yaml", "toml", "json"
 metaDataFormat = "yaml"
 
+# filesystem path to write files to
+publishdir = "public"
+# # color-codes for highlighting derived from this style
+pygmentsStyle = "monokai"
+# # true: use pygments-css or false: color-codes directly
+pygmentsUseClasses = false
+
 # Theme to use (located in /themes/THEMENAME/)
 theme = "hugo-bootstrap"
 

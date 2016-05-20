@@ -15,3 +15,4 @@ topics:
 type: post
 ---
 
+I've had the opportunity to attend the dotScale conference in Paris.
