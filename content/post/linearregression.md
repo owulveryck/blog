@@ -40,5 +40,6 @@ But I was not accurate and I felt I was missing some basic theory.
 That's the main reason why, 8 weeks ago, I signed in a course about ["Machine learning" on Coursera](https://www.coursera.org/learn/machine-learning). 
 This course is given by [Andrew Ng](http://www.andrewng.org/) from [Stanford University](https://www.stanford.edu/)
 
+# So what?
 
 
