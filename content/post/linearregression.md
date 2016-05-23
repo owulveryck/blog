@@ -1,13 +1,16 @@
 ---
 author: Olivier Wulveryck
 date: 2016-05-20T12:50:59+02:00
-description: description
+description: A post about machine learning and an application on a simple case I've met in my job. 
+  Here is the use case \:regarding three different technical solutions, 
+  after the evaluation by group of human of different features, can a Bot "think" on its own and evaluate which one offers then best ratio cost/features.
+  And therefore, can it tell any manager which solution to choose.
 draft: true
 tags:
 - machine learning
 - octave
 - linear regression
-title: Which solution should I choose? Deciding with an algorithm
+title: Which solution should I choose? Don't think too much and ask a bot!
 topics:
 - topic 1
 type: post
@@ -42,4 +45,17 @@ This course is given by [Andrew Ng](http://www.andrewng.org/) from [Stanford Uni
 
 # So what?
 
+The course is not finished yet, but after about 8 weeks, I've learn a lot about what we call "machine learning".
+
+The main idea of the machine learning is:
+
+* to feed some code with a bunch of data (who said big data was useless)
+* to code or encode some mathematical formulas that could represent the data
+* to implement any algorithm that optimize the formulas by minimizing the error made by the machine on the evolving data sets.
+
+To make it simple: machine learning is feeding a "robot" with data and teach him how to analyse the errors so it can make decisions on its own.
+
+Scary isn't it?
+
+In this post I will explain
 
