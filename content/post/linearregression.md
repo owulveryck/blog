@@ -141,7 +141,7 @@ Here is a representation of the function $ x^{-\frac{1}{5}} $
 </center>
 
 <pre>
-octave:1> compute                                                                                                                            [31/881]
+octave:1> compute
 Analysing solution1.csv
 Running gradient descent...
 ans =  14.839
