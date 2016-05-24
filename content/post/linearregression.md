@@ -57,5 +57,22 @@ To make it simple: machine learning is feeding a "robot" with data and teach him
 
 Scary isn't it?
 
-In this post I will explain
+In this post I will explain 
 
+## The training set
+
+<img class="img-responsive" src="/blog/assets/images/ml/trainingset.jpg" alt="Training set"/> 
+
+## Supervised learning
+
+The basic curve:
+
+$ f(x) = \theta_0 + \theta_1 . x^{-\frac{1}{5}} $
+
+Here is a representation of the function $ x^{-\frac{1}{5}} $
+
+<img class="img-responsive" src="/blog/assets/images/ml/x-1_5.jpg" alt="x^(-1/5)"/> 
+
+## The computation and the result
+
+<img class="img-responsive" src="/blog/assets/images/ml/trainingset_plot.jpg" alt="Training set with the function"/> 
