@@ -2,7 +2,7 @@
 author: Olivier Wulveryck
 date: 2016-05-20T12:50:59+02:00
 description: A post about machine learning and an application on a simple case I've met in my job. 
-  Here is the use case \:regarding three different technical solutions, 
+  Here is the use case \:regarding four different technical solutions, 
   after the evaluation by group of human of different features, can a Bot "think" on its own and evaluate which one offers then best ratio cost/features.
   And therefore, can it tell any manager which solution to choose.
 draft: true
@@ -95,9 +95,16 @@ To do an analytic, I must look for a concrete element of comparison. So I've tur
 
 I would like to know which product is the cheapest to fulfill my requirement.
 
+(I've uploaded my samples here):
+
+* [solution 1](/blog/assets/ml/solution1.csv)
+* [solution 2](/blog/assets/ml/solution2.csv)
+* [solution 3](/blog/assets/ml/solution3.csv)
+* [solution 4](/blog/assets/ml/solution4.csv)
+
 ### Finding a solution
 
-The first thing to find it the total score of all the three solution.
+The first thing to find it the total score of all the 4 solutions.
 If I consider $m$ features, the total score (on a scale of 10) of the solution is defined by:
 
 $ score = \frac{10}{3m} . \sum_{k=1}^{m} feature_k $ 
