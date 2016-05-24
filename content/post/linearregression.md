@@ -141,38 +141,34 @@ Here is a representation of the function $ x^{-\frac{1}{5}} $
 </center>
 
 <pre>
-octave:1> compute
-Analysing solution1.csv
+octave:10> compute
+Analysing solution1.csv:0.67/3
 Running gradient descent...
-ans =  14.839
 Theta found by gradient descent: 5.397050 -4.315835 
-Prediction for x=0 ; 5.397050
-Prediction for x=1 ; 1.081215
+Prediction for x=0.669291 ; 1.414256
 Prediction for x=3 ; 0.020681
+Effort (scaled to 10): 2.582105
 
-Analysing solution2.csv
+Analysing solution2.csv:0.96/3
 Running gradient descent...
-ans =  4.1496
 Theta found by gradient descent: 3.178478 -2.451611 
-Prediction for x=0 ; 3.178478
-Prediction for x=1 ; 0.726867
+Prediction for x=0.960630 ; 0.746482
 Prediction for x=3 ; 0.124430
+Effort (scaled to 10): 1.957075
 
-Analysing solution3.csv
+Analysing solution3.csv:0.67/3
 Running gradient descent...
-ans =  3.7205
 Theta found by gradient descent: 2.557847 -2.015334 
-Prediction for x=0 ; 2.557847
-Prediction for x=1 ; 0.542513
+Prediction for x=0.669291 ; 0.698031
 Prediction for x=3 ; 0.047283
+Effort (scaled to 10): 2.544122
 
-Analysing solution4.csv
+Analysing solution4.csv:0.86/3
 Running gradient descent...
-ans =  3.6299
 Theta found by gradient descent: 3.104868 -2.422627 
-Prediction for x=0 ; 3.104868
-Prediction for x=1 ; 0.682241
+Prediction for x=0.858268 ; 0.755175
 Prediction for x=3 ; 0.086926
+Effort (scaled to 10): 2.152261
 </pre>
 
 # Conclusion: how can I be sure to eat some _pains au chocolat_
