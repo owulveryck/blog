@@ -65,8 +65,34 @@ But Rabelais's saying will remain, indeed:
 
 > Science sans conscience n'est que ruine de l'&acirc;me (_Science without conscience is but the ruin of the soul_)
 
+## The use case
+
+I have 3 technical solutions providing a similar goal: deliver cloud services.
+Actually, none of them is fulfilling all the requirements of my business.
+As usual, one is good in a certain area, while another one is weak, etc.
+
+A team of people has evaluated more than 100 criteria, and gave two notes per product:
+
+* the first note is in the range 0/3 and indicated whether the product is fulfilling the current feature
+* the second note may be {0,1,3,9} and point the effort needed to reach a 3 for the feature
+
+Therefore, for each solution, I have a table looking like this :
+
+| feature  name | feature note  | effort |
+|---------------|---------------|--------|
+| feature 1     |             0 |      9 |
+| feature 2     |             3 |      0 |
+| feature 3     |             2 |      1 |
+| feature 4     |             0 |      3 |
+| .......       |          ...  |    ... |
+| feature 100   |             2 |      3 |
+
+
 
 In this post I will describe a simple implementation of a linear regression. 
+
+
+
 
 ## The training set
 
