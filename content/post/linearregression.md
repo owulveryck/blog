@@ -22,7 +22,7 @@ A year ago, one of those Sunday morning where spring starts to warm up the souls
 The family tradition is to come back with a bunch of "Pains au Chocolat" (which, are, you can trust me, simply excellent).
 
 - _hello sir, I'd like 4 of your excellent "pains au chocolat" please_
-- _I'm sorry, I don't have any pains au chocolat nor any croissant anymore_
+- _I'm sorry, I don't have any "pains au chocolat" nor any "croissant" anymore_
 - _what? How is it possible ?_
 - _everything has been sold._
 - _too bad..._
@@ -32,7 +32,7 @@ I think to myself: _why didn't you made more?_. He may have read my thought and 
 - _I wish I could have foreseen_
  
 When I left his shop, his words were echoing... I wish I could have foreseen... We have self-driving cars, we have the Internet, 
-we are a technology advanced civilization. 
+we are a civilization that is technology advanced. 
 Facebook recognize your face among billions as soon as you post a photo... It must be possible to foresee...
 
 This is how I started to gain interest in machine learning
@@ -41,7 +41,10 @@ At first I started to read some papers, then I learn (a very little bit) about g
 But I was not accurate and I felt I was missing some basic theory.
 
 That's the main reason why, 8 weeks ago, I signed in a course about ["Machine learning" on Coursera](https://www.coursera.org/learn/machine-learning). 
-This course is given by [Andrew Ng](http://www.andrewng.org/) from [Stanford University](https://www.stanford.edu/)
+This course is given by [Andrew real Ng](http://www.andrewng.org/) from [Stanford University](https://www.stanford.edu/).
+
+It is an excellent introduction that gives me all the tool I need to go deeper in this science. The course is based on real examples
+and uses powerful mathematics without going too deeply in the proofs.
 
 # So what?
 
@@ -55,9 +58,15 @@ The main idea of the machine learning is:
 
 To make it simple: machine learning is feeding a "robot" with data and teach him how to analyse the errors so it can make decisions on its own.
 
-Scary isn't it?
+Scary isn't it? But so exciting... As usual I won't go into ethical debate on this blog, and I will stick to science and on the benefit
+of the science.
 
-In this post I will explain 
+But Rabelais's saying will remain, indeed:
+
+> Science sans conscience n'est que ruine de l'&acirc;me (_Science without conscience is but the ruin of the soul_)
+
+
+In this post I will describe a simple implementation of a linear regression. 
 
 ## The training set
 
