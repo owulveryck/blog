@@ -5,7 +5,7 @@ description: A post about machine learning and an application on a simple case I
   Here is the use case \:regarding four different technical solutions, 
   after the evaluation by group of human of different features, can a Bot "think" on its own and evaluate which one offers then best ratio cost/features.
   And therefore, can it tell any manager which solution to choose.
-draft: true
+draft: false
 tags:
 - machine learning
 - octave
