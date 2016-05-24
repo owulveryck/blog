@@ -104,42 +104,86 @@ I would like to know which product is the cheapest to fulfill my requirement.
 
 ### Finding a solution
 
+In the machine learning, we notice two different fields of application:
+
+* regression
+* classification
+
+The classification mechanism would be used to answer a yes/no question; for example: _should I keep solution 1_ ?
+The regression mechanism helps us for "predicting". Actually, the goal is to _automatically_ find a mathematical formulae that turns
+a set of feature into a result. 
+
+what is a feature, and what's the result?
+Let's go back to my _petits pains_ example.
+
+Consider that the baker has made statistics on its production for sunday, and it has taken some events into consideration:
+
+* sunday the 1st: it was raining, I sold only 100 petits Pains
+* sunday the 8th: it was sunny, I sold 250 petits Pains
+* sunday the 16th: it was sunny, and it was a special day (eg: mother's day): 300 petits Pains
+* sunday the 24th: it was cloudy: 150 petits Pains
+
+Here, the baker thinks that its production must be a function of the weather and the calendar; therefore those are the two features.
+What ML propose is to tell the baker how many petits pains he should make __knowing__ that it will be a special day (father's day) and that it 
+will be partially sunny... 
+
+Back in the context of this post, the goal of the regression would be to find a mathematical function that will tell me the effort needed
+for any value, and doing this on the simple basis of the training set I have.
+
+#### The actual score of all the solutions
+
 The first thing to find it the total score of all the 4 solutions.
 If I consider $m$ features, the total score of the solution is defined by:
 
 $ score = \frac{1}{m} . \sum_{k=1}^{m} feature_k $ 
 
+What I need now, it to evaluate the effort needed to reach a score of 3 for each solution.
+Let's do that.
 
-In this post I will describe a simple implementation of a linear regression.
-The ide
+#### Representing the training set
 
-
-
-
-## The training set
-
+First, let's plot the training set.
 <center>
 <img class="img-responsive" src="/blog/assets/images/ml/trainingset.jpg" alt="Training set"/> 
 </center>
 
-## Supervised learning
+__note__ the representation is not accurate because there may be several bunk points 
 
-The basic curve:
+I will use in this post what's called "supervised learning". That means that I will express a skeleton of function and let the machine 
+adjust it. (actually this is very basic, and a lot more complex examples may be implemented but that's not the purpose of this post)
 
-$ f(x) = \theta_0 + \theta_1 . x^{-\frac{1}{5}} $
-
-Here is a representation of the function $ x^{-\frac{1}{5}} $
+When I look at the training set representation, I can imagine a line passing by the middle of the plots.
+This line may look like this:
 
 <center>
 <img class="img-responsive" src="/blog/assets/images/ml/x-1_5.jpg" alt="x^(-1/5)"/> 
 </center>
 
+This is actually a representation of the function $ x^{-\frac{1}{5}} $
+
+Let's assume that this function may basically fit my example, my goal will be to adapt the function.
+assume this equation with two parameters $\theta_0$ and $\theta_1$ that will influence the curve:
+
+$ f(x) = \theta_0 + \theta_1 . x^{-\frac{1}{5}} $
+
+Therefore, my goal will be to code something so that the machine will figure out what $\theta_0$ and $\theta_1$  are.
+
+I will use an implementation of an algorithm called [gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) for linear regression.
+I won't go into the details of this algorithm, as it takes a complete course to be explained.
+
+The implementation is made with [GNU octave](https://www.gnu.org/software/octave/) and the code is available on my [github](https://github.com/owulveryck/linear-regression-example)
+
 ## The computation and the result
 
+Here is a representation of the plot for one solution:
 <center>
 <img class="img-responsive" src="/blog/assets/images/ml/trainingset_plot.jpg" alt="Training set with the function"/> 
 </center>
 
+We can see that the curve is "under fitting" the data. 
+Anyway, let's continue and get the result I want (I will explain later how to perform better):
+
+Here are the computational results:
 <pre>
 octave:10> compute
 Analysing solution1.csv:0.67/3
@@ -171,4 +215,30 @@ Prediction for x=3 ; 0.086926
 Effort (scaled to 10): 2.152261
 </pre>
 
-# Conclusion: how can I be sure to eat some _pains au chocolat_
+For each solution, I have:
+
+* the score (the first line /3)
+* the parameters $\theta$
+* a prediction for the actual score, and for a score of 3
+* the effort (scale on 10) needed to pass from the actual score to 3
+
+Here is the final classification:
+
+| Solution   | score | effort |
+|------------|-------|--------|
+| Solution 2 |  0.96 |   1.95 |
+| Solution 4 |  0.86 |   2.15 |
+| Solution 3 |  0.67 |   2.54 |
+| Solution 1 |  0.67 |   2.58 |
+
+Solution 2 is the cheapest.
+
+# Conclusion
+
+This is a simple approach.
+Some axis of optimization could be to use a more complex polynomial (eg: $\theta_0+\theta_1.x^\frac{-1}{3}+\theta_2.x^\frac{-1}{5}$)
+or to use a [support vector machine](https://en.wikipedia.org/wiki/Support_vector_machine) with a gaussian kernel for example.
+
+One other optimization would be to add some more features, such as, for example, a score on the importance of a feature (a functional feature).
+
+
