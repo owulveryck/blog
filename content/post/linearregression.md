@@ -105,9 +105,9 @@ I would like to know which product is the cheapest to fulfill my requirement.
 ### Finding a solution
 
 The first thing to find it the total score of all the 4 solutions.
-If I consider $m$ features, the total score (on a scale of 10) of the solution is defined by:
+If I consider $m$ features, the total score of the solution is defined by:
 
-$ score = \frac{10}{3m} . \sum_{k=1}^{m} feature_k $ 
+$ score = \frac{1}{m} . \sum_{k=1}^{m} feature_k $ 
 
 
 In this post I will describe a simple implementation of a linear regression.
@@ -139,5 +139,40 @@ Here is a representation of the function $ x^{-\frac{1}{5}} $
 <center>
 <img class="img-responsive" src="/blog/assets/images/ml/trainingset_plot.jpg" alt="Training set with the function"/> 
 </center>
+
+<pre>
+octave:1> compute                                                                                                                            [31/881]
+Analysing solution1.csv
+Running gradient descent...
+ans =  14.839
+Theta found by gradient descent: 5.397050 -4.315835 
+Prediction for x=0 ; 5.397050
+Prediction for x=1 ; 1.081215
+Prediction for x=3 ; 0.020681
+
+Analysing solution2.csv
+Running gradient descent...
+ans =  4.1496
+Theta found by gradient descent: 3.178478 -2.451611 
+Prediction for x=0 ; 3.178478
+Prediction for x=1 ; 0.726867
+Prediction for x=3 ; 0.124430
+
+Analysing solution3.csv
+Running gradient descent...
+ans =  3.7205
+Theta found by gradient descent: 2.557847 -2.015334 
+Prediction for x=0 ; 2.557847
+Prediction for x=1 ; 0.542513
+Prediction for x=3 ; 0.047283
+
+Analysing solution4.csv
+Running gradient descent...
+ans =  3.6299
+Theta found by gradient descent: 3.104868 -2.422627 
+Prediction for x=0 ; 3.104868
+Prediction for x=1 ; 0.682241
+Prediction for x=3 ; 0.086926
+</pre>
 
 # Conclusion: how can I be sure to eat some _pains au chocolat_
