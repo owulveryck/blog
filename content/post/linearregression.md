@@ -61,7 +61,9 @@ In this post I will explain
 
 ## The training set
 
+<center>
 <img class="img-responsive" src="/blog/assets/images/ml/trainingset.jpg" alt="Training set"/> 
+</center>
 
 ## Supervised learning
 
@@ -71,8 +73,12 @@ $ f(x) = \theta_0 + \theta_1 . x^{-\frac{1}{5}} $
 
 Here is a representation of the function $ x^{-\frac{1}{5}} $
 
+<center>
 <img class="img-responsive" src="/blog/assets/images/ml/x-1_5.jpg" alt="x^(-1/5)"/> 
+</center>
 
 ## The computation and the result
 
+<center>
 <img class="img-responsive" src="/blog/assets/images/ml/trainingset_plot.jpg" alt="Training set with the function"/> 
+</center>
