@@ -288,33 +288,30 @@ I will use the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/example
 &lt;p&gt;The hello world client/server is implementing a Request-Reply patternt and are communicating via a TCP socket.&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;The server is the &lt;em&gt;replier&lt;/em&gt; and is listening on the TCP port 5555&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;...
+&lt;li&gt;The server is the &lt;em&gt;replier&lt;/em&gt; and is listening on the TCP port 5555
+&lt;code&gt;go
+...
 func main() {
-    //  Socket to talk to clients
-    responder, _ := zmq.NewSocket(zmq.REP)
-    defer responder.Close()
-    responder.Bind(&amp;quot;tcp://*:5555&amp;quot;)
-    ...
+//  Socket to talk to clients
+responder, _ := zmq.NewSocket(zmq.REP)
+defer responder.Close()
+responder.Bind(&amp;quot;tcp://*:5555&amp;quot;)
+...
 }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;The client is the &lt;em&gt;requester&lt;/em&gt; and is dialing the same TCP port&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;...
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;The client is the &lt;em&gt;requester&lt;/em&gt; and is dialing the same TCP port
+&lt;code&gt;go
+...
 func main() {
-    //  Socket to talk to server
-    fmt.Println(&amp;quot;Connecting to hello world server...&amp;quot;)
-    requester, _ := zmq.NewSocket(zmq.REQ)
-    defer requester.Close()
-    requester.Connect(&amp;quot;tcp://localhost:5555&amp;quot;)
-    ...
+//  Socket to talk to server
+fmt.Println(&amp;quot;Connecting to hello world server...&amp;quot;)
+requester, _ := zmq.NewSocket(zmq.REQ)
+defer requester.Close()
+requester.Connect(&amp;quot;tcp://localhost:5555&amp;quot;)
+...
 }
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Then, the client is sending (requesting) a &lt;em&gt;hello&lt;/em&gt; message, and the server is replying a &lt;em&gt;world&lt;/em&gt; message.&lt;/p&gt;
 

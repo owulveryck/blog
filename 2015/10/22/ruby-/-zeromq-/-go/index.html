@@ -63,7 +63,7 @@
     },
     "datePublished": "2015-10-22",
     "description": "My attempt to make a go program talk to a ruby script via a 0MQ message",
-    "wordCount":  768 
+    "wordCount":  770 
   }
 </script>
 
@@ -74,7 +74,7 @@
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://dev.owulveryck.info/blog/touch-icon-144-precomposed.png">
 <link href="http://dev.owulveryck.info/blog/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.14" />
+<meta name="generator" content="Hugo 0.15" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -174,7 +174,7 @@
 
   <small>
   &middot; Read in about 4 min
-  &middot; (768 Words)
+  &middot; (770 Words)
 </small>
 
 
@@ -258,33 +258,30 @@ I will use the <a href="https://github.com/pebbe/zmq4/blob/master/examples/hwcli
 <p>The hello world client/server is implementing a Request-Reply patternt and are communicating via a TCP socket.</p>
 
 <ul>
-<li>The server is the <em>replier</em> and is listening on the TCP port 5555</li>
-</ul>
-
-<pre><code class="language-go">...
+<li>The server is the <em>replier</em> and is listening on the TCP port 5555
+<code>go
+...
 func main() {
-    //  Socket to talk to clients
-    responder, _ := zmq.NewSocket(zmq.REP)
-    defer responder.Close()
-    responder.Bind(&quot;tcp://*:5555&quot;)
-    ...
+//  Socket to talk to clients
+responder, _ := zmq.NewSocket(zmq.REP)
+defer responder.Close()
+responder.Bind(&quot;tcp://*:5555&quot;)
+...
 }
-</code></pre>
-
-<ul>
-<li>The client is the <em>requester</em> and is dialing the same TCP port</li>
-</ul>
-
-<pre><code class="language-go">...
+</code></li>
+<li>The client is the <em>requester</em> and is dialing the same TCP port
+<code>go
+...
 func main() {
-    //  Socket to talk to server
-    fmt.Println(&quot;Connecting to hello world server...&quot;)
-    requester, _ := zmq.NewSocket(zmq.REQ)
-    defer requester.Close()
-    requester.Connect(&quot;tcp://localhost:5555&quot;)
-    ...
+//  Socket to talk to server
+fmt.Println(&quot;Connecting to hello world server...&quot;)
+requester, _ := zmq.NewSocket(zmq.REQ)
+defer requester.Close()
+requester.Connect(&quot;tcp://localhost:5555&quot;)
+...
 }
-</code></pre>
+</code></li>
+</ul>
 
 <p>Then, the client is sending (requesting) a <em>hello</em> message, and the server is replying a <em>world</em> message.</p>
 

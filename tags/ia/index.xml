@@ -140,7 +140,7 @@ which is represented this way &lt;img src=&#34;http://dev.owulveryck.info/blog/b
 
 &lt;p&gt;To find the steady state vector, we must solve the equation: $P\mathbf{v}=\mathbf{v}$. $\mathbf{v}$ is actually an eigenvector for an eigenvalue $\lambda = 1$.&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Note from &lt;a href=&#34;https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors&#34;&gt;wikipedia&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;_Note from &lt;a href=&#34;https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors&#34;&gt;wikipedia&lt;/a&gt;_&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;In linear algebra, an eigenvector or characteristic vector of a square matrix is a vector that does not change its direction under the associated linear transformation.
