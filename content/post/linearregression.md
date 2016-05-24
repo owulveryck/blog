@@ -65,7 +65,9 @@ But Rabelais's saying will remain, indeed:
 
 > Science sans conscience n'est que ruine de l'&acirc;me (_Science without conscience is but the ruin of the soul_)
 
-## The use case
+## A use case
+
+### Defining the problem
 
 I have 3 technical solutions providing a similar goal: deliver cloud services.
 Actually, none of them is fulfilling all the requirements of my business.
@@ -91,12 +93,18 @@ I've been asked to evaluate the product and to produce a comparison.
 
 To do an analytic, I must look for a concrete element of comparison. So I've turned the problem into this :
 
-I would like to know which product needs the cheapest to fulfill my requirement.
+I would like to know which product is the cheapest to fulfill my requirement.
+
+### Finding a solution
+
+The first thing to find it the total score of all the three solution.
+If I consider $m$ features, the total score (on a scale of 10) of the solution is defined by:
+
+$ score = \frac{10}{3m} . \sum_{k=1}^{m} feature_k $ 
 
 
-
-
-In this post I will describe a simple implementation of a linear regression. 
+In this post I will describe a simple implementation of a linear regression.
+The ide
 
 
 
