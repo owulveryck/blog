@@ -71,21 +71,28 @@ I have 3 technical solutions providing a similar goal: deliver cloud services.
 Actually, none of them is fulfilling all the requirements of my business.
 As usual, one is good in a certain area, while another one is weak, etc.
 
-A team of people has evaluated more than 100 criteria, and gave two notes per product:
+A team of people has evaluated more than 100 criteria, and gave two quotations per criteria and per product:
 
-* the first note is in the range 0/3 and indicated whether the product is fulfilling the current feature
-* the second note may be {0,1,3,9} and point the effort needed to reach a 3 for the feature
+* the first quotation is in the range 0/3 and indicated whether the product is fulfilling the current feature
+* the second quotation may be {0,1,3,9} and points the effort needed to reach a 3 for the feature
 
 Therefore, for each solution, I have a table looking like this :
 
-| feature  name | feature note  | effort |
-|---------------|---------------|--------|
-| feature 1     |             0 |      9 |
-| feature 2     |             3 |      0 |
-| feature 3     |             2 |      1 |
-| feature 4     |             0 |      3 |
-| .......       |          ...  |    ... |
-| feature 100   |             2 |      3 |
+| feature  name | feature evaluation  | effort |
+|---------------|---------------------|--------|
+| feature 1     |                   0 |      9 |
+| feature 2     |                   3 |      0 |
+| feature 3     |                   2 |      1 |
+| feature 4     |                   0 |      3 |
+| .......       |                ...  |    ... |
+| feature 100   |                   2 |      3 |
+
+I've been asked to evaluate the product and to produce a comparison.
+
+To do an analytic, I must look for a concrete element of comparison. So I've turned the problem into this :
+
+I would like to know which product needs the cheapest to fulfill my requirement.
+
 
 
 
@@ -117,3 +124,5 @@ Here is a representation of the function $ x^{-\frac{1}{5}} $
 <center>
 <img class="img-responsive" src="/blog/assets/images/ml/trainingset_plot.jpg" alt="Training set with the function"/> 
 </center>
+
+# Conclusion: how can I be sure to eat some _pains au chocolat_
