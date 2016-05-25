@@ -27,7 +27,7 @@ The family tradition is to come back with a bunch of "Pains au Chocolat" (which,
 - _everything has been sold._
 - _too bad..._
 
-I think to myself: _why didn't you made more?_. He may have read my thought and told me:
+I think to myself: _why didn't you made more?_. He may have read my thought and told me
 
 - _I wish I could have foreseen_
  
@@ -41,14 +41,14 @@ At first I started to read some papers, then I learn (a very little bit) about g
 But I was not accurate and I felt I was missing some basic theory.
 
 That's the main reason why, 8 weeks ago, I signed in a course about ["Machine learning" on Coursera](https://www.coursera.org/learn/machine-learning). 
-This course is given by [Andrew real Ng](http://www.andrewng.org/) from [Stanford University](https://www.stanford.edu/).
+This course is given by [Andrew Ng](http://www.andrewng.org/) from [Stanford University](https://www.stanford.edu/).
 
-It is an excellent introduction that gives me all the tool I need to go deeper in this science. The course is based on real examples
+It is an excellent introduction that gives me all the tools I need to go deeper in this science. The course is based on real examples
 and uses powerful mathematics without going too deeply in the proofs.
 
 # So what?
 
-The course is not finished yet, but after about 8 weeks, I've learn a lot about what we call "machine learning".
+The course is not finished yet, but after about 8 weeks, I've learned a lot about what we call "machine learning".
 
 The main idea of the machine learning is:
 
@@ -59,9 +59,9 @@ The main idea of the machine learning is:
 To make it simple: machine learning is feeding a "robot" with data and teach him how to analyse the errors so it can make decisions on its own.
 
 Scary isn't it? But so exciting... As usual I won't go into ethical debate on this blog, and I will stick to science and on the benefit
-of the science.
+of the science. 
 
-But Rabelais's saying will remain, indeed:
+But indeed, always remind François Rabelais:
 
 > Science sans conscience n'est que ruine de l'&acirc;me (_Science without conscience is but the ruin of the soul_)
 
@@ -69,7 +69,7 @@ But Rabelais's saying will remain, indeed:
 
 ### Defining the problem
 
-I have 3 technical solutions providing a similar goal: deliver cloud services.
+I have 4 technical solutions providing a similar goal: deliver cloud services.
 Actually, none of them is fulfilling all the requirements of my business.
 As usual, one is good in a certain area, while another one is weak, etc.
 
@@ -91,9 +91,9 @@ Therefore, for each solution, I have a table looking like this :
 
 I've been asked to evaluate the product and to produce a comparison.
 
-To do an analytic, I must look for a concrete element of comparison. So I've turned the problem into this :
+To do an analytic, I must look for an element of comparison. So I've turned the problem into this :
 
-I would like to know which product is the cheapest to fulfill my requirement.
+__I would like to know which product is the cheapest to fulfill my requirement.__
 
 (I've uploaded my samples here):
 
@@ -124,8 +124,8 @@ Consider that the baker has made statistics on its production for sunday, and it
 * sunday the 24th: it was cloudy: 150 petits Pains
 
 Here, the baker thinks that its production must be a function of the weather and the calendar; therefore those are the two features.
-What ML propose is to tell the baker how many petits pains he should make __knowing__ that it will be a special day (father's day) and that it 
-will be partially sunny... 
+What ML propose is to tell the baker how many "petits pains" he should make __knowing__ that it is a special day (father's day) and that it 
+is partially sunny... 
 
 Back in the context of this post, the goal of the regression would be to find a mathematical function that will tell me the effort needed
 for any value, and doing this on the simple basis of the training set I have.
@@ -137,7 +137,7 @@ If I consider $m$ features, the total score of the solution is defined by:
 
 $ score = \frac{1}{m} . \sum_{k=1}^{m} feature_k $ 
 
-What I need now, it to evaluate the effort needed to reach a score of 3 for each solution.
+What I need now, is to evaluate the effort needed to reach a score of 3 for each solution.
 Let's do that.
 
 #### Representing the training set
@@ -150,7 +150,7 @@ First, let's plot the training set.
 __note__ the representation is not accurate because there may be several bunk points 
 
 I will use in this post what's called "supervised learning". That means that I will express a skeleton of function and let the machine 
-adjust it. (actually this is very basic, and a lot more complex examples may be implemented but that's not the purpose of this post)
+adjust it. (actually this is a very basic and week implementation; a lot more complex examples may be implemented but that's not the purpose of this post)
 
 When I look at the training set representation, I can imagine a line passing by the middle of the plots.
 This line may look like this:
@@ -175,7 +175,7 @@ The implementation is made with [GNU octave](https://www.gnu.org/software/octave
 
 ## The computation and the result
 
-Here is a representation of the plot for one solution:
+Here is a figure representing the function for one particular solution:
 <center>
 <img class="img-responsive" src="/blog/assets/images/ml/trainingset_plot.jpg" alt="Training set with the function"/> 
 </center>
@@ -222,7 +222,8 @@ For each solution, I have:
 * a prediction for the actual score, and for a score of 3
 * the effort (scale on 10) needed to pass from the actual score to 3
 
-Here is the final classification:
+#### Final result 
+Here is the final classification of my four solutions:
 
 | Solution   | score | effort |
 |------------|-------|--------|
@@ -231,7 +232,8 @@ Here is the final classification:
 | Solution 3 |  0.67 |   2.54 |
 | Solution 1 |  0.67 |   2.58 |
 
-Solution 2 is the cheapest.
+Solution 2 is the cheapest. It's possible to go into further analysis to determine why it's the cheapest, and how the other ones 
+may catch up and go back in the race, but again, that is not the purpose of my post.
 
 # Conclusion
 
@@ -241,4 +243,10 @@ or to use a [support vector machine](https://en.wikipedia.org/wiki/Support_vecto
 
 One other optimization would be to add some more features, such as, for example, a score on the importance of a feature (a functional feature).
 
+Machine learning is a wide mathematical and IT area. It is now in everyone's life.
+Nowadays we are talking about plateform fully automated, self-healing applications, smart deployements, smart monitoring.
+There are already some good implementations of algorithms on the market, but there is a huge place for integration of those tools into
+the life of the IT specialist.
+
+Automation has already helped and took the boring job of the IT specialist. Smart automation will go a step further.
 
