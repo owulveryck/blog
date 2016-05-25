@@ -33,7 +33,7 @@ The family tradition is to come back with a bunch of &amp;ldquo;Pains au Chocola
 &lt;li&gt;&lt;em&gt;too bad&amp;hellip;&lt;/em&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;I think to myself: &lt;em&gt;why didn&amp;rsquo;t you made more?&lt;/em&gt;. He may have read my thought and told me:&lt;/p&gt;
+&lt;p&gt;I think to myself: &lt;em&gt;why didn&amp;rsquo;t you made more?&lt;/em&gt;. He may have read my thought and told me&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;em&gt;I wish I could have foreseen&lt;/em&gt;&lt;/li&gt;
@@ -49,14 +49,14 @@ Facebook recognize your face among billions as soon as you post a photo&amp;hell
 But I was not accurate and I felt I was missing some basic theory.&lt;/p&gt;
 
 &lt;p&gt;That&amp;rsquo;s the main reason why, 8 weeks ago, I signed in a course about &lt;a href=&#34;https://www.coursera.org/learn/machine-learning&#34;&gt;&amp;ldquo;Machine learning&amp;rdquo; on Coursera&lt;/a&gt;.
-This course is given by &lt;a href=&#34;http://www.andrewng.org/&#34;&gt;Andrew real Ng&lt;/a&gt; from &lt;a href=&#34;https://www.stanford.edu/&#34;&gt;Stanford University&lt;/a&gt;.&lt;/p&gt;
+This course is given by &lt;a href=&#34;http://www.andrewng.org/&#34;&gt;Andrew Ng&lt;/a&gt; from &lt;a href=&#34;https://www.stanford.edu/&#34;&gt;Stanford University&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;It is an excellent introduction that gives me all the tool I need to go deeper in this science. The course is based on real examples
+&lt;p&gt;It is an excellent introduction that gives me all the tools I need to go deeper in this science. The course is based on real examples
 and uses powerful mathematics without going too deeply in the proofs.&lt;/p&gt;
 
 &lt;h1 id=&#34;so-what:f9b1a1ed53e4ef825dd6193bcdc715da&#34;&gt;So what?&lt;/h1&gt;
 
-&lt;p&gt;The course is not finished yet, but after about 8 weeks, I&amp;rsquo;ve learn a lot about what we call &amp;ldquo;machine learning&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;The course is not finished yet, but after about 8 weeks, I&amp;rsquo;ve learned a lot about what we call &amp;ldquo;machine learning&amp;rdquo;.&lt;/p&gt;
 
 &lt;p&gt;The main idea of the machine learning is:&lt;/p&gt;
 
@@ -71,7 +71,7 @@ and uses powerful mathematics without going too deeply in the proofs.&lt;/p&gt;
 &lt;p&gt;Scary isn&amp;rsquo;t it? But so exciting&amp;hellip; As usual I won&amp;rsquo;t go into ethical debate on this blog, and I will stick to science and on the benefit
 of the science.&lt;/p&gt;
 
-&lt;p&gt;But Rabelais&amp;rsquo;s saying will remain, indeed:&lt;/p&gt;
+&lt;p&gt;But indeed, always remind François Rabelais:&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;Science sans conscience n&amp;rsquo;est que ruine de l&amp;rsquo;&amp;acirc;me (&lt;em&gt;Science without conscience is but the ruin of the soul&lt;/em&gt;)&lt;/p&gt;
@@ -81,7 +81,7 @@ of the science.&lt;/p&gt;
 
 &lt;h3 id=&#34;defining-the-problem:f9b1a1ed53e4ef825dd6193bcdc715da&#34;&gt;Defining the problem&lt;/h3&gt;
 
-&lt;p&gt;I have 3 technical solutions providing a similar goal: deliver cloud services.
+&lt;p&gt;I have 4 technical solutions providing a similar goal: deliver cloud services.
 Actually, none of them is fulfilling all the requirements of my business.
 As usual, one is good in a certain area, while another one is weak, etc.&lt;/p&gt;
 
@@ -144,9 +144,9 @@ As usual, one is good in a certain area, while another one is weak, etc.&lt;/p&g
 
 &lt;p&gt;I&amp;rsquo;ve been asked to evaluate the product and to produce a comparison.&lt;/p&gt;
 
-&lt;p&gt;To do an analytic, I must look for a concrete element of comparison. So I&amp;rsquo;ve turned the problem into this :&lt;/p&gt;
+&lt;p&gt;To do an analytic, I must look for an element of comparison. So I&amp;rsquo;ve turned the problem into this :&lt;/p&gt;
 
-&lt;p&gt;I would like to know which product is the cheapest to fulfill my requirement.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;I would like to know which product is the cheapest to fulfill my requirement.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;(I&amp;rsquo;ve uploaded my samples here):&lt;/p&gt;
 
@@ -183,8 +183,8 @@ Let&amp;rsquo;s go back to my &lt;em&gt;petits pains&lt;/em&gt; example.&lt;/p&g
 &lt;/ul&gt;
 
 &lt;p&gt;Here, the baker thinks that its production must be a function of the weather and the calendar; therefore those are the two features.
-What ML propose is to tell the baker how many petits pains he should make &lt;strong&gt;knowing&lt;/strong&gt; that it will be a special day (father&amp;rsquo;s day) and that it
-will be partially sunny&amp;hellip;&lt;/p&gt;
+What ML propose is to tell the baker how many &amp;ldquo;petits pains&amp;rdquo; he should make &lt;strong&gt;knowing&lt;/strong&gt; that it is a special day (father&amp;rsquo;s day) and that it
+is partially sunny&amp;hellip;&lt;/p&gt;
 
 &lt;p&gt;Back in the context of this post, the goal of the regression would be to find a mathematical function that will tell me the effort needed
 for any value, and doing this on the simple basis of the training set I have.&lt;/p&gt;
@@ -196,7 +196,7 @@ If I consider $m$ features, the total score of the solution is defined by:&lt;/p
 
 &lt;p&gt;$ score = \frac{1}{m} . \sum_{k=1}^{m} feature_k $&lt;/p&gt;
 
-&lt;p&gt;What I need now, it to evaluate the effort needed to reach a score of 3 for each solution.
+&lt;p&gt;What I need now, is to evaluate the effort needed to reach a score of 3 for each solution.
 Let&amp;rsquo;s do that.&lt;/p&gt;
 
 &lt;h4 id=&#34;representing-the-training-set:f9b1a1ed53e4ef825dd6193bcdc715da&#34;&gt;Representing the training set&lt;/h4&gt;
@@ -209,7 +209,7 @@ Let&amp;rsquo;s do that.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;note&lt;/strong&gt; the representation is not accurate because there may be several bunk points&lt;/p&gt;
 
 &lt;p&gt;I will use in this post what&amp;rsquo;s called &amp;ldquo;supervised learning&amp;rdquo;. That means that I will express a skeleton of function and let the machine
-adjust it. (actually this is very basic, and a lot more complex examples may be implemented but that&amp;rsquo;s not the purpose of this post)&lt;/p&gt;
+adjust it. (actually this is a very basic and week implementation; a lot more complex examples may be implemented but that&amp;rsquo;s not the purpose of this post)&lt;/p&gt;
 
 &lt;p&gt;When I look at the training set representation, I can imagine a line passing by the middle of the plots.
 This line may look like this:&lt;/p&gt;
@@ -234,7 +234,7 @@ I won&amp;rsquo;t go into the details of this algorithm, as it takes a complete 
 
 &lt;h2 id=&#34;the-computation-and-the-result:f9b1a1ed53e4ef825dd6193bcdc715da&#34;&gt;The computation and the result&lt;/h2&gt;
 
-&lt;p&gt;Here is a representation of the plot for one solution:
+&lt;p&gt;Here is a figure representing the function for one particular solution:
 &lt;center&gt;
 &lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ml/trainingset_plot.jpg&#34; alt=&#34;Training set with the function&#34;/&gt;
 &lt;/center&gt;&lt;/p&gt;
@@ -283,7 +283,9 @@ Effort (scaled to 10): 2.152261
 &lt;li&gt;the effort (scale on 10) needed to pass from the actual score to 3&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Here is the final classification:&lt;/p&gt;
+&lt;h4 id=&#34;final-result:f9b1a1ed53e4ef825dd6193bcdc715da&#34;&gt;Final result&lt;/h4&gt;
+
+&lt;p&gt;Here is the final classification of my four solutions:&lt;/p&gt;
 
 &lt;table&gt;
 &lt;thead&gt;
@@ -321,7 +323,8 @@ Effort (scaled to 10): 2.152261
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;p&gt;Solution 2 is the cheapest.&lt;/p&gt;
+&lt;p&gt;Solution 2 is the cheapest. It&amp;rsquo;s possible to go into further analysis to determine why it&amp;rsquo;s the cheapest, and how the other ones
+may catch up and go back in the race, but again, that is not the purpose of my post.&lt;/p&gt;
 
 &lt;h1 id=&#34;conclusion:f9b1a1ed53e4ef825dd6193bcdc715da&#34;&gt;Conclusion&lt;/h1&gt;
 
@@ -330,6 +333,13 @@ Some axis of optimization could be to use a more complex polynomial (eg: $\theta
 or to use a &lt;a href=&#34;https://en.wikipedia.org/wiki/Support_vector_machine&#34;&gt;support vector machine&lt;/a&gt; with a gaussian kernel for example.&lt;/p&gt;
 
 &lt;p&gt;One other optimization would be to add some more features, such as, for example, a score on the importance of a feature (a functional feature).&lt;/p&gt;
+
+&lt;p&gt;Machine learning is a wide mathematical and IT area. It is now in everyone&amp;rsquo;s life.
+Nowadays we are talking about plateform fully automated, self-healing applications, smart deployements, smart monitoring.
+There are already some good implementations of algorithms on the market, but there is a huge place for integration of those tools into
+the life of the IT specialist.&lt;/p&gt;
+
+&lt;p&gt;Automation has already helped and took the boring job of the IT specialist. Smart automation will go a step further.&lt;/p&gt;
 </description>
     </item>
     
