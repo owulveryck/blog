@@ -159,12 +159,12 @@ This line may look like this:
 <img class="img-responsive" src="/blog/assets/images/ml/x-1_5.jpg" alt="x^(-1/5)"/> 
 </center>
 
-This is actually a representation of the function $ x^{-\frac{1}{5}} $
+This is actually a representation of the function $ x^{\frac{1}{5}} $
 
 Let's assume that this function may basically fit my example, my goal will be to adapt the function.
 assume this equation with two parameters $\theta_0$ and $\theta_1$ that will influence the curve:
 
-$ f(x) = \theta_0 + \theta_1 . x^{-\frac{1}{5}} $
+$ f(x) = \theta_0 + \theta_1 . x^{\frac{1}{5}} $
 
 Therefore, my goal will be to code something so that the machine will figure out what $\theta_0$ and $\theta_1$  are.
 
@@ -238,7 +238,7 @@ may catch up and go back in the race, but again, that is not the purpose of my p
 # Conclusion
 
 This is a simple approach.
-Some axis of optimization could be to use a more complex polynomial (eg: $\theta_0+\theta_1.x^\frac{-1}{3}+\theta_2.x^\frac{-1}{5}$)
+Some axis of optimization could be to use a more complex polynomial (eg: $\theta_0+\theta_1.x^\frac{1}{3}+\theta_2.x^\frac{1}{5}$)
 or to use a [support vector machine](https://en.wikipedia.org/wiki/Support_vector_machine) with a gaussian kernel for example.
 
 One other optimization would be to add some more features, such as, for example, a score on the importance of a feature (a functional feature).
