@@ -218,12 +218,12 @@ This line may look like this:&lt;/p&gt;
 &lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ml/x-1_5.jpg&#34; alt=&#34;x^(-1/5)&#34;/&gt;
 &lt;/center&gt;&lt;/p&gt;
 
-&lt;p&gt;This is actually a representation of the function $ x^{-\frac{1}{5}} $&lt;/p&gt;
+&lt;p&gt;This is actually a representation of the function $ x^{\frac{1}{5}} $&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s assume that this function may basically fit my example, my goal will be to adapt the function.
 assume this equation with two parameters $\theta_0$ and $\theta_1$ that will influence the curve:&lt;/p&gt;
 
-&lt;p&gt;$ f(x) = \theta_0 + \theta_1 . x^{-\frac{1}{5}} $&lt;/p&gt;
+&lt;p&gt;$ f(x) = \theta_0 + \theta_1 . x^{\frac{1}{5}} $&lt;/p&gt;
 
 &lt;p&gt;Therefore, my goal will be to code something so that the machine will figure out what $\theta_0$ and $\theta_1$  are.&lt;/p&gt;
 
@@ -329,7 +329,7 @@ may catch up and go back in the race, but again, that is not the purpose of my p
 &lt;h1 id=&#34;conclusion:f9b1a1ed53e4ef825dd6193bcdc715da&#34;&gt;Conclusion&lt;/h1&gt;
 
 &lt;p&gt;This is a simple approach.
-Some axis of optimization could be to use a more complex polynomial (eg: $\theta_0+\theta_1.x^\frac{-1}{3}+\theta_2.x^\frac{-1}{5}$)
+Some axis of optimization could be to use a more complex polynomial (eg: $\theta_0+\theta_1.x^\frac{1}{3}+\theta_2.x^\frac{1}{5}$)
 or to use a &lt;a href=&#34;https://en.wikipedia.org/wiki/Support_vector_machine&#34;&gt;support vector machine&lt;/a&gt; with a gaussian kernel for example.&lt;/p&gt;
 
 &lt;p&gt;One other optimization would be to add some more features, such as, for example, a score on the importance of a feature (a functional feature).&lt;/p&gt;
