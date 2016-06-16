@@ -76,7 +76,7 @@
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://dev.owulveryck.info/blog/touch-icon-144-precomposed.png">
 <link href="http://dev.owulveryck.info/blog/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.15" />
+<meta name="generator" content="Hugo 0.14" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -95,8 +95,12 @@
   <link rel="stylesheet" href="http://dev.owulveryck.info/blog/css/highlight/default.css">
 
 
-<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
-<script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript" async
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+  </script>
 </head>
 <body>
     <header id="main-header">
@@ -254,7 +258,7 @@ $$</p>
 <p>Let&rsquo;s represent it with GNU-R (see <a href="http://www.r-bloggers.com/getting-started-with-markov-chains/">this blog post</a>
 for an introduction of markov reprentation with this software)</p>
 
-<pre><code class="language-R">&gt; library(expm)
+<pre><code class="language-r">&gt; library(expm)
 &gt; library(markovchain)
 &gt; library(diagram)
 &gt; library(pracma)
@@ -285,7 +289,8 @@ for an introduction of markov reprentation with this software)</p>
 
 <p>which is represented by:</p>
 
-<p><img src="/blog/assets/images/ExecutionPlan.svg" alt="Representation" /></p>
+<p><img src="/blog/assets/images/ExecutionPlan.svg" alt="Representation" />
+</p>
 
 <h4 id="knowing-part-of-the-plan:8ff21f56669823562f41e250370cd700">Knowing part of the plan&hellip;</h4>
 
@@ -299,11 +304,12 @@ P=\begin{pmatrix}
 0 &amp; \frac{1}{2} &amp; \frac{1}{2}
 \end{pmatrix}
 $
-which is represented this way <img src="/blog/assets/images/ExecutionPlan2.svg" alt="Representation" /></p>
+which is represented this way <img src="/blog/assets/images/ExecutionPlan2.svg" alt="Representation" />
+</p>
 
 <p>The transition matrix is regular - we can see, for example that $P^2$ contains all non nil numbers:</p>
 
-<pre><code class="language-R">&gt; ExecutionPlan %^% 2
+<pre><code class="language-r">&gt; ExecutionPlan %^% 2
                 Alpha     Beta      Gamma
           Alpha 0.4166667 0.4166667 0.1666667
           Beta  0.2777778 0.4444444 0.2777778
@@ -327,7 +333,7 @@ which is represented this way <img src="/blog/assets/images/ExecutionPlan2.svg" 
 
 <p>To find the steady state vector, we must solve the equation: $P\mathbf{v}=\mathbf{v}$. $\mathbf{v}$ is actually an eigenvector for an eigenvalue $\lambda = 1$.</p>
 
-<p>_Note from <a href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors">wikipedia</a>_</p>
+<p><em>Note from <a href="https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors">wikipedia</a></em></p>
 
 <blockquote>
 <p>In linear algebra, an eigenvector or characteristic vector of a square matrix is a vector that does not change its direction under the associated linear transformation.
@@ -339,7 +345,7 @@ value associated with the eigenvector $v$</p>
 <p>To compute the eigenvector, we should find the solution to the equation $det(A-\lambda I)=0$ where $I$ is the identity matrix. Actually
 I don&rsquo;t know how to do it anymore, and I will simply use <em>R</em>&rsquo;s <em>eigen</em> function:</p>
 
-<pre><code>&gt; eigen(ExecutionPlan)
+<pre><code class="language-r">&gt; eigen(ExecutionPlan)
 $values
 [1]  1.0000000  0.5000000 -0.1666667
 
@@ -364,7 +370,7 @@ that&rsquo;s because it computes the <em>right</em> eigenvector and what I need 
 
 <p>Here is how to evaluate it.</p>
 
-<pre><code>&gt; lefteigen  &lt;-  function(A){
+<pre><code class="language-r">&gt; lefteigen  &lt;-  function(A){
        return(t(eigen(t(A))$vectors))
 }
 &gt; lefteigen(ExecutionPlan)
@@ -478,7 +484,7 @@ So yes, there is a Markov model hidden in the choreography!</p>
     
 <div class="container copyright">
   
-  All rights reserved - 2015
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
 
 
 </div>

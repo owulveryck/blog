@@ -8,7 +8,7 @@
     <language>en-us</language>
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
-    <copyright>All rights reserved - 2015</copyright>
+    <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Fri, 20 May 2016 12:50:59 +0200</lastBuildDate>
     <atom:link href="http://dev.owulveryck.info/blog/topics/topic-1/index.xml" rel="self" type="application/rss+xml" />
     
@@ -604,7 +604,7 @@ $$&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s represent it with GNU-R (see &lt;a href=&#34;http://www.r-bloggers.com/getting-started-with-markov-chains/&#34;&gt;this blog post&lt;/a&gt;
 for an introduction of markov reprentation with this software)&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-R&#34;&gt;&amp;gt; library(expm)
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;&amp;gt; library(expm)
 &amp;gt; library(markovchain)
 &amp;gt; library(diagram)
 &amp;gt; library(pracma)
@@ -635,7 +635,8 @@ for an introduction of markov reprentation with this software)&lt;/p&gt;
 
 &lt;p&gt;which is represented by:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ExecutionPlan.svg&#34; alt=&#34;Representation&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ExecutionPlan.svg&#34; alt=&#34;Representation&#34; /&gt;
+&lt;/p&gt;
 
 &lt;h4 id=&#34;knowing-part-of-the-plan:8ff21f56669823562f41e250370cd700&#34;&gt;Knowing part of the plan&amp;hellip;&lt;/h4&gt;
 
@@ -649,11 +650,12 @@ P=\begin{pmatrix}
 0 &amp;amp; \frac{1}{2} &amp;amp; \frac{1}{2}
 \end{pmatrix}
 $
-which is represented this way &lt;img src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ExecutionPlan2.svg&#34; alt=&#34;Representation&#34; /&gt;&lt;/p&gt;
+which is represented this way &lt;img src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ExecutionPlan2.svg&#34; alt=&#34;Representation&#34; /&gt;
+&lt;/p&gt;
 
 &lt;p&gt;The transition matrix is regular - we can see, for example that $P^2$ contains all non nil numbers:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-R&#34;&gt;&amp;gt; ExecutionPlan %^% 2
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;&amp;gt; ExecutionPlan %^% 2
                 Alpha     Beta      Gamma
           Alpha 0.4166667 0.4166667 0.1666667
           Beta  0.2777778 0.4444444 0.2777778
@@ -677,7 +679,7 @@ which is represented this way &lt;img src=&#34;http://dev.owulveryck.info/blog/b
 
 &lt;p&gt;To find the steady state vector, we must solve the equation: $P\mathbf{v}=\mathbf{v}$. $\mathbf{v}$ is actually an eigenvector for an eigenvalue $\lambda = 1$.&lt;/p&gt;
 
-&lt;p&gt;_Note from &lt;a href=&#34;https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors&#34;&gt;wikipedia&lt;/a&gt;_&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Note from &lt;a href=&#34;https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors&#34;&gt;wikipedia&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;In linear algebra, an eigenvector or characteristic vector of a square matrix is a vector that does not change its direction under the associated linear transformation.
@@ -689,7 +691,7 @@ value associated with the eigenvector $v$&lt;/p&gt;
 &lt;p&gt;To compute the eigenvector, we should find the solution to the equation $det(A-\lambda I)=0$ where $I$ is the identity matrix. Actually
 I don&amp;rsquo;t know how to do it anymore, and I will simply use &lt;em&gt;R&lt;/em&gt;&amp;rsquo;s &lt;em&gt;eigen&lt;/em&gt; function:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;&amp;gt; eigen(ExecutionPlan)
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;&amp;gt; eigen(ExecutionPlan)
 $values
 [1]  1.0000000  0.5000000 -0.1666667
 
@@ -714,7 +716,7 @@ that&amp;rsquo;s because it computes the &lt;em&gt;right&lt;/em&gt; eigenvector 
 
 &lt;p&gt;Here is how to evaluate it.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;&amp;gt; lefteigen  &amp;lt;-  function(A){
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;&amp;gt; lefteigen  &amp;lt;-  function(A){
        return(t(eigen(t(A))$vectors))
 }
 &amp;gt; lefteigen(ExecutionPlan)

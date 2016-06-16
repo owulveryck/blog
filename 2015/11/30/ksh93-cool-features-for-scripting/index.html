@@ -63,7 +63,7 @@
     },
     "datePublished": "2015-11-30",
     "description": "Two reasons why I usually use KSH93 as script engine",
-    "wordCount":  1253 
+    "wordCount":  1254 
   }
 </script>
 
@@ -74,7 +74,7 @@
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://dev.owulveryck.info/blog/touch-icon-144-precomposed.png">
 <link href="http://dev.owulveryck.info/blog/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.15" />
+<meta name="generator" content="Hugo 0.14" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -93,8 +93,12 @@
   <link rel="stylesheet" href="http://dev.owulveryck.info/blog/css/highlight/default.css">
 
 
-<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
-<script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript" async
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+  </script>
 </head>
 <body>
     <header id="main-header">
@@ -176,7 +180,7 @@
     &middot; by Olivier Wulveryck
   
   &middot; Read in about 6 min
-  &middot; (1253 Words)
+  &middot; (1254 Words)
 </small>
 
 
@@ -214,7 +218,7 @@
 <p>Anyway, in this post I will expose two arguments, or I should say two reasons, why I usually use <code>ksh93</code> to run my scripts.</p>
 
 <p><strong>Note</strong> I&rsquo;m really talking about the engine of the script, (the shebang definition).
-I&rsquo;m used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
+set I&rsquo;m used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
 My <code>$SHELL</code> for interactivity is <code>zsh</code> because it&rsquo;s efficient enough
 and it has a bunch of really cool features I won&rsquo;t discuss in this post (maybe later)</p>
 
@@ -229,7 +233,7 @@ and it has a bunch of really cool features I won&rsquo;t discuss in this post (m
 
 <p>Let&rsquo;s take this script as example:</p>
 
-<pre><code class="language-shell">$ cat test                                                                                                         
+<pre><code class="language-sh">$ cat test                                                                                                         
 for i in $(seq 1 500)
 do
     echo $i | read a
@@ -244,7 +248,7 @@ echo &quot;&quot;
 
 <p>Let&rsquo;s execute it in different shells</p>
 
-<pre><code class="language-shell">for i in bash zsh ksh                                                                                         
+<pre><code class="language-sh">for i in bash zsh ksh                                                                                         
 do
     echo &quot;$i =&gt;&quot;
     eval $i test
@@ -268,7 +272,7 @@ Simply because ksh and zsh have noticed that the command after the pipe was a bu
 
 <p>To prove it, let&rsquo;s check for syscalls with the <code>strace</code> tool, and count how many clones and calls are performed:</p>
 
-<pre><code class="language-shell">$ for i in bash zsh ksh                                                                                         
+<pre><code class="language-sh">$ for i in bash zsh ksh                                                                                         
 do
     echo &quot;$i =&gt;&quot;
     strace -c  $i  test 2&gt;&amp;1 | egrep &quot;clone|calls&quot;
@@ -290,7 +294,7 @@ ksh =&gt;
 
 <p>Of course this as an impact on performances, because fork are expensive, let&rsquo;s query the execution time:</p>
 
-<pre><code class="language-shell">for i in bash zsh ksh                                                                                         
+<pre><code class="language-sh">for i in bash zsh ksh                                                                                         
 do
     echo &quot;$i =&gt;&quot;
     eval time $i test
@@ -367,7 +371,7 @@ The option <B>#</B> can only be specified as the first option.
 
 <h3 id="the-script:492220ebbfd063710e57a4727b3232af">The script</h3>
 
-<pre><code class="language-shell">#!/bin/ksh
+<pre><code class="language-sh">#!/bin/ksh
 
 ENV=dev
 MPATH=/tmp
@@ -408,7 +412,7 @@ ACTION=$1
 
 <h4 id="ballad-of-a-thin-man:492220ebbfd063710e57a4727b3232af"><em>Ballad of a thin man</em></h4>
 
-<pre><code class="language-shell">$ ./blog.ksh --man
+<pre><code class="language-sh">$ ./blog.ksh --man
 NAME
   ./blog.ksh --- The Example Script
 
@@ -443,7 +447,7 @@ IMPLEMENTATION
 
 <h4 id="i-m-gonna-try-with-a-little-help-from-my-friends:492220ebbfd063710e57a4727b3232af">I&rsquo;m gonna try <em>with a little help (from my friends)</em></h4>
 
-<pre><code class="language-shell">$ ./blog.ksh --help
+<pre><code class="language-sh">$ ./blog.ksh --help
 Usage: ./blog.ksh [ options ]
 OPTIONS
   -u, --user=user to run the command as
@@ -456,7 +460,7 @@ OPTIONS
 
 <p>And let&rsquo;s try with an invalid option&hellip;</p>
 
-<pre><code class="language-shell">  ./blog.ksh -t
+<pre><code class="language-sh">  ./blog.ksh -t
 ./blog.ksh: -t: unknown option
 Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Execution PATH]
 </code></pre>
@@ -546,7 +550,7 @@ Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Executi
     
 <div class="container copyright">
   
-  All rights reserved - 2015
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
 
 
 </div>
