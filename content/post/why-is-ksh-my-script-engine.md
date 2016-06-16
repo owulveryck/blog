@@ -27,7 +27,7 @@ I totally disagree, but as I'm getting older, I don't argue anymore.
 Anyway, in this post I will expose two arguments, or I should say two reasons, why I usually use `ksh93` to run my scripts.
 
 **Note** I'm really talking about the engine of the script, (the shebang definition). 
-I'm used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
+set I'm used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
 My `$SHELL` for interactivity is `zsh` because it's efficient enough
 and it has a bunch of really cool features I won't discuss in this post (maybe later)
 
@@ -41,7 +41,7 @@ And one feature I've always used is the `while read` loop.
 ## The use case
 Let's take this script as example:
 
-```shell
+```sh
 $ cat test                                                                                                         
 for i in $(seq 1 500)
 do
@@ -57,7 +57,7 @@ It simply iterate 500 times and display the counter on the screen.
 
 Let's execute it in different shells
 
-```shell
+```sh
 for i in bash zsh ksh                                                                                         
 do
     echo "$i =>"
@@ -82,7 +82,7 @@ Simply because ksh and zsh have noticed that the command after the pipe was a bu
 
 To prove it, let's check for syscalls with the `strace` tool, and count how many clones and calls are performed: 
 
-```shell
+```sh
 $ for i in bash zsh ksh                                                                                         
 do
     echo "$i =>"
@@ -105,7 +105,7 @@ _quod erat demonstrandum_, twice as much clone in bash thant in ksh|zsh.
 
 Of course this as an impact on performances, because fork are expensive, let's query the execution time:
 
-```shell
+```sh
 for i in bash zsh ksh                                                                                         
 do
     echo "$i =>"
@@ -182,7 +182,7 @@ An example is sometimes better than an explanation (and the book is complete on 
 ## The example
 
 ### The script
-```shell
+```sh
 #!/bin/ksh
 
 ENV=dev
@@ -221,7 +221,7 @@ ACTION=$1
 
 Here are two _singing_ examples of the usage output (sorry, I'm tired)
 #### _Ballad of a thin man_
-```shell
+```sh
 $ ./blog.ksh --man
 NAME
   ./blog.ksh --- The Example Script
@@ -257,7 +257,7 @@ IMPLEMENTATION
 
 #### I'm gonna try _with a little help (from my friends)_
 
-```shell
+```sh
 $ ./blog.ksh --help
 Usage: ./blog.ksh [ options ]
 OPTIONS
@@ -271,7 +271,7 @@ OPTIONS
 
 And let's try with an invalid option...
 
-```shell
+```sh
   ./blog.ksh -t
 ./blog.ksh: -t: unknown option
 Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Execution PATH]
