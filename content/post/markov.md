@@ -69,7 +69,7 @@ $$
 Let's represent it with GNU-R (see [this blog post](http://www.r-bloggers.com/getting-started-with-markov-chains/) 
 for an introduction of markov reprentation with this software)
 
-```R
+```r
 > library(expm)
 > library(markovchain)
 > library(diagram)
@@ -119,7 +119,7 @@ which is represented this way ![Representation](/blog/assets/images/ExecutionPla
 
 The transition matrix is regular - we can see, for example that $P^2$ contains all non nil numbers:
 
-```R
+```r
 > ExecutionPlan %^% 2
                 Alpha     Beta      Gamma
           Alpha 0.4166667 0.4166667 0.1666667
@@ -152,7 +152,7 @@ _Note from [wikipedia](https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvector
 To compute the eigenvector, we should find the solution to the equation $det(A-\lambda I)=0$ where $I$ is the identity matrix. Actually
 I don't know how to do it anymore, and I will simply use _R_'s _eigen_ function:
 
-```
+```r
 > eigen(ExecutionPlan)
 $values
 [1]  1.0000000  0.5000000 -0.1666667
@@ -178,7 +178,7 @@ that's because it computes the _right_ eigenvector and what I need is the _left_
 
 Here is how to evaluate it.
 
-```
+```r
 > lefteigen  <-  function(A){
        return(t(eigen(t(A))$vectors))
 }
