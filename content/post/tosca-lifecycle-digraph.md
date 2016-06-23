@@ -70,7 +70,7 @@ and that would be **the premise of a TOSCA orchestrator**.
 I've recently discoverd the [digraph](https://github.com/golang/tools/tree/master/cmd/digraph) tool, that I will use for querying the graphs.
 The `digraph` is represented as a map with a node as a key and its immediates successors as values:
 
-```golang
+```go
 // A graph maps nodes to the non-nil set of their immediate successors.
 type graph map[string]nodeset
 
@@ -90,7 +90,7 @@ Considering the digraph code, what I need to do is simply to override the `parse
 I will fill the `graph` with a string composed of _nodename:action_ as key.
 For example, if I need to do a "Configure" action of node "A" after a "Start" action on node "B", I will have the following entry in the map:
 
-```golang
+```go
 g["B:Start"] = "A:Configure"
 ```
 
@@ -130,7 +130,7 @@ That's it
 # The final function
 
 Here is the final parse function
-```golang
+```go
 func parse(rd io.Reader) (graph, error) {
         g := make(graph)
         // Parse the input graph.
@@ -187,7 +187,7 @@ I will use the the same example as described below: the single instance wordpres
 I've extracted the YAML and placed in in the file [tosca_single_instance_wordpress.yaml](https://github.com/owulveryck/toscaviewer/blob/master/examples/tosca_single_instance_wordpress.yaml).
 
 Let's query the nodes first:
-```shell
+```sh
 curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
 mysql_database:Configure
 mysql_database:Create

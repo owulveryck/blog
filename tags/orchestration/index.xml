@@ -8,7 +8,7 @@
     <language>en-us</language>
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
-    <copyright>All rights reserved - 2015</copyright>
+    <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Wed, 10 Feb 2016 17:19:47 +0100</lastBuildDate>
     <atom:link href="http://dev.owulveryck.info/blog/tags/orchestration/index.xml" rel="self" type="application/rss+xml" />
     
@@ -111,6 +111,7 @@ Cause or consequence, Gartner has nominated Ansible as a &lt;em&gt;cool vendor&l
 that the position of Ansible is near the &amp;ldquo;late majority&amp;rdquo;
 &lt;center&gt;
 &lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Diffusionofideas.PNG/330px-Diffusionofideas.PNG&#34; alt=&#34;Diffusion of ideas&#34; /&gt;
+
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;What does this mean ?&lt;/p&gt;

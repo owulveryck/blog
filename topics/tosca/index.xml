@@ -8,7 +8,7 @@
     <language>en-us</language>
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
-    <copyright>All rights reserved - 2015</copyright>
+    <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Fri, 20 Nov 2015 10:09:30 +0000</lastBuildDate>
     <atom:link href="http://dev.owulveryck.info/blog/topics/tosca/index.xml" rel="self" type="application/rss+xml" />
     
@@ -82,7 +82,7 @@ Then I should perform requests on this graph. For example I could ask:&lt;/p&gt;
 &lt;p&gt;I&amp;rsquo;ve recently discoverd the &lt;a href=&#34;https://github.com/golang/tools/tree/master/cmd/digraph&#34;&gt;digraph&lt;/a&gt; tool, that I will use for querying the graphs.
 The &lt;code&gt;digraph&lt;/code&gt; is represented as a map with a node as a key and its immediates successors as values:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;// A graph maps nodes to the non-nil set of their immediate successors.
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// A graph maps nodes to the non-nil set of their immediate successors.
 type graph map[string]nodeset
 
 type nodeset map[string]bool
@@ -101,7 +101,7 @@ type nodeset map[string]bool
 &lt;p&gt;I will fill the &lt;code&gt;graph&lt;/code&gt; with a string composed of &lt;em&gt;nodename:action&lt;/em&gt; as key.
 For example, if I need to do a &amp;ldquo;Configure&amp;rdquo; action of node &amp;ldquo;A&amp;rdquo; after a &amp;ldquo;Start&amp;rdquo; action on node &amp;ldquo;B&amp;rdquo;, I will have the following entry in the map:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;g[&amp;quot;B:Start&amp;quot;] = &amp;quot;A:Configure&amp;quot;
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;g[&amp;quot;B:Start&amp;quot;] = &amp;quot;A:Configure&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;So What I need to do is to parse the adjjacency matrix, do a matching with the row id and the &amp;ldquo;node:action&amp;rdquo; name, and fill the &lt;code&gt;graph g&lt;/code&gt; with the matching of the corresponding &amp;ldquo;node:action&amp;rdquo;.&lt;/p&gt;
@@ -140,7 +140,7 @@ For example, if I need to do a &amp;ldquo;Configure&amp;rdquo; action of node &a
 
 &lt;p&gt;Here is the final parse function&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;func parse(rd io.Reader) (graph, error) {
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func parse(rd io.Reader) (graph, error) {
         g := make(graph)
         // Parse the input graph.
         var toscaTemplate toscalib.ToscaDefinition
@@ -198,7 +198,7 @@ cd $GOPATH/src/github.com/owulveryck/digraph &amp;amp;&amp;amp; go build
 
 &lt;p&gt;Let&amp;rsquo;s query the nodes first:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
 mysql_database:Configure
 mysql_database:Create
 mysql_database:Start

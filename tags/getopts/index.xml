@@ -8,7 +8,7 @@
     <language>en-us</language>
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
-    <copyright>All rights reserved - 2015</copyright>
+    <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Mon, 30 Nov 2015 13:17:41 +0000</lastBuildDate>
     <atom:link href="http://dev.owulveryck.info/blog/tags/getopts/index.xml" rel="self" type="application/rss+xml" />
     
@@ -29,7 +29,7 @@
 &lt;p&gt;Anyway, in this post I will expose two arguments, or I should say two reasons, why I usually use &lt;code&gt;ksh93&lt;/code&gt; to run my scripts.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; I&amp;rsquo;m really talking about the engine of the script, (the shebang definition).
-I&amp;rsquo;m used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
+set I&amp;rsquo;m used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
 My &lt;code&gt;$SHELL&lt;/code&gt; for interactivity is &lt;code&gt;zsh&lt;/code&gt; because it&amp;rsquo;s efficient enough
 and it has a bunch of really cool features I won&amp;rsquo;t discuss in this post (maybe later)&lt;/p&gt;
 
@@ -44,7 +44,7 @@ and it has a bunch of really cool features I won&amp;rsquo;t discuss in this pos
 
 &lt;p&gt;Let&amp;rsquo;s take this script as example:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cat test                                                                                                         
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ cat test                                                                                                         
 for i in $(seq 1 500)
 do
     echo $i | read a
@@ -59,7 +59,7 @@ echo &amp;quot;&amp;quot;
 
 &lt;p&gt;Let&amp;rsquo;s execute it in different shells&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;for i in bash zsh ksh                                                                                         
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;for i in bash zsh ksh                                                                                         
 do
     echo &amp;quot;$i =&amp;gt;&amp;quot;
     eval $i test
@@ -83,7 +83,7 @@ Simply because ksh and zsh have noticed that the command after the pipe was a bu
 
 &lt;p&gt;To prove it, let&amp;rsquo;s check for syscalls with the &lt;code&gt;strace&lt;/code&gt; tool, and count how many clones and calls are performed:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ for i in bash zsh ksh                                                                                         
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ for i in bash zsh ksh                                                                                         
 do
     echo &amp;quot;$i =&amp;gt;&amp;quot;
     strace -c  $i  test 2&amp;gt;&amp;amp;1 | egrep &amp;quot;clone|calls&amp;quot;
@@ -105,7 +105,7 @@ ksh =&amp;gt;
 
 &lt;p&gt;Of course this as an impact on performances, because fork are expensive, let&amp;rsquo;s query the execution time:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;for i in bash zsh ksh                                                                                         
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;for i in bash zsh ksh                                                                                         
 do
     echo &amp;quot;$i =&amp;gt;&amp;quot;
     eval time $i test
@@ -182,7 +182,7 @@ The option &lt;B&gt;#&lt;/B&gt; can only be specified as the first option.
 
 &lt;h3 id=&#34;the-script:492220ebbfd063710e57a4727b3232af&#34;&gt;The script&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;#!/bin/ksh
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;#!/bin/ksh
 
 ENV=dev
 MPATH=/tmp
@@ -223,7 +223,7 @@ ACTION=$1
 
 &lt;h4 id=&#34;ballad-of-a-thin-man:492220ebbfd063710e57a4727b3232af&#34;&gt;&lt;em&gt;Ballad of a thin man&lt;/em&gt;&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ ./blog.ksh --man
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ ./blog.ksh --man
 NAME
   ./blog.ksh --- The Example Script
 
@@ -258,7 +258,7 @@ IMPLEMENTATION
 
 &lt;h4 id=&#34;i-m-gonna-try-with-a-little-help-from-my-friends:492220ebbfd063710e57a4727b3232af&#34;&gt;I&amp;rsquo;m gonna try &lt;em&gt;with a little help (from my friends)&lt;/em&gt;&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ ./blog.ksh --help
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ ./blog.ksh --help
 Usage: ./blog.ksh [ options ]
 OPTIONS
   -u, --user=user to run the command as
@@ -271,7 +271,7 @@ OPTIONS
 
 &lt;p&gt;And let&amp;rsquo;s try with an invalid option&amp;hellip;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;  ./blog.ksh -t
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;  ./blog.ksh -t
 ./blog.ksh: -t: unknown option
 Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Execution PATH]
 &lt;/code&gt;&lt;/pre&gt;

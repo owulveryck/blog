@@ -74,7 +74,7 @@
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://dev.owulveryck.info/blog/touch-icon-144-precomposed.png">
 <link href="http://dev.owulveryck.info/blog/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.15" />
+<meta name="generator" content="Hugo 0.14" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -93,8 +93,12 @@
   <link rel="stylesheet" href="http://dev.owulveryck.info/blog/css/highlight/default.css">
 
 
-<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
-<script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript" async
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+  </script>
 </head>
 <body>
     <header id="main-header">
@@ -265,7 +269,7 @@ Then I should perform requests on this graph. For example I could ask:</p>
 <p>I&rsquo;ve recently discoverd the <a href="https://github.com/golang/tools/tree/master/cmd/digraph">digraph</a> tool, that I will use for querying the graphs.
 The <code>digraph</code> is represented as a map with a node as a key and its immediates successors as values:</p>
 
-<pre><code class="language-golang">// A graph maps nodes to the non-nil set of their immediate successors.
+<pre><code class="language-go">// A graph maps nodes to the non-nil set of their immediate successors.
 type graph map[string]nodeset
 
 type nodeset map[string]bool
@@ -284,7 +288,7 @@ type nodeset map[string]bool
 <p>I will fill the <code>graph</code> with a string composed of <em>nodename:action</em> as key.
 For example, if I need to do a &ldquo;Configure&rdquo; action of node &ldquo;A&rdquo; after a &ldquo;Start&rdquo; action on node &ldquo;B&rdquo;, I will have the following entry in the map:</p>
 
-<pre><code class="language-golang">g[&quot;B:Start&quot;] = &quot;A:Configure&quot;
+<pre><code class="language-go">g[&quot;B:Start&quot;] = &quot;A:Configure&quot;
 </code></pre>
 
 <p>So What I need to do is to parse the adjjacency matrix, do a matching with the row id and the &ldquo;node:action&rdquo; name, and fill the <code>graph g</code> with the matching of the corresponding &ldquo;node:action&rdquo;.</p>
@@ -323,7 +327,7 @@ For example, if I need to do a &ldquo;Configure&rdquo; action of node &ldquo;A&r
 
 <p>Here is the final parse function</p>
 
-<pre><code class="language-golang">func parse(rd io.Reader) (graph, error) {
+<pre><code class="language-go">func parse(rd io.Reader) (graph, error) {
         g := make(graph)
         // Parse the input graph.
         var toscaTemplate toscalib.ToscaDefinition
@@ -381,7 +385,7 @@ cd $GOPATH/src/github.com/owulveryck/digraph &amp;&amp; go build
 
 <p>Let&rsquo;s query the nodes first:</p>
 
-<pre><code class="language-shell">curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
+<pre><code class="language-sh">curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
 mysql_database:Configure
 mysql_database:Create
 mysql_database:Start
@@ -512,7 +516,7 @@ wordpress:Start
     
 <div class="container copyright">
   
-  All rights reserved - 2015
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
 
 
 </div>

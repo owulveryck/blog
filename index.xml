@@ -8,7 +8,7 @@
     <language>en-us</language>
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
-    <copyright>All rights reserved - 2015</copyright>
+    <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Fri, 20 May 2016 12:50:59 +0200</lastBuildDate>
     <atom:link href="http://dev.owulveryck.info/blog/index.xml" rel="self" type="application/rss+xml" />
     
@@ -385,6 +385,7 @@ Specifications are hard to follow, but even more they&amp;rsquo;re hard to evalu
 
 &lt;p&gt;&lt;center&gt;
 &lt;img src=&#34;http://imgs.xkcd.com/comics/babies.png&#34; alt=&#34;Babies (xkcd)&#34; /&gt;
+
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;The &lt;strong&gt;B&lt;/strong&gt;ehavior &lt;strong&gt;D&lt;/strong&gt;riven &lt;strong&gt;D&lt;/strong&gt;evelopment is the assurance that everything have been made respectfully i
@@ -1039,7 +1040,7 @@ $$&lt;/p&gt;
 &lt;p&gt;Let&amp;rsquo;s represent it with GNU-R (see &lt;a href=&#34;http://www.r-bloggers.com/getting-started-with-markov-chains/&#34;&gt;this blog post&lt;/a&gt;
 for an introduction of markov reprentation with this software)&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-R&#34;&gt;&amp;gt; library(expm)
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;&amp;gt; library(expm)
 &amp;gt; library(markovchain)
 &amp;gt; library(diagram)
 &amp;gt; library(pracma)
@@ -1070,7 +1071,8 @@ for an introduction of markov reprentation with this software)&lt;/p&gt;
 
 &lt;p&gt;which is represented by:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ExecutionPlan.svg&#34; alt=&#34;Representation&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ExecutionPlan.svg&#34; alt=&#34;Representation&#34; /&gt;
+&lt;/p&gt;
 
 &lt;h4 id=&#34;knowing-part-of-the-plan:8ff21f56669823562f41e250370cd700&#34;&gt;Knowing part of the plan&amp;hellip;&lt;/h4&gt;
 
@@ -1084,11 +1086,12 @@ P=\begin{pmatrix}
 0 &amp;amp; \frac{1}{2} &amp;amp; \frac{1}{2}
 \end{pmatrix}
 $
-which is represented this way &lt;img src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ExecutionPlan2.svg&#34; alt=&#34;Representation&#34; /&gt;&lt;/p&gt;
+which is represented this way &lt;img src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ExecutionPlan2.svg&#34; alt=&#34;Representation&#34; /&gt;
+&lt;/p&gt;
 
 &lt;p&gt;The transition matrix is regular - we can see, for example that $P^2$ contains all non nil numbers:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-R&#34;&gt;&amp;gt; ExecutionPlan %^% 2
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;&amp;gt; ExecutionPlan %^% 2
                 Alpha     Beta      Gamma
           Alpha 0.4166667 0.4166667 0.1666667
           Beta  0.2777778 0.4444444 0.2777778
@@ -1112,7 +1115,7 @@ which is represented this way &lt;img src=&#34;http://dev.owulveryck.info/blog/b
 
 &lt;p&gt;To find the steady state vector, we must solve the equation: $P\mathbf{v}=\mathbf{v}$. $\mathbf{v}$ is actually an eigenvector for an eigenvalue $\lambda = 1$.&lt;/p&gt;
 
-&lt;p&gt;_Note from &lt;a href=&#34;https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors&#34;&gt;wikipedia&lt;/a&gt;_&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Note from &lt;a href=&#34;https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors&#34;&gt;wikipedia&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;In linear algebra, an eigenvector or characteristic vector of a square matrix is a vector that does not change its direction under the associated linear transformation.
@@ -1124,7 +1127,7 @@ value associated with the eigenvector $v$&lt;/p&gt;
 &lt;p&gt;To compute the eigenvector, we should find the solution to the equation $det(A-\lambda I)=0$ where $I$ is the identity matrix. Actually
 I don&amp;rsquo;t know how to do it anymore, and I will simply use &lt;em&gt;R&lt;/em&gt;&amp;rsquo;s &lt;em&gt;eigen&lt;/em&gt; function:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;&amp;gt; eigen(ExecutionPlan)
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;&amp;gt; eigen(ExecutionPlan)
 $values
 [1]  1.0000000  0.5000000 -0.1666667
 
@@ -1149,7 +1152,7 @@ that&amp;rsquo;s because it computes the &lt;em&gt;right&lt;/em&gt; eigenvector 
 
 &lt;p&gt;Here is how to evaluate it.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;&amp;gt; lefteigen  &amp;lt;-  function(A){
+&lt;pre&gt;&lt;code class=&#34;language-r&#34;&gt;&amp;gt; lefteigen  &amp;lt;-  function(A){
        return(t(eigen(t(A))$vectors))
 }
 &amp;gt; lefteigen(ExecutionPlan)
@@ -1285,6 +1288,7 @@ Cause or consequence, Gartner has nominated Ansible as a &lt;em&gt;cool vendor&l
 that the position of Ansible is near the &amp;ldquo;late majority&amp;rdquo;
 &lt;center&gt;
 &lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Diffusionofideas.PNG/330px-Diffusionofideas.PNG&#34; alt=&#34;Diffusion of ideas&#34; /&gt;
+
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;What does this mean ?&lt;/p&gt;
@@ -1778,7 +1782,7 @@ and then we would be able to see the progession in a graphical way.&lt;/li&gt;
 &lt;p&gt;Anyway, in this post I will expose two arguments, or I should say two reasons, why I usually use &lt;code&gt;ksh93&lt;/code&gt; to run my scripts.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; I&amp;rsquo;m really talking about the engine of the script, (the shebang definition).
-I&amp;rsquo;m used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
+set I&amp;rsquo;m used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
 My &lt;code&gt;$SHELL&lt;/code&gt; for interactivity is &lt;code&gt;zsh&lt;/code&gt; because it&amp;rsquo;s efficient enough
 and it has a bunch of really cool features I won&amp;rsquo;t discuss in this post (maybe later)&lt;/p&gt;
 
@@ -1793,7 +1797,7 @@ and it has a bunch of really cool features I won&amp;rsquo;t discuss in this pos
 
 &lt;p&gt;Let&amp;rsquo;s take this script as example:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cat test                                                                                                         
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ cat test                                                                                                         
 for i in $(seq 1 500)
 do
     echo $i | read a
@@ -1808,7 +1812,7 @@ echo &amp;quot;&amp;quot;
 
 &lt;p&gt;Let&amp;rsquo;s execute it in different shells&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;for i in bash zsh ksh                                                                                         
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;for i in bash zsh ksh                                                                                         
 do
     echo &amp;quot;$i =&amp;gt;&amp;quot;
     eval $i test
@@ -1832,7 +1836,7 @@ Simply because ksh and zsh have noticed that the command after the pipe was a bu
 
 &lt;p&gt;To prove it, let&amp;rsquo;s check for syscalls with the &lt;code&gt;strace&lt;/code&gt; tool, and count how many clones and calls are performed:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ for i in bash zsh ksh                                                                                         
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ for i in bash zsh ksh                                                                                         
 do
     echo &amp;quot;$i =&amp;gt;&amp;quot;
     strace -c  $i  test 2&amp;gt;&amp;amp;1 | egrep &amp;quot;clone|calls&amp;quot;
@@ -1854,7 +1858,7 @@ ksh =&amp;gt;
 
 &lt;p&gt;Of course this as an impact on performances, because fork are expensive, let&amp;rsquo;s query the execution time:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;for i in bash zsh ksh                                                                                         
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;for i in bash zsh ksh                                                                                         
 do
     echo &amp;quot;$i =&amp;gt;&amp;quot;
     eval time $i test
@@ -1931,7 +1935,7 @@ The option &lt;B&gt;#&lt;/B&gt; can only be specified as the first option.
 
 &lt;h3 id=&#34;the-script:492220ebbfd063710e57a4727b3232af&#34;&gt;The script&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;#!/bin/ksh
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;#!/bin/ksh
 
 ENV=dev
 MPATH=/tmp
@@ -1972,7 +1976,7 @@ ACTION=$1
 
 &lt;h4 id=&#34;ballad-of-a-thin-man:492220ebbfd063710e57a4727b3232af&#34;&gt;&lt;em&gt;Ballad of a thin man&lt;/em&gt;&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ ./blog.ksh --man
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ ./blog.ksh --man
 NAME
   ./blog.ksh --- The Example Script
 
@@ -2007,7 +2011,7 @@ IMPLEMENTATION
 
 &lt;h4 id=&#34;i-m-gonna-try-with-a-little-help-from-my-friends:492220ebbfd063710e57a4727b3232af&#34;&gt;I&amp;rsquo;m gonna try &lt;em&gt;with a little help (from my friends)&lt;/em&gt;&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ ./blog.ksh --help
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ ./blog.ksh --help
 Usage: ./blog.ksh [ options ]
 OPTIONS
   -u, --user=user to run the command as
@@ -2020,7 +2024,7 @@ OPTIONS
 
 &lt;p&gt;And let&amp;rsquo;s try with an invalid option&amp;hellip;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;  ./blog.ksh -t
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;  ./blog.ksh -t
 ./blog.ksh: -t: unknown option
 Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Execution PATH]
 &lt;/code&gt;&lt;/pre&gt;
@@ -2103,7 +2107,7 @@ Then I should perform requests on this graph. For example I could ask:&lt;/p&gt;
 &lt;p&gt;I&amp;rsquo;ve recently discoverd the &lt;a href=&#34;https://github.com/golang/tools/tree/master/cmd/digraph&#34;&gt;digraph&lt;/a&gt; tool, that I will use for querying the graphs.
 The &lt;code&gt;digraph&lt;/code&gt; is represented as a map with a node as a key and its immediates successors as values:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;// A graph maps nodes to the non-nil set of their immediate successors.
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// A graph maps nodes to the non-nil set of their immediate successors.
 type graph map[string]nodeset
 
 type nodeset map[string]bool
@@ -2122,7 +2126,7 @@ type nodeset map[string]bool
 &lt;p&gt;I will fill the &lt;code&gt;graph&lt;/code&gt; with a string composed of &lt;em&gt;nodename:action&lt;/em&gt; as key.
 For example, if I need to do a &amp;ldquo;Configure&amp;rdquo; action of node &amp;ldquo;A&amp;rdquo; after a &amp;ldquo;Start&amp;rdquo; action on node &amp;ldquo;B&amp;rdquo;, I will have the following entry in the map:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;g[&amp;quot;B:Start&amp;quot;] = &amp;quot;A:Configure&amp;quot;
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;g[&amp;quot;B:Start&amp;quot;] = &amp;quot;A:Configure&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;So What I need to do is to parse the adjjacency matrix, do a matching with the row id and the &amp;ldquo;node:action&amp;rdquo; name, and fill the &lt;code&gt;graph g&lt;/code&gt; with the matching of the corresponding &amp;ldquo;node:action&amp;rdquo;.&lt;/p&gt;
@@ -2161,7 +2165,7 @@ For example, if I need to do a &amp;ldquo;Configure&amp;rdquo; action of node &a
 
 &lt;p&gt;Here is the final parse function&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;func parse(rd io.Reader) (graph, error) {
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func parse(rd io.Reader) (graph, error) {
         g := make(graph)
         // Parse the input graph.
         var toscaTemplate toscalib.ToscaDefinition
@@ -2219,7 +2223,7 @@ cd $GOPATH/src/github.com/owulveryck/digraph &amp;amp;&amp;amp; go build
 
 &lt;p&gt;Let&amp;rsquo;s query the nodes first:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
 mysql_database:Configure
 mysql_database:Create
 mysql_database:Start
@@ -3309,14 +3313,16 @@ It is a &lt;a href=&#34;http://golang.org&#34;&gt;GO&lt;/a&gt; developement.&lt;
 &lt;h2 id=&#34;the-web-pages:154917605c8b60fbfe1ec11d0e3a2450&#34;&gt;The web pages&lt;/h2&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;the question &amp;ldquo;will you participate&amp;rdquo; and a form input where you will be able to write your name and three buttons &amp;ldquo;yes&amp;rdquo;, &amp;ldquo;no&amp;rdquo; and &amp;ldquo;&amp;ldquo;maybe&amp;rdquo;&amp;ldquo;.&lt;/p&gt;
+&lt;li&gt;the question &amp;ldquo;will you participate&amp;rdquo; and a form input where you will be able to write your name and three buttons &amp;ldquo;yes&amp;rdquo;, &amp;ldquo;no&amp;rdquo; and &amp;ldquo;&amp;ldquo;maybe&amp;rdquo;&amp;ldquo;.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;pre&gt;&lt;code&gt;Will you participate 
 +------------------+  +-----+ +-----+ +-------+
 |  Your name       |  | YES | |  NO | | Maybe |
 +------------------+  +-----+ +-----+ +-------+
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
+&lt;ul&gt;
 &lt;li&gt;&lt;p&gt;a simple table with two columns:&lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;One will hold the participant name&lt;/p&gt;&lt;/li&gt;
@@ -3452,30 +3458,33 @@ I will use the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/example
 &lt;p&gt;The hello world client/server is implementing a Request-Reply patternt and are communicating via a TCP socket.&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;The server is the &lt;em&gt;replier&lt;/em&gt; and is listening on the TCP port 5555
-&lt;code&gt;go
-...
-func main() {
-//  Socket to talk to clients
-responder, _ := zmq.NewSocket(zmq.REP)
-defer responder.Close()
-responder.Bind(&amp;quot;tcp://*:5555&amp;quot;)
-...
-}
-&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;The client is the &lt;em&gt;requester&lt;/em&gt; and is dialing the same TCP port
-&lt;code&gt;go
-...
-func main() {
-//  Socket to talk to server
-fmt.Println(&amp;quot;Connecting to hello world server...&amp;quot;)
-requester, _ := zmq.NewSocket(zmq.REQ)
-defer requester.Close()
-requester.Connect(&amp;quot;tcp://localhost:5555&amp;quot;)
-...
-}
-&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;The server is the &lt;em&gt;replier&lt;/em&gt; and is listening on the TCP port 5555&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;...
+func main() {
+    //  Socket to talk to clients
+    responder, _ := zmq.NewSocket(zmq.REP)
+    defer responder.Close()
+    responder.Bind(&amp;quot;tcp://*:5555&amp;quot;)
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The client is the &lt;em&gt;requester&lt;/em&gt; and is dialing the same TCP port&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;...
+func main() {
+    //  Socket to talk to server
+    fmt.Println(&amp;quot;Connecting to hello world server...&amp;quot;)
+    requester, _ := zmq.NewSocket(zmq.REQ)
+    defer requester.Close()
+    requester.Connect(&amp;quot;tcp://localhost:5555&amp;quot;)
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Then, the client is sending (requesting) a &lt;em&gt;hello&lt;/em&gt; message, and the server is replying a &lt;em&gt;world&lt;/em&gt; message.&lt;/p&gt;
 

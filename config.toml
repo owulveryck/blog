@@ -1,7 +1,7 @@
 baseurl = "http://dev.owulveryck.info/blog"
 languageCode = "en-us"
 title = "Olivier Wulveryck's Tech Blog"
-Copyright = "All rights reserved - 2015"
+Copyright = "All rights reserved - 2015/2016"
 #canonifyurls = true
 
 # Metadata format

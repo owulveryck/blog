@@ -64,7 +64,7 @@
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://dev.owulveryck.info/blog/touch-icon-144-precomposed.png">
 <link href="http://dev.owulveryck.info/blog/favicon.png" rel="icon">
 
-<meta name="generator" content="Hugo 0.15" />
+<meta name="generator" content="Hugo 0.14" />
 
   <!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -83,8 +83,12 @@
   <link rel="stylesheet" href="http://dev.owulveryck.info/blog/css/highlight/default.css">
 
 
-<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
-<script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  <script type="text/javascript" async
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+  </script>
 </head>
 <body>
     <header id="main-header">
@@ -217,14 +221,16 @@ It is a <a href="http://golang.org">GO</a> developement.</p>
 <h2 id="the-web-pages:154917605c8b60fbfe1ec11d0e3a2450">The web pages</h2>
 
 <ul>
-<li><p>the question &ldquo;will you participate&rdquo; and a form input where you will be able to write your name and three buttons &ldquo;yes&rdquo;, &ldquo;no&rdquo; and &ldquo;&ldquo;maybe&rdquo;&ldquo;.</p>
+<li>the question &ldquo;will you participate&rdquo; and a form input where you will be able to write your name and three buttons &ldquo;yes&rdquo;, &ldquo;no&rdquo; and &ldquo;&ldquo;maybe&rdquo;&ldquo;.</li>
+</ul>
 
 <pre><code>Will you participate 
 +------------------+  +-----+ +-----+ +-------+
 |  Your name       |  | YES | |  NO | | Maybe |
 +------------------+  +-----+ +-----+ +-------+
-</code></pre></li>
+</code></pre>
 
+<ul>
 <li><p>a simple table with two columns:</p></li>
 
 <li><p>One will hold the participant name</p></li>
@@ -372,7 +378,7 @@ Hello, world!
     
 <div class="container copyright">
   
-  All rights reserved - 2015
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
 
 
 </div>
