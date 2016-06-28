@@ -32,6 +32,43 @@ Indeed, they are a must. So for my next presentation I thought:
 wouldn't it be nice to use this wide display area to make the presentation more interactive.
 One of the key point in communication is to federate people. So what if people could get represented for real in the presentation.
 
-## how to dothat
+## how to: the architecture 
 
+Obviously I cannot use conventional tools, such as PowerPoint, Keynote, Impress, google slides and so.
+I need something that I can program; something that can interact with a server, and something that is not a console so I can get
+fancy and eye-candy animations.
+
+### The basic
+
+[reveal.js](http://reference) is an almost perfect candidate:
+
+* it is a framework written in JavaScript therefore, I can easily ass code
+* it's well designed
+* it can be used alongside with any other JavaScript framework
+
+### Graphs, animations, etc...
+
+A good presentation has animations, graphs, diagrams, and stuffs that cannot be expressed simply with words.
+I will interact with the audience. I will explain how later, but anyway they will send me some data.
+I could process them in whatever server-side application (php, go-template base, python) but I have the feeling that's not 
+the idiomatic way of doing modern web content. Actually, I would need anyway to deal with device (mobile, desktop), screen size,
+browser... So what's best, I think, is to get the data on the client side and process it via Javascript.
+
+[Data Driver Document (D3)](http://reference) is the framework I will use to process and display the data I will get from the client.
+
+### The attendees 
+
+If I want the attendees to participate they need a device, to act as a client.
+About all people I will talk to have a smartphone; that is what I will use. 
+
+It has two advantages:
+
+* it is their own device, I looks more realistic and unexpected: therefore I would get a better reception of the message I'm trying to pass.
+* it usually has a Webkit based web browser with a decent Javascript engine.
+
+
+
+### The HUB
+
+I sounds difficult to code peer to peer communication 
 
