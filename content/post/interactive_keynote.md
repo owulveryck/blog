@@ -4,8 +4,12 @@ date: 2016-06-23T15:32:54+02:00
 description: Playing with websocket for a dynamic presentation.
 draft: true
 tags:
-- one
-- two
+- websocket
+- bootstrap
+- golang
+- reveal.js 
+- Javascript
+- D3.js
 title: Websockets, Reveal.js, D3 and GO for a dynamic keynote
 topics:
 - topic 1
@@ -66,9 +70,10 @@ It has two advantages:
 * it is their own device, I looks more realistic and unexpected: therefore I would get a better reception of the message I'm trying to pass.
 * it usually has a Webkit based web browser with a decent Javascript engine.
 
-
+I won't develop a native app, instead I will a webpage mobile compliant based on the [bootstrap](http://reference) framework.
 
 ### The HUB
 
-I sounds difficult to code peer to peer communication 
+#### A server
 
+#### with websocket
