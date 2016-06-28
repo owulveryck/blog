@@ -74,6 +74,10 @@ I won't develop a native app, instead I will a webpage mobile compliant based on
 
 ### The HUB
 
-#### A server
+The point now, is how to make my clients and my presentation to exchange data.
+As I said before, I would not be an easy task to setup a pure browser based peer-to-peer communication, so I will fall 
+back to the traditional web server based hub.
 
-#### with websocket
+the first idea is to use a RESTfull mechanism, but this has the major disadvantage of not being real-timed
+
+#### the server
