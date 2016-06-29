@@ -100,7 +100,7 @@ for an introduction of markov reprentation with this software)
 ```
 which is represented by:
 
-![Representation](/blog/assets/images/ExecutionPlan.svg)
+![Representation](/assets/images/ExecutionPlan.svg)
 
 #### Knowing part of the plan...
 
@@ -115,7 +115,7 @@ P=\\begin\{pmatrix\}
 0 & \frac{1}{2} & \frac{1}{2} 
 \\end\{pmatrix\}
 $
-which is represented this way ![Representation](/blog/assets/images/ExecutionPlan2.svg)
+which is represented this way ![Representation](/assets/images/ExecutionPlan2.svg)
 
 The transition matrix is regular - we can see, for example that $P^2$ contains all non nil numbers:
 

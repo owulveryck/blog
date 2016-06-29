@@ -97,10 +97,10 @@ __I would like to know which product is the cheapest to fulfill my requirement._
 
 (I've uploaded my samples here):
 
-* [solution 1](/blog/assets/ml/solution1.csv)
-* [solution 2](/blog/assets/ml/solution2.csv)
-* [solution 3](/blog/assets/ml/solution3.csv)
-* [solution 4](/blog/assets/ml/solution4.csv)
+* [solution 1](/assets/ml/solution1.csv)
+* [solution 2](/assets/ml/solution2.csv)
+* [solution 3](/assets/ml/solution3.csv)
+* [solution 4](/assets/ml/solution4.csv)
 
 ### Finding a solution
 
@@ -144,7 +144,7 @@ Let's do that.
 
 First, let's plot the training set.
 <center>
-<img class="img-responsive" src="/blog/assets/images/ml/trainingset.jpg" alt="Training set"/> 
+<img class="img-responsive" src="/assets/images/ml/trainingset.jpg" alt="Training set"/> 
 </center>
 
 __note__ the representation is not accurate because there may be several bunk points 
@@ -156,7 +156,7 @@ When I look at the training set representation, I can imagine a line passing by 
 This line may look like this:
 
 <center>
-<img class="img-responsive" src="/blog/assets/images/ml/x-1_5.jpg" alt="x^(-1/5)"/> 
+<img class="img-responsive" src="/assets/images/ml/x-1_5.jpg" alt="x^(-1/5)"/> 
 </center>
 
 This is actually a representation of the function $ x^{\frac{1}{5}} $
@@ -177,7 +177,7 @@ The implementation is made with [GNU octave](https://www.gnu.org/software/octave
 
 Here is a figure representing the function for one particular solution:
 <center>
-<img class="img-responsive" src="/blog/assets/images/ml/trainingset_plot.jpg" alt="Training set with the function"/> 
+<img class="img-responsive" src="/assets/images/ml/trainingset_plot.jpg" alt="Training set with the function"/> 
 </center>
 
 We can see that the curve is "under fitting" the data. 

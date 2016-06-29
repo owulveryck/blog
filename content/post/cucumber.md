@@ -161,7 +161,7 @@ It may also be a good idea to use `bundle` if we plan to do further development 
 #### The test environment with bundler
 
 The whole development will run with the help of bundler (and RVM).
-See this [post](http://dev.owulveryck.info/blog/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/) for more explanation on
+See this [post](http://dev.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/) for more explanation on
 how I set it up on my Chromebook.
 
 ```shell
@@ -176,7 +176,7 @@ Writing new Gemfile to /home/chronos/user/gherkin/Gemfile
 
 #### the _Gemfile_
 
-Let's add the cucumber, vagrant (as installed in a previous [post](http://dev.owulveryck.info/blog/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/) ),
+Let's add the cucumber, vagrant (as installed in a previous [post](http://dev.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/) ),
 and vagrant-aws dependencies in the Gemfile:
 
 ```shell

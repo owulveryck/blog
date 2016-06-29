@@ -233,7 +233,7 @@ Two machines are used (linked by a VPN):
 
 Both machines are part of an etcd cluster.
 The topology is composed of 8 nodes with dependencies which can be represented like this (same example as the one I used in a previous post):
-<img class="img-responsive" src="/blog/assets/images/digraph1.png" alt="digraph example"/> 
+<img class="img-responsive" src="/assets/images/digraph1.png" alt="digraph example"/> 
 
 Nodes 0-3 are targeted on the chromebook while nodes 5-7 are targeted on the BSD machine.
 
