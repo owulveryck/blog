@@ -1,0 +1,745 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Go on Olivier Wulveryck&#39;s Tech Blog</title>
+    <link>/tags/go/</link>
+    <description>Recent content in Go on Olivier Wulveryck&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved - 2015/2016</copyright>
+    <lastBuildDate>Wed, 10 Feb 2016 17:19:47 +0100</lastBuildDate>
+    <atom:link href="/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Configuration management, choreography and self-aware applications</title>
+      <link>/2016/02/10/configuration-management-choreography-and-self-aware-applications/</link>
+      <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>/2016/02/10/configuration-management-choreography-and-self-aware-applications/</guid>
+      <description>
+
+&lt;p&gt;Thanks to the &lt;a href=&#34;https://www.linkedin.com/company/techsys?trk=company_logo&#34;&gt;company I&amp;rsquo;m working for (Techsys)&lt;/a&gt; I&amp;rsquo;ve had the opportunity to attend the &lt;a href=&#34;http://cfgmgmtcamp.eu/&#34;&gt;configuration management camp&lt;/a&gt; in Gent (&lt;em&gt;be&lt;/em&gt;) for its 2016 edition.&lt;/p&gt;
+
+&lt;p&gt;I really enjoyed those two days of talks, watching people present different ideas of a possible future for
+the infrastructure and deployment engineering.
+Beyond the technical demonstrations and the experience sharing, I&amp;rsquo;ve spotted a bunch of ideas&lt;/p&gt;
+
+&lt;p&gt;Among all, those that comes to me spontaneously are:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;You don&amp;rsquo;t need configuration management, what you need is a description of the topology of your application - &lt;em&gt;&lt;a href=&#34;http://www.markshuttleworth.com/biography&#34;&gt;Mark Shuttleworth&lt;/a&gt;&lt;/em&gt; in its keynote &lt;em&gt;The magic of modeling&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;You don&amp;rsquo;t need orchestration, what you need is choreography - Exposed by &lt;em&gt;&lt;a href=&#34;https://www.linkedin.com/in/julian&#34;&gt;Julian Dunn&lt;/a&gt;&lt;/em&gt;
+(you can find a transcription &lt;a href=&#34;https://www.youtube.com/watch?v=kfF9IATUask&#34;&gt;here on youtube&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;What we need is a new way to do configuration management - &lt;em&gt;&lt;a href=&#34;https://www.linkedin.com/in/james-shubin-74a89a44&#34;&gt;James Shubin&lt;/a&gt;&lt;/em&gt;, see &lt;a href=&#34;https://ttboj.wordpress.com/2016/01/18/next-generation-configuration-mgmt/&#34;&gt;his blog post&lt;/a&gt; which ispired my project &lt;a href=&#34;http://github.com/owulveryck/khoreia&#34;&gt;khoreia&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I came back home very excited about this.
+This post tries to expose my reflection and how I&amp;rsquo;ve implemented an idea (see it as a POC)
+I&amp;rsquo;ve passed some time to learn about TOSCA, and the to code an orchestrator.&lt;/p&gt;
+
+&lt;p&gt;In a first part I will expose why, according to me, the topological description of the application may be what
+company needs.&lt;/p&gt;
+
+&lt;p&gt;Therefore, I will notice the need for orchestration tools.&lt;/p&gt;
+
+&lt;p&gt;Even if the concepts remains actuals, the future may be an evolution of this mechanism of central command and control.
+In the last part of this post, I will expose what I&amp;rsquo;ve understood of the concept of choreography so far.&lt;/p&gt;
+
+&lt;p&gt;Finally I will demonstrate the idea with a POC based on a development on &lt;a href=&#34;https://github.com/coreos/etcd&#34;&gt;the etcd product&lt;/a&gt; from CoreOS.
+(and a youtube demo for those who don&amp;rsquo;t want to &lt;code&gt;git clone...&lt;/code&gt;)&lt;/p&gt;
+
+&lt;h2 id=&#34;configuration-management-and-orchestration:01ecc74d815319839ce50fcf86930ee5&#34;&gt;Configuration management and orchestration&lt;/h2&gt;
+
+&lt;p&gt;Configuration management has been for a long time, a goal for IT automation.
+Years ago, it allowed system engineers to control a huge park of machines while maintaining a TCO at a relatively decent level.&lt;/p&gt;
+
+&lt;p&gt;Over the last decade, 4 major tools have emerged and are now part of most CTO common vocabulary.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a look at the trends from 4 major tools categorized as &amp;ldquo;configuration management tools&amp;rdquo;:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Tool&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;Founded in&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Ansible&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;2012&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Puppet&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;2005&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Chef&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;2009&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Salt&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;2011&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: I do not represent CFEngine because it is doesn&amp;rsquo;t seem not so widely used in dotcom companies (even if it seems to be a great tool and on a certain extent the father of the others)&lt;/p&gt;
+
+&lt;p&gt;The &amp;ldquo;interest&amp;rdquo; for those tools as seen by Google is be represented like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;script type=&#34;text/javascript&#34; src=&#34;//www.google.com/trends/embed.js?hl=en&amp;q=/m/0k0vzjb,+/m/03d3cjz,+/m/05zxlz3,+/m/0hn8c6s&amp;date=1/2014+25m&amp;cmpt=q&amp;tz=Etc/GMT-1&amp;tz=Etc/GMT-1&amp;content=1&amp;cid=TIMESERIES_GRAPH_0&amp;export=5&amp;w=700&amp;h=350&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;As we can see, Ansible seems to be the emerging technology. Indeed its acquisition by redhat in late 2015 may have boosted a bit the trends, but anyway, the companies that do not implement infrastructure as code may seem to prefer this tool.
+Cause or consequence, Gartner has nominated Ansible as a &lt;em&gt;cool vendor&lt;/em&gt; for 2015 (according to Gartner, a Cool Vendor is an emerging and innovative vendor that has original, interesting, and unique technology with real market impact)&lt;/p&gt;
+
+&lt;p&gt;Why did a newcomer such as Ansible did present such interest?&lt;/p&gt;
+
+&lt;p&gt;Beside its simplicity, Ansible is not exactly a configuration management tool, it is &lt;strong&gt;an orchestrator&lt;/strong&gt; (see &lt;a href=&#34;https://www.Ansible.com/orchestration&#34;&gt;the Ansible webpage&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;According to &lt;a href=&#34;https://en.wikipedia.org/wiki/Diffusion_of_innovations&#34;&gt;Rogger&amp;rsquo;s theory&lt;/a&gt; about the diffusion of innovation, and regarding the trends, I think that it is accurate to say
+that the position of Ansible is near the &amp;ldquo;late majority&amp;rdquo;
+&lt;center&gt;
+&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Diffusionofideas.PNG/330px-Diffusionofideas.PNG&#34; alt=&#34;Diffusion of ideas&#34; /&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;What does this mean ?&lt;/p&gt;
+
+&lt;p&gt;To me,it means that people do feel the need for orchestration, or if they don&amp;rsquo;t feel it, they will thanks to Ansible.
+Via orchestration, they may feel the need for representing their product.&lt;/p&gt;
+
+&lt;p&gt;We are now talking about &lt;strong&gt;infrastructure as data&lt;/strong&gt;; soon we will talk about &lt;strong&gt;architecture as data&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;from-system-configuration-management:01ecc74d815319839ce50fcf86930ee5&#34;&gt;From system configuration management&amp;hellip;&lt;/h3&gt;
+
+&lt;p&gt;I did system administration and engineering for years. Configuration management was the answer to the growing of the infrastructure.
+Config management allowed us to&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Get the systems reliable&lt;/li&gt;
+&lt;li&gt;Get the best efficiency possible from the infrastructure&lt;/li&gt;
+&lt;li&gt;Maintain a low TCO
+&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;It was all &amp;ldquo;system centric&amp;rdquo;, so the application could be deposed and run in best conditions.&lt;/p&gt;
+
+&lt;h3 id=&#34;to-application-s-full-description:01ecc74d815319839ce50fcf86930ee5&#34;&gt;&amp;hellip; to application&amp;rsquo;s full description&lt;/h3&gt;
+
+&lt;p&gt;A couple of years ago, maybe because of the DevOps movement, my missions were getting more and more application centric (which is good).
+Actually infrastructure has not been considered as a needed cost anymore.&lt;/p&gt;
+
+&lt;p&gt;Thanks to &lt;em&gt;Agility&lt;/em&gt;, &lt;em&gt;DevOps&lt;/em&gt;, and the emergent notion of product (as opposed to project), &lt;strong&gt;Application and infrastructure are now seen as a whole&lt;/strong&gt;.&lt;br /&gt;
+(I&amp;rsquo;m talking of the application &amp;ldquo;born in the data center&amp;rdquo;, it is different for those &amp;ldquo;born in the cloud&amp;rdquo;)&lt;/p&gt;
+
+&lt;p&gt;Therefore, the setup of the application must not rely only on programmed configuration management tools anymore, but on its complete &lt;strong&gt;representation&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;the-self-sufficient-application:01ecc74d815319839ce50fcf86930ee5&#34;&gt;The self-sufficient application&lt;/h1&gt;
+
+&lt;p&gt;Some times ago, I wrote article published on &lt;a href=&#34;https://www.linkedin.com/pulse/from-integration-self-sufficient-application-olivier-wulveryck?trk=prof-post&#34;&gt;pulse&lt;/a&gt; because I wanted to lay down on paper what I thought about the future of application deployment.
+I&amp;rsquo;ve described some layers of the application.
+I kept on studying, and with a some help from my colleagues and friends, I&amp;rsquo;ve  finally been able to put a word on those ideas I had in mind.&lt;/p&gt;
+
+&lt;p&gt;This word is &lt;strong&gt;Topology&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;and-then-came-tosca:01ecc74d815319839ce50fcf86930ee5&#34;&gt;and then came TOSCA&lt;/h2&gt;
+
+&lt;p&gt;To describe a whole application, I needed a &lt;em&gt;domain specific language&lt;/em&gt; (DSL).
+All of the languages I was trying to document were by far too system centric.
+Then I discovered &lt;a href=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html&#34;&gt;TOSCA&lt;/a&gt;.
+TOSCA is &lt;strong&gt;THE DSL&lt;/strong&gt; for representing the topology of an application.&lt;/p&gt;
+
+&lt;h3 id=&#34;pros:01ecc74d815319839ce50fcf86930ee5&#34;&gt;Pros&amp;hellip;&lt;/h3&gt;
+
+&lt;p&gt;What&amp;rsquo;s good about Tosca is its goal:&lt;/p&gt;
+
+&lt;p&gt;It describes a standard for representing a cloud application. It is written by the Oasis consortium and
+therefore most of the big brand in IT may be aware of its existence.
+The promise is that if you describe any application with Tosca, it could be deployed on any platform, with a decent &lt;strong&gt;orchestrator&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;and-cons:01ecc74d815319839ce50fcf86930ee5&#34;&gt;&amp;hellip;and cons&lt;/h3&gt;
+
+&lt;p&gt;But&amp;hellip; Tosca is complex.
+It&amp;rsquo;s not that simple to write a Tosca representation. The standard wants to cover all the possible cases, and according &lt;a href=&#34;https://en.wikipedia.org/wiki/Vilfredo_Pareto&#34;&gt;Pareto&lt;/a&gt;&amp;rsquo;s law,
+I can say that 80% of the customers will only need 20% of the standard.&lt;/p&gt;
+
+&lt;p&gt;On top of that, Tosca is young (by now, the YAML version is still in pre-release), and I could not find any decent tool to orchestrate and deploy an application.
+Big companies claim their compliance with the standard, but actually very few of them (if any) does really implement it.&lt;/p&gt;
+
+&lt;h2 id=&#34;let-s-come-back-to-orchestration-and-real-world:01ecc74d815319839ce50fcf86930ee5&#34;&gt;Let&amp;rsquo;s come back to orchestration (and real world)&lt;/h2&gt;
+
+&lt;p&gt;As seen before, a Tosca file would need a tool to transform it to a real application.
+This tool is &lt;strong&gt;an orchestrator&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;The tool should be called &lt;strong&gt;conductor&lt;/strong&gt;, because what is does actually is to conduct the symphony, and yet in our context the symphony is not
+represented by the topology, but by its &amp;lsquo;score&amp;rsquo;: its execution plan, and the purpose of the &amp;lsquo;orchestrator&amp;rsquo; is to make every node to play its part
+so the application symphony could be rendered in best condition of reliability and efficiency&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;Wait, that was the promise of the configuration management tools, isn&amp;rsquo;t it?&lt;/p&gt;
+
+&lt;h3 id=&#34;the-execution-plan:01ecc74d815319839ce50fcf86930ee5&#34;&gt;The execution plan&lt;/h3&gt;
+
+&lt;p&gt;So what is the execution plan.
+An execution plan is a program. It describes exactly what needs to be done by systems.
+The execution plan is deterministic.&lt;/p&gt;
+
+&lt;p&gt;With the description of the application, the execution plan, and the orchestration, the ultimate goal of automation seems fulfilled, indeed!
+We have a complete suite of tools that allows to describe the application and architecture base on its functions and it is possible to
+generate and executes all the commands a computer &lt;strong&gt;must&lt;/strong&gt; do to get things done.&lt;/p&gt;
+
+&lt;p&gt;Why do we need more?
+Because now systems are so complex that we could not rely anymore on IT infrastructure to do exactly what we told it to.
+Mark Burgess, considered by a lot of people as a visionary, wrote a book entitled:
+&lt;a href=&#34;http://www.amazon.com/In-Search-Certainty-information-infrastructure/dp/1492389161&#34;&gt;In Search of Certainty: The science of our information infrastructure&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Julian Dunn told about it in its speech, and I&amp;rsquo;ve started reading IT.&lt;/p&gt;
+
+&lt;p&gt;The conclusion is roughly:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;We may not rely on command and control anymore, we should make the system work on its own to reach a level of stability&lt;/em&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;dancing-choreography-jazz:01ecc74d815319839ce50fcf86930ee5&#34;&gt;Dancing, Choreography, Jazz ?&lt;/h1&gt;
+
+&lt;p&gt;A solution to the orchestration SPOF and  a workaround for dealing with the uncertainty of the infrastructure may be to implement a choreography.
+Or to replace the symphony with a piece of jazz.
+You give every attendee (dancer, jazzman or TOSCA node) the structure of the piece to play.
+And given the chords and the structure, they all react and do what they have committed to do.&lt;/p&gt;
+
+&lt;p&gt;This should produce similar to the same mechanism controlled by an orchestrator, but more fault tolerant.
+Actually, the brain will not have to take care of unpredicted event; each node will do so.
+The application has become self-aware.&lt;/p&gt;
+
+&lt;h2 id=&#34;implementation-a-distributed-system:01ecc74d815319839ce50fcf86930ee5&#34;&gt;Implementation: a distributed system&lt;/h2&gt;
+
+&lt;p&gt;This concept, described in so many sci-fi books, may become applicable because science formalized consensus algorithm such as
+paxo or raft.
+And even better, it is easy to find very good implementation of those concepts (for free)&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;etcd&lt;/code&gt; from CoreOS is one of those tools.
+It is a service oriented key/value store, distributed on a cluster of machine.&lt;/p&gt;
+
+&lt;p&gt;It can be used as a communication based for a cluster of nodes composing a choreography.&lt;/p&gt;
+
+&lt;p&gt;Even more, etcd clients have the ability to monitor an event allowing us to implement the self awareness of the application.&lt;/p&gt;
+
+&lt;h2 id=&#34;proof-of-concept-khoreia:01ecc74d815319839ce50fcf86930ee5&#34;&gt;Proof of concept: khoreia&lt;/h2&gt;
+
+&lt;p&gt;khoreia is a little program I made in &lt;code&gt;go&lt;/code&gt; that relies on the &lt;a href=&#34;http://github.com/coreos/eetcd&#34;&gt;etcd&lt;/a&gt; distributed system.
+Etcd itself is an implementation of the raft consensus algorithm. I do heavily advice that you take a look at &lt;a href=&#34;http://thesecretlivesofdata.com/raft/&#34;&gt;this page&lt;/a&gt;
+for a complete and clear explanation.&lt;/p&gt;
+
+&lt;p&gt;The khoreia single binary takes a topology description in yaml
+(by now very simple, but sooner or later I may implement the TOSCA DSL, as I already
+have a &lt;a href=&#34;http://github.com/owulveryck/toscalib&#34;&gt;Tosca library&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;Then it triggers the nodes and every node reacts on events.
+Regarding the events, it implements the expected life cycle for the node.&lt;/p&gt;
+
+&lt;p&gt;Without actually coding it, the complement life cycle of the application is then applied.
+Even better, the application is fault tolerant (if a check fails, the do method is called again) and the execution
+is completely stateless because of the event based mechanism.&lt;/p&gt;
+
+&lt;h3 id=&#34;screencast-a-little-demo-on-distributed-systems-based-on-event-on-filesystems:01ecc74d815319839ce50fcf86930ee5&#34;&gt;Screencast: a little demo on distributed systems based on event on filesystems&lt;/h3&gt;
+
+&lt;p&gt;Here is a little screencast I made as a POC.
+Two machines are used (linked by a VPN):&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;my chromebook, linux-based at home in France;&lt;/li&gt;
+&lt;li&gt;a FreeBSD server located in Canada.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Both machines are part of an etcd cluster.
+The topology is composed of 8 nodes with dependencies which can be represented like this (same example as the one I used in a previous post):
+&lt;img class=&#34;img-responsive&#34; src=&#34;/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;Nodes 0-3 are targeted on the chromebook while nodes 5-7 are targeted on the BSD machine.&lt;/p&gt;
+
+&lt;p&gt;The topology is described as a simple yaml file &lt;a href=&#34;https://github.com/owulveryck/khoreia/blob/e32af3d77d0b57bf36b68a2460e5a47132f29118/samples/topology.yaml&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Each node is fulfilling two methods:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Create&lt;/li&gt;
+&lt;li&gt;Configure&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And each method is implementing an interface composed of:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Check()&lt;/code&gt; which check whether the action has been release and the &amp;ldquo;role&amp;rdquo; is ok&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Do()&lt;/code&gt; which actually implements the action&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: The signature of the method is actually a bit different, and the go implementation involve channels, but I does not change the principle,
+so I&amp;rsquo;ve decided to omit that for clarity.&lt;/p&gt;
+
+&lt;h4 id=&#34;example:01ecc74d815319839ce50fcf86930ee5&#34;&gt;Example&lt;/h4&gt;
+
+&lt;p&gt;Each node will:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Wait for an event&lt;/strong&gt; and call Create.Check() and Configure.Check().&lt;/li&gt;
+&lt;li&gt;watch for events from their dependencies&lt;/li&gt;
+&lt;li&gt;if an event is detected, call the appropriate Do() method&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&#34;engine:01ecc74d815319839ce50fcf86930ee5&#34;&gt;Engine&lt;/h4&gt;
+
+&lt;p&gt;The interfaces &lt;code&gt;Check()&lt;/code&gt; and &lt;code&gt;Do()&lt;/code&gt; may be implemented on different engines.&lt;/p&gt;
+
+&lt;p&gt;For my demo, as suggested by James I&amp;rsquo;m using a &amp;ldquo;file engine&amp;rdquo; base on iNotify (linux) and kQueue (freebsd).&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;Check()&lt;/code&gt; method is watching the presence of a file. It sends the event &amp;ldquo;true&amp;rdquo; if the file is created of &amp;ldquo;false&amp;rdquo; if its deleted.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;Do()&lt;/code&gt; method actually create an empty file.&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/l96uFQUrcp8&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;khoreia-on-github:01ecc74d815319839ce50fcf86930ee5&#34;&gt;Khoreia on github:&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://github.com/owulveryck/khoreia&#34;&gt;github.com/owulveryck/khoreia&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion:01ecc74d815319839ce50fcf86930ee5&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;Self-awareness, self-healing, elasticity, modularity, &amp;hellip; with a choreography based configuration and deployment tools, standard application may get
+new capabilities without totally rethinking their infrastructure.&lt;/p&gt;
+
+&lt;p&gt;Some of the stuff that still need to be implemented are, for example,  the notion of interface and commitment of the node, and the notion of
+machine learning for every node to teach them how to react to different events in an efficient way.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>IaaS-like RESTfull API based on microservices</title>
+      <link>/2015/11/10/iaas-like-restfull-api-based-on-microservices/</link>
+      <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>/2015/11/10/iaas-like-restfull-api-based-on-microservices/</guid>
+      <description>
+
+&lt;h1 id=&#34;abstracts:1574d51e403296c43e921da78612bc7c&#34;&gt;Abstracts&lt;/h1&gt;
+
+&lt;p&gt;Recently, I&amp;rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.&lt;/p&gt;
+
+&lt;p&gt;I am reading more and more about the &amp;ldquo;API economy&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve also seen this excellent video made by &lt;a href=&#34;https://www.youtube.com/watch?v=tIm8UkSf6RA&amp;amp;list=PLDWZ5uzn69ezRJYeWxYNRMYebvf8DerHd&#34;&gt;Mat Ryer&lt;/a&gt; about how to code an API in GO and why go would be the perfect language to code such a portal.&lt;/p&gt;
+
+&lt;p&gt;The problem I&amp;rsquo;m facing is that in the organization I&amp;rsquo;m working for, the developments are heterogeneous and therefore you can find &lt;em&gt;ruby&lt;/em&gt; teams as well as &lt;em&gt;python&lt;/em&gt; teams and myself as a &lt;em&gt;go&lt;/em&gt; team (That will change in the future anyway)
+The key point is that I would like my middleware to serve as an entry point to the services provided by the department.&lt;/p&gt;
+
+&lt;p&gt;We (as an &amp;ldquo;ops&amp;rdquo; team) would then be able to present the interface via, for example, a &lt;a href=&#34;http://swagger.io&#34;&gt;swagger&lt;/a&gt; like interface, take care of the API and do whatever RPC to any submodule.&lt;/p&gt;
+
+&lt;h1 id=&#34;an-example-a-iaas-like-interface:1574d51e403296c43e921da78612bc7c&#34;&gt;An example: a IAAS like interface&lt;/h1&gt;
+
+&lt;p&gt;Let&amp;rsquo;s consider a node compute lifecycle.&lt;/p&gt;
+
+&lt;p&gt;What I&amp;rsquo;d like to be able to do is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;to create a node&lt;/li&gt;
+&lt;li&gt;to update a node (maybe)&lt;/li&gt;
+&lt;li&gt;to delete a node&lt;/li&gt;
+&lt;li&gt;to get the status of the node&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;the-backend:1574d51e403296c43e921da78612bc7c&#34;&gt;The backend&lt;/h2&gt;
+
+&lt;p&gt;The backend is whatever service, able to create a node, such as openstack, vmware vcac, juju, &amp;hellip;
+Thoses services usually provide RESTfull API.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve seen in my experience, that usually, the API are given with a library in a so called &amp;ldquo;modern language&amp;rdquo;.
+This aim to simplify the development of the clients.
+Sometimes this library may also be developed by an internal team that will take care of the maintenance.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-library:1574d51e403296c43e921da78612bc7c&#34;&gt;The library&lt;/h2&gt;
+
+&lt;p&gt;In my example, we will consider that the library is a simple &lt;em&gt;gem&lt;/em&gt; file developed in ruby.
+Therefore, our service will be a simple server that will get RPC calls, call the good method in the &lt;em&gt;gemfile&lt;/em&gt;
+and that will, &lt;em&gt;in fine&lt;/em&gt; transfer it to the backend.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-restfull-api:1574d51e403296c43e921da78612bc7c&#34;&gt;The RestFull API.&lt;/h2&gt;
+
+&lt;p&gt;I will use the example described &lt;a href=&#34;http://thenewstack.io/make-a-restful-json-api-go/&#34;&gt;here&lt;/a&gt; as a basis for this post.
+Of course there are many other examples and excellent go packages that may be used, but according to Mat Ryer, I will stick to the idiomatic approach.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-glue-msgpack-rpc:1574d51e403296c43e921da78612bc7c&#34;&gt;The glue: MSGPACK-RPC&lt;/h2&gt;
+
+&lt;p&gt;There are several methods for RPC-ing between different languages. Ages ago, there was xml-rpc; then there has been json-rpc;
+I will use &lt;a href=&#34;https://github.com/msgpack-rpc/msgpack-rpc&#34;&gt;msgpack-rpc&lt;/a&gt; which is a binary, json base codec.
+The communication between the Go client and the ruby server will be done over TCP via HTTP for example.&lt;/p&gt;
+
+&lt;p&gt;Later on, outside of the scope of this post, I may use ZMQ (as I have already blogged about 0MQ communication between those languages).&lt;/p&gt;
+
+&lt;h1 id=&#34;the-implementation-of-the-client-the-go-part:1574d51e403296c43e921da78612bc7c&#34;&gt;The implementation of the Client (the go part)&lt;/h1&gt;
+
+&lt;p&gt;I will describe here the node creation via a POST method, and consider that the other methods could be implemented in a similar way.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-signature-of-the-node-creation:1574d51e403296c43e921da78612bc7c&#34;&gt;The signature of the node creation&lt;/h2&gt;
+
+&lt;p&gt;Here is the expected signature for creating a compute element:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;kind&amp;quot;:&amp;quot;linux&amp;quot;,
+    &amp;quot;size&amp;quot;:&amp;quot;S&amp;quot;,
+    &amp;quot;disksize&amp;quot;:20,
+    &amp;quot;leasedays&amp;quot;:1,
+    &amp;quot;environment_type&amp;quot;:&amp;quot;dev&amp;quot;,
+    &amp;quot;description&amp;quot;:&amp;quot;my_description&amp;quot;,
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The corresponding GO structure is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type NodeRequest struct {
+    Kind string `json:&amp;quot;kind&amp;quot;` // Node kind (eg linux)
+    Size string `json:&amp;quot;size&amp;quot;` // size
+    Disksize         int    `json:&amp;quot;disksize&amp;quot;`
+    Leasedays        int    `json:&amp;quot;leasedays&amp;quot;`
+    EnvironmentType  string `json:&amp;quot;environment_type&amp;quot;`
+    Description      string `json:&amp;quot;description&amp;quot;`
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;the-route:1574d51e403296c43e921da78612bc7c&#34;&gt;The route&lt;/h2&gt;
+
+&lt;p&gt;The Middleware is using the &lt;a href=&#34;http://www.gorillatoolkit.org/pkg/mux&#34;&gt;gorilla mux package&lt;/a&gt;.
+According the description, I will add an entry in the routes array (into the &lt;em&gt;routes.go&lt;/em&gt; file):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;Route{
+    &amp;quot;NodeCreate&amp;quot;,
+    &amp;quot;POST&amp;quot;,
+    &amp;quot;/v1/nodes&amp;quot;,
+    NodeCreate,
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; : I am using a prefix &lt;code&gt;/v1&lt;/code&gt; for my API, for exploitation purpose.&lt;/p&gt;
+
+&lt;p&gt;I will then create the corresponding handler in the file with this signature&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func NodeCreate(w http.ResponseWriter, r *http.Request){
+    var nodeRequest NodeRequest
+    body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+    if err != nil {
+        panic(err)
+    }
+    if err := r.Body.Close(); err != nil {
+        panic(err)
+    }
+    if err := json.Unmarshal(body, &amp;amp;nodeRequest); err != nil {
+        w.Header().Set(&amp;quot;Content-Type&amp;quot;, &amp;quot;application/json; charset=UTF-8&amp;quot;)
+        w.WriteHeader(http.StatusBadRequest) // unprocessable entity
+        if err := json.NewEncoder(w).Encode(err); err != nil {
+            panic(err)
+        }
+    }    
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s in this function that will be implemented RPC (client part). To keep it simple at the beginning,
+I will instantiate a TCP connection on every call.
+Don&amp;rsquo;t throw things at me, that will be changed later following the advice of Mat Ryer.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-implementation-of-the-handler:1574d51e403296c43e921da78612bc7c&#34;&gt;The implementation of the handler&lt;/h2&gt;
+
+&lt;h3 id=&#34;the-effective-remote-procedure-call:1574d51e403296c43e921da78612bc7c&#34;&gt;The effective remote procedure call&lt;/h3&gt;
+
+&lt;p&gt;To use &lt;em&gt;msgpack&lt;/em&gt; I need to import the go implementation &lt;code&gt;github.com/msgpack-rpc/msgpack-rpc-go/rpc&lt;/code&gt;.
+This library will take care of the encoding/decoding of the messages.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s dial the RPC server and call the &lt;code&gt;NodeCreate&lt;/code&gt; method with, as argument, the information we had from the JSON input&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;    conn, err := net.Dial(&amp;quot;tcp&amp;quot;, &amp;quot;127.0.0.1:18800&amp;quot;)
+    if err != nil {
+        fmt.Println(&amp;quot;fail to connect to server.&amp;quot;)
+        return
+    }
+    client := rpc.NewSession(conn, true)
+    retval, err := client.Send(&amp;quot;NodeCreate&amp;quot;, nodeRequest.Kind, nodeRequest.Size, nodeRequest.Disksize, nodeRequest.Leasedays, nodeRequest.EnvironmentType, nodeRequest.Description)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    fmt.Println(retval)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;the-rpc-server-the-ruby-part:1574d51e403296c43e921da78612bc7c&#34;&gt;The RPC server (the ruby part)&lt;/h1&gt;
+
+&lt;p&gt;This part is written in ruby, and will take care of the effective node creation.
+At first, we should install the GEM file with the command &lt;code&gt;gem install msgpack-rpc&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;require &#39;msgpack/rpc&#39;
+class MyHandler
+    def NodeCreate(kind, size, disksize, leasedays, environmenttype, description) 
+        print &amp;quot;Creating the node with parameters: &amp;quot;,kind, size, disksize, leasedays, environmenttype, description
+        return &amp;quot;ok&amp;quot;
+    end
+end
+svr = MessagePack::RPC::Server.new
+svr.listen(&#39;0.0.0.0&#39;, 18800, MyHandler.new)
+svr.run
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;let-s-test-it:1574d51e403296c43e921da78612bc7c&#34;&gt;let&amp;rsquo;s test it&lt;/h1&gt;
+
+&lt;p&gt;Launch the RPC server:
+&lt;code&gt;ruby server.rb&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Then launch the API rest server&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;go run *go&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Then perform a POST request&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;curl -X POST -H &#39;Content-Type:application/json&#39; -H &#39;Accept:application/json&#39; -d &#39;{&amp;quot;kind&amp;quot;:&amp;quot;linux&amp;quot;,&amp;quot;size&amp;quot;:&amp;quot;S&amp;quot;,&amp;quot;disksize&amp;quot;:20,&amp;quot;leasedays&amp;quot;:1,&amp;quot;environment_type&amp;quot;:&amp;quot;dev&amp;quot;,&amp;quot;description&amp;quot;:&amp;quot;my_description&amp;quot;}&#39; -k http://localhost:8080/v1/nodes
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It should write something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015/11/10 13:56:51 POST        /v1/nodes       NodeCreate      2.520673ms
+ok
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And something like this in the output of the ruby code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Creating the node with parameters: linux S 20 1 dev my_description
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s all folks! What&amp;rsquo;s left:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;To implement the other methods to be &amp;ldquo;&lt;a href=&#34;https://en.wikipedia.org/wiki/Create,_read,_update_and_delete&#34;&gt;CRUD&lt;/a&gt;&amp;rdquo; compliant&lt;/li&gt;
+&lt;li&gt;To implement an authentication and accreditation mechanism (JWT, Oauth, ?)&lt;/li&gt;
+&lt;li&gt;To change the implementation of the RPC client to use a pool instead of a single connection&lt;/li&gt;
+&lt;li&gt;To implement the swagger interface and documentation of the API&lt;/li&gt;
+&lt;li&gt;Whatever fancy stuff you may want from a production ready interface.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can find all the codes in the github repository &lt;a href=&#34;https://github.com/owulveryck/example-iaas&#34;&gt;here&lt;/a&gt; in the branch &lt;code&gt;iaas-like-restfull-api-based-on-microservices&lt;/code&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ruby / ZeroMQ / GO</title>
+      <link>/2015/10/22/ruby-/-zeromq-/-go/</link>
+      <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>/2015/10/22/ruby-/-zeromq-/-go/</guid>
+      <description>
+
+&lt;h1 id=&#34;abtract:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Abtract&lt;/h1&gt;
+
+&lt;p&gt;I really like go as a programming language. It is a good tool to develop web restful API service.&lt;/p&gt;
+
+&lt;p&gt;On the other hand, ruby and its framework rails has also been wildly used to achieve the same goal.&lt;/p&gt;
+
+&lt;p&gt;Therefore we may be facing a &amp;ldquo;legacy&amp;rdquo; ruby developpement that we would like to connect to our brand new go framework.
+0MQ may be a perfect choice for intefacing the two languages.&lt;/p&gt;
+
+&lt;p&gt;Anyway, it is, at least, a good experience to do a little bit of code to make them communicate.&lt;/p&gt;
+
+&lt;h1 id=&#34;zeromq:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;ZeroMQ&lt;/h1&gt;
+
+&lt;p&gt;I will use the ZeroMQ version 4 as it is the latest available one.
+On top of that, I can see in the &lt;a href=&#34;http://zeromq.org/docs:changes-4-0-0&#34;&gt;release notes&lt;/a&gt; that there is an implementation of a strong encryption, and I may use it later on&lt;/p&gt;
+
+&lt;h1 id=&#34;go:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Go&lt;/h1&gt;
+
+&lt;h2 id=&#34;installation-of-the-library:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Installation of the library&lt;/h2&gt;
+
+&lt;p&gt;As written in the README file, I try a &lt;code&gt;go get&lt;/code&gt; installation on my chromebook.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ go get github.com/pebbe/zmq4
+# pkg-config --cflags libzmq
+Package libzmq was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libzmq.pc&#39;
+to the PKG_CONFIG_PATH environment variable
+No package &#39;libzmq&#39; found
+pkg-config: exit status 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The go binding is not a pure go implementation, and it still needs the C library of zmq.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s &lt;em&gt;brew installing&lt;/em&gt; it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~  brew install zmq
+==&amp;gt; Downloading http://download.zeromq.org/zeromq-4.1.3.tar.gz
+######################################################################## 100.0%
+==&amp;gt; ./configure --prefix=/usr/local/linuxbrew/Cellar/zeromq/4.1.3 --without-libsodium
+==&amp;gt; make
+==&amp;gt; make install
+/usr/local/linuxbrew/Cellar/zeromq/4.1.3: 63 files, 3.5M, built in 73 seconds
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s do the go-get again:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ go get github.com/pebbe/zmq4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;so far so good. Now let&amp;rsquo;s test the installation with a &amp;ldquo;hello world&amp;rdquo; example.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/examples&#34;&gt;examples directory&lt;/a&gt; contains a go implementation of all the example of the ZMQ book
+I will use the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/examples/hwclient.go&#34;&gt;hello world client&lt;/a&gt; and the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/examples/hwserver.go&#34;&gt;hello world server&lt;/a&gt; for my tests&lt;/p&gt;
+
+&lt;p&gt;The hello world client/server is implementing a Request-Reply patternt and are communicating via a TCP socket.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The server is the &lt;em&gt;replier&lt;/em&gt; and is listening on the TCP port 5555
+&lt;code&gt;go
+...
+func main() {
+//  Socket to talk to clients
+responder, _ := zmq.NewSocket(zmq.REP)
+defer responder.Close()
+responder.Bind(&amp;quot;tcp://*:5555&amp;quot;)
+...
+}
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;The client is the &lt;em&gt;requester&lt;/em&gt; and is dialing the same TCP port
+&lt;code&gt;go
+...
+func main() {
+//  Socket to talk to server
+fmt.Println(&amp;quot;Connecting to hello world server...&amp;quot;)
+requester, _ := zmq.NewSocket(zmq.REQ)
+defer requester.Close()
+requester.Connect(&amp;quot;tcp://localhost:5555&amp;quot;)
+...
+}
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Then, the client is sending (requesting) a &lt;em&gt;hello&lt;/em&gt; message, and the server is replying a &lt;em&gt;world&lt;/em&gt; message.&lt;/p&gt;
+
+&lt;h2 id=&#34;running-the-example:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Running the example&lt;/h2&gt;
+
+&lt;p&gt;First, start the server:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ cd $GOPATH/src/github.com/pebbe/zmq4/examples
+~ go run hwserver.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then the client&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ cd $GOPATH/src/github.com/pebbe/zmq4/examples
+~ go run hwclient.go
+Connecting to hello world server...
+Sending  Hello 0
+Received  World
+Sending  Hello 1
+Received  World
+Sending  Hello 2
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;ruby:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Ruby&lt;/h1&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s implement a Ruby client.&lt;/p&gt;
+
+&lt;h2 id=&#34;installation-of-the-library-1:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Installation of the library&lt;/h2&gt;
+
+&lt;p&gt;a &lt;em&gt;gem install&lt;/em&gt; is supposed to do the trick:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ gem install zmq
+Building native extensions.  This could take a while...
+ERROR:  Error installing zmq:
+ERROR: Failed to build gem native extension.
+
+/usr/local/linuxbrew/opt/ruby/bin/ruby -r ./siteconf20151022-23021-1ehwusq.rb extconf.rb
+    checking for zmq.h... yes
+    checking for zmq_init() in -lzmq... yes
+    Cool, I found your zmq install...
+    creating Makefile
+
+    make &amp;quot;DESTDIR=&amp;quot; clean
+
+    make &amp;quot;DESTDIR=&amp;quot;
+    compiling rbzmq.c
+    rbzmq.c: In function &#39;socket_getsockopt&#39;:
+    rbzmq.c:968:7: error: &#39;ZMQ_RECOVERY_IVL_MSEC&#39; undeclared (first use in this function)
+        case ZMQ_RECOVERY_IVL_MSEC:
+        ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Arg!, something went wrong. It looks like there is a version mismatch between th libzmq brew installed and the version expected by the gem
+The &lt;em&gt;zmq&lt;/em&gt; gem seems a bit old and there is a &lt;em&gt;FFI&lt;/em&gt; ruby extension with a more active developement.&lt;/p&gt;
+
+&lt;p&gt;Moreover, I have found []the perfect website for the ruby-and-zmq-ignorant(&lt;a href=&#34;https://github.com/andrewvc/learn-ruby-zeromq&#34;&gt;https://github.com/andrewvc/learn-ruby-zeromq&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;As written in the doc, let&amp;rsquo;s install the needed gems via &lt;code&gt;gem install ffi ffi-rzmq zmqmachine&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;let-s-try-the-lib:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Let&amp;rsquo;s try the lib&lt;/h2&gt;
+
+&lt;p&gt;Ok, it is now time to run an example&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;require &#39;rubygems&#39;
+require &#39;ffi-rzmq&#39;
+def error_check(rc)
+    if ZMQ::Util.resultcode_ok?(rc)
+        false
+    else
+        STDERR.puts &amp;quot;Operation failed, errno [#{ZMQ::Util.errno}] description [#{ZMQ::Util.error_string}]&amp;quot;
+        caller(1).each { |callstack| STDERR.puts(callstack)  }
+        true
+    end
+end
+
+ctx = ZMQ::Context.create(1)
+STDERR.puts &amp;quot;Failed to create a Context&amp;quot; unless ctx
+
+req_sock = ctx.socket(ZMQ::REQ)
+rc = req_sock.connect(&#39;tcp://127.0.0.1:5555&#39;)
+STDERR.puts &amp;quot;Failed to connect REQ socket&amp;quot; unless ZMQ::Util.resultcode_ok?(rc)
+
+2.times do
+    rc = req_sock.send_string(&#39;Ruby says Hello&#39;)
+    break if error_check(rc)
+
+    rep = &#39;&#39;
+    rc = req_sock.recv_string(rep)
+    break if error_check(rc)
+    puts &amp;quot;Received reply &#39;#{rep}&#39;&amp;quot;
+end
+error_check(req_sock.close)
+
+ctx.terminate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Running this example with a simple &lt;code&gt;ruby client.rb&lt;/code&gt; command leads to the following errors:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ruby client.rb
+Assertion failed: check () (src/msg.cpp:248)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But, my GO server is receiving the messages:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ go run hwserver.go
+Received  Ruby says Hello
+Received  Ruby says Hello
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;end-of-show:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;End of show&lt;/h1&gt;
+
+&lt;p&gt;That&amp;rsquo;s it for now. I think I&amp;rsquo;m facing a bug in the ruby implementation of the libzmq I&amp;rsquo;m using.
+Indeed, I&amp;rsquo;ve found an &lt;a href=&#34;https://github.com/chuckremes/ffi-rzmq/issues/118&#34;&gt;issue&lt;/a&gt;&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;I will check again later, or I will try on another environement but the essential is here.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

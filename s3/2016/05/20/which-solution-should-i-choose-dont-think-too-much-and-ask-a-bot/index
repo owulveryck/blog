@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Which solution should I choose? Don&#39;t think too much and ask a bot!  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="A post about machine learning and an application on a simple case I&#39;ve met in my job. Here is the use case \:regarding four different technical solutions, after the evaluation by group of human of different features, can a Bot &#34;think&#34; on its own and evaluate which one offers then best ratio cost/features. And therefore, can it tell any manager which solution to choose." />
+
+<meta name="keywords" content="machine learning, octave, linear regression, ">
+
+<link rel="author" href="http://plus.google.com/+olivier.wulveryck">
+
+
+<meta property="og:title" content="Which solution should I choose? Don&#39;t think too much and ask a bot!  &middot; Olivier Wulveryck&#39;s Tech Blog ">
+<meta property="og:site_name" content="Olivier Wulveryck&#39;s Tech Blog"/>
+<meta property="og:url" content="/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="A post about machine learning and an application on a simple case I&#39;ve met in my job. Here is the use case \:regarding four different technical solutions, after the evaluation by group of human of different features, can a Bot &#34;think&#34; on its own and evaluate which one offers then best ratio cost/features. And therefore, can it tell any manager which solution to choose."/>
+<meta property="og:article:published_time" content="2016-05-20T12:50:59&#43;02:00" />
+<meta property="og:article:modified_time" content="2016-05-20T12:50:59&#43;02:00" />
+
+  
+    
+<meta property="og:article:tag" content="machine learning">
+    
+<meta property="og:article:tag" content="octave">
+    
+<meta property="og:article:tag" content="linear regression">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@owulveryck" />
+<meta name="twitter:creator" content="@owulveryck" />
+<meta name="twitter:title" content="Which solution should I choose? Don&#39;t think too much and ask a bot!" />
+<meta name="twitter:description" content="A post about machine learning and an application on a simple case I&#39;ve met in my job. Here is the use case \:regarding four different technical solutions, after the evaluation by group of human of different features, can a Bot &#34;think&#34; on its own and evaluate which one offers then best ratio cost/features. And therefore, can it tell any manager which solution to choose." />
+<meta name="twitter:url" content="/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/" />
+<meta name="twitter:domain" content="/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Which solution should I choose? Don\x27t think too much and ask a bot!",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+olivier.wulveryck?rel=author"
+    },
+    "datePublished": "2016-05-20",
+    "description": "A post about machine learning and an application on a simple case I\x27ve met in my job. Here is the use case \\:regarding four different technical solutions, after the evaluation by group of human of different features, can a Bot \x22think\x22 on its own and evaluate which one offers then best ratio cost\/features. And therefore, can it tell any manager which solution to choose.",
+    "wordCount":  1570 
+  }
+</script>
+
+
+
+<link rel="canonical" href="/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+<link href="/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.15" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="/css/theme/default.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css">
+
+
+  <link rel="stylesheet" href="/css/highlight/default.css">
+
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+<script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+</head>
+<body>
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Olivier Wulveryck&#39;s Tech Blog</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li>
+
+            <a href="/about"
+            >
+
+            
+                <i class="fa fa-info-circle"></i>
+            
+            
+            About
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="/post"
+             title="Show list of posts">
+
+            
+            
+            Posts
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="/tags"
+             title="Show list of tags">
+
+            
+            
+            Tags
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </div>
+  </nav>
+
+</header>
+
+
+<div class="container">
+<div class="row">
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Which solution should I choose? Don&#39;t think too much and ask a bot!
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2016-05-20">20 May, 2016</time>
+</small>
+
+
+  <small>
+    &middot; by Olivier Wulveryck
+  
+  &middot; Read in about 8 min
+  &middot; (1570 Words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="/tags/machine-learning" class="label label-primary">machine learning</a>
+  
+  <a href="/tags/octave" class="label label-primary">octave</a>
+  
+  <a href="/tags/linear-regression" class="label label-primary">linear regression</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+  <div class="container content">
+  
+
+<h1 id="let-me-tell-you-a-story-the-why:f9b1a1ed53e4ef825dd6193bcdc715da">Let me tell you a story: the why!</h1>
+
+<p>A year ago, one of those Sunday morning where spring starts to warm up the souls, I went, as usual to my favorite bakery.
+The family tradition is to come back with a bunch of &ldquo;Pains au Chocolat&rdquo; (which, are, you can trust me, simply excellent).</p>
+
+<ul>
+<li><em>hello sir, I&rsquo;d like 4 of your excellent &ldquo;pains au chocolat&rdquo; please</em></li>
+<li><em>I&rsquo;m sorry, I don&rsquo;t have any &ldquo;pains au chocolat&rdquo; nor any &ldquo;croissant&rdquo; anymore</em></li>
+<li><em>what? How is it possible ?</em></li>
+<li><em>everything has been sold.</em></li>
+<li><em>too bad&hellip;</em></li>
+</ul>
+
+<p>I think to myself: <em>why didn&rsquo;t you made more?</em>. He may have read my thought and told me</p>
+
+<ul>
+<li><em>I wish I could have foreseen</em></li>
+</ul>
+
+<p>When I left his shop, his words were echoing&hellip; I wish I could have foreseen&hellip; We have self-driving cars, we have the Internet,
+we are a civilization that is technology advanced.
+Facebook recognize your face among billions as soon as you post a photo&hellip; It must be possible to foresee&hellip;</p>
+
+<p>This is how I started to gain interest in machine learning</p>
+
+<p>At first I started to read some papers, then I learn (a very little bit) about graph theory, Bayesian networks, Markov chains.
+But I was not accurate and I felt I was missing some basic theory.</p>
+
+<p>That&rsquo;s the main reason why, 8 weeks ago, I signed in a course about <a href="https://www.coursera.org/learn/machine-learning">&ldquo;Machine learning&rdquo; on Coursera</a>.
+This course is given by <a href="http://www.andrewng.org/">Andrew Ng</a> from <a href="https://www.stanford.edu/">Stanford University</a>.</p>
+
+<p>It is an excellent introduction that gives me all the tools I need to go deeper in this science. The course is based on real examples
+and uses powerful mathematics without going too deeply in the proofs.</p>
+
+<h1 id="so-what:f9b1a1ed53e4ef825dd6193bcdc715da">So what?</h1>
+
+<p>The course is not finished yet, but after about 8 weeks, I&rsquo;ve learned a lot about what we call &ldquo;machine learning&rdquo;.</p>
+
+<p>The main idea of the machine learning is:</p>
+
+<ul>
+<li>to feed some code with a bunch of data (who said big data was useless)</li>
+<li>to code or encode some mathematical formulas that could represent the data</li>
+<li>to implement any algorithm that optimize the formulas by minimizing the error made by the machine on the evolving data sets.</li>
+</ul>
+
+<p>To make it simple: machine learning is feeding a &ldquo;robot&rdquo; with data and teach him how to analyse the errors so it can make decisions on its own.</p>
+
+<p>Scary isn&rsquo;t it? But so exciting&hellip; As usual I won&rsquo;t go into ethical debate on this blog, and I will stick to science and on the benefit
+of the science.</p>
+
+<p>But indeed, always remind François Rabelais:</p>
+
+<blockquote>
+<p>Science sans conscience n&rsquo;est que ruine de l&rsquo;&acirc;me (<em>Science without conscience is but the ruin of the soul</em>)</p>
+</blockquote>
+
+<h2 id="a-use-case:f9b1a1ed53e4ef825dd6193bcdc715da">A use case</h2>
+
+<h3 id="defining-the-problem:f9b1a1ed53e4ef825dd6193bcdc715da">Defining the problem</h3>
+
+<p>I have 4 technical solutions providing a similar goal: deliver cloud services.
+Actually, none of them is fulfilling all the requirements of my business.
+As usual, one is good in a certain area, while another one is weak, etc.</p>
+
+<p>A team of people has evaluated more than 100 criteria, and gave two quotations per criteria and per product:</p>
+
+<ul>
+<li>the first quotation is in the range 0/3 and indicated whether the product is fulfilling the current feature</li>
+<li>the second quotation may be {0,1,3,9} and points the effort needed to reach a 3 for the feature</li>
+</ul>
+
+<p>Therefore, for each solution, I have a table looking like this :</p>
+
+<table>
+<thead>
+<tr>
+<th>feature  name</th>
+<th>feature evaluation</th>
+<th>effort</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>feature 1</td>
+<td>0</td>
+<td>9</td>
+</tr>
+
+<tr>
+<td>feature 2</td>
+<td>3</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>feature 3</td>
+<td>2</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>feature 4</td>
+<td>0</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>&hellip;&hellip;.</td>
+<td>&hellip;</td>
+<td>&hellip;</td>
+</tr>
+
+<tr>
+<td>feature 100</td>
+<td>2</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+
+<p>I&rsquo;ve been asked to evaluate the product and to produce a comparison.</p>
+
+<p>To do an analytic, I must look for an element of comparison. So I&rsquo;ve turned the problem into this :</p>
+
+<p><strong>I would like to know which product is the cheapest to fulfill my requirement.</strong></p>
+
+<p>(I&rsquo;ve uploaded my samples here):</p>
+
+<ul>
+<li><a href="/assets/ml/solution1.csv">solution 1</a></li>
+<li><a href="/assets/ml/solution2.csv">solution 2</a></li>
+<li><a href="/assets/ml/solution3.csv">solution 3</a></li>
+<li><a href="/assets/ml/solution4.csv">solution 4</a></li>
+</ul>
+
+<h3 id="finding-a-solution:f9b1a1ed53e4ef825dd6193bcdc715da">Finding a solution</h3>
+
+<p>In the machine learning, we notice two different fields of application:</p>
+
+<ul>
+<li>regression</li>
+<li>classification</li>
+</ul>
+
+<p>The classification mechanism would be used to answer a yes/no question; for example: <em>should I keep solution 1</em> ?
+The regression mechanism helps us for &ldquo;predicting&rdquo;. Actually, the goal is to <em>automatically</em> find a mathematical formulae that turns
+a set of feature into a result.</p>
+
+<p>what is a feature, and what&rsquo;s the result?
+Let&rsquo;s go back to my <em>petits pains</em> example.</p>
+
+<p>Consider that the baker has made statistics on its production for sunday, and it has taken some events into consideration:</p>
+
+<ul>
+<li>sunday the 1st: it was raining, I sold only 100 petits Pains</li>
+<li>sunday the 8th: it was sunny, I sold 250 petits Pains</li>
+<li>sunday the 16th: it was sunny, and it was a special day (eg: mother&rsquo;s day): 300 petits Pains</li>
+<li>sunday the 24th: it was cloudy: 150 petits Pains</li>
+</ul>
+
+<p>Here, the baker thinks that its production must be a function of the weather and the calendar; therefore those are the two features.
+What ML propose is to tell the baker how many &ldquo;petits pains&rdquo; he should make <strong>knowing</strong> that it is a special day (father&rsquo;s day) and that it
+is partially sunny&hellip;</p>
+
+<p>Back in the context of this post, the goal of the regression would be to find a mathematical function that will tell me the effort needed
+for any value, and doing this on the simple basis of the training set I have.</p>
+
+<h4 id="the-actual-score-of-all-the-solutions:f9b1a1ed53e4ef825dd6193bcdc715da">The actual score of all the solutions</h4>
+
+<p>The first thing to find it the total score of all the 4 solutions.
+If I consider $m$ features, the total score of the solution is defined by:</p>
+
+<p>$ score = \frac{1}{m} . \sum_{k=1}^{m} feature_k $</p>
+
+<p>What I need now, is to evaluate the effort needed to reach a score of 3 for each solution.
+Let&rsquo;s do that.</p>
+
+<h4 id="representing-the-training-set:f9b1a1ed53e4ef825dd6193bcdc715da">Representing the training set</h4>
+
+<p>First, let&rsquo;s plot the training set.
+<center>
+<img class="img-responsive" src="/assets/images/ml/trainingset.jpg" alt="Training set"/>
+</center></p>
+
+<p><strong>note</strong> the representation is not accurate because there may be several bunk points</p>
+
+<p>I will use in this post what&rsquo;s called &ldquo;supervised learning&rdquo;. That means that I will express a skeleton of function and let the machine
+adjust it. (actually this is a very basic and week implementation; a lot more complex examples may be implemented but that&rsquo;s not the purpose of this post)</p>
+
+<p>When I look at the training set representation, I can imagine a line passing by the middle of the plots.
+This line may look like this:</p>
+
+<p><center>
+<img class="img-responsive" src="/assets/images/ml/x-1_5.jpg" alt="x^(-1/5)"/>
+</center></p>
+
+<p>This is actually a representation of the function $ x^{\frac{1}{5}} $</p>
+
+<p>Let&rsquo;s assume that this function may basically fit my example, my goal will be to adapt the function.
+assume this equation with two parameters $\theta_0$ and $\theta_1$ that will influence the curve:</p>
+
+<p>$ f(x) = \theta_0 + \theta_1 . x^{\frac{1}{5}} $</p>
+
+<p>Therefore, my goal will be to code something so that the machine will figure out what $\theta_0$ and $\theta_1$  are.</p>
+
+<p>I will use an implementation of an algorithm called <a href="https://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a> for linear regression.
+I won&rsquo;t go into the details of this algorithm, as it takes a complete course to be explained.</p>
+
+<p>The implementation is made with <a href="https://www.gnu.org/software/octave/">GNU octave</a> and the code is available on my <a href="https://github.com/owulveryck/linear-regression-example">github</a></p>
+
+<h2 id="the-computation-and-the-result:f9b1a1ed53e4ef825dd6193bcdc715da">The computation and the result</h2>
+
+<p>Here is a figure representing the function for one particular solution:
+<center>
+<img class="img-responsive" src="/assets/images/ml/trainingset_plot.jpg" alt="Training set with the function"/>
+</center></p>
+
+<p>We can see that the curve is &ldquo;under fitting&rdquo; the data.
+Anyway, let&rsquo;s continue and get the result I want (I will explain later how to perform better):</p>
+
+<p>Here are the computational results:
+<pre>
+octave:10&gt; compute
+Analysing solution1.csv:0.<sup>67</sup>&frasl;<sub>3</sub>
+Running gradient descent&hellip;
+Theta found by gradient descent: 5.397050 -4.315835
+Prediction for x=0.669291 ; 1.414256
+Prediction for x=3 ; 0.020681
+Effort (scaled to 10): 2.582105</p>
+
+<p>Analysing solution2.csv:0.<sup>96</sup>&frasl;<sub>3</sub>
+Running gradient descent&hellip;
+Theta found by gradient descent: 3.178478 -2.451611
+Prediction for x=0.960630 ; 0.746482
+Prediction for x=3 ; 0.124430
+Effort (scaled to 10): 1.957075</p>
+
+<p>Analysing solution3.csv:0.<sup>67</sup>&frasl;<sub>3</sub>
+Running gradient descent&hellip;
+Theta found by gradient descent: 2.557847 -2.015334
+Prediction for x=0.669291 ; 0.698031
+Prediction for x=3 ; 0.047283
+Effort (scaled to 10): 2.544122</p>
+
+<p>Analysing solution4.csv:0.<sup>86</sup>&frasl;<sub>3</sub>
+Running gradient descent&hellip;
+Theta found by gradient descent: 3.104868 -2.422627
+Prediction for x=0.858268 ; 0.755175
+Prediction for x=3 ; 0.086926
+Effort (scaled to 10): 2.152261
+</pre></p>
+
+<p>For each solution, I have:</p>
+
+<ul>
+<li>the score (the first line /3)</li>
+<li>the parameters $\theta$</li>
+<li>a prediction for the actual score, and for a score of 3</li>
+<li>the effort (scale on 10) needed to pass from the actual score to 3</li>
+</ul>
+
+<h4 id="final-result:f9b1a1ed53e4ef825dd6193bcdc715da">Final result</h4>
+
+<p>Here is the final classification of my four solutions:</p>
+
+<table>
+<thead>
+<tr>
+<th>Solution</th>
+<th>score</th>
+<th>effort</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Solution 2</td>
+<td>0.96</td>
+<td>1.95</td>
+</tr>
+
+<tr>
+<td>Solution 4</td>
+<td>0.86</td>
+<td>2.15</td>
+</tr>
+
+<tr>
+<td>Solution 3</td>
+<td>0.67</td>
+<td>2.54</td>
+</tr>
+
+<tr>
+<td>Solution 1</td>
+<td>0.67</td>
+<td>2.58</td>
+</tr>
+</tbody>
+</table>
+
+<p>Solution 2 is the cheapest. It&rsquo;s possible to go into further analysis to determine why it&rsquo;s the cheapest, and how the other ones
+may catch up and go back in the race, but again, that is not the purpose of my post.</p>
+
+<h1 id="conclusion:f9b1a1ed53e4ef825dd6193bcdc715da">Conclusion</h1>
+
+<p>This is a simple approach.
+Some axis of optimization could be to use a more complex polynomial (eg: $\theta_0+\theta_1.x^\frac{1}{3}+\theta_2.x^\frac{1}{5}$)
+or to use a <a href="https://en.wikipedia.org/wiki/Support_vector_machine">support vector machine</a> with a gaussian kernel for example.</p>
+
+<p>One other optimization would be to add some more features, such as, for example, a score on the importance of a feature (a functional feature).</p>
+
+<p>Machine learning is a wide mathematical and IT area. It is now in everyone&rsquo;s life.
+Nowadays we are talking about plateform fully automated, self-healing applications, smart deployements, smart monitoring.
+There are already some good implementations of algorithms on the market, but there is a huge place for integration of those tools into
+the life of the IT specialist.</p>
+
+<p>Automation has already helped and took the boring job of the IT specialist. Smart automation will go a step further.</p>
+
+</div>
+
+
+  <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/" title="Behaviour Driven Development with Gherkin and Cucumber (an introduction)">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+</footer>
+
+
+</div>
+</div>
+      <footer class="footer">
+    <div class="container hidden-print">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="#">back to top</a>
+</div>
+<div class="pull-right">
+  
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+          <small>
+              
+    
+<div class="container footline">
+  
+
+</div>
+
+
+    
+<div class="container copyright">
+  
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
+
+
+</div>
+
+
+
+          </small>
+        </div>
+     </div>
+    </div>
+</footer>
+
+    <script src="/js/jquery.min-2.1.4.js"></script>
+<script src="/js/bootstrap.min-3.3.5.js"></script>
+
+
+
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="/js/highlight.pack.js"></script>
+<script src="/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-69673850-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+  </body>
+</html>
+

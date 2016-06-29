@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bash on Olivier Wulveryck&#39;s Tech Blog</title>
+    <link>/tags/bash/</link>
+    <description>Recent content in Bash on Olivier Wulveryck&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved - 2015/2016</copyright>
+    <lastBuildDate>Mon, 30 Nov 2015 13:17:41 +0000</lastBuildDate>
+    <atom:link href="/tags/bash/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>KSH93 cool features for scripting</title>
+      <link>/2015/11/30/ksh93-cool-features-for-scripting/</link>
+      <pubDate>Mon, 30 Nov 2015 13:17:41 +0000</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>/2015/11/30/ksh93-cool-features-for-scripting/</guid>
+      <description>
+
+&lt;p&gt;From time to time, I&amp;rsquo;m involved into a trolling conversation when any linux kiddie tells me:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Bash is really the superior shell&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;I totally disagree, but as I&amp;rsquo;m getting older, I don&amp;rsquo;t argue anymore.&lt;/p&gt;
+
+&lt;p&gt;Anyway, in this post I will expose two arguments, or I should say two reasons, why I usually use &lt;code&gt;ksh93&lt;/code&gt; to run my scripts.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; I&amp;rsquo;m really talking about the engine of the script, (the shebang definition).
+set I&amp;rsquo;m used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
+My &lt;code&gt;$SHELL&lt;/code&gt; for interactivity is &lt;code&gt;zsh&lt;/code&gt; because it&amp;rsquo;s efficient enough
+and it has a bunch of really cool features I won&amp;rsquo;t discuss in this post (maybe later)&lt;/p&gt;
+
+&lt;h1 id=&#34;read-loops-forks-and-efficiency:492220ebbfd063710e57a4727b3232af&#34;&gt;Read, loops, forks and efficiency&amp;hellip;&lt;/h1&gt;
+
+&lt;p&gt;More than 10 years ago, as I was working for a project at IBM, my excellent team leader told me to refer to this book:
+&lt;a href=&#34;http://shop.oreilly.com/product/9780596003302.do&#34;&gt;Unix Power Tools&lt;/a&gt;. I did learn a lot with it.&lt;/p&gt;
+
+&lt;p&gt;And one feature I&amp;rsquo;ve always used is the &lt;code&gt;while read&lt;/code&gt; loop.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-use-case:492220ebbfd063710e57a4727b3232af&#34;&gt;The use case&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take this script as example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ cat test                                                                                                         
+for i in $(seq 1 500)
+do
+    echo $i | read a
+    echo -ne &amp;quot;$a\r&amp;quot;
+done
+echo &amp;quot;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It simply iterate 500 times and display the counter on the screen.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-result-of-execution:492220ebbfd063710e57a4727b3232af&#34;&gt;The result of execution&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s execute it in different shells&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;for i in bash zsh ksh                                                                                         
+do
+    echo &amp;quot;$i =&amp;gt;&amp;quot;
+    eval $i test
+done
+bash =&amp;gt;
+
+zsh =&amp;gt;
+500
+ksh =&amp;gt;
+500
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Bash is the only one which does not display the expected result.
+The explanation is that the shell sees a pipe and the fork the process. The assignation to the variable &lt;code&gt;a&lt;/code&gt; is in another context and therefore,
+when the father wants to display &lt;code&gt;$a&lt;/code&gt; in the current shell, the variable is empty.&lt;/p&gt;
+
+&lt;p&gt;Wait, but why does &lt;code&gt;ksh&lt;/code&gt; (and &lt;code&gt;zsh&lt;/code&gt;) do display the correct result ?
+Simply because ksh and zsh have noticed that the command after the pipe was a builtin, and therefore that it was un-useful to fork.&lt;/p&gt;
+
+&lt;h3 id=&#34;strace-to-the-rescue:492220ebbfd063710e57a4727b3232af&#34;&gt;Strace to the rescue&amp;hellip;&lt;/h3&gt;
+
+&lt;p&gt;To prove it, let&amp;rsquo;s check for syscalls with the &lt;code&gt;strace&lt;/code&gt; tool, and count how many clones and calls are performed:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ for i in bash zsh ksh                                                                                         
+do
+    echo &amp;quot;$i =&amp;gt;&amp;quot;
+    strace -c  $i  test 2&amp;gt;&amp;amp;1 | egrep &amp;quot;clone|calls&amp;quot;
+done
+bash =&amp;gt;
+% time     seconds  usecs/call     calls    errors syscall
+56.05    0.067081          67      1001           clone
+zsh =&amp;gt;
+% time     seconds  usecs/call     calls    errors syscall
+71.57    0.057681         115       501           clone
+ksh =&amp;gt;
+% time     seconds  usecs/call     calls    errors syscall
+68.50    0.042059          84       500           clone
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;quod erat demonstrandum&lt;/em&gt;, twice as much clone in bash thant in ksh|zsh.&lt;/p&gt;
+
+&lt;h2 id=&#34;efficiency:492220ebbfd063710e57a4727b3232af&#34;&gt;Efficiency&lt;/h2&gt;
+
+&lt;p&gt;Of course this as an impact on performances, because fork are expensive, let&amp;rsquo;s query the execution time:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;for i in bash zsh ksh                                                                                         
+do
+    echo &amp;quot;$i =&amp;gt;&amp;quot;
+    eval time $i test
+done
+bash =&amp;gt;
+
+bash test  0,17s user 0,86s system 95% cpu 1,079 total
+zsh =&amp;gt;
+500
+zsh test  0,08s user 0,46s system 82% cpu 0,648 total
+ksh =&amp;gt;
+500
+ksh test  0,07s user 0,46s system 65% cpu 0,819 total
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This sounds clear to me&amp;hellip;&lt;/p&gt;
+
+&lt;h1 id=&#34;the-ksh93-getopts-unknown-feature:492220ebbfd063710e57a4727b3232af&#34;&gt;The KSH93 Getopts unknown feature&lt;/h1&gt;
+
+&lt;p&gt;Another cool feature I&amp;rsquo;ve discovered recently is the little addon of the getopts feature.&lt;/p&gt;
+
+&lt;p&gt;I wanted to use the &lt;code&gt;getopts&lt;/code&gt; built in in a script. As usual, I did &lt;em&gt;RTFM&lt;/em&gt; (because I never know when to use colon etc.).&lt;/p&gt;
+
+&lt;p&gt;Here is the extract of the man page of ksh93 relative to the getopts function:&lt;/p&gt;
+
+&lt;pre&gt;
+&lt;B&gt;getopts&lt;/B&gt; [ &lt;B&gt;-a&lt;/B&gt; &lt;I&gt;name&lt;/I&gt; ] &lt;I&gt;optstring vname&lt;/I&gt; [ &lt;I&gt;arg&lt;/I&gt; ... ]
+
+Checks &lt;I&gt;arg&lt;/I&gt; for legal options.  If &lt;I&gt;arg&lt;/I&gt; is omitted, the positional parameters are used.
+
+An option argument begins with a &lt;B&gt;+&lt;/B&gt; or a &lt;B&gt;-&lt;/B&gt;.  An option not beginning with &lt;B&gt;+&lt;/B&gt; or &lt;B&gt;-&lt;/B&gt; or the argument &lt;B&gt;--&lt;/B&gt; ends the options.
+Options beginning with &lt;B&gt;+&lt;/B&gt; are only recognized when &lt;I&gt;optstring&lt;/I&gt; begins with a &lt;B&gt;+&lt;/B&gt;.
+
+&lt;I&gt;optstring&lt;/I&gt; contains the letters that &lt;B&gt;getopts&lt;/B&gt; recognizes.
+If a letter is followed by a &lt;B&gt;:&lt;/B&gt;, that option is expected to have an argument.
+The options can be separated from the argument by blanks.
+The option &lt;B&gt;-?&lt;/B&gt; causes &lt;B&gt;getopts&lt;/B&gt; to generate a usage message on standard error.
+The &lt;B&gt;-a&lt;/B&gt; argument can be used to specify the name to use for the usage message, which defaults to &lt;B&gt;$0&lt;/B&gt;.
+
+&lt;B&gt;getopts&lt;/B&gt; places the next option letter it finds inside variable &lt;I&gt;vname&lt;/I&gt; each time it is invoked.
+The option letter will be prepended with a &lt;B&gt;+&lt;/B&gt; when &lt;I&gt;arg&lt;/I&gt; begins with a &lt;B&gt;+&lt;/B&gt;.
+The index of the next &lt;I&gt;arg&lt;/I&gt; is stored in &lt;FONT SIZE=&#34;-1&#34;&gt;&lt;B&gt;OPTIND&lt;/B&gt;.
+&lt;/FONT&gt; The option argument, if any, gets stored in &lt;FONT SIZE=&#34;-1&#34;&gt;&lt;B&gt;OPTARG&lt;/B&gt;.  &lt;/FONT&gt; 
+
+A leading &lt;B&gt;:&lt;/B&gt; in &lt;I&gt;optstring&lt;/I&gt; causes &lt;B&gt;getopts&lt;/B&gt; to store the letter of an invalid option in &lt;FONT SIZE=&#34;-1&#34;&gt;&lt;B&gt;OPTARG&lt;/B&gt;, &lt;/FONT&gt;
+and to set &lt;I&gt;vname&lt;/I&gt; to &lt;B&gt;?&lt;/B&gt; for an unknown option and to &lt;B&gt;:&lt;/B&gt; when a required option argument is missing.
+Otherwise, &lt;B&gt;getopts&lt;/B&gt; prints an error message.
+The exit status is non-zero when there are no more options.
+
+&lt;P&gt; There is no way to specify any of the options &lt;B&gt;:&lt;/B&gt;, &lt;B&gt;+&lt;/B&gt;, &lt;B&gt;-&lt;/B&gt;, &lt;B&gt;?&lt;/B&gt;, &lt;B&gt;[&lt;/B&gt;, and &lt;B&gt;]&lt;/B&gt;.
+
+The option &lt;B&gt;#&lt;/B&gt; can only be specified as the first option. 
+&lt;/pre&gt;
+
+&lt;p&gt;This particular sentence, in the middle of the documentation peaked my interest&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The option -? causes getopts to generate a usage message on standard error.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;What? We can generate usage with getopts?&lt;/p&gt;
+
+&lt;p&gt;Cool, any script should be documented, but any documentation should not be difficult to implement.&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&#34;img-responsive center-block&#34; src=&#34;http://imgs.xkcd.com/comics/manuals.png&#34;&gt;
+&lt;center&gt;&lt;em&gt;&lt;a href=&#34;https://xkcd.com/1343/&#34;&gt;https://xkcd.com/1343/&lt;/a&gt;&lt;/em&gt;&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;I did googled and found this
+&lt;a href=&#34;http://docstore.mik.ua/orelly/unix3/korn/appb_11.htm&#34;&gt;web page&lt;/a&gt; which is an extract from this book &lt;a href=&#34;http://shop.oreilly.com/product/9780596001957.do&#34;&gt;Learning the Korn Shell&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;An example is sometimes better than an explanation (and the book is complete on this subject)&lt;/p&gt;
+
+&lt;h2 id=&#34;the-example:492220ebbfd063710e57a4727b3232af&#34;&gt;The example&lt;/h2&gt;
+
+&lt;h3 id=&#34;the-script:492220ebbfd063710e57a4727b3232af&#34;&gt;The script&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;#!/bin/ksh
+
+ENV=dev
+MPATH=/tmp
+##
+### Man usage and co...
+
+USAGE=&amp;quot;[-?The example script v1.0]&amp;quot;
+USAGE+=&amp;quot;[-author?Olivier Wulveryck]&amp;quot;
+USAGE+=&amp;quot;[-copyright?Copyright (C) My Blog]&amp;quot;
+USAGE+=&amp;quot;[+NAME?$0 --- The Example Script]&amp;quot;
+USAGE+=&amp;quot;[+DESCRIPTION?The description of the script]&amp;quot;
+USAGE+=&amp;quot;[u:user]:[user to run the command as:=$USER?Use the name of the user you want to sudo to: ]&amp;quot;
+USAGE+=&amp;quot;[e:env]:[environnement:=$ENV?environnement to use (eg: dev, prod) ]&amp;quot;
+USAGE+=&amp;quot;[p:path]:[Execution PATH:=$MPATH?prefix of the chroot]&amp;quot;
+USAGE+=&amp;quot;[+EXAMPLE?$0 action2]&amp;quot;
+USAGE+=&#39;[+SEE ALSO?My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting]&#39;
+USAGE+=&amp;quot;[+BUGS?A few, maybe...]&amp;quot;
+
+### Option Checking
+
+while getopts &amp;quot;$USAGE&amp;quot; optchar ; do
+    case $optchar in
+        u)  USER=$OPTARG
+        ;;
+        e)  ENV=$OPTARG
+        ;;
+        p)  PATH=$OPTARG
+        ;;
+    esac
+done
+shift OPTIND-1
+ACTION=$1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;the-invocation:492220ebbfd063710e57a4727b3232af&#34;&gt;The invocation&lt;/h3&gt;
+
+&lt;p&gt;Here are two &lt;em&gt;singing&lt;/em&gt; examples of the usage output (sorry, I&amp;rsquo;m tired)&lt;/p&gt;
+
+&lt;h4 id=&#34;ballad-of-a-thin-man:492220ebbfd063710e57a4727b3232af&#34;&gt;&lt;em&gt;Ballad of a thin man&lt;/em&gt;&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ ./blog.ksh --man
+NAME
+  ./blog.ksh --- The Example Script
+
+SYNOPSIS
+  ./blog.ksh [ options ]
+
+DESCRIPTION
+  The description of the script
+
+OPTIONS
+  -u, --user=user to run the command as
+                  Use the name of the user you want to sudo to: The default value is owulveryck.
+  -e, --env=environnement
+                  environnement to use (eg: dev, prod) The default value is dev.
+  -p, --path=Execution PATH
+                  prefix of the chroot The default value is /tmp.
+
+EXAMPLE
+  ./blog.ksh action2
+
+SEE ALSO
+  My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting
+
+BUGS
+  A few, maybe...
+
+IMPLEMENTATION
+  version         The example script v1.0
+  author          Olivier Wulveryck
+  copyright       Copyright (C) My Blog
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;i-m-gonna-try-with-a-little-help-from-my-friends:492220ebbfd063710e57a4727b3232af&#34;&gt;I&amp;rsquo;m gonna try &lt;em&gt;with a little help (from my friends)&lt;/em&gt;&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ ./blog.ksh --help
+Usage: ./blog.ksh [ options ]
+OPTIONS
+  -u, --user=user to run the command as
+                  Use the name of the user you want to sudo to: The default value is owulveryck.
+  -e, --env=environnement
+                  environnement to use (eg: dev, prod) The default value is dev.
+  -p, --path=Execution PATH
+                  prefix of the chroot The default value is /tmp.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And let&amp;rsquo;s try with an invalid option&amp;hellip;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;  ./blog.ksh -t
+./blog.ksh: -t: unknown option
+Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Execution PATH]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;conclusion:492220ebbfd063710e57a4727b3232af&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;By now, KSH93 remains my favorite engine for shell scripts, but is sometimes replaced by ZSH.&lt;/p&gt;
+
+&lt;p&gt;Actually, ZSH seems as &amp;ldquo;smart&amp;rdquo; and efficient, but this &lt;code&gt;getopts&lt;/code&gt; feature is really nice for any script aim to be distributed widely.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

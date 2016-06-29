@@ -1,0 +1,1076 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ruby on Olivier Wulveryck&#39;s Tech Blog</title>
+    <link>/tags/ruby/</link>
+    <description>Recent content in Ruby on Olivier Wulveryck&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved - 2015/2016</copyright>
+    <lastBuildDate>Thu, 31 Mar 2016 23:39:35 +0100</lastBuildDate>
+    <atom:link href="/tags/ruby/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Behaviour Driven Development with Gherkin and Cucumber (an introduction)</title>
+      <link>/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/</link>
+      <pubDate>Thu, 31 Mar 2016 23:39:35 +0100</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/</guid>
+      <description>
+
+&lt;h4 id=&#34;opening-remarks:7984b822e668ba97556d3e033abc0938&#34;&gt;Opening remarks&lt;/h4&gt;
+
+&lt;p&gt;All my previous posts were about choreography, deployment, topology, and more recently about an attempt to include &lt;em&gt;AI&lt;/em&gt; in those systems.
+This post is a bit apart, because I&amp;rsquo;m facing a new challenge in my job which is to implement BDD in a &lt;em&gt;CI&lt;/em&gt; chain. Therefore, I&amp;rsquo;m using
+this blog as a reminder of what I did personally. The following of the &lt;em&gt;Markov&lt;/em&gt; saga will come again later.&lt;/p&gt;
+
+&lt;h1 id=&#34;introduction:7984b822e668ba97556d3e033abc0938&#34;&gt;Introduction&lt;/h1&gt;
+
+&lt;p&gt;Wikipedia defines the word contract like this:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;A contract is a voluntary arrangement between two or more parties that is enforceable at law as a binding legal agreement.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;If law usually describes what you can and cannot do, a contract is more likely to describe what&amp;rsquo;s you are expected to do.&lt;/p&gt;
+
+&lt;p&gt;A law&amp;rsquo;s goal is not only to give rules to follow,
+but also to maintain a stability in an ecosystem.
+In IT there are laws, that may be implicit, didactic, empiric, &amp;hellip; but the IT with all its laws should not
+dictate the expected behavior of the customer. But how often have you heard:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;those computer stuffs are not for me, just get the thing done&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;we&amp;rsquo;ve always done it this way&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;There are laws that cannot be changed, but the contract between a customer and its provider could and should evolve.&lt;/p&gt;
+
+&lt;p&gt;In IT, like everywhere else where a customer/provider relationship exists, a special need is formalized via specifications.
+Specifications are hard to follow, but even more they&amp;rsquo;re hard to evaluate.&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;http://imgs.xkcd.com/comics/babies.png&#34; alt=&#34;Babies (xkcd)&#34; /&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;B&lt;/strong&gt;ehavior &lt;strong&gt;D&lt;/strong&gt;riven &lt;strong&gt;D&lt;/strong&gt;evelopment is the assurance that everything have been made respectfully i
+with the contract ²that has been established between the parties (customers and providers).
+To do things right, this contract should be established at the very beginning.&lt;/p&gt;
+
+&lt;p&gt;Hence, every single item must be developed with all the &lt;em&gt;features&lt;/em&gt; of the contract in mind. And then, it should be
+possible to use automation to perform the tests of behaviour, so that the developer can see if the contract is fulfilled, and if, for
+example, no regression has been introduced.&lt;/p&gt;
+
+&lt;p&gt;In a continuous integration chain, this is an essential piece that can be use to fully automate the process of delivery.&lt;/p&gt;
+
+&lt;h2 id=&#34;gherkin:7984b822e668ba97556d3e033abc0938&#34;&gt;Gherkin&lt;/h2&gt;
+
+&lt;p&gt;To express the specification in a way that can be both human and computer readable, the easiest way is to use a special dedicated
+language.&lt;/p&gt;
+
+&lt;p&gt;Such a language is known as &lt;a href=&#34;https://en.wikipedia.org/wiki/Domain-specific_language&#34;&gt;DSL&lt;/a&gt; ( Domain Specific Language).&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/cucumber/cucumber/wiki/Gherkin&#34;&gt;Gherkin&lt;/a&gt; is a DSL that &lt;em&gt;lets you describe software&amp;rsquo;s behaviour without dealing how that behaviour
+is implemented&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;The behaviour is a scenario detailed as a set of &lt;em&gt;features&lt;/em&gt;. A feature is a human readable English
+(or another human language among 37 implemented languages) text file with a bunch of key words in it (eg: &lt;strong&gt;Given&lt;/strong&gt;, &lt;strong&gt;And&lt;/strong&gt;, &lt;strong&gt;When&lt;/strong&gt;, &lt;strong&gt;Then&lt;/strong&gt;,&amp;hellip;).
+Those words do not only help the writer of the feature to organize its idea, but they are used by the Gherkin processor to localize the
+test of the feature in the code. Of course, there is no magic in it: the test must have been implemented manually.&lt;/p&gt;
+
+&lt;h2 id=&#34;and-here-comes-cucumber:7984b822e668ba97556d3e033abc0938&#34;&gt;And here comes Cucumber&lt;/h2&gt;
+
+&lt;p&gt;The historic Gherkin processor is called Cucumber. It&amp;rsquo;s a Ruby implementation of the Gherkin DSL.
+Its purpose is to read a scenario, and to localize the Ruby code that is implementing the all the tests corresponding to the scenario.
+Finally it executes the code, and for each feature it simply says ok or ko.&lt;/p&gt;
+
+&lt;p&gt;Easy.&lt;/p&gt;
+
+&lt;p&gt;Nowadays there are many implementation of Gherkin parser for different languages, but in this post I will stick to the Cucumber.&lt;/p&gt;
+
+&lt;h1 id=&#34;let-s-play:7984b822e668ba97556d3e033abc0938&#34;&gt;Let&amp;rsquo;s play&lt;/h1&gt;
+
+&lt;p&gt;Let&amp;rsquo;s see how we can implement a basic behaviour driver development with the help of cucumber and Ruby.
+The idea here is not to test a Ruby development, but instead to use ruby to validate a shell script.
+That&amp;rsquo;s the main reason why I stick to Ruby (instead of GO which I know better). The Go implementation
+(&lt;a href=&#34;https://github.com/DATA-DOG/godog&#34;&gt;GoDoc&lt;/a&gt;, &lt;a href=&#34;https://github.com/smartystreets/goconvey&#34;&gt;GoConvey&lt;/a&gt;, &amp;hellip;) relies
+on &lt;code&gt;go test&lt;/code&gt; and therefore are related to a pure GO development.
+Of course I could do a complete GO development to encapsulate my scripts, but that&amp;rsquo;s not the point; for my purpose, a scripting
+language is a better choice.&lt;/p&gt;
+
+&lt;p&gt;Ruby is a scripting language and all the tests implemented here are neither dependent on the Ruby test framework nor on &lt;a href=&#34;http://rspec.info/&#34;&gt;RSpec&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I will write a script that will deploy an EC2 instance via vagrant-aws and install an Openvpn instance on it.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-scenario:7984b822e668ba97556d3e033abc0938&#34;&gt;The scenario&lt;/h2&gt;
+
+&lt;h4 id=&#34;the-customer-point-of-view:7984b822e668ba97556d3e033abc0938&#34;&gt;The customer point of view&lt;/h4&gt;
+
+&lt;p&gt;With my role of customer, the feature I&amp;rsquo;m expecting is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Given the execution of the program, and waiting for it to be successful&lt;/li&gt;
+&lt;li&gt;Then I may be able to watch netflix US from France.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The feature may be:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gherkin&#34;&gt;Feature: I want a program that
+  will simply allows me to watch netflix US
+
+  Scenario: I want to watch netflix
+     Given I am on my chromebook
+     And I have access to the shell
+     When I want to watch netflix
+     And I launch a program from the command line
+     And it displays ready
+     Then I open a navigator windows on http://www.netflix.com
+     And I can watch Grey&#39;s anatomy (which is not available in france)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;the-architect-point-of-view:7984b822e668ba97556d3e033abc0938&#34;&gt;The architect point of view&lt;/h4&gt;
+
+&lt;p&gt;As an architect the implementation I&amp;rsquo;m thinking of is&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;start an EC2 instance (I will not create it in this post)&lt;/li&gt;
+&lt;li&gt;register it to my DNS (with blog-test.owulveryck.info)&lt;/li&gt;
+&lt;li&gt;install Openvpn&lt;/li&gt;
+&lt;li&gt;configure Openvpn to make it accessible via blog-test.owulveryck.info&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;the-developer-point-of-view:7984b822e668ba97556d3e033abc0938&#34;&gt;The developer point of view&lt;/h4&gt;
+
+&lt;p&gt;And as a developer, I&amp;rsquo;m thinking about using &lt;a href=&#34;https://github.com/mitchellh/vagrant-aws&#34;&gt;vagrant-aws&lt;/a&gt; to perform the tasks.
+All the implementation will be based on a Vagrant file and a provisioning script.
+The vagrant file will be evaluated by &lt;code&gt;vagrant up&lt;/code&gt; on CLI (aka in the real world, by the end user) and
+the same vagrant file will be evaluated within my cucumber scripts.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Therefore I can say that I am doing BDD/TDD for a configuration management and provisioning.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-basic-feature:7984b822e668ba97556d3e033abc0938&#34;&gt;The basic &lt;em&gt;feature&lt;/em&gt;&lt;/h2&gt;
+
+&lt;p&gt;I will describe here a single feature, just for testing purpose.&lt;/p&gt;
+
+&lt;h2 id=&#34;setting-up-the-ruby-environment:7984b822e668ba97556d3e033abc0938&#34;&gt;Setting up the Ruby environment&lt;/h2&gt;
+
+&lt;p&gt;I will use the &lt;em&gt;Ruby&lt;/em&gt; implementation of cucumber.
+To install it, assuming that we have a &lt;code&gt;gem&lt;/code&gt; installed, just run this command&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;# gem install cucumber
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will load all the required dependencies.
+It may also be a good idea to use &lt;code&gt;bundle&lt;/code&gt; if we plan to do further development of the steps in ruby.&lt;/p&gt;
+
+&lt;h4 id=&#34;the-test-environment-with-bundler:7984b822e668ba97556d3e033abc0938&#34;&gt;The test environment with bundler&lt;/h4&gt;
+
+&lt;p&gt;The whole development will run with the help of bundler (and RVM).
+See this &lt;a href=&#34;http://dev.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/&#34;&gt;post&lt;/a&gt; for more explanation on
+how I set it up on my Chromebook.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;&amp;gt; mkdir /media/removable/Lexar/tools/vpn-blog
+&amp;gt; cd /media/removable/Lexar/tools/vpn-blog
+&amp;gt; rvmrc --create 2.2.0@vpn-blog
+&amp;gt; source .rvmrc
+&amp;gt; gem install bundler -v 1.5.2 
+&amp;gt; bundle init
+Writing new Gemfile to /home/chronos/user/gherkin/Gemfile
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;the-gemfile:7984b822e668ba97556d3e033abc0938&#34;&gt;the &lt;em&gt;Gemfile&lt;/em&gt;&lt;/h4&gt;
+
+&lt;p&gt;Let&amp;rsquo;s add the cucumber, vagrant (as installed in a previous &lt;a href=&#34;http://dev.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/&#34;&gt;post&lt;/a&gt; ),
+and vagrant-aws dependencies in the Gemfile:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;&amp;gt; cat Gemfile
+source &amp;quot;https://rubygems.org&amp;quot;
+
+gem &amp;quot;vagrant&amp;quot;, :path =&amp;gt; &amp;quot;/media/removable/Lexar/tools/vagrant&amp;quot;
+gem &amp;quot;vagrant-aws&amp;quot;
+gem &amp;quot;bundler&amp;quot;, &amp;quot;1.5.2&amp;quot;
+gem &amp;quot;cucumber&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and then &lt;em&gt;install&lt;/em&gt; the bundle:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;&amp;gt; bundle _1.5.2_ install
+Resolving dependencies...
+Using builder 3.2.2
+Using gherkin 3.2.0
+Using cucumber-wire 0.0.1
+Using diff-lcs 1.2.4
+Using multi_json 1.7.9
+Using multi_test 0.1.2
+Using bundler 1.11.2
+Using cucumber-core 1.4.0
+Using cucumber 2.3.3
+...
+Bundle complete! 1 Gemfile dependency, 9 gems now installed.
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And now let&amp;rsquo;s run cucumber within the bundle:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;&amp;gt; bundle _1.5.2_ exec cucumber
+No such file or directory - features. You can use `cucumber --init` to get started.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;the-skeleton-of-the-test:7984b822e668ba97556d3e033abc0938&#34;&gt;The skeleton of the test&lt;/h3&gt;
+
+&lt;p&gt;First, as requested by cucumber, let&amp;rsquo;s initialize a couple of files in the directory to be &amp;ldquo;cucumber compliant&amp;rdquo;.
+Cucumber do have a helpful &lt;em&gt;init&lt;/em&gt; function. Let&amp;rsquo;s run it now:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;bundle _1.5.2_ exec cucumber --init
+  create   features
+  create   features/step_definitions
+  create   features/support
+  create   features/support/env.rb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;adding-the-feature-file:7984b822e668ba97556d3e033abc0938&#34;&gt;Adding the &lt;em&gt;feature&lt;/em&gt; file&lt;/h4&gt;
+
+&lt;p&gt;In the &lt;em&gt;features/&lt;/em&gt; directory, I create a file &lt;code&gt;basic_feature.feature&lt;/code&gt; which contains the YAML we wrote earlier, then I run cucumber again.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ bundle _1.5.2_ exec cucumber
+Feature: I want a program that
+  will simply allows me to watch netflix US
+  
+  Scenario: I want to watch netflix                                   # features/basic_feature.feature:4
+    Given I am on my chromebook                                       # features/basic_feature.feature:5
+    And I have access to the shell                                    # features/basic_feature.feature:6
+    When I want to watch netflix                                      # features/basic_feature.feature:7
+    And I launch a program on the command line                        # features/basic_feature.feature:8
+    And it displays ready                                             # features/basic_feature.feature:9
+    Then I open a navigator windows on http://www.netflix.com         # features/basic_feature.feature:10
+    And I can watch Grey&#39;s anatomy (which is not available in france) # features/basic_feature.feature:11
+                                
+1 scenario (1 undefined)
+7 steps (7 undefined)
+0m0.054s
+
+You can implement step definitions for undefined steps with these snippets:
+
+Given(/^I am on my chromebook$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We notice that the feature has been read and understood correctly by cucumber.
+ON top of that Cucumber gives the skeleton of a ruby implementation for the tests.&lt;/p&gt;
+
+&lt;p&gt;I will copy all the ruby code in its own file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# cat &amp;gt; features/step_definitions/tests.rb
+Given(/^I am on my chromebook$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+  end
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And run cucumber once more:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;Feature: I want a program that
+  will simply allows me to watch netflix US
+
+  Scenario: I want to watch netflix                                   # features/basic_feature.feature:4
+      Given I am on my chromebook                                       # features/step_definitions/tests.rb:1
+        TODO (Cucumber::Pending)
+        ./features/step_definitions/tests.rb:2:in `/^I am on my chromebook$/&#39;
+        features/basic_feature.feature:5:in `Given I am on my chromebook&#39;
+      And I have access to the shell                                    # features/step_definitions/tests.rb:5
+      When I want to watch netflix                                      # features/step_definitions/tests.rb:9
+      And I launch gonetflix.sh                                         # features/step_definitions/tests.rb:13
+      And it displays ready                                             # features/step_definitions/tests.rb:17
+      Then I open a navigator windows on http://www.netflix.com         # features/step_definitions/tests.rb:21
+      And I can watch Grey&#39;s anatomy (which is not available in france) # features/step_definitions/tests.rb:25
+      
+1 scenario (1 pending)
+7 steps (6 skipped, 1 pending)
+0m0.041s`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Cool, the framework is ok. Now let&amp;rsquo;s actually implement the scenario and the tests&lt;/p&gt;
+
+&lt;h4 id=&#34;implementation-of-the-given-keywords:7984b822e668ba97556d3e033abc0938&#34;&gt;Implementation of the &amp;ldquo;Given&amp;rdquo; keywords&lt;/h4&gt;
+
+&lt;p&gt;There is not much to say about the Given keyword. I can test that I am really on my Chromebook but that does not make any sense.
+I will skip this test by not implementing anything in the function.&lt;/p&gt;
+
+&lt;h4 id=&#34;implementation-of-the-when-keyword:7984b822e668ba97556d3e033abc0938&#34;&gt;Implementation of the &amp;ldquo;When&amp;rdquo; keyword&lt;/h4&gt;
+
+&lt;p&gt;The actual execution of the &amp;ldquo;When&amp;rdquo; is the execution of the Vagrant file.
+It will start the EC2 instance and provision the VPN
+I also need to mount the VPN locally afterwards&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;#!/usr/bin/env ruby
+require &amp;quot;vagrant&amp;quot;
+
+# Starting the EC2 instance (running the vagrantfile)
+env = Vagrant::Environment.new
+env.cli(&amp;quot;up&amp;quot;)
+# Starting OpenVPN locally
+`sudo openvpn --mktun --dev tun0 &amp;amp;&amp;amp; sudo openvpn --config ~/Downloads/client.ovpn --dev tun0`
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;trying-to-implement-the-netflix-test-with-selenium:7984b822e668ba97556d3e033abc0938&#34;&gt;(trying to) Implement the netflix test with selenium&lt;/h4&gt;
+
+&lt;p&gt;To test the access, instead of faking my browser with curl, I will use the &lt;em&gt;selenium&lt;/em&gt; tool.
+So I add it to my &lt;em&gt;Gemfile&lt;/em&gt; and &lt;code&gt;bundle update&lt;/code&gt; it (informations comes from &lt;a href=&#34;https://github.com/jonathanchrisp/selenium-cucumber-ruby-kickstarter&#34;&gt;this starterkit&lt;/a&gt;):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ echo &#39;gem &amp;quot;selenium-cucumber&amp;quot;&#39; &amp;gt;&amp;gt; Gemfile
+$ echo &#39;gem &amp;quot;selenium-webdriver&amp;quot;&#39; &amp;gt;&amp;gt; Gemfile
+$ echo &#39;gem &amp;quot;require_all&amp;quot;&#39; &amp;gt;&amp;gt; Gemfile
+$ bundle _1.5.2_ update 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then I need to create a special file in the &lt;code&gt;support&lt;/code&gt; subdirectory to define a bunch of objects:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# cat features/support/env.rb
+require &#39;selenium-webdriver&#39;
+require &#39;cucumber&#39;
+
+require &#39;require_all&#39;
+
+require_all &#39;lib&#39;
+
+Before do |scenario|
+    @browser = Browser.new(ENV[&#39;DRIVER&#39;])
+    @browser.delete_cookies
+end
+
+After do |scenario|
+    @browser.driver.quit
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&amp;rsquo;m also adding the files from the starterkit in the &lt;code&gt;lib&lt;/code&gt; subdirectory.&lt;/p&gt;
+
+&lt;p&gt;As I am developing on my Chromebook, I also need the &lt;a href=&#34;https://sites.google.com/a/chromium.org/chromedriver/&#34;&gt;chromedriver&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Too bad&lt;/strong&gt; chromedriver relies on the libX11 that cannot be installed on my Chromebook / &lt;strong&gt;end of show for selenium&lt;/strong&gt;
+on the Chromebook&amp;hellip;  for now&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; I will continue with the development, but be aware that I won&amp;rsquo;t be able to test it until I am on a true linux box with
+the chromedriver installed&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;Then(/^I open a navigator windows on (.*?)$/) do |arg1|
+  @browser.open_page(&amp;quot;http://www.netflix.com&amp;quot;)
+end
+
+Then(/^I can watch Grey&#39;s anatomy \(which is not available in france\)$/) do
+  @browser.open_page(&amp;quot;http://www.netflix.com/idtogreysanatomy&amp;quot;)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;the-actual-implementation-of-the-scenario:7984b822e668ba97556d3e033abc0938&#34;&gt;The actual implementation of the scenario&lt;/h3&gt;
+
+&lt;p&gt;What I need to do is to implement the scenario. Not the test scenario, the real one;
+the one that will actually allows me to launch my ec2 instance, configure and start Openvpn.&lt;/p&gt;
+
+&lt;p&gt;As I said before, I will use vagrant-aws to do so.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; vagrant was depending on &lt;em&gt;bsdtar&lt;/em&gt;, and I&amp;rsquo;ve had to install it manually from source:&lt;/p&gt;
+
+&lt;p&gt;(&lt;code&gt;tar xzvf libarchive-3.1.2.tar.gz &amp;amp;&amp;amp; ... &amp;amp;&amp;amp; ./configure --prefix=/usr/local &amp;amp;&amp;amp; make install clean&lt;/code&gt;)&lt;/p&gt;
+
+&lt;h4 id=&#34;installing-vagrant-aws-plugin:7984b822e668ba97556d3e033abc0938&#34;&gt;Installing vagrant-aws plugin&lt;/h4&gt;
+
+&lt;p&gt;The vagrant-aws plugin has been installed by the bundler because I&amp;rsquo;ve indicated it as a dependency in the Gemfile.
+But, I will have to have it as a requirement in the Vagrantfile because I&amp;rsquo;m not using the &amp;ldquo;official vagrant&amp;rdquo; and that
+I am running in a bundler environment:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Vagrant&amp;rsquo;s built-in bundler management mechanism is disabled because
+Vagrant is running in an external bundler environment. In these
+cases, plugin management does not work with Vagrant. To install
+plugins, use your own Gemfile. To load plugins, either put the
+plugins in the &lt;code&gt;plugins&lt;/code&gt; group in your Gemfile or manually require
+them in a Vagrantfile.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&#34;installing-the-base-box:7984b822e668ba97556d3e033abc0938&#34;&gt;Installing the base box&lt;/h4&gt;
+
+&lt;p&gt;The documentation says that the quickest way to get started is to install the dummy box.
+That&amp;rsquo;s what I did:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ bundle _1.5.2_ exec vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
+...
+==&amp;gt; box: Successfully added box &#39;dummy&#39; (v0) for &#39;aws&#39;!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;the-vagrantfile:7984b822e668ba97556d3e033abc0938&#34;&gt;The Vagrantfile&lt;/h4&gt;
+
+&lt;p&gt;The initial Vagrantfile looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;require &amp;quot;vagrant-aws&amp;quot;
+Vagrant.configure(&amp;quot;2&amp;quot;) do |config|
+  config.vm.box = &amp;quot;dummy&amp;quot;
+
+  config.vm.provider :aws do |aws, override|
+    aws.access_key_id = &amp;quot;YOUR KEY&amp;quot;
+    aws.secret_access_key = &amp;quot;YOUR SECRET KEY&amp;quot;
+    aws.session_token = &amp;quot;SESSION TOKEN&amp;quot;
+    aws.keypair_name = &amp;quot;KEYPAIR NAME&amp;quot;
+
+    aws.ami = &amp;quot;ami-7747d01e&amp;quot;
+
+    override.ssh.username = &amp;quot;ubuntu&amp;quot;
+    override.ssh.private_key_path = &amp;quot;PATH TO YOUR PRIVATE KEY&amp;quot;
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So all the rest in the basic implementation of the vagrant file and the provisioning.sh for the Openvpn configuration.
+but that goes far behind the topic of this post which was to introduce myself to BDD and TDD.&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion:7984b822e668ba97556d3e033abc0938&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;I&amp;rsquo;ve learned a lot about the ruby and cucumber environment in this post.
+Too bad I couldn&amp;rsquo;t end with a fully running example because of my Chromebook.&lt;/p&gt;
+
+&lt;p&gt;Anyway the expected results were for me to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;learn about BDD&lt;/li&gt;
+&lt;li&gt;learn about cucumber&lt;/li&gt;
+&lt;li&gt;learn about Ruby&lt;/li&gt;
+&lt;li&gt;learn about vagrant&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I can say that I&amp;rsquo;ve reach my goals anyway. I will try to finish the implementation on a true Linux box locally, or on my
+Macbook if I have time to do so.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>RVM from a USB stick on a Chromebook</title>
+      <link>/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/</link>
+      <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/</guid>
+      <description>
+
+&lt;h1 id=&#34;introduction:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Introduction&lt;/h1&gt;
+
+&lt;h4 id=&#34;opening-remarks:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Opening remarks&lt;/h4&gt;
+
+&lt;p&gt;I&amp;rsquo;m not a Ruby developer, and I&amp;rsquo;m heavily discovering the ecosystem by now.
+This are my notes, and if anything seems wrong to you, do not hesitate to send me remarks.&lt;/p&gt;
+
+&lt;h4 id=&#34;the-scenario:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;The scenario&lt;/h4&gt;
+
+&lt;p&gt;For testing purpose, I wanted to play with vagrant-aws and more generally with ruby on my Chromebook.&lt;/p&gt;
+
+&lt;p&gt;Vagrant does not support &lt;em&gt;rubygems&lt;/em&gt; as installation method anymore (&lt;a href=&#34;http://mitchellh.com/abandoning-rubygems&#34;&gt;see Mitchell Hashimoto&amp;rsquo;s post&lt;/a&gt;)
+and of course, there is no binary distribution available for the Chromebook.&lt;/p&gt;
+
+&lt;p&gt;So I have to install it from the sources.&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&#34;https://github.com/mitchellh/vagrant/wiki/Installing-Vagrant-from-Source&#34;&gt;documentation&lt;/a&gt; says:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Do &lt;strong&gt;NOT&lt;/strong&gt; use the system Ruby - use a Ruby version manager like rvm, chruby, etc&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Alright, anyway I don&amp;rsquo;t want to mess with my system and break Homebrew, so using RVM seems to be a good idea.&lt;/p&gt;
+
+&lt;h2 id=&#34;installing-rvm:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Installing RVM&lt;/h2&gt;
+
+&lt;p&gt;The RVM installation is relatively easy; simply running &lt;code&gt;curl -sSL https://get.rvm.io | bash&lt;/code&gt; does the trick.
+And then those commands make ruby 2.3.0 available via rvm:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ source ~/.rvm/scripts/rvm  
+$ rvm install 2.3.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The stupid trick here is that everything is installed in my $HOME directory, and as my Chromebook is short on disk space: FS full !&lt;/p&gt;
+
+&lt;p&gt;Too bad.&lt;/p&gt;
+
+&lt;h2 id=&#34;using-a-usb-stick:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Using a USB stick&lt;/h2&gt;
+
+&lt;p&gt;So my idea is to install the RVM suite onto a USB stick (because with me I don&amp;rsquo;t have any SDHC card available).&lt;/p&gt;
+
+&lt;h3 id=&#34;preparing-the-stick:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Preparing the stick&lt;/h3&gt;
+
+&lt;p&gt;At first, the USB stick must be formatted in extendX (ext4) in order to be able to use symlinks, correct ownership etc.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sudo mkfs.ext4 -L Lexar /dev/sda1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: I&amp;rsquo;ve found that avoiding spaces in the volume name was good for rvm.&lt;/p&gt;
+
+&lt;p&gt;Once connected on the Chromebook, it&amp;rsquo;s automatically mounted on &lt;code&gt;/media/removable/Lexar&lt;/code&gt;.
+The problem are the options:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;/dev/sda1 on /media/removable/Lexar type ext4 (rw,nosuid,nodev,noexec,relatime,dirsync,data=ordered)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;the most problematic is &lt;code&gt;noexec&lt;/code&gt; because I want to install executables in it.&lt;/p&gt;
+
+&lt;p&gt;So what I did was simply:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo mount -o remount /dev/sda1 /media/removable/Lexar&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;and that did the trick.&lt;/p&gt;
+
+&lt;h2 id=&#34;installing-rvm-on-the-usb:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Installing RVM on the USB&lt;/h2&gt;
+
+&lt;p&gt;I will install rvm into &lt;code&gt;/media/removable/Lexar/rvm&lt;/code&gt;. In order to avoid any ownership and permission problem I did:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;mkdir /media/removable/Lexar/rvm
+chown chronos:chronos /media/removable/Lexar/rvm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And then I created a simple &lt;code&gt;~/.rvmrc&lt;/code&gt; file as indicated in the documentation with this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cat ~/.rvmrc                                          
+$ export rvm_path=/media/removable/Lexar/rvm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I also included this in my &lt;code&gt;~/.zshrc&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;if [ -s &amp;quot;$HOME/.rvmrc&amp;quot;   ]; then
+    source &amp;quot;$HOME/.rvmrc&amp;quot;
+fi # to have $rvm_path defined if set
+if [ -s &amp;quot;${rvm_path-$HOME/.rvm}/scripts/rvm&amp;quot;   ]; then
+    source &amp;quot;${rvm_path-$HOME/.rvm}/scripts/rvm&amp;quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;installing-rvm-1:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Installing rvm&lt;/h2&gt;
+
+&lt;p&gt;the command I executed were then:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -sSL https://get.rvm.io | bash
+$ source /media/removable/Lexar/rvm/scripts/rvm
+$ rvm autolibs enable
+$ rvm get stable
+$ rvm install 2.3.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And that did the trick&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ rvm list
+
+rvm rubies
+
+=* ruby-2.3.0 [ x84_64 ]
+
+# =&amp;gt; - current
+# =* - current &amp;amp;&amp;amp; default
+#  * - default
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;testing-with-vagrant:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Testing with vagrant&lt;/h2&gt;
+
+&lt;h3 id=&#34;cloning-the-vagrant-sources:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Cloning the vagrant sources&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ sudo mkdir /media/removable/Lexar/tools
+$ sudo chown chronos:chronos /media/removable/Lexar/tools
+$ cd /media/removable/Lexar/tools
+$ git clone https://github.com/mitchellh/vagrant.git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;preparing-the-rvm-file-for-vagrant:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Preparing the rvm file for vagrant&lt;/h3&gt;
+
+&lt;p&gt;To use the ruby 2.3.0 (that I&amp;rsquo;ve installed before) with vagrant, I need to create a .rvmrc in the vagrant directory:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd /media/removable/Lexar/tools/vagrant
+$ rvm --rvmrc --create 2.3.0@vagrant
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;installing-bundler:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Installing bundler&lt;/h3&gt;
+
+&lt;p&gt;The bundler version that is supported by vagrant must be &amp;lt;= 1.5.2 as written in the &lt;code&gt;Gemfile&lt;/code&gt;. So I&amp;rsquo;m installing version
+1.5.2&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cd /media/removable/Lexar/tools/vagrant
+$ source .rcmrv
+$ gem install bundler -v 1.5.2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;compiling-vagrant:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Compiling vagrant&lt;/h3&gt;
+
+&lt;p&gt;Back to the vagrant documentation, what I must do is now to &amp;ldquo;compile it&amp;rdquo;. To do so, the advice is to run:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ bundle _1.5.2_ install  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(just in case several bundler are present )&lt;/p&gt;
+
+&lt;p&gt;I faced this error:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;NoMethodError: undefined method `spec&#39; for nil:NilClass
+Did you mean?  inspect
+An error occurred while installing vagrant (1.8.2.dev), and Bundler cannot continue.
+Make sure that `gem install vagrant -v &#39;1.8.2.dev&#39;` succeeds before bundling.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;According to google, this may be an issue with the version of bundler I&amp;rsquo;m using.
+As I cannot upgrade the bundler because of vagrant, I&amp;rsquo;ve decided to take a chance and use
+a lower version of Ruby&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ rvm install 2.2.0
+$ rvm --rvmrc --create 2.2.0@vagrant
+$ source .rvmrc
+# and reinstalling bundler
+$ gem install bundler -v 1.5.2            
+$ bundle _1.5.2_ install
+...
+Your bundle is complete!
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;voilà:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Voilà!&lt;/h1&gt;
+
+&lt;p&gt;I can now use vagrant installed fully on the USB stick with&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ bundle _1.5.2_ exec vagrant
+Vagrant appears to be running in a Bundler environment. Your 
+existing Gemfile will be used. Vagrant will not auto-load any plugins
+installed with `vagrant plugin`. Vagrant will autoload any plugins in
+the &#39;plugins&#39; group in your Gemfile. You can force Vagrant to take over
+with VAGRANT_FORCE_BUNDLER.
+
+You appear to be running Vagrant outside of the official installers.
+Note that the installers are what ensure that Vagrant has all required
+dependencies, and Vagrant assumes that these dependencies exist. By
+running outside of the installer environment, Vagrant may not function
+properly. To remove this warning, install Vagrant using one of the
+official packages from vagrantup.com.
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s it for this post; next I will try to install vagrant-aws and play a little bit with it.&lt;/p&gt;
+
+&lt;p&gt;stay tuned.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>IaaS-like RESTfull API based on microservices</title>
+      <link>/2015/11/10/iaas-like-restfull-api-based-on-microservices/</link>
+      <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>/2015/11/10/iaas-like-restfull-api-based-on-microservices/</guid>
+      <description>
+
+&lt;h1 id=&#34;abstracts:1574d51e403296c43e921da78612bc7c&#34;&gt;Abstracts&lt;/h1&gt;
+
+&lt;p&gt;Recently, I&amp;rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.&lt;/p&gt;
+
+&lt;p&gt;I am reading more and more about the &amp;ldquo;API economy&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve also seen this excellent video made by &lt;a href=&#34;https://www.youtube.com/watch?v=tIm8UkSf6RA&amp;amp;list=PLDWZ5uzn69ezRJYeWxYNRMYebvf8DerHd&#34;&gt;Mat Ryer&lt;/a&gt; about how to code an API in GO and why go would be the perfect language to code such a portal.&lt;/p&gt;
+
+&lt;p&gt;The problem I&amp;rsquo;m facing is that in the organization I&amp;rsquo;m working for, the developments are heterogeneous and therefore you can find &lt;em&gt;ruby&lt;/em&gt; teams as well as &lt;em&gt;python&lt;/em&gt; teams and myself as a &lt;em&gt;go&lt;/em&gt; team (That will change in the future anyway)
+The key point is that I would like my middleware to serve as an entry point to the services provided by the department.&lt;/p&gt;
+
+&lt;p&gt;We (as an &amp;ldquo;ops&amp;rdquo; team) would then be able to present the interface via, for example, a &lt;a href=&#34;http://swagger.io&#34;&gt;swagger&lt;/a&gt; like interface, take care of the API and do whatever RPC to any submodule.&lt;/p&gt;
+
+&lt;h1 id=&#34;an-example-a-iaas-like-interface:1574d51e403296c43e921da78612bc7c&#34;&gt;An example: a IAAS like interface&lt;/h1&gt;
+
+&lt;p&gt;Let&amp;rsquo;s consider a node compute lifecycle.&lt;/p&gt;
+
+&lt;p&gt;What I&amp;rsquo;d like to be able to do is:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;to create a node&lt;/li&gt;
+&lt;li&gt;to update a node (maybe)&lt;/li&gt;
+&lt;li&gt;to delete a node&lt;/li&gt;
+&lt;li&gt;to get the status of the node&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;the-backend:1574d51e403296c43e921da78612bc7c&#34;&gt;The backend&lt;/h2&gt;
+
+&lt;p&gt;The backend is whatever service, able to create a node, such as openstack, vmware vcac, juju, &amp;hellip;
+Thoses services usually provide RESTfull API.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve seen in my experience, that usually, the API are given with a library in a so called &amp;ldquo;modern language&amp;rdquo;.
+This aim to simplify the development of the clients.
+Sometimes this library may also be developed by an internal team that will take care of the maintenance.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-library:1574d51e403296c43e921da78612bc7c&#34;&gt;The library&lt;/h2&gt;
+
+&lt;p&gt;In my example, we will consider that the library is a simple &lt;em&gt;gem&lt;/em&gt; file developed in ruby.
+Therefore, our service will be a simple server that will get RPC calls, call the good method in the &lt;em&gt;gemfile&lt;/em&gt;
+and that will, &lt;em&gt;in fine&lt;/em&gt; transfer it to the backend.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-restfull-api:1574d51e403296c43e921da78612bc7c&#34;&gt;The RestFull API.&lt;/h2&gt;
+
+&lt;p&gt;I will use the example described &lt;a href=&#34;http://thenewstack.io/make-a-restful-json-api-go/&#34;&gt;here&lt;/a&gt; as a basis for this post.
+Of course there are many other examples and excellent go packages that may be used, but according to Mat Ryer, I will stick to the idiomatic approach.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-glue-msgpack-rpc:1574d51e403296c43e921da78612bc7c&#34;&gt;The glue: MSGPACK-RPC&lt;/h2&gt;
+
+&lt;p&gt;There are several methods for RPC-ing between different languages. Ages ago, there was xml-rpc; then there has been json-rpc;
+I will use &lt;a href=&#34;https://github.com/msgpack-rpc/msgpack-rpc&#34;&gt;msgpack-rpc&lt;/a&gt; which is a binary, json base codec.
+The communication between the Go client and the ruby server will be done over TCP via HTTP for example.&lt;/p&gt;
+
+&lt;p&gt;Later on, outside of the scope of this post, I may use ZMQ (as I have already blogged about 0MQ communication between those languages).&lt;/p&gt;
+
+&lt;h1 id=&#34;the-implementation-of-the-client-the-go-part:1574d51e403296c43e921da78612bc7c&#34;&gt;The implementation of the Client (the go part)&lt;/h1&gt;
+
+&lt;p&gt;I will describe here the node creation via a POST method, and consider that the other methods could be implemented in a similar way.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-signature-of-the-node-creation:1574d51e403296c43e921da78612bc7c&#34;&gt;The signature of the node creation&lt;/h2&gt;
+
+&lt;p&gt;Here is the expected signature for creating a compute element:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;kind&amp;quot;:&amp;quot;linux&amp;quot;,
+    &amp;quot;size&amp;quot;:&amp;quot;S&amp;quot;,
+    &amp;quot;disksize&amp;quot;:20,
+    &amp;quot;leasedays&amp;quot;:1,
+    &amp;quot;environment_type&amp;quot;:&amp;quot;dev&amp;quot;,
+    &amp;quot;description&amp;quot;:&amp;quot;my_description&amp;quot;,
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The corresponding GO structure is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type NodeRequest struct {
+    Kind string `json:&amp;quot;kind&amp;quot;` // Node kind (eg linux)
+    Size string `json:&amp;quot;size&amp;quot;` // size
+    Disksize         int    `json:&amp;quot;disksize&amp;quot;`
+    Leasedays        int    `json:&amp;quot;leasedays&amp;quot;`
+    EnvironmentType  string `json:&amp;quot;environment_type&amp;quot;`
+    Description      string `json:&amp;quot;description&amp;quot;`
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;the-route:1574d51e403296c43e921da78612bc7c&#34;&gt;The route&lt;/h2&gt;
+
+&lt;p&gt;The Middleware is using the &lt;a href=&#34;http://www.gorillatoolkit.org/pkg/mux&#34;&gt;gorilla mux package&lt;/a&gt;.
+According the description, I will add an entry in the routes array (into the &lt;em&gt;routes.go&lt;/em&gt; file):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;Route{
+    &amp;quot;NodeCreate&amp;quot;,
+    &amp;quot;POST&amp;quot;,
+    &amp;quot;/v1/nodes&amp;quot;,
+    NodeCreate,
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; : I am using a prefix &lt;code&gt;/v1&lt;/code&gt; for my API, for exploitation purpose.&lt;/p&gt;
+
+&lt;p&gt;I will then create the corresponding handler in the file with this signature&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func NodeCreate(w http.ResponseWriter, r *http.Request){
+    var nodeRequest NodeRequest
+    body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
+    if err != nil {
+        panic(err)
+    }
+    if err := r.Body.Close(); err != nil {
+        panic(err)
+    }
+    if err := json.Unmarshal(body, &amp;amp;nodeRequest); err != nil {
+        w.Header().Set(&amp;quot;Content-Type&amp;quot;, &amp;quot;application/json; charset=UTF-8&amp;quot;)
+        w.WriteHeader(http.StatusBadRequest) // unprocessable entity
+        if err := json.NewEncoder(w).Encode(err); err != nil {
+            panic(err)
+        }
+    }    
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s in this function that will be implemented RPC (client part). To keep it simple at the beginning,
+I will instantiate a TCP connection on every call.
+Don&amp;rsquo;t throw things at me, that will be changed later following the advice of Mat Ryer.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-implementation-of-the-handler:1574d51e403296c43e921da78612bc7c&#34;&gt;The implementation of the handler&lt;/h2&gt;
+
+&lt;h3 id=&#34;the-effective-remote-procedure-call:1574d51e403296c43e921da78612bc7c&#34;&gt;The effective remote procedure call&lt;/h3&gt;
+
+&lt;p&gt;To use &lt;em&gt;msgpack&lt;/em&gt; I need to import the go implementation &lt;code&gt;github.com/msgpack-rpc/msgpack-rpc-go/rpc&lt;/code&gt;.
+This library will take care of the encoding/decoding of the messages.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s dial the RPC server and call the &lt;code&gt;NodeCreate&lt;/code&gt; method with, as argument, the information we had from the JSON input&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;    conn, err := net.Dial(&amp;quot;tcp&amp;quot;, &amp;quot;127.0.0.1:18800&amp;quot;)
+    if err != nil {
+        fmt.Println(&amp;quot;fail to connect to server.&amp;quot;)
+        return
+    }
+    client := rpc.NewSession(conn, true)
+    retval, err := client.Send(&amp;quot;NodeCreate&amp;quot;, nodeRequest.Kind, nodeRequest.Size, nodeRequest.Disksize, nodeRequest.Leasedays, nodeRequest.EnvironmentType, nodeRequest.Description)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    fmt.Println(retval)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;the-rpc-server-the-ruby-part:1574d51e403296c43e921da78612bc7c&#34;&gt;The RPC server (the ruby part)&lt;/h1&gt;
+
+&lt;p&gt;This part is written in ruby, and will take care of the effective node creation.
+At first, we should install the GEM file with the command &lt;code&gt;gem install msgpack-rpc&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;require &#39;msgpack/rpc&#39;
+class MyHandler
+    def NodeCreate(kind, size, disksize, leasedays, environmenttype, description) 
+        print &amp;quot;Creating the node with parameters: &amp;quot;,kind, size, disksize, leasedays, environmenttype, description
+        return &amp;quot;ok&amp;quot;
+    end
+end
+svr = MessagePack::RPC::Server.new
+svr.listen(&#39;0.0.0.0&#39;, 18800, MyHandler.new)
+svr.run
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;let-s-test-it:1574d51e403296c43e921da78612bc7c&#34;&gt;let&amp;rsquo;s test it&lt;/h1&gt;
+
+&lt;p&gt;Launch the RPC server:
+&lt;code&gt;ruby server.rb&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Then launch the API rest server&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;go run *go&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Then perform a POST request&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;curl -X POST -H &#39;Content-Type:application/json&#39; -H &#39;Accept:application/json&#39; -d &#39;{&amp;quot;kind&amp;quot;:&amp;quot;linux&amp;quot;,&amp;quot;size&amp;quot;:&amp;quot;S&amp;quot;,&amp;quot;disksize&amp;quot;:20,&amp;quot;leasedays&amp;quot;:1,&amp;quot;environment_type&amp;quot;:&amp;quot;dev&amp;quot;,&amp;quot;description&amp;quot;:&amp;quot;my_description&amp;quot;}&#39; -k http://localhost:8080/v1/nodes
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It should write something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;2015/11/10 13:56:51 POST        /v1/nodes       NodeCreate      2.520673ms
+ok
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And something like this in the output of the ruby code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Creating the node with parameters: linux S 20 1 dev my_description
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s all folks! What&amp;rsquo;s left:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;To implement the other methods to be &amp;ldquo;&lt;a href=&#34;https://en.wikipedia.org/wiki/Create,_read,_update_and_delete&#34;&gt;CRUD&lt;/a&gt;&amp;rdquo; compliant&lt;/li&gt;
+&lt;li&gt;To implement an authentication and accreditation mechanism (JWT, Oauth, ?)&lt;/li&gt;
+&lt;li&gt;To change the implementation of the RPC client to use a pool instead of a single connection&lt;/li&gt;
+&lt;li&gt;To implement the swagger interface and documentation of the API&lt;/li&gt;
+&lt;li&gt;Whatever fancy stuff you may want from a production ready interface.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can find all the codes in the github repository &lt;a href=&#34;https://github.com/owulveryck/example-iaas&#34;&gt;here&lt;/a&gt; in the branch &lt;code&gt;iaas-like-restfull-api-based-on-microservices&lt;/code&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Ruby / ZeroMQ / GO</title>
+      <link>/2015/10/22/ruby-/-zeromq-/-go/</link>
+      <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>/2015/10/22/ruby-/-zeromq-/-go/</guid>
+      <description>
+
+&lt;h1 id=&#34;abtract:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Abtract&lt;/h1&gt;
+
+&lt;p&gt;I really like go as a programming language. It is a good tool to develop web restful API service.&lt;/p&gt;
+
+&lt;p&gt;On the other hand, ruby and its framework rails has also been wildly used to achieve the same goal.&lt;/p&gt;
+
+&lt;p&gt;Therefore we may be facing a &amp;ldquo;legacy&amp;rdquo; ruby developpement that we would like to connect to our brand new go framework.
+0MQ may be a perfect choice for intefacing the two languages.&lt;/p&gt;
+
+&lt;p&gt;Anyway, it is, at least, a good experience to do a little bit of code to make them communicate.&lt;/p&gt;
+
+&lt;h1 id=&#34;zeromq:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;ZeroMQ&lt;/h1&gt;
+
+&lt;p&gt;I will use the ZeroMQ version 4 as it is the latest available one.
+On top of that, I can see in the &lt;a href=&#34;http://zeromq.org/docs:changes-4-0-0&#34;&gt;release notes&lt;/a&gt; that there is an implementation of a strong encryption, and I may use it later on&lt;/p&gt;
+
+&lt;h1 id=&#34;go:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Go&lt;/h1&gt;
+
+&lt;h2 id=&#34;installation-of-the-library:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Installation of the library&lt;/h2&gt;
+
+&lt;p&gt;As written in the README file, I try a &lt;code&gt;go get&lt;/code&gt; installation on my chromebook.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ go get github.com/pebbe/zmq4
+# pkg-config --cflags libzmq
+Package libzmq was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libzmq.pc&#39;
+to the PKG_CONFIG_PATH environment variable
+No package &#39;libzmq&#39; found
+pkg-config: exit status 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The go binding is not a pure go implementation, and it still needs the C library of zmq.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s &lt;em&gt;brew installing&lt;/em&gt; it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~  brew install zmq
+==&amp;gt; Downloading http://download.zeromq.org/zeromq-4.1.3.tar.gz
+######################################################################## 100.0%
+==&amp;gt; ./configure --prefix=/usr/local/linuxbrew/Cellar/zeromq/4.1.3 --without-libsodium
+==&amp;gt; make
+==&amp;gt; make install
+/usr/local/linuxbrew/Cellar/zeromq/4.1.3: 63 files, 3.5M, built in 73 seconds
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s do the go-get again:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ go get github.com/pebbe/zmq4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;so far so good. Now let&amp;rsquo;s test the installation with a &amp;ldquo;hello world&amp;rdquo; example.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/examples&#34;&gt;examples directory&lt;/a&gt; contains a go implementation of all the example of the ZMQ book
+I will use the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/examples/hwclient.go&#34;&gt;hello world client&lt;/a&gt; and the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/examples/hwserver.go&#34;&gt;hello world server&lt;/a&gt; for my tests&lt;/p&gt;
+
+&lt;p&gt;The hello world client/server is implementing a Request-Reply patternt and are communicating via a TCP socket.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The server is the &lt;em&gt;replier&lt;/em&gt; and is listening on the TCP port 5555
+&lt;code&gt;go
+...
+func main() {
+//  Socket to talk to clients
+responder, _ := zmq.NewSocket(zmq.REP)
+defer responder.Close()
+responder.Bind(&amp;quot;tcp://*:5555&amp;quot;)
+...
+}
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;The client is the &lt;em&gt;requester&lt;/em&gt; and is dialing the same TCP port
+&lt;code&gt;go
+...
+func main() {
+//  Socket to talk to server
+fmt.Println(&amp;quot;Connecting to hello world server...&amp;quot;)
+requester, _ := zmq.NewSocket(zmq.REQ)
+defer requester.Close()
+requester.Connect(&amp;quot;tcp://localhost:5555&amp;quot;)
+...
+}
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Then, the client is sending (requesting) a &lt;em&gt;hello&lt;/em&gt; message, and the server is replying a &lt;em&gt;world&lt;/em&gt; message.&lt;/p&gt;
+
+&lt;h2 id=&#34;running-the-example:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Running the example&lt;/h2&gt;
+
+&lt;p&gt;First, start the server:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ cd $GOPATH/src/github.com/pebbe/zmq4/examples
+~ go run hwserver.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then the client&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ cd $GOPATH/src/github.com/pebbe/zmq4/examples
+~ go run hwclient.go
+Connecting to hello world server...
+Sending  Hello 0
+Received  World
+Sending  Hello 1
+Received  World
+Sending  Hello 2
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;ruby:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Ruby&lt;/h1&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s implement a Ruby client.&lt;/p&gt;
+
+&lt;h2 id=&#34;installation-of-the-library-1:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Installation of the library&lt;/h2&gt;
+
+&lt;p&gt;a &lt;em&gt;gem install&lt;/em&gt; is supposed to do the trick:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ gem install zmq
+Building native extensions.  This could take a while...
+ERROR:  Error installing zmq:
+ERROR: Failed to build gem native extension.
+
+/usr/local/linuxbrew/opt/ruby/bin/ruby -r ./siteconf20151022-23021-1ehwusq.rb extconf.rb
+    checking for zmq.h... yes
+    checking for zmq_init() in -lzmq... yes
+    Cool, I found your zmq install...
+    creating Makefile
+
+    make &amp;quot;DESTDIR=&amp;quot; clean
+
+    make &amp;quot;DESTDIR=&amp;quot;
+    compiling rbzmq.c
+    rbzmq.c: In function &#39;socket_getsockopt&#39;:
+    rbzmq.c:968:7: error: &#39;ZMQ_RECOVERY_IVL_MSEC&#39; undeclared (first use in this function)
+        case ZMQ_RECOVERY_IVL_MSEC:
+        ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Arg!, something went wrong. It looks like there is a version mismatch between th libzmq brew installed and the version expected by the gem
+The &lt;em&gt;zmq&lt;/em&gt; gem seems a bit old and there is a &lt;em&gt;FFI&lt;/em&gt; ruby extension with a more active developement.&lt;/p&gt;
+
+&lt;p&gt;Moreover, I have found []the perfect website for the ruby-and-zmq-ignorant(&lt;a href=&#34;https://github.com/andrewvc/learn-ruby-zeromq&#34;&gt;https://github.com/andrewvc/learn-ruby-zeromq&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;As written in the doc, let&amp;rsquo;s install the needed gems via &lt;code&gt;gem install ffi ffi-rzmq zmqmachine&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;let-s-try-the-lib:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Let&amp;rsquo;s try the lib&lt;/h2&gt;
+
+&lt;p&gt;Ok, it is now time to run an example&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;require &#39;rubygems&#39;
+require &#39;ffi-rzmq&#39;
+def error_check(rc)
+    if ZMQ::Util.resultcode_ok?(rc)
+        false
+    else
+        STDERR.puts &amp;quot;Operation failed, errno [#{ZMQ::Util.errno}] description [#{ZMQ::Util.error_string}]&amp;quot;
+        caller(1).each { |callstack| STDERR.puts(callstack)  }
+        true
+    end
+end
+
+ctx = ZMQ::Context.create(1)
+STDERR.puts &amp;quot;Failed to create a Context&amp;quot; unless ctx
+
+req_sock = ctx.socket(ZMQ::REQ)
+rc = req_sock.connect(&#39;tcp://127.0.0.1:5555&#39;)
+STDERR.puts &amp;quot;Failed to connect REQ socket&amp;quot; unless ZMQ::Util.resultcode_ok?(rc)
+
+2.times do
+    rc = req_sock.send_string(&#39;Ruby says Hello&#39;)
+    break if error_check(rc)
+
+    rep = &#39;&#39;
+    rc = req_sock.recv_string(rep)
+    break if error_check(rc)
+    puts &amp;quot;Received reply &#39;#{rep}&#39;&amp;quot;
+end
+error_check(req_sock.close)
+
+ctx.terminate
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Running this example with a simple &lt;code&gt;ruby client.rb&lt;/code&gt; command leads to the following errors:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ruby client.rb
+Assertion failed: check () (src/msg.cpp:248)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;But, my GO server is receiving the messages:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~ go run hwserver.go
+Received  Ruby says Hello
+Received  Ruby says Hello
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;end-of-show:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;End of show&lt;/h1&gt;
+
+&lt;p&gt;That&amp;rsquo;s it for now. I think I&amp;rsquo;m facing a bug in the ruby implementation of the libzmq I&amp;rsquo;m using.
+Indeed, I&amp;rsquo;ve found an &lt;a href=&#34;https://github.com/chuckremes/ffi-rzmq/issues/118&#34;&gt;issue&lt;/a&gt;&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;I will check again later, or I will try on another environement but the essential is here.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
