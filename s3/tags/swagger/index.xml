@@ -14,10 +14,10 @@
     
     <item>
       <title>Simple IaaS API documentation with swagger</title>
-      <link>/2015/11/11/simple-iaas-api-documentation-with-swagger/</link>
+      <link>/2015/11/11/simple-iaas-api-documentation-with-swagger/index.html</link>
       <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>/2015/11/11/simple-iaas-api-documentation-with-swagger/</guid>
+      <guid>/2015/11/11/simple-iaas-api-documentation-with-swagger/index.html</guid>
       <description>
 
 &lt;p&gt;In a &lt;a href=&#34;http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/&#34;&gt;previous post&lt;/a&gt; I have explained how to develop a very simple API server.&lt;/p&gt;

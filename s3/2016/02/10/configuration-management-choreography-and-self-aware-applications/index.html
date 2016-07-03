@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Configuration management, choreography and self-aware applications  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="From system configuration management to self aware application. How did we pass from automation to infrastructure as data ? What is the future of automation ? In this post I describe some ideas I have collected about the principles that could lead to self-aware application. I will also present a proof of concept I made to illustrate those ideas." />
+
+<meta name="keywords" content="choreography, orchestration, topology, ">
+
+<link rel="author" href="http://plus.google.com/+olivier.wulveryck">
+
+
+<meta property="og:title" content="Configuration management, choreography and self-aware applications  &middot; Olivier Wulveryck&#39;s Tech Blog ">
+<meta property="og:site_name" content="Olivier Wulveryck&#39;s Tech Blog"/>
+<meta property="og:url" content="/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="From system configuration management to self aware application. How did we pass from automation to infrastructure as data ? What is the future of automation ? In this post I describe some ideas I have collected about the principles that could lead to self-aware application. I will also present a proof of concept I made to illustrate those ideas."/>
+<meta property="og:article:published_time" content="2016-02-10T17:19:47&#43;01:00" />
+<meta property="og:article:modified_time" content="2016-02-10T17:19:47&#43;01:00" />
+
+  
+    
+<meta property="og:article:tag" content="choreography">
+    
+<meta property="og:article:tag" content="orchestration">
+    
+<meta property="og:article:tag" content="topology">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@owulveryck" />
+<meta name="twitter:creator" content="@owulveryck" />
+<meta name="twitter:title" content="Configuration management, choreography and self-aware applications" />
+<meta name="twitter:description" content="From system configuration management to self aware application. How did we pass from automation to infrastructure as data ? What is the future of automation ? In this post I describe some ideas I have collected about the principles that could lead to self-aware application. I will also present a proof of concept I made to illustrate those ideas." />
+<meta name="twitter:url" content="/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html" />
+<meta name="twitter:domain" content="/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Configuration management, choreography and self-aware applications",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+olivier.wulveryck?rel=author"
+    },
+    "datePublished": "2016-02-10",
+    "description": "From system configuration management to self aware application. How did we pass from automation to infrastructure as data ? What is the future of automation ? In this post I describe some ideas I have collected about the principles that could lead to self-aware application. I will also present a proof of concept I made to illustrate those ideas.",
+    "wordCount":  2026 
+  }
+</script>
+
+
+
+<link rel="canonical" href="/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+<link href="/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.15" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="/css/theme/default.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css">
+
+
+  <link rel="stylesheet" href="/css/highlight/default.css">
+
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+<script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+</head>
+<body>
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Olivier Wulveryck&#39;s Tech Blog</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li>
+
+            <a href="/about"
+            >
+
+            
+                <i class="fa fa-info-circle"></i>
+            
+            
+            About
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="/post"
+             title="Show list of posts">
+
+            
+            
+            Posts
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="/tags"
+             title="Show list of tags">
+
+            
+            
+            Tags
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </div>
+  </nav>
+
+</header>
+
+
+<div class="container">
+<div class="row">
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Configuration management, choreography and self-aware applications
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2016-02-10">10 Feb, 2016</time>
+</small>
+
+
+  <small>
+    &middot; by Olivier Wulveryck
+  
+  &middot; Read in about 10 min
+  &middot; (2026 Words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="/tags/config-management" class="label label-primary">config management</a>
+  
+  <a href="/tags/choreography" class="label label-primary">choreography</a>
+  
+  <a href="/tags/orchestration" class="label label-primary">orchestration</a>
+  
+  <a href="/tags/topology" class="label label-primary">topology</a>
+  
+  <a href="/tags/tosca" class="label label-primary">TOSCA</a>
+  
+  <a href="/tags/go" class="label label-primary">go</a>
+  
+  <a href="/tags/khoreia" class="label label-primary">khoreia</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+  <div class="container content">
+  
+
+<p>Thanks to the <a href="https://www.linkedin.com/company/techsys?trk=company_logo">company I&rsquo;m working for (Techsys)</a> I&rsquo;ve had the opportunity to attend the <a href="http://cfgmgmtcamp.eu/">configuration management camp</a> in Gent (<em>be</em>) for its 2016 edition.</p>
+
+<p>I really enjoyed those two days of talks, watching people present different ideas of a possible future for
+the infrastructure and deployment engineering.
+Beyond the technical demonstrations and the experience sharing, I&rsquo;ve spotted a bunch of ideas</p>
+
+<p>Among all, those that comes to me spontaneously are:</p>
+
+<blockquote>
+<p>You don&rsquo;t need configuration management, what you need is a description of the topology of your application - <em><a href="http://www.markshuttleworth.com/biography">Mark Shuttleworth</a></em> in its keynote <em>The magic of modeling</em></p>
+
+<p>You don&rsquo;t need orchestration, what you need is choreography - Exposed by <em><a href="https://www.linkedin.com/in/julian">Julian Dunn</a></em>
+(you can find a transcription <a href="https://www.youtube.com/watch?v=kfF9IATUask">here on youtube</a>)</p>
+
+<p>What we need is a new way to do configuration management - <em><a href="https://www.linkedin.com/in/james-shubin-74a89a44">James Shubin</a></em>, see <a href="https://ttboj.wordpress.com/2016/01/18/next-generation-configuration-mgmt/">his blog post</a> which ispired my project <a href="http://github.com/owulveryck/khoreia">khoreia</a></p>
+</blockquote>
+
+<p>I came back home very excited about this.
+This post tries to expose my reflection and how I&rsquo;ve implemented an idea (see it as a POC)
+I&rsquo;ve passed some time to learn about TOSCA, and the to code an orchestrator.</p>
+
+<p>In a first part I will expose why, according to me, the topological description of the application may be what
+company needs.</p>
+
+<p>Therefore, I will notice the need for orchestration tools.</p>
+
+<p>Even if the concepts remains actuals, the future may be an evolution of this mechanism of central command and control.
+In the last part of this post, I will expose what I&rsquo;ve understood of the concept of choreography so far.</p>
+
+<p>Finally I will demonstrate the idea with a POC based on a development on <a href="https://github.com/coreos/etcd">the etcd product</a> from CoreOS.
+(and a youtube demo for those who don&rsquo;t want to <code>git clone...</code>)</p>
+
+<h2 id="configuration-management-and-orchestration:01ecc74d815319839ce50fcf86930ee5">Configuration management and orchestration</h2>
+
+<p>Configuration management has been for a long time, a goal for IT automation.
+Years ago, it allowed system engineers to control a huge park of machines while maintaining a TCO at a relatively decent level.</p>
+
+<p>Over the last decade, 4 major tools have emerged and are now part of most CTO common vocabulary.</p>
+
+<p>Let&rsquo;s take a look at the trends from 4 major tools categorized as &ldquo;configuration management tools&rdquo;:</p>
+
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th align="center">Founded in</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Ansible</td>
+<td align="center">2012</td>
+</tr>
+
+<tr>
+<td>Puppet</td>
+<td align="center">2005</td>
+</tr>
+
+<tr>
+<td>Chef</td>
+<td align="center">2009</td>
+</tr>
+
+<tr>
+<td>Salt</td>
+<td align="center">2011</td>
+</tr>
+</tbody>
+</table>
+
+<p><em>Note</em>: I do not represent CFEngine because it is doesn&rsquo;t seem not so widely used in dotcom companies (even if it seems to be a great tool and on a certain extent the father of the others)</p>
+
+<p>The &ldquo;interest&rdquo; for those tools as seen by Google is be represented like this:</p>
+
+<p><center>
+<script type="text/javascript" src="//www.google.com/trends/embed.js?hl=en&q=/m/0k0vzjb,+/m/03d3cjz,+/m/05zxlz3,+/m/0hn8c6s&date=1/2014+25m&cmpt=q&tz=Etc/GMT-1&tz=Etc/GMT-1&content=1&cid=TIMESERIES_GRAPH_0&export=5&w=700&h=350"></script>
+</center></p>
+
+<p>As we can see, Ansible seems to be the emerging technology. Indeed its acquisition by redhat in late 2015 may have boosted a bit the trends, but anyway, the companies that do not implement infrastructure as code may seem to prefer this tool.
+Cause or consequence, Gartner has nominated Ansible as a <em>cool vendor</em> for 2015 (according to Gartner, a Cool Vendor is an emerging and innovative vendor that has original, interesting, and unique technology with real market impact)</p>
+
+<p>Why did a newcomer such as Ansible did present such interest?</p>
+
+<p>Beside its simplicity, Ansible is not exactly a configuration management tool, it is <strong>an orchestrator</strong> (see <a href="https://www.Ansible.com/orchestration">the Ansible webpage</a>)</p>
+
+<p>According to <a href="https://en.wikipedia.org/wiki/Diffusion_of_innovations">Rogger&rsquo;s theory</a> about the diffusion of innovation, and regarding the trends, I think that it is accurate to say
+that the position of Ansible is near the &ldquo;late majority&rdquo;
+<center>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Diffusionofideas.PNG/330px-Diffusionofideas.PNG" alt="Diffusion of ideas" />
+</center></p>
+
+<p>What does this mean ?</p>
+
+<p>To me,it means that people do feel the need for orchestration, or if they don&rsquo;t feel it, they will thanks to Ansible.
+Via orchestration, they may feel the need for representing their product.</p>
+
+<p>We are now talking about <strong>infrastructure as data</strong>; soon we will talk about <strong>architecture as data</strong></p>
+
+<h3 id="from-system-configuration-management:01ecc74d815319839ce50fcf86930ee5">From system configuration management&hellip;</h3>
+
+<p>I did system administration and engineering for years. Configuration management was the answer to the growing of the infrastructure.
+Config management allowed us to</p>
+
+<ul>
+<li>Get the systems reliable</li>
+<li>Get the best efficiency possible from the infrastructure</li>
+<li>Maintain a low TCO
+&hellip;</li>
+</ul>
+
+<p>It was all &ldquo;system centric&rdquo;, so the application could be deposed and run in best conditions.</p>
+
+<h3 id="to-application-s-full-description:01ecc74d815319839ce50fcf86930ee5">&hellip; to application&rsquo;s full description</h3>
+
+<p>A couple of years ago, maybe because of the DevOps movement, my missions were getting more and more application centric (which is good).
+Actually infrastructure has not been considered as a needed cost anymore.</p>
+
+<p>Thanks to <em>Agility</em>, <em>DevOps</em>, and the emergent notion of product (as opposed to project), <strong>Application and infrastructure are now seen as a whole</strong>.<br />
+(I&rsquo;m talking of the application &ldquo;born in the data center&rdquo;, it is different for those &ldquo;born in the cloud&rdquo;)</p>
+
+<p>Therefore, the setup of the application must not rely only on programmed configuration management tools anymore, but on its complete <strong>representation</strong></p>
+
+<h1 id="the-self-sufficient-application:01ecc74d815319839ce50fcf86930ee5">The self-sufficient application</h1>
+
+<p>Some times ago, I wrote article published on <a href="https://www.linkedin.com/pulse/from-integration-self-sufficient-application-olivier-wulveryck?trk=prof-post">pulse</a> because I wanted to lay down on paper what I thought about the future of application deployment.
+I&rsquo;ve described some layers of the application.
+I kept on studying, and with a some help from my colleagues and friends, I&rsquo;ve  finally been able to put a word on those ideas I had in mind.</p>
+
+<p>This word is <strong>Topology</strong></p>
+
+<h2 id="and-then-came-tosca:01ecc74d815319839ce50fcf86930ee5">and then came TOSCA</h2>
+
+<p>To describe a whole application, I needed a <em>domain specific language</em> (DSL).
+All of the languages I was trying to document were by far too system centric.
+Then I discovered <a href="http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html">TOSCA</a>.
+TOSCA is <strong>THE DSL</strong> for representing the topology of an application.</p>
+
+<h3 id="pros:01ecc74d815319839ce50fcf86930ee5">Pros&hellip;</h3>
+
+<p>What&rsquo;s good about Tosca is its goal:</p>
+
+<p>It describes a standard for representing a cloud application. It is written by the Oasis consortium and
+therefore most of the big brand in IT may be aware of its existence.
+The promise is that if you describe any application with Tosca, it could be deployed on any platform, with a decent <strong>orchestrator</strong>.</p>
+
+<h3 id="and-cons:01ecc74d815319839ce50fcf86930ee5">&hellip;and cons</h3>
+
+<p>But&hellip; Tosca is complex.
+It&rsquo;s not that simple to write a Tosca representation. The standard wants to cover all the possible cases, and according <a href="https://en.wikipedia.org/wiki/Vilfredo_Pareto">Pareto</a>&rsquo;s law,
+I can say that 80% of the customers will only need 20% of the standard.</p>
+
+<p>On top of that, Tosca is young (by now, the YAML version is still in pre-release), and I could not find any decent tool to orchestrate and deploy an application.
+Big companies claim their compliance with the standard, but actually very few of them (if any) does really implement it.</p>
+
+<h2 id="let-s-come-back-to-orchestration-and-real-world:01ecc74d815319839ce50fcf86930ee5">Let&rsquo;s come back to orchestration (and real world)</h2>
+
+<p>As seen before, a Tosca file would need a tool to transform it to a real application.
+This tool is <strong>an orchestrator</strong>.</p>
+
+<p>The tool should be called <strong>conductor</strong>, because what is does actually is to conduct the symphony, and yet in our context the symphony is not
+represented by the topology, but by its &lsquo;score&rsquo;: its execution plan, and the purpose of the &lsquo;orchestrator&rsquo; is to make every node to play its part
+so the application symphony could be rendered in best condition of reliability and efficiency&hellip;</p>
+
+<p>Wait, that was the promise of the configuration management tools, isn&rsquo;t it?</p>
+
+<h3 id="the-execution-plan:01ecc74d815319839ce50fcf86930ee5">The execution plan</h3>
+
+<p>So what is the execution plan.
+An execution plan is a program. It describes exactly what needs to be done by systems.
+The execution plan is deterministic.</p>
+
+<p>With the description of the application, the execution plan, and the orchestration, the ultimate goal of automation seems fulfilled, indeed!
+We have a complete suite of tools that allows to describe the application and architecture base on its functions and it is possible to
+generate and executes all the commands a computer <strong>must</strong> do to get things done.</p>
+
+<p>Why do we need more?
+Because now systems are so complex that we could not rely anymore on IT infrastructure to do exactly what we told it to.
+Mark Burgess, considered by a lot of people as a visionary, wrote a book entitled:
+<a href="http://www.amazon.com/In-Search-Certainty-information-infrastructure/dp/1492389161">In Search of Certainty: The science of our information infrastructure</a></p>
+
+<p>Julian Dunn told about it in its speech, and I&rsquo;ve started reading IT.</p>
+
+<p>The conclusion is roughly:</p>
+
+<p><em>We may not rely on command and control anymore, we should make the system work on its own to reach a level of stability</em></p>
+
+<h1 id="dancing-choreography-jazz:01ecc74d815319839ce50fcf86930ee5">Dancing, Choreography, Jazz ?</h1>
+
+<p>A solution to the orchestration SPOF and  a workaround for dealing with the uncertainty of the infrastructure may be to implement a choreography.
+Or to replace the symphony with a piece of jazz.
+You give every attendee (dancer, jazzman or TOSCA node) the structure of the piece to play.
+And given the chords and the structure, they all react and do what they have committed to do.</p>
+
+<p>This should produce similar to the same mechanism controlled by an orchestrator, but more fault tolerant.
+Actually, the brain will not have to take care of unpredicted event; each node will do so.
+The application has become self-aware.</p>
+
+<h2 id="implementation-a-distributed-system:01ecc74d815319839ce50fcf86930ee5">Implementation: a distributed system</h2>
+
+<p>This concept, described in so many sci-fi books, may become applicable because science formalized consensus algorithm such as
+paxo or raft.
+And even better, it is easy to find very good implementation of those concepts (for free)</p>
+
+<p><code>etcd</code> from CoreOS is one of those tools.
+It is a service oriented key/value store, distributed on a cluster of machine.</p>
+
+<p>It can be used as a communication based for a cluster of nodes composing a choreography.</p>
+
+<p>Even more, etcd clients have the ability to monitor an event allowing us to implement the self awareness of the application.</p>
+
+<h2 id="proof-of-concept-khoreia:01ecc74d815319839ce50fcf86930ee5">Proof of concept: khoreia</h2>
+
+<p>khoreia is a little program I made in <code>go</code> that relies on the <a href="http://github.com/coreos/eetcd">etcd</a> distributed system.
+Etcd itself is an implementation of the raft consensus algorithm. I do heavily advice that you take a look at <a href="http://thesecretlivesofdata.com/raft/">this page</a>
+for a complete and clear explanation.</p>
+
+<p>The khoreia single binary takes a topology description in yaml
+(by now very simple, but sooner or later I may implement the TOSCA DSL, as I already
+have a <a href="http://github.com/owulveryck/toscalib">Tosca library</a>).</p>
+
+<p>Then it triggers the nodes and every node reacts on events.
+Regarding the events, it implements the expected life cycle for the node.</p>
+
+<p>Without actually coding it, the complement life cycle of the application is then applied.
+Even better, the application is fault tolerant (if a check fails, the do method is called again) and the execution
+is completely stateless because of the event based mechanism.</p>
+
+<h3 id="screencast-a-little-demo-on-distributed-systems-based-on-event-on-filesystems:01ecc74d815319839ce50fcf86930ee5">Screencast: a little demo on distributed systems based on event on filesystems</h3>
+
+<p>Here is a little screencast I made as a POC.
+Two machines are used (linked by a VPN):</p>
+
+<ul>
+<li>my chromebook, linux-based at home in France;</li>
+<li>a FreeBSD server located in Canada.</li>
+</ul>
+
+<p>Both machines are part of an etcd cluster.
+The topology is composed of 8 nodes with dependencies which can be represented like this (same example as the one I used in a previous post):
+<img class="img-responsive" src="/assets/images/digraph1.png" alt="digraph example"/></p>
+
+<p>Nodes 0-3 are targeted on the chromebook while nodes 5-7 are targeted on the BSD machine.</p>
+
+<p>The topology is described as a simple yaml file <a href="https://github.com/owulveryck/khoreia/blob/e32af3d77d0b57bf36b68a2460e5a47132f29118/samples/topology.yaml">here</a></p>
+
+<p>Each node is fulfilling two methods:</p>
+
+<ul>
+<li>Create</li>
+<li>Configure</li>
+</ul>
+
+<p>And each method is implementing an interface composed of:</p>
+
+<ul>
+<li><code>Check()</code> which check whether the action has been release and the &ldquo;role&rdquo; is ok</li>
+<li><code>Do()</code> which actually implements the action</li>
+</ul>
+
+<p><em>Note</em>: The signature of the method is actually a bit different, and the go implementation involve channels, but I does not change the principle,
+so I&rsquo;ve decided to omit that for clarity.</p>
+
+<h4 id="example:01ecc74d815319839ce50fcf86930ee5">Example</h4>
+
+<p>Each node will:</p>
+
+<ol>
+<li><strong>Wait for an event</strong> and call Create.Check() and Configure.Check().</li>
+<li>watch for events from their dependencies</li>
+<li>if an event is detected, call the appropriate Do() method</li>
+</ol>
+
+<h4 id="engine:01ecc74d815319839ce50fcf86930ee5">Engine</h4>
+
+<p>The interfaces <code>Check()</code> and <code>Do()</code> may be implemented on different engines.</p>
+
+<p>For my demo, as suggested by James I&rsquo;m using a &ldquo;file engine&rdquo; base on iNotify (linux) and kQueue (freebsd).</p>
+
+<p>The <code>Check()</code> method is watching the presence of a file. It sends the event &ldquo;true&rdquo; if the file is created of &ldquo;false&rdquo; if its deleted.</p>
+
+<p>The <code>Do()</code> method actually create an empty file.</p>
+
+<p><center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/l96uFQUrcp8" frameborder="0" allowfullscreen></iframe>
+</center></p>
+
+<h4 id="khoreia-on-github:01ecc74d815319839ce50fcf86930ee5">Khoreia on github:</h4>
+
+<p><a href="http://github.com/owulveryck/khoreia">github.com/owulveryck/khoreia</a></p>
+
+<h1 id="conclusion:01ecc74d815319839ce50fcf86930ee5">Conclusion</h1>
+
+<p>Self-awareness, self-healing, elasticity, modularity, &hellip; with a choreography based configuration and deployment tools, standard application may get
+new capabilities without totally rethinking their infrastructure.</p>
+
+<p>Some of the stuff that still need to be implemented are, for example,  the notion of interface and commitment of the node, and the notion of
+machine learning for every node to teach them how to react to different events in an efficient way.</p>
+
+</div>
+
+
+  <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html" title="Orchestrate a digraph with goroutine, a concurrent orchestrator">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/index.html" title="Is there a Markov model hidden in the choreography?">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+</footer>
+
+
+</div>
+</div>
+      <footer class="footer">
+    <div class="container hidden-print">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="#">back to top</a>
+</div>
+<div class="pull-right">
+  
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+          <small>
+              
+    
+<div class="container footline">
+  
+
+</div>
+
+
+    
+<div class="container copyright">
+  
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
+
+
+</div>
+
+
+
+          </small>
+        </div>
+     </div>
+    </div>
+</footer>
+
+    <script src="/js/jquery.min-2.1.4.js"></script>
+<script src="/js/bootstrap.min-3.3.5.js"></script>
+
+
+
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="/js/highlight.pack.js"></script>
+<script src="/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-69673850-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+  </body>
+</html>
+

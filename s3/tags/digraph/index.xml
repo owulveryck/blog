@@ -14,10 +14,10 @@
     
     <item>
       <title>Orchestrate a digraph with goroutine, a concurrent orchestrator</title>
-      <link>/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</link>
+      <link>/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html</link>
       <pubDate>Wed, 02 Dec 2015 14:24:21 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</guid>
+      <guid>/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html</guid>
       <description>
 
 &lt;p&gt;I&amp;rsquo;ve read a lot about graph theory recently.
@@ -279,10 +279,10 @@ and then we would be able to see the progession in a graphical way.&lt;/li&gt;
     
     <item>
       <title>TOSCA lifecycle as a digraph</title>
-      <link>/2015/11/20/tosca-lifecycle-as-a-digraph/</link>
+      <link>/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</link>
       <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>/2015/11/20/tosca-lifecycle-as-a-digraph/</guid>
+      <guid>/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</guid>
       <description>
 
 &lt;h1 id=&#34;about-tosca:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;About TOSCA&lt;/h1&gt;

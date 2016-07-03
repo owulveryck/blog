@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Simple polling, a cloud native app - part 1  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="">
+
+<link rel="author" href="http://plus.google.com/+olivier.wulveryck">
+
+
+<meta property="og:title" content="Simple polling, a cloud native app - part 1  &middot; Olivier Wulveryck&#39;s Tech Blog ">
+<meta property="og:site_name" content="Olivier Wulveryck&#39;s Tech Blog"/>
+<meta property="og:url" content="/2015/10/23/simple-polling-a-cloud-native-app---part-1/index.html" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2015-10-23T09:54:27&#43;01:00" />
+<meta property="og:article:modified_time" content="2015-10-23T09:54:27&#43;01:00" />
+
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@owulveryck" />
+<meta name="twitter:creator" content="@owulveryck" />
+<meta name="twitter:title" content="Simple polling, a cloud native app - part 1" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="/2015/10/23/simple-polling-a-cloud-native-app---part-1/index.html" />
+<meta name="twitter:domain" content="/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Simple polling, a cloud native app - part 1",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+olivier.wulveryck?rel=author"
+    },
+    "datePublished": "2015-10-23",
+    "description": "",
+    "wordCount":  605 
+  }
+</script>
+
+
+
+<link rel="canonical" href="/2015/10/23/simple-polling-a-cloud-native-app---part-1/index.html" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+<link href="/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.15" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="/css/theme/default.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css">
+
+
+  <link rel="stylesheet" href="/css/highlight/default.css">
+
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+<script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+</head>
+<body>
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Olivier Wulveryck&#39;s Tech Blog</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li>
+
+            <a href="/about"
+            >
+
+            
+                <i class="fa fa-info-circle"></i>
+            
+            
+            About
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="/post"
+             title="Show list of posts">
+
+            
+            
+            Posts
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="/tags"
+             title="Show list of tags">
+
+            
+            
+            Tags
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </div>
+  </nav>
+
+</header>
+
+
+<div class="container">
+<div class="row">
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Simple polling, a cloud native app - part 1
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2015-10-23">23 Oct, 2015</time>
+</small>
+
+
+  <small>
+  &middot; Read in about 3 min
+  &middot; (605 Words)
+</small>
+
+
+<div class="margin-10">
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+  <div class="container content">
+  
+
+<p>In this series of posts I&rsquo;ll explain how to setup a simple polling app, the cloud way.
+This app, written in go, will be hosted on a PAAS, and I&rsquo;ve chosen the <a href="https://cloud.google.com/appengine/docs">Google App Engine</a> for convenience.</p>
+
+<p>I will not explain in this post how to setup the Development environment as it is described <a href="https://cloud.google.com/appengine/docs/go/gettingstarted/devenvironment">here</a></p>
+
+<h1 id="a-word-about-the-hosting:154917605c8b60fbfe1ec11d0e3a2450">A word about the Hosting</h1>
+
+<p>Google Apps Engine is a cloud service aim to host applications without worrying about scalability, and technical architecture of the hosting environement.
+The application is seen as a web service and proxyfied and load balanced in several compute nodes.
+The storage service is provided via a schemaless NoSQL datastore, featuring:</p>
+
+<ul>
+<li>high availability</li>
+<li>consistency</li>
+<li>&hellip;</li>
+</ul>
+
+<p>and basically all the strong features you would expect from a decent production ready database provider.</p>
+
+<p>To be simple: Take care of the functionnality of your app and respect the cloud principles (see for example the <a href="http://12factor.net">12factor.net</a> ), and google will take care that it can run in the best conditions.</p>
+
+<h1 id="the-principles-of-the-application:154917605c8b60fbfe1ec11d0e3a2450">The principles of the application</h1>
+
+<p>The application is composed of a stateless engine, a data bucket and some web pages for the presentation.</p>
+
+<h2 id="the-engine:154917605c8b60fbfe1ec11d0e3a2450">The engine</h2>
+
+<p>The engine is the core of the application. It is the &ldquo;computational element&rdquo; that will take care of the inputs of the user and interact with the storage.
+It is a <a href="http://golang.org">GO</a> developement.</p>
+
+<h2 id="the-bucket:154917605c8b60fbfe1ec11d0e3a2450">The bucket</h2>
+
+<p>It is the data warehouse. It will store the participant name and its answer. It will be NoSQL based, the key will be the username and the value its answer.</p>
+
+<h2 id="the-web-pages:154917605c8b60fbfe1ec11d0e3a2450">The web pages</h2>
+
+<ul>
+<li><p>the question &ldquo;will you participate&rdquo; and a form input where you will be able to write your name and three buttons &ldquo;yes&rdquo;, &ldquo;no&rdquo; and &ldquo;&ldquo;maybe&rdquo;&ldquo;.</p>
+
+<pre><code>Will you participate 
++------------------+  +-----+ +-----+ +-------+
+|  Your name       |  | YES | |  NO | | Maybe |
++------------------+  +-----+ +-----+ +-------+
+</code></pre></li>
+
+<li><p>a simple table with two columns:</p></li>
+
+<li><p>One will hold the participant name</p></li>
+
+<li><p>The other one will display its response</p></li>
+</ul>
+
+<pre><code>+---------------------+-------+
+|  John doe           | YES   |
++---------------------+-------+
+|  Johnny Vacances    | NO    |
++---------------------+-------+
+|  Foo Bar            | YES   |
++---------------------+-------+
+|  Toto Titi          | NO    |
++---------------------+-------+
+|  Pascal Obistro     | YES   |
++---------------------+-------+
+</code></pre>
+
+<h1 id="setting-up-the-development-environment:154917605c8b60fbfe1ec11d0e3a2450">Setting up the development environment</h1>
+
+<p>First, we will create a directory that will host the sources of our application in our <code>GOPATH/src</code>.
+<em>Note</em>: For convenience I&rsquo;ve created a github repo named &ldquo;google-app-example&rdquo; to host the complete source.</p>
+
+<pre><code>~ mkdir -p $GOPATH/src/github.com/owulveryck/google-app-example
+~ cd $GOPATH/src/github.com/owulveryck/google-app-example
+~ git init
+~ git remote add origin https://github.com/owulveryck/google-app-example
+</code></pre>
+
+<h2 id="hello-world:154917605c8b60fbfe1ec11d0e3a2450">Hello World!</h2>
+
+<p>Let&rsquo;s create the hello world first to validate the whole development chain.
+As written in the doc, create the two files <code>hello.go</code> and <code>app.yaml</code>.
+Obviously the <code>simple-polling.go</code> file will hold the code of the application. Let&rsquo;s focus a bit on the <em>app.yaml</em> file.
+The documentation of the <em>app.yaml</em> file is <a href="https://cloud.google.com/appengine/docs/go/config/appconfig">here</a>. The goal of this file is to specifiy the runtime configuration of the engine.
+This simple file replace the &ldquo;integration&rdquo; task for an application typed &ldquo;born in the datacenter&rdquo;</p>
+
+<p>Here is my app.yaml</p>
+
+<pre><code class="language-yaml">application: simple-polling
+version: 1
+runtime: go
+api_version: go1
+
+handlers:
+- url: /.*
+  script: _go_app
+</code></pre>
+
+<p>And then we try our application with the command <code>goapp serve $GOPATH/src/github.com/owulveryck/google-app-example/</code>
+which should display something similar to:</p>
+
+<pre><code>INFO     2015-10-26 21:02:10,295 devappserver2.py:763] Skipping SDK update check.
+INFO     2015-10-26 21:02:10,468 api_server.py:205] Starting API server at: http://localhost:52457
+INFO     2015-10-26 21:02:12,011 dispatcher.py:197] Starting module &quot;default&quot; running at: http://localhost:8080
+INFO     2015-10-26 21:02:12,014 admin_server.py:116] Starting admin server at: http://localhost:8000
+</code></pre>
+
+<p>Then I can open my browser (or curl) and point it to <a href="http://localhost:8080">http://localhost:8080</a> to see my brand new &ldquo;Hello World!&rdquo; displayed</p>
+
+<pre><code>~ curl http://localhost:8080
+Hello, world!
+</code></pre>
+
+<p>This ends the part 1 of this serie of articles.</p>
+
+</div>
+
+
+  <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="/2015/10/22/ruby-/-zeromq-/-go/index.html" title="Ruby / ZeroMQ / GO">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="/2015/10/26/developping-google-apps-on-my-chromebook/index.html" title="Developping &#34;Google Apps&#34; on my Chromebook">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+</footer>
+
+
+</div>
+</div>
+      <footer class="footer">
+    <div class="container hidden-print">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="#">back to top</a>
+</div>
+<div class="pull-right">
+  
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+          <small>
+              
+    
+<div class="container footline">
+  
+
+</div>
+
+
+    
+<div class="container copyright">
+  
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
+
+
+</div>
+
+
+
+          </small>
+        </div>
+     </div>
+    </div>
+</footer>
+
+    <script src="/js/jquery.min-2.1.4.js"></script>
+<script src="/js/bootstrap.min-3.3.5.js"></script>
+
+
+
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="/js/highlight.pack.js"></script>
+<script src="/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-69673850-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+  </body>
+</html>
+

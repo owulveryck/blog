@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>TOSCA lifecycle as a digraph  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="A tosca lifecycle represented as a digraph" />
+
+<meta name="keywords" content="TOSCA, Digraph, Graph Theory, golang, ">
+
+<link rel="author" href="http://plus.google.com/+olivier.wulveryck">
+
+
+<meta property="og:title" content="TOSCA lifecycle as a digraph  &middot; Olivier Wulveryck&#39;s Tech Blog ">
+<meta property="og:site_name" content="Olivier Wulveryck&#39;s Tech Blog"/>
+<meta property="og:url" content="/2015/11/20/tosca-lifecycle-as-a-digraph/index.html" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="A tosca lifecycle represented as a digraph"/>
+<meta property="og:article:published_time" content="2015-11-20T10:09:30Z" />
+<meta property="og:article:modified_time" content="2015-11-20T10:09:30Z" />
+
+  
+    
+<meta property="og:article:tag" content="TOSCA">
+    
+<meta property="og:article:tag" content="Digraph">
+    
+<meta property="og:article:tag" content="Graph Theory">
+    
+<meta property="og:article:tag" content="golang">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@owulveryck" />
+<meta name="twitter:creator" content="@owulveryck" />
+<meta name="twitter:title" content="TOSCA lifecycle as a digraph" />
+<meta name="twitter:description" content="A tosca lifecycle represented as a digraph" />
+<meta name="twitter:url" content="/2015/11/20/tosca-lifecycle-as-a-digraph/index.html" />
+<meta name="twitter:domain" content="/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "TOSCA lifecycle as a digraph",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+olivier.wulveryck?rel=author"
+    },
+    "datePublished": "2015-11-20",
+    "description": "A tosca lifecycle represented as a digraph",
+    "wordCount":  1103 
+  }
+</script>
+
+
+
+<link rel="canonical" href="/2015/11/20/tosca-lifecycle-as-a-digraph/index.html" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+<link href="/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.15" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="/css/theme/default.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css">
+
+
+  <link rel="stylesheet" href="/css/highlight/default.css">
+
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+<script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+</head>
+<body>
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Olivier Wulveryck&#39;s Tech Blog</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li>
+
+            <a href="/about"
+            >
+
+            
+                <i class="fa fa-info-circle"></i>
+            
+            
+            About
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="/post"
+             title="Show list of posts">
+
+            
+            
+            Posts
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="/tags"
+             title="Show list of tags">
+
+            
+            
+            Tags
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </div>
+  </nav>
+
+</header>
+
+
+<div class="container">
+<div class="row">
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>TOSCA lifecycle as a digraph
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2015-11-20">20 Nov, 2015</time>
+</small>
+
+
+  <small>
+    &middot; by Olivier Wulveryck
+  
+  &middot; Read in about 6 min
+  &middot; (1103 Words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="/tags/tosca" class="label label-primary">TOSCA</a>
+  
+  <a href="/tags/digraph" class="label label-primary">Digraph</a>
+  
+  <a href="/tags/graph-theory" class="label label-primary">Graph Theory</a>
+  
+  <a href="/tags/golang" class="label label-primary">golang</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+  <div class="container content">
+  
+
+<h1 id="about-tosca:8cf993f2ffc57e79f07e9de1887ed972">About TOSCA</h1>
+
+<p>The <a href="https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=tosca">TOSCA</a> acronym stands for
+<em>Topology and Orchestration Specification for Cloud Applications</em>. It&rsquo;s an <a href="https://www.oasis-open.org">OASIS</a> standard.</p>
+
+<p>The purpose of the TOSCA project is to represent an application by its topology and formalize it using the TOSCA grammar.</p>
+
+<p>The <a href="http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simp$le-Profile-YAML-v1.0-csprd01.html">[TOSCA-Simple-Profile-YAML-v1.0]</a>
+current specification in YAML introduces the following concepts.</p>
+
+<blockquote>
+<ul>
+<li>TOSCA YAML service template: A YAML document artifact containing a (TOSCA) service template that represents a Cloud application.</li>
+<li>TOSCA processor: An engine or tool that is capable of parsing and interpreting a TOSCA YAML service template for a particular purpose. For example, the purpose could be validation, translation or visual rendering.</li>
+<li>TOSCA orchestrator (also called orchestration engine): A TOSCA processor that interprets a TOSCA YAML service template then instantiates and deploys the described application in a Cloud.</li>
+<li>TOSCA generator: A tool that generates a TOSCA YAML service template. An example of generator is a modeling tool capable of generating or editing a TOSCA YAML service template (often such a tool would also be a TOSCA processor).</li>
+<li>TOSCA archive (or TOSCA Cloud Service Archive, or “CSAR”): a package artifact that contains a TOSCA YAML service template and other artifacts usable by a TOSCA orchestrator to deploy an application.</li>
+</ul>
+</blockquote>
+
+<h2 id="my-work-with-tosca:8cf993f2ffc57e79f07e9de1887ed972">My work with TOSCA</h2>
+
+<p>I do believe that TOSCA may be a very good leverage to port a &ldquo;legacy application&rdquo; (aka <em>born in the datacenter</em> application) into a cloud ready application without rewriting it completely to be cloud compliant.
+To be clear, It may act on the hosting and execution plan of the application, and not on the application itself.</p>
+
+<p>A single wordpress installation in a TOSCA way as written <a href="http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html#_Toc430015847">here</a> is represented like that</p>
+
+<p><img class="img-square img-responsive" src="http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01_files/image035.png" alt="Single Wordpress representation"/></p>
+
+<p>While I was learnig GO, I have developped a <a href="https://github.com/owulveryck/toscalib">TOSCA lib</a> and a <a href="https://github.com/owulveryck/toscaviewer">TOSCA processor</a> which are, by far, not <em>idiomatic GO</em>.</p>
+
+<p>Here are two screenshots of the rendering in a web page made with my tool (and the graphviz product):</p>
+
+<hr/>
+
+<p><em>The graph representation of a <em>Single instance wordpress</em></em>
+<img class="img-responsive" src="/assets/images/toscaviewer_template_def.png" alt="Tosca view ofthe single instance wordpress"/></p>
+
+<p><em>The graph representation of a lifecycle of <em>Single instance wordpress</em></em>
+<img class="img-responsive" src="/assets/images/toscaviewer_lifecycle_def.png" alt="Lifecycle representation of the single wordpress instance representation"/>
+<hr/></p>
+
+<p>The TOSCA file is parsed with the help of the <code>TOSCALIB</code> and then it fills an adjacency matrix (see <a href="https://godoc.org/github.com/owulveryck/toscalib#ToscaDefinition.FillAdjacencyMatrix">FillAdjacencyMatrix</a>)</p>
+
+<p>The <a href="http://graphviz.org">graphviz</a> take care of the (di)graph representation.</p>
+
+<p>What I would like to do now, is a little bit more: I would like to play with the graph and query it
+Then I should perform requests on this graph. For example I could ask:</p>
+
+<ul>
+<li><em>What are the steps to go from the state Initial of the application, to the state running</em> ?</li>
+<li><em>What are the steps to go from stop to delete</em></li>
+<li>&hellip;</li>
+</ul>
+
+<p>and that would be <strong>the premise of a TOSCA orchestrator</strong>.</p>
+
+<h2 id="the-digraph-go-code:8cf993f2ffc57e79f07e9de1887ed972">The digraph go code</h2>
+
+<p>I&rsquo;ve recently discoverd the <a href="https://github.com/golang/tools/tree/master/cmd/digraph">digraph</a> tool, that I will use for querying the graphs.
+The <code>digraph</code> is represented as a map with a node as a key and its immediates successors as values:</p>
+
+<pre><code class="language-go">// A graph maps nodes to the non-nil set of their immediate successors.
+type graph map[string]nodeset
+
+type nodeset map[string]bool
+</code></pre>
+
+<h2 id="from-tosca-to-digraph:8cf993f2ffc57e79f07e9de1887ed972">From TOSCA to digraph</h2>
+
+<p>What I must do is to parse the adjacency matrix, get the &ldquo;lifecycle action&rdquo; related to the id and fill the graph g.</p>
+
+<h1 id="let-s-go:8cf993f2ffc57e79f07e9de1887ed972">Let&rsquo;s go</h1>
+
+<p>Considering the digraph code, what I need to do is simply to override the <code>parse</code> method.</p>
+
+<h2 id="principle:8cf993f2ffc57e79f07e9de1887ed972">Principle</h2>
+
+<p>I will fill the <code>graph</code> with a string composed of <em>nodename:action</em> as key.
+For example, if I need to do a &ldquo;Configure&rdquo; action of node &ldquo;A&rdquo; after a &ldquo;Start&rdquo; action on node &ldquo;B&rdquo;, I will have the following entry in the map:</p>
+
+<pre><code class="language-go">g[&quot;B:Start&quot;] = &quot;A:Configure&quot;
+</code></pre>
+
+<p>So What I need to do is to parse the adjjacency matrix, do a matching with the row id and the &ldquo;node:action&rdquo; name, and fill the <code>graph g</code> with the matching of the corresponding &ldquo;node:action&rdquo;.</p>
+
+<p>I will fill a <code>map</code> with the id of the node:action as key and the corresponding label as values:</p>
+
+<pre><code class="language-gloang">for node, template := range toscaTemplate.TopologyTemplate.NodeTemplates {
+        ids[template.GetConfigureIndex()] = fmt.Sprintf(&quot;%v:Configure&quot;, node)
+        ids[template.GetCreateIndex()] = fmt.Sprintf(&quot;%v:Create&quot;, node)
+        ids[template.GetDeleteIndex()] = fmt.Sprintf(&quot;%v:Delete&quot;, node)
+        ids[template.GetInitialIndex()] = fmt.Sprintf(&quot;%v:Initial&quot;, node)
+        ids[template.GetPostConfigureSourceIndex()] = fmt.Sprintf(&quot;%v:PostConfigureSource&quot;, node)
+        ids[template.GetPostConfigureTargetIndex()] = fmt.Sprintf(&quot;%v:PostconfigureTarget&quot;, node)
+        ids[template.GetPreConfigureSourceIndex()] = fmt.Sprintf(&quot;%v:PreConfigureSource&quot;, node)
+        ids[template.GetPreConfigureTargetIndex()] = fmt.Sprintf(&quot;%v:PreConfigureTarget&quot;, node)
+        ids[template.GetStartIndex()] = fmt.Sprintf(&quot;%v:Start&quot;, node)
+        ids[template.GetStopIndex()] = fmt.Sprintf(&quot;%v:Stop&quot;, node)
+}
+</code></pre>
+
+<p>Then I can easily fill the <code>graph g</code> from the adjacency matrix:</p>
+
+<pre><code class="language-gloang">row, col := toscaTemplate.AdjacencyMatrix.Dims()
+        for r := 1; r &lt; row; r++ {
+                for c := 1; c &lt; col; c++ {
+                        if adjacencyMatrix.At(r, c) == 1 {
+                                g.addEdges(ids[r], ids[c])
+                        }
+                }
+        }
+</code></pre>
+
+<p>That&rsquo;s it</p>
+
+<h1 id="the-final-function:8cf993f2ffc57e79f07e9de1887ed972">The final function</h1>
+
+<p>Here is the final parse function</p>
+
+<pre><code class="language-go">func parse(rd io.Reader) (graph, error) {
+        g := make(graph)
+        // Parse the input graph.
+        var toscaTemplate toscalib.ToscaDefinition
+        err := toscaTemplate.Parse(rd)
+        if err != nil {
+                return nil, err
+        }
+        // a map containing the ID and the corresponding action
+        ids := make(map[int]string)
+        // Fill in the graph with the toscaTemplate via the adjacency matrix
+        for node, template := range toscaTemplate.TopologyTemplate.NodeTemplates {
+                // Find the edges of the current node and add them to the graph
+
+                ids[template.GetConfigureIndex()] = fmt.Sprintf(&quot;%v:Configure&quot;, node)
+                ids[template.GetCreateIndex()] = fmt.Sprintf(&quot;%v:Create&quot;, node)
+                ids[template.GetDeleteIndex()] = fmt.Sprintf(&quot;%v:Delete&quot;, node)
+                ids[template.GetInitialIndex()] = fmt.Sprintf(&quot;%v:Initial&quot;, node)
+                ids[template.GetPostConfigureSourceIndex()] = fmt.Sprintf(&quot;%v:PostConfigureSource&quot;, node)
+                ids[template.GetPostConfigureTargetIndex()] = fmt.Sprintf(&quot;%v:PostconfigureTarget&quot;, node)
+                ids[template.GetPreConfigureSourceIndex()] = fmt.Sprintf(&quot;%v:PreConfigureSource&quot;, node)
+                ids[template.GetPreConfigureTargetIndex()] = fmt.Sprintf(&quot;%v:PreConfigureTarget&quot;, node)
+                ids[template.GetStartIndex()] = fmt.Sprintf(&quot;%v:Start&quot;, node)
+                ids[template.GetStopIndex()] = fmt.Sprintf(&quot;%v:Stop&quot;, node)
+        }
+
+        row, col := toscaTemplate.AdjacencyMatrix.Dims()
+        for r := 1; r &lt; row; r++ {
+                for c := 1; c &lt; col; c++ {
+                        if adjacencyMatrix.At(r, c) == 1 {
+                                g.addEdges(ids[r], ids[c])
+                        }
+                }
+        }
+        return g, nil
+}
+
+</code></pre>
+
+<h1 id="grab-the-source-and-compile-it:8cf993f2ffc57e79f07e9de1887ed972">Grab the source and compile it</h1>
+
+<p>I have a github repo with the source.
+It is go-gettable</p>
+
+<pre><code>go get github.com/owulveryck/digraph
+cd $GOPATH/src/github.com/owulveryck/digraph &amp;&amp; go build
+</code></pre>
+
+<p><strong>EDIT</strong> As I continue to work on this tool, I have created a &ldquo;blog&rdquo; branch in the github which holds the version related to this post</p>
+
+<h1 id="example:8cf993f2ffc57e79f07e9de1887ed972">Example</h1>
+
+<p>I will use the the same example as described below: the single instance wordpress.</p>
+
+<p>I&rsquo;ve extracted the YAML and placed in in the file <a href="https://github.com/owulveryck/toscaviewer/blob/master/examples/tosca_single_instance_wordpress.yaml">tosca_single_instance_wordpress.yaml</a>.</p>
+
+<p>Let&rsquo;s query the nodes first:</p>
+
+<pre><code class="language-sh">curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
+mysql_database:Configure
+mysql_database:Create
+mysql_database:Start
+mysql_dbms:Configure
+mysql_dbms:Create
+mysql_dbms:Start
+server:Configure
+server:Create
+server:Start
+webserver:Configure
+webserver:Create
+webserver:Start
+wordpress:Configure
+wordpress:Create
+wordpress:Start
+
+</code></pre>
+
+<p>so far, so good&hellip;</p>
+
+<p>Now, I can I go from a <code>Server:Create</code> to a running instance <code>wordpress:Start</code></p>
+
+<pre><code>curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph somepath server:Create wordpress:Start
+server:Create
+server:Configure
+server:Start
+mysql_dbms:Create
+mysql_dbms:Configure
+mysql_dbms:Start
+mysql_database:Create
+mysql_database:Configure
+mysql_database:Start
+wordpress:Create
+wordpress:Configure
+wordpress:Start
+</code></pre>
+
+<p>Cool!</p>
+
+<h1 id="conclusion:8cf993f2ffc57e79f07e9de1887ed972">Conclusion</h1>
+
+<p>The tool sounds ok. What I may add:</p>
+
+<ul>
+<li>a command to display the full lifecycle (finding the entry and the exit points in the matrix and call somepath with it)</li>
+<li>get the tosca <code>artifacts</code> and display them instead of the label to generate a deployment plan</li>
+<li>execute the command in <code>goroutines</code> to make them concurrent</li>
+</ul>
+
+<p>And of course validate any other TOSCA definition to go through a bug hunting party</p>
+
+</div>
+
+
+  <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="/2015/11/17/playing-with-openstack-keystone/index.html" title="Playing with (Openstack) Keystone">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="/2015/11/30/ksh93-cool-features-for-scripting/index.html" title="KSH93 cool features for scripting">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+</footer>
+
+
+</div>
+</div>
+      <footer class="footer">
+    <div class="container hidden-print">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="#">back to top</a>
+</div>
+<div class="pull-right">
+  
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+          <small>
+              
+    
+<div class="container footline">
+  
+
+</div>
+
+
+    
+<div class="container copyright">
+  
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
+
+
+</div>
+
+
+
+          </small>
+        </div>
+     </div>
+    </div>
+</footer>
+
+    <script src="/js/jquery.min-2.1.4.js"></script>
+<script src="/js/bootstrap.min-3.3.5.js"></script>
+
+
+
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="/js/highlight.pack.js"></script>
+<script src="/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-69673850-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+  </body>
+</html>
+

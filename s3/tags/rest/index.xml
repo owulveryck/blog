@@ -14,10 +14,10 @@
     
     <item>
       <title>Playing with (Openstack) Keystone</title>
-      <link>/2015/11/17/playing-with-openstack-keystone/</link>
+      <link>/2015/11/17/playing-with-openstack-keystone/index.html</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>/2015/11/17/playing-with-openstack-keystone/</guid>
+      <guid>/2015/11/17/playing-with-openstack-keystone/index.html</guid>
       <description>
 
 &lt;p&gt;In the cloud computing, alongside of the hosting monsters such as amazon or google, there is the &lt;a href=&#34;https://www.openstack.org&#34;&gt;Openstack Platform&lt;/a&gt;.&lt;/p&gt;
@@ -386,10 +386,10 @@ The tool may be useful, but the TCO sounds high and the entry ticket is not negl
     
     <item>
       <title>Simple IaaS API documentation with swagger</title>
-      <link>/2015/11/11/simple-iaas-api-documentation-with-swagger/</link>
+      <link>/2015/11/11/simple-iaas-api-documentation-with-swagger/index.html</link>
       <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>/2015/11/11/simple-iaas-api-documentation-with-swagger/</guid>
+      <guid>/2015/11/11/simple-iaas-api-documentation-with-swagger/index.html</guid>
       <description>
 
 &lt;p&gt;In a &lt;a href=&#34;http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/&#34;&gt;previous post&lt;/a&gt; I have explained how to develop a very simple API server.&lt;/p&gt;
@@ -675,10 +675,10 @@ Once the API is fully implemented, any client binding may also be generated with
     
     <item>
       <title>IaaS-like RESTfull API based on microservices</title>
-      <link>/2015/11/10/iaas-like-restfull-api-based-on-microservices/</link>
+      <link>/2015/11/10/iaas-like-restfull-api-based-on-microservices/index.html</link>
       <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>/2015/11/10/iaas-like-restfull-api-based-on-microservices/</guid>
+      <guid>/2015/11/10/iaas-like-restfull-api-based-on-microservices/index.html</guid>
       <description>
 
 &lt;h1 id=&#34;abstracts:1574d51e403296c43e921da78612bc7c&#34;&gt;Abstracts&lt;/h1&gt;

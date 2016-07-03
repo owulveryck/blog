@@ -26,8 +26,8 @@ paginatePath = "page"
 disqusShortname = "owulveryck"
 
 [permalinks]
-    post = "/:year/:month/:day/:slug/"
-    code = "/:slug/"
+    post = "/:year/:month/:day/:slug/index.html"
+    code = "/:slug/index.html"
 
 [taxonomies]
     tag = "tags"

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>KSH93 cool features for scripting  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="Two reasons why I usually use KSH93 as script engine" />
+
+<meta name="keywords" content="ksh, shell, getopts, man, ">
+
+<link rel="author" href="http://plus.google.com/+olivier.wulveryck">
+
+
+<meta property="og:title" content="KSH93 cool features for scripting  &middot; Olivier Wulveryck&#39;s Tech Blog ">
+<meta property="og:site_name" content="Olivier Wulveryck&#39;s Tech Blog"/>
+<meta property="og:url" content="/2015/11/30/ksh93-cool-features-for-scripting/index.html" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Two reasons why I usually use KSH93 as script engine"/>
+<meta property="og:article:published_time" content="2015-11-30T13:17:41Z" />
+<meta property="og:article:modified_time" content="2015-11-30T13:17:41Z" />
+
+  
+    
+<meta property="og:article:tag" content="ksh">
+    
+<meta property="og:article:tag" content="shell">
+    
+<meta property="og:article:tag" content="getopts">
+    
+<meta property="og:article:tag" content="man">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@owulveryck" />
+<meta name="twitter:creator" content="@owulveryck" />
+<meta name="twitter:title" content="KSH93 cool features for scripting" />
+<meta name="twitter:description" content="Two reasons why I usually use KSH93 as script engine" />
+<meta name="twitter:url" content="/2015/11/30/ksh93-cool-features-for-scripting/index.html" />
+<meta name="twitter:domain" content="/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "KSH93 cool features for scripting",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+olivier.wulveryck?rel=author"
+    },
+    "datePublished": "2015-11-30",
+    "description": "Two reasons why I usually use KSH93 as script engine",
+    "wordCount":  1254 
+  }
+</script>
+
+
+
+<link rel="canonical" href="/2015/11/30/ksh93-cool-features-for-scripting/index.html" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+<link href="/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.15" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="/css/theme/default.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css">
+
+
+  <link rel="stylesheet" href="/css/highlight/default.css">
+
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+<script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+</head>
+<body>
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Olivier Wulveryck&#39;s Tech Blog</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li>
+
+            <a href="/about"
+            >
+
+            
+                <i class="fa fa-info-circle"></i>
+            
+            
+            About
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="/post"
+             title="Show list of posts">
+
+            
+            
+            Posts
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="/tags"
+             title="Show list of tags">
+
+            
+            
+            Tags
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </div>
+  </nav>
+
+</header>
+
+
+<div class="container">
+<div class="row">
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>KSH93 cool features for scripting
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2015-11-30">30 Nov, 2015</time>
+</small>
+
+
+  <small>
+    &middot; by Olivier Wulveryck
+  
+  &middot; Read in about 6 min
+  &middot; (1254 Words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="/tags/ksh" class="label label-primary">ksh</a>
+  
+  <a href="/tags/bash" class="label label-primary">bash</a>
+  
+  <a href="/tags/shell" class="label label-primary">shell</a>
+  
+  <a href="/tags/getopts" class="label label-primary">getopts</a>
+  
+  <a href="/tags/man" class="label label-primary">man</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+  <div class="container content">
+  
+
+<p>From time to time, I&rsquo;m involved into a trolling conversation when any linux kiddie tells me:</p>
+
+<p><em>Bash is really the superior shell</em></p>
+
+<p>I totally disagree, but as I&rsquo;m getting older, I don&rsquo;t argue anymore.</p>
+
+<p>Anyway, in this post I will expose two arguments, or I should say two reasons, why I usually use <code>ksh93</code> to run my scripts.</p>
+
+<p><strong>Note</strong> I&rsquo;m really talking about the engine of the script, (the shebang definition).
+set I&rsquo;m used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
+My <code>$SHELL</code> for interactivity is <code>zsh</code> because it&rsquo;s efficient enough
+and it has a bunch of really cool features I won&rsquo;t discuss in this post (maybe later)</p>
+
+<h1 id="read-loops-forks-and-efficiency:492220ebbfd063710e57a4727b3232af">Read, loops, forks and efficiency&hellip;</h1>
+
+<p>More than 10 years ago, as I was working for a project at IBM, my excellent team leader told me to refer to this book:
+<a href="http://shop.oreilly.com/product/9780596003302.do">Unix Power Tools</a>. I did learn a lot with it.</p>
+
+<p>And one feature I&rsquo;ve always used is the <code>while read</code> loop.</p>
+
+<h2 id="the-use-case:492220ebbfd063710e57a4727b3232af">The use case</h2>
+
+<p>Let&rsquo;s take this script as example:</p>
+
+<pre><code class="language-sh">$ cat test                                                                                                         
+for i in $(seq 1 500)
+do
+    echo $i | read a
+    echo -ne &quot;$a\r&quot;
+done
+echo &quot;&quot;
+</code></pre>
+
+<p>It simply iterate 500 times and display the counter on the screen.</p>
+
+<h2 id="the-result-of-execution:492220ebbfd063710e57a4727b3232af">The result of execution</h2>
+
+<p>Let&rsquo;s execute it in different shells</p>
+
+<pre><code class="language-sh">for i in bash zsh ksh                                                                                         
+do
+    echo &quot;$i =&gt;&quot;
+    eval $i test
+done
+bash =&gt;
+
+zsh =&gt;
+500
+ksh =&gt;
+500
+</code></pre>
+
+<p>Bash is the only one which does not display the expected result.
+The explanation is that the shell sees a pipe and the fork the process. The assignation to the variable <code>a</code> is in another context and therefore,
+when the father wants to display <code>$a</code> in the current shell, the variable is empty.</p>
+
+<p>Wait, but why does <code>ksh</code> (and <code>zsh</code>) do display the correct result ?
+Simply because ksh and zsh have noticed that the command after the pipe was a builtin, and therefore that it was un-useful to fork.</p>
+
+<h3 id="strace-to-the-rescue:492220ebbfd063710e57a4727b3232af">Strace to the rescue&hellip;</h3>
+
+<p>To prove it, let&rsquo;s check for syscalls with the <code>strace</code> tool, and count how many clones and calls are performed:</p>
+
+<pre><code class="language-sh">$ for i in bash zsh ksh                                                                                         
+do
+    echo &quot;$i =&gt;&quot;
+    strace -c  $i  test 2&gt;&amp;1 | egrep &quot;clone|calls&quot;
+done
+bash =&gt;
+% time     seconds  usecs/call     calls    errors syscall
+56.05    0.067081          67      1001           clone
+zsh =&gt;
+% time     seconds  usecs/call     calls    errors syscall
+71.57    0.057681         115       501           clone
+ksh =&gt;
+% time     seconds  usecs/call     calls    errors syscall
+68.50    0.042059          84       500           clone
+</code></pre>
+
+<p><em>quod erat demonstrandum</em>, twice as much clone in bash thant in ksh|zsh.</p>
+
+<h2 id="efficiency:492220ebbfd063710e57a4727b3232af">Efficiency</h2>
+
+<p>Of course this as an impact on performances, because fork are expensive, let&rsquo;s query the execution time:</p>
+
+<pre><code class="language-sh">for i in bash zsh ksh                                                                                         
+do
+    echo &quot;$i =&gt;&quot;
+    eval time $i test
+done
+bash =&gt;
+
+bash test  0,17s user 0,86s system 95% cpu 1,079 total
+zsh =&gt;
+500
+zsh test  0,08s user 0,46s system 82% cpu 0,648 total
+ksh =&gt;
+500
+ksh test  0,07s user 0,46s system 65% cpu 0,819 total
+</code></pre>
+
+<p>This sounds clear to me&hellip;</p>
+
+<h1 id="the-ksh93-getopts-unknown-feature:492220ebbfd063710e57a4727b3232af">The KSH93 Getopts unknown feature</h1>
+
+<p>Another cool feature I&rsquo;ve discovered recently is the little addon of the getopts feature.</p>
+
+<p>I wanted to use the <code>getopts</code> built in in a script. As usual, I did <em>RTFM</em> (because I never know when to use colon etc.).</p>
+
+<p>Here is the extract of the man page of ksh93 relative to the getopts function:</p>
+
+<pre>
+<B>getopts</B> [ <B>-a</B> <I>name</I> ] <I>optstring vname</I> [ <I>arg</I> ... ]
+
+Checks <I>arg</I> for legal options.  If <I>arg</I> is omitted, the positional parameters are used.
+
+An option argument begins with a <B>+</B> or a <B>-</B>.  An option not beginning with <B>+</B> or <B>-</B> or the argument <B>--</B> ends the options.
+Options beginning with <B>+</B> are only recognized when <I>optstring</I> begins with a <B>+</B>.
+
+<I>optstring</I> contains the letters that <B>getopts</B> recognizes.
+If a letter is followed by a <B>:</B>, that option is expected to have an argument.
+The options can be separated from the argument by blanks.
+The option <B>-?</B> causes <B>getopts</B> to generate a usage message on standard error.
+The <B>-a</B> argument can be used to specify the name to use for the usage message, which defaults to <B>$0</B>.
+
+<B>getopts</B> places the next option letter it finds inside variable <I>vname</I> each time it is invoked.
+The option letter will be prepended with a <B>+</B> when <I>arg</I> begins with a <B>+</B>.
+The index of the next <I>arg</I> is stored in <FONT SIZE="-1"><B>OPTIND</B>.
+</FONT> The option argument, if any, gets stored in <FONT SIZE="-1"><B>OPTARG</B>.  </FONT> 
+
+A leading <B>:</B> in <I>optstring</I> causes <B>getopts</B> to store the letter of an invalid option in <FONT SIZE="-1"><B>OPTARG</B>, </FONT>
+and to set <I>vname</I> to <B>?</B> for an unknown option and to <B>:</B> when a required option argument is missing.
+Otherwise, <B>getopts</B> prints an error message.
+The exit status is non-zero when there are no more options.
+
+<P> There is no way to specify any of the options <B>:</B>, <B>+</B>, <B>-</B>, <B>?</B>, <B>[</B>, and <B>]</B>.
+
+The option <B>#</B> can only be specified as the first option. 
+</pre>
+
+<p>This particular sentence, in the middle of the documentation peaked my interest</p>
+
+<blockquote>
+<p>The option -? causes getopts to generate a usage message on standard error.</p>
+</blockquote>
+
+<p>What? We can generate usage with getopts?</p>
+
+<p>Cool, any script should be documented, but any documentation should not be difficult to implement.</p>
+
+<p><img class="img-responsive center-block" src="http://imgs.xkcd.com/comics/manuals.png">
+<center><em><a href="https://xkcd.com/1343/">https://xkcd.com/1343/</a></em></center></p>
+
+<p>I did googled and found this
+<a href="http://docstore.mik.ua/orelly/unix3/korn/appb_11.htm">web page</a> which is an extract from this book <a href="http://shop.oreilly.com/product/9780596001957.do">Learning the Korn Shell</a></p>
+
+<p>An example is sometimes better than an explanation (and the book is complete on this subject)</p>
+
+<h2 id="the-example:492220ebbfd063710e57a4727b3232af">The example</h2>
+
+<h3 id="the-script:492220ebbfd063710e57a4727b3232af">The script</h3>
+
+<pre><code class="language-sh">#!/bin/ksh
+
+ENV=dev
+MPATH=/tmp
+##
+### Man usage and co...
+
+USAGE=&quot;[-?The example script v1.0]&quot;
+USAGE+=&quot;[-author?Olivier Wulveryck]&quot;
+USAGE+=&quot;[-copyright?Copyright (C) My Blog]&quot;
+USAGE+=&quot;[+NAME?$0 --- The Example Script]&quot;
+USAGE+=&quot;[+DESCRIPTION?The description of the script]&quot;
+USAGE+=&quot;[u:user]:[user to run the command as:=$USER?Use the name of the user you want to sudo to: ]&quot;
+USAGE+=&quot;[e:env]:[environnement:=$ENV?environnement to use (eg: dev, prod) ]&quot;
+USAGE+=&quot;[p:path]:[Execution PATH:=$MPATH?prefix of the chroot]&quot;
+USAGE+=&quot;[+EXAMPLE?$0 action2]&quot;
+USAGE+='[+SEE ALSO?My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting]'
+USAGE+=&quot;[+BUGS?A few, maybe...]&quot;
+
+### Option Checking
+
+while getopts &quot;$USAGE&quot; optchar ; do
+    case $optchar in
+        u)  USER=$OPTARG
+        ;;
+        e)  ENV=$OPTARG
+        ;;
+        p)  PATH=$OPTARG
+        ;;
+    esac
+done
+shift OPTIND-1
+ACTION=$1
+</code></pre>
+
+<h3 id="the-invocation:492220ebbfd063710e57a4727b3232af">The invocation</h3>
+
+<p>Here are two <em>singing</em> examples of the usage output (sorry, I&rsquo;m tired)</p>
+
+<h4 id="ballad-of-a-thin-man:492220ebbfd063710e57a4727b3232af"><em>Ballad of a thin man</em></h4>
+
+<pre><code class="language-sh">$ ./blog.ksh --man
+NAME
+  ./blog.ksh --- The Example Script
+
+SYNOPSIS
+  ./blog.ksh [ options ]
+
+DESCRIPTION
+  The description of the script
+
+OPTIONS
+  -u, --user=user to run the command as
+                  Use the name of the user you want to sudo to: The default value is owulveryck.
+  -e, --env=environnement
+                  environnement to use (eg: dev, prod) The default value is dev.
+  -p, --path=Execution PATH
+                  prefix of the chroot The default value is /tmp.
+
+EXAMPLE
+  ./blog.ksh action2
+
+SEE ALSO
+  My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting
+
+BUGS
+  A few, maybe...
+
+IMPLEMENTATION
+  version         The example script v1.0
+  author          Olivier Wulveryck
+  copyright       Copyright (C) My Blog
+</code></pre>
+
+<h4 id="i-m-gonna-try-with-a-little-help-from-my-friends:492220ebbfd063710e57a4727b3232af">I&rsquo;m gonna try <em>with a little help (from my friends)</em></h4>
+
+<pre><code class="language-sh">$ ./blog.ksh --help
+Usage: ./blog.ksh [ options ]
+OPTIONS
+  -u, --user=user to run the command as
+                  Use the name of the user you want to sudo to: The default value is owulveryck.
+  -e, --env=environnement
+                  environnement to use (eg: dev, prod) The default value is dev.
+  -p, --path=Execution PATH
+                  prefix of the chroot The default value is /tmp.
+</code></pre>
+
+<p>And let&rsquo;s try with an invalid option&hellip;</p>
+
+<pre><code class="language-sh">  ./blog.ksh -t
+./blog.ksh: -t: unknown option
+Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Execution PATH]
+</code></pre>
+
+<h1 id="conclusion:492220ebbfd063710e57a4727b3232af">Conclusion</h1>
+
+<p>By now, KSH93 remains my favorite engine for shell scripts, but is sometimes replaced by ZSH.</p>
+
+<p>Actually, ZSH seems as &ldquo;smart&rdquo; and efficient, but this <code>getopts</code> feature is really nice for any script aim to be distributed widely.</p>
+
+</div>
+
+
+  <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="/2015/11/20/tosca-lifecycle-as-a-digraph/index.html" title="TOSCA lifecycle as a digraph">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html" title="Orchestrate a digraph with goroutine, a concurrent orchestrator">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+</footer>
+
+
+</div>
+</div>
+      <footer class="footer">
+    <div class="container hidden-print">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="#">back to top</a>
+</div>
+<div class="pull-right">
+  
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+          <small>
+              
+    
+<div class="container footline">
+  
+
+</div>
+
+
+    
+<div class="container copyright">
+  
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
+
+
+</div>
+
+
+
+          </small>
+        </div>
+     </div>
+    </div>
+</footer>
+
+    <script src="/js/jquery.min-2.1.4.js"></script>
+<script src="/js/bootstrap.min-3.3.5.js"></script>
+
+
+
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="/js/highlight.pack.js"></script>
+<script src="/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-69673850-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+  </body>
+</html>
+

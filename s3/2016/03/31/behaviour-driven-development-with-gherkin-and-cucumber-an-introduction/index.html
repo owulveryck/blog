@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Behaviour Driven Development with Gherkin and Cucumber (an introduction)  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="Some notes about Behaviour driver development, gherkin and Cucumber. The example describes here will test a service on an AWS&#39;s EC2 instance." />
+
+<meta name="keywords" content="EC2, BDD, Gherkin, Cucumber, Ruby, ">
+
+<link rel="author" href="http://plus.google.com/+olivier.wulveryck">
+
+
+<meta property="og:title" content="Behaviour Driven Development with Gherkin and Cucumber (an introduction)  &middot; Olivier Wulveryck&#39;s Tech Blog ">
+<meta property="og:site_name" content="Olivier Wulveryck&#39;s Tech Blog"/>
+<meta property="og:url" content="/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/index.html" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Some notes about Behaviour driver development, gherkin and Cucumber. The example describes here will test a service on an AWS&#39;s EC2 instance."/>
+<meta property="og:article:published_time" content="2016-03-31T23:39:35&#43;01:00" />
+<meta property="og:article:modified_time" content="2016-03-31T23:39:35&#43;01:00" />
+
+  
+    
+<meta property="og:article:tag" content="EC2">
+    
+<meta property="og:article:tag" content="BDD">
+    
+<meta property="og:article:tag" content="Gherkin">
+    
+<meta property="og:article:tag" content="Cucumber">
+    
+<meta property="og:article:tag" content="Ruby">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@owulveryck" />
+<meta name="twitter:creator" content="@owulveryck" />
+<meta name="twitter:title" content="Behaviour Driven Development with Gherkin and Cucumber (an introduction)" />
+<meta name="twitter:description" content="Some notes about Behaviour driver development, gherkin and Cucumber. The example describes here will test a service on an AWS&#39;s EC2 instance." />
+<meta name="twitter:url" content="/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/index.html" />
+<meta name="twitter:domain" content="/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Behaviour Driven Development with Gherkin and Cucumber (an introduction)",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+olivier.wulveryck?rel=author"
+    },
+    "datePublished": "2016-03-31",
+    "description": "Some notes about Behaviour driver development, gherkin and Cucumber. The example describes here will test a service on an AWS\x27s EC2 instance.",
+    "wordCount":  2337 
+  }
+</script>
+
+
+
+<link rel="canonical" href="/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/index.html" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-144-precomposed.png">
+<link href="/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.15" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="/css/theme/default.css">
+
+
+<link rel="stylesheet" href="/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/style.css">
+
+
+  <link rel="stylesheet" href="/css/highlight/default.css">
+
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+<script src='http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+</head>
+<body>
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Olivier Wulveryck&#39;s Tech Blog</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li>
+
+            <a href="/about"
+            >
+
+            
+                <i class="fa fa-info-circle"></i>
+            
+            
+            About
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="/post"
+             title="Show list of posts">
+
+            
+            
+            Posts
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="/tags"
+             title="Show list of tags">
+
+            
+            
+            Tags
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </div>
+  </nav>
+
+</header>
+
+
+<div class="container">
+<div class="row">
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Behaviour Driven Development with Gherkin and Cucumber (an introduction)
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2016-03-31">31 Mar, 2016</time>
+</small>
+
+
+  <small>
+    &middot; by Olivier Wulveryck
+  
+  &middot; Read in about 11 min
+  &middot; (2337 Words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="/tags/ec2" class="label label-primary">EC2</a>
+  
+  <a href="/tags/bdd" class="label label-primary">BDD</a>
+  
+  <a href="/tags/gherkin" class="label label-primary">Gherkin</a>
+  
+  <a href="/tags/cucumber" class="label label-primary">Cucumber</a>
+  
+  <a href="/tags/ruby" class="label label-primary">Ruby</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+  <div class="container content">
+  
+
+<h4 id="opening-remarks:7984b822e668ba97556d3e033abc0938">Opening remarks</h4>
+
+<p>All my previous posts were about choreography, deployment, topology, and more recently about an attempt to include <em>AI</em> in those systems.
+This post is a bit apart, because I&rsquo;m facing a new challenge in my job which is to implement BDD in a <em>CI</em> chain. Therefore, I&rsquo;m using
+this blog as a reminder of what I did personally. The following of the <em>Markov</em> saga will come again later.</p>
+
+<h1 id="introduction:7984b822e668ba97556d3e033abc0938">Introduction</h1>
+
+<p>Wikipedia defines the word contract like this:</p>
+
+<blockquote>
+<p>A contract is a voluntary arrangement between two or more parties that is enforceable at law as a binding legal agreement.</p>
+</blockquote>
+
+<p>If law usually describes what you can and cannot do, a contract is more likely to describe what&rsquo;s you are expected to do.</p>
+
+<p>A law&rsquo;s goal is not only to give rules to follow,
+but also to maintain a stability in an ecosystem.
+In IT there are laws, that may be implicit, didactic, empiric, &hellip; but the IT with all its laws should not
+dictate the expected behavior of the customer. But how often have you heard:</p>
+
+<blockquote>
+<p>&ldquo;those computer stuffs are not for me, just get the thing done&rdquo;</p>
+
+<p>&ldquo;we&rsquo;ve always done it this way&rdquo;</p>
+</blockquote>
+
+<p>There are laws that cannot be changed, but the contract between a customer and its provider could and should evolve.</p>
+
+<p>In IT, like everywhere else where a customer/provider relationship exists, a special need is formalized via specifications.
+Specifications are hard to follow, but even more they&rsquo;re hard to evaluate.</p>
+
+<p><center>
+<img src="http://imgs.xkcd.com/comics/babies.png" alt="Babies (xkcd)" />
+</center></p>
+
+<p>The <strong>B</strong>ehavior <strong>D</strong>riven <strong>D</strong>evelopment is the assurance that everything have been made respectfully i
+with the contract ²that has been established between the parties (customers and providers).
+To do things right, this contract should be established at the very beginning.</p>
+
+<p>Hence, every single item must be developed with all the <em>features</em> of the contract in mind. And then, it should be
+possible to use automation to perform the tests of behaviour, so that the developer can see if the contract is fulfilled, and if, for
+example, no regression has been introduced.</p>
+
+<p>In a continuous integration chain, this is an essential piece that can be use to fully automate the process of delivery.</p>
+
+<h2 id="gherkin:7984b822e668ba97556d3e033abc0938">Gherkin</h2>
+
+<p>To express the specification in a way that can be both human and computer readable, the easiest way is to use a special dedicated
+language.</p>
+
+<p>Such a language is known as <a href="https://en.wikipedia.org/wiki/Domain-specific_language">DSL</a> ( Domain Specific Language).</p>
+
+<p><a href="https://github.com/cucumber/cucumber/wiki/Gherkin">Gherkin</a> is a DSL that <em>lets you describe software&rsquo;s behaviour without dealing how that behaviour
+is implemented</em></p>
+
+<p>The behaviour is a scenario detailed as a set of <em>features</em>. A feature is a human readable English
+(or another human language among 37 implemented languages) text file with a bunch of key words in it (eg: <strong>Given</strong>, <strong>And</strong>, <strong>When</strong>, <strong>Then</strong>,&hellip;).
+Those words do not only help the writer of the feature to organize its idea, but they are used by the Gherkin processor to localize the
+test of the feature in the code. Of course, there is no magic in it: the test must have been implemented manually.</p>
+
+<h2 id="and-here-comes-cucumber:7984b822e668ba97556d3e033abc0938">And here comes Cucumber</h2>
+
+<p>The historic Gherkin processor is called Cucumber. It&rsquo;s a Ruby implementation of the Gherkin DSL.
+Its purpose is to read a scenario, and to localize the Ruby code that is implementing the all the tests corresponding to the scenario.
+Finally it executes the code, and for each feature it simply says ok or ko.</p>
+
+<p>Easy.</p>
+
+<p>Nowadays there are many implementation of Gherkin parser for different languages, but in this post I will stick to the Cucumber.</p>
+
+<h1 id="let-s-play:7984b822e668ba97556d3e033abc0938">Let&rsquo;s play</h1>
+
+<p>Let&rsquo;s see how we can implement a basic behaviour driver development with the help of cucumber and Ruby.
+The idea here is not to test a Ruby development, but instead to use ruby to validate a shell script.
+That&rsquo;s the main reason why I stick to Ruby (instead of GO which I know better). The Go implementation
+(<a href="https://github.com/DATA-DOG/godog">GoDoc</a>, <a href="https://github.com/smartystreets/goconvey">GoConvey</a>, &hellip;) relies
+on <code>go test</code> and therefore are related to a pure GO development.
+Of course I could do a complete GO development to encapsulate my scripts, but that&rsquo;s not the point; for my purpose, a scripting
+language is a better choice.</p>
+
+<p>Ruby is a scripting language and all the tests implemented here are neither dependent on the Ruby test framework nor on <a href="http://rspec.info/">RSpec</a>.</p>
+
+<p>I will write a script that will deploy an EC2 instance via vagrant-aws and install an Openvpn instance on it.</p>
+
+<h2 id="the-scenario:7984b822e668ba97556d3e033abc0938">The scenario</h2>
+
+<h4 id="the-customer-point-of-view:7984b822e668ba97556d3e033abc0938">The customer point of view</h4>
+
+<p>With my role of customer, the feature I&rsquo;m expecting is:</p>
+
+<ul>
+<li>Given the execution of the program, and waiting for it to be successful</li>
+<li>Then I may be able to watch netflix US from France.</li>
+</ul>
+
+<p>The feature may be:</p>
+
+<pre><code class="language-gherkin">Feature: I want a program that
+  will simply allows me to watch netflix US
+
+  Scenario: I want to watch netflix
+     Given I am on my chromebook
+     And I have access to the shell
+     When I want to watch netflix
+     And I launch a program from the command line
+     And it displays ready
+     Then I open a navigator windows on http://www.netflix.com
+     And I can watch Grey's anatomy (which is not available in france)
+</code></pre>
+
+<h4 id="the-architect-point-of-view:7984b822e668ba97556d3e033abc0938">The architect point of view</h4>
+
+<p>As an architect the implementation I&rsquo;m thinking of is</p>
+
+<ul>
+<li>start an EC2 instance (I will not create it in this post)</li>
+<li>register it to my DNS (with blog-test.owulveryck.info)</li>
+<li>install Openvpn</li>
+<li>configure Openvpn to make it accessible via blog-test.owulveryck.info</li>
+</ul>
+
+<h4 id="the-developer-point-of-view:7984b822e668ba97556d3e033abc0938">The developer point of view</h4>
+
+<p>And as a developer, I&rsquo;m thinking about using <a href="https://github.com/mitchellh/vagrant-aws">vagrant-aws</a> to perform the tasks.
+All the implementation will be based on a Vagrant file and a provisioning script.
+The vagrant file will be evaluated by <code>vagrant up</code> on CLI (aka in the real world, by the end user) and
+the same vagrant file will be evaluated within my cucumber scripts.</p>
+
+<p><strong>Therefore I can say that I am doing BDD/TDD for a configuration management and provisioning.</strong></p>
+
+<h2 id="the-basic-feature:7984b822e668ba97556d3e033abc0938">The basic <em>feature</em></h2>
+
+<p>I will describe here a single feature, just for testing purpose.</p>
+
+<h2 id="setting-up-the-ruby-environment:7984b822e668ba97556d3e033abc0938">Setting up the Ruby environment</h2>
+
+<p>I will use the <em>Ruby</em> implementation of cucumber.
+To install it, assuming that we have a <code>gem</code> installed, just run this command</p>
+
+<pre><code class="language-shell"># gem install cucumber
+</code></pre>
+
+<p>This will load all the required dependencies.
+It may also be a good idea to use <code>bundle</code> if we plan to do further development of the steps in ruby.</p>
+
+<h4 id="the-test-environment-with-bundler:7984b822e668ba97556d3e033abc0938">The test environment with bundler</h4>
+
+<p>The whole development will run with the help of bundler (and RVM).
+See this <a href="http://dev.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/">post</a> for more explanation on
+how I set it up on my Chromebook.</p>
+
+<pre><code class="language-shell">&gt; mkdir /media/removable/Lexar/tools/vpn-blog
+&gt; cd /media/removable/Lexar/tools/vpn-blog
+&gt; rvmrc --create 2.2.0@vpn-blog
+&gt; source .rvmrc
+&gt; gem install bundler -v 1.5.2 
+&gt; bundle init
+Writing new Gemfile to /home/chronos/user/gherkin/Gemfile
+</code></pre>
+
+<h4 id="the-gemfile:7984b822e668ba97556d3e033abc0938">the <em>Gemfile</em></h4>
+
+<p>Let&rsquo;s add the cucumber, vagrant (as installed in a previous <a href="http://dev.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/">post</a> ),
+and vagrant-aws dependencies in the Gemfile:</p>
+
+<pre><code class="language-shell">&gt; cat Gemfile
+source &quot;https://rubygems.org&quot;
+
+gem &quot;vagrant&quot;, :path =&gt; &quot;/media/removable/Lexar/tools/vagrant&quot;
+gem &quot;vagrant-aws&quot;
+gem &quot;bundler&quot;, &quot;1.5.2&quot;
+gem &quot;cucumber&quot;
+</code></pre>
+
+<p>and then <em>install</em> the bundle:</p>
+
+<pre><code class="language-shell">&gt; bundle _1.5.2_ install
+Resolving dependencies...
+Using builder 3.2.2
+Using gherkin 3.2.0
+Using cucumber-wire 0.0.1
+Using diff-lcs 1.2.4
+Using multi_json 1.7.9
+Using multi_test 0.1.2
+Using bundler 1.11.2
+Using cucumber-core 1.4.0
+Using cucumber 2.3.3
+...
+Bundle complete! 1 Gemfile dependency, 9 gems now installed.
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+</code></pre>
+
+<p>And now let&rsquo;s run cucumber within the bundle:</p>
+
+<pre><code class="language-shell">&gt; bundle _1.5.2_ exec cucumber
+No such file or directory - features. You can use `cucumber --init` to get started.
+</code></pre>
+
+<h3 id="the-skeleton-of-the-test:7984b822e668ba97556d3e033abc0938">The skeleton of the test</h3>
+
+<p>First, as requested by cucumber, let&rsquo;s initialize a couple of files in the directory to be &ldquo;cucumber compliant&rdquo;.
+Cucumber do have a helpful <em>init</em> function. Let&rsquo;s run it now:</p>
+
+<pre><code class="language-shell">bundle _1.5.2_ exec cucumber --init
+  create   features
+  create   features/step_definitions
+  create   features/support
+  create   features/support/env.rb
+</code></pre>
+
+<h4 id="adding-the-feature-file:7984b822e668ba97556d3e033abc0938">Adding the <em>feature</em> file</h4>
+
+<p>In the <em>features/</em> directory, I create a file <code>basic_feature.feature</code> which contains the YAML we wrote earlier, then I run cucumber again.</p>
+
+<pre><code class="language-shell">$ bundle _1.5.2_ exec cucumber
+Feature: I want a program that
+  will simply allows me to watch netflix US
+  
+  Scenario: I want to watch netflix                                   # features/basic_feature.feature:4
+    Given I am on my chromebook                                       # features/basic_feature.feature:5
+    And I have access to the shell                                    # features/basic_feature.feature:6
+    When I want to watch netflix                                      # features/basic_feature.feature:7
+    And I launch a program on the command line                        # features/basic_feature.feature:8
+    And it displays ready                                             # features/basic_feature.feature:9
+    Then I open a navigator windows on http://www.netflix.com         # features/basic_feature.feature:10
+    And I can watch Grey's anatomy (which is not available in france) # features/basic_feature.feature:11
+                                
+1 scenario (1 undefined)
+7 steps (7 undefined)
+0m0.054s
+
+You can implement step definitions for undefined steps with these snippets:
+
+Given(/^I am on my chromebook$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+...
+</code></pre>
+
+<p>We notice that the feature has been read and understood correctly by cucumber.
+ON top of that Cucumber gives the skeleton of a ruby implementation for the tests.</p>
+
+<p>I will copy all the ruby code in its own file:</p>
+
+<pre><code class="language-ruby"># cat &gt; features/step_definitions/tests.rb
+Given(/^I am on my chromebook$/) do
+  pending # Write code here that turns the phrase above into concrete actions
+  end
+...
+</code></pre>
+
+<p>And run cucumber once more:</p>
+
+<pre><code class="language-shell">Feature: I want a program that
+  will simply allows me to watch netflix US
+
+  Scenario: I want to watch netflix                                   # features/basic_feature.feature:4
+      Given I am on my chromebook                                       # features/step_definitions/tests.rb:1
+        TODO (Cucumber::Pending)
+        ./features/step_definitions/tests.rb:2:in `/^I am on my chromebook$/'
+        features/basic_feature.feature:5:in `Given I am on my chromebook'
+      And I have access to the shell                                    # features/step_definitions/tests.rb:5
+      When I want to watch netflix                                      # features/step_definitions/tests.rb:9
+      And I launch gonetflix.sh                                         # features/step_definitions/tests.rb:13
+      And it displays ready                                             # features/step_definitions/tests.rb:17
+      Then I open a navigator windows on http://www.netflix.com         # features/step_definitions/tests.rb:21
+      And I can watch Grey's anatomy (which is not available in france) # features/step_definitions/tests.rb:25
+      
+1 scenario (1 pending)
+7 steps (6 skipped, 1 pending)
+0m0.041s`
+</code></pre>
+
+<p>Cool, the framework is ok. Now let&rsquo;s actually implement the scenario and the tests</p>
+
+<h4 id="implementation-of-the-given-keywords:7984b822e668ba97556d3e033abc0938">Implementation of the &ldquo;Given&rdquo; keywords</h4>
+
+<p>There is not much to say about the Given keyword. I can test that I am really on my Chromebook but that does not make any sense.
+I will skip this test by not implementing anything in the function.</p>
+
+<h4 id="implementation-of-the-when-keyword:7984b822e668ba97556d3e033abc0938">Implementation of the &ldquo;When&rdquo; keyword</h4>
+
+<p>The actual execution of the &ldquo;When&rdquo; is the execution of the Vagrant file.
+It will start the EC2 instance and provision the VPN
+I also need to mount the VPN locally afterwards</p>
+
+<pre><code class="language-ruby">#!/usr/bin/env ruby
+require &quot;vagrant&quot;
+
+# Starting the EC2 instance (running the vagrantfile)
+env = Vagrant::Environment.new
+env.cli(&quot;up&quot;)
+# Starting OpenVPN locally
+`sudo openvpn --mktun --dev tun0 &amp;&amp; sudo openvpn --config ~/Downloads/client.ovpn --dev tun0`
+</code></pre>
+
+<h4 id="trying-to-implement-the-netflix-test-with-selenium:7984b822e668ba97556d3e033abc0938">(trying to) Implement the netflix test with selenium</h4>
+
+<p>To test the access, instead of faking my browser with curl, I will use the <em>selenium</em> tool.
+So I add it to my <em>Gemfile</em> and <code>bundle update</code> it (informations comes from <a href="https://github.com/jonathanchrisp/selenium-cucumber-ruby-kickstarter">this starterkit</a>):</p>
+
+<pre><code class="language-shell">$ echo 'gem &quot;selenium-cucumber&quot;' &gt;&gt; Gemfile
+$ echo 'gem &quot;selenium-webdriver&quot;' &gt;&gt; Gemfile
+$ echo 'gem &quot;require_all&quot;' &gt;&gt; Gemfile
+$ bundle _1.5.2_ update 
+</code></pre>
+
+<p>Then I need to create a special file in the <code>support</code> subdirectory to define a bunch of objects:</p>
+
+<pre><code class="language-ruby"># cat features/support/env.rb
+require 'selenium-webdriver'
+require 'cucumber'
+
+require 'require_all'
+
+require_all 'lib'
+
+Before do |scenario|
+    @browser = Browser.new(ENV['DRIVER'])
+    @browser.delete_cookies
+end
+
+After do |scenario|
+    @browser.driver.quit
+end
+</code></pre>
+
+<p>I&rsquo;m also adding the files from the starterkit in the <code>lib</code> subdirectory.</p>
+
+<p>As I am developing on my Chromebook, I also need the <a href="https://sites.google.com/a/chromium.org/chromedriver/">chromedriver</a></p>
+
+<p><strong>Too bad</strong> chromedriver relies on the libX11 that cannot be installed on my Chromebook / <strong>end of show for selenium</strong>
+on the Chromebook&hellip;  for now</p>
+
+<p><em>Note</em> I will continue with the development, but be aware that I won&rsquo;t be able to test it until I am on a true linux box with
+the chromedriver installed</p>
+
+<pre><code class="language-ruby">Then(/^I open a navigator windows on (.*?)$/) do |arg1|
+  @browser.open_page(&quot;http://www.netflix.com&quot;)
+end
+
+Then(/^I can watch Grey's anatomy \(which is not available in france\)$/) do
+  @browser.open_page(&quot;http://www.netflix.com/idtogreysanatomy&quot;)
+end
+</code></pre>
+
+<h3 id="the-actual-implementation-of-the-scenario:7984b822e668ba97556d3e033abc0938">The actual implementation of the scenario</h3>
+
+<p>What I need to do is to implement the scenario. Not the test scenario, the real one;
+the one that will actually allows me to launch my ec2 instance, configure and start Openvpn.</p>
+
+<p>As I said before, I will use vagrant-aws to do so.</p>
+
+<p><strong>Note</strong> vagrant was depending on <em>bsdtar</em>, and I&rsquo;ve had to install it manually from source:</p>
+
+<p>(<code>tar xzvf libarchive-3.1.2.tar.gz &amp;&amp; ... &amp;&amp; ./configure --prefix=/usr/local &amp;&amp; make install clean</code>)</p>
+
+<h4 id="installing-vagrant-aws-plugin:7984b822e668ba97556d3e033abc0938">Installing vagrant-aws plugin</h4>
+
+<p>The vagrant-aws plugin has been installed by the bundler because I&rsquo;ve indicated it as a dependency in the Gemfile.
+But, I will have to have it as a requirement in the Vagrantfile because I&rsquo;m not using the &ldquo;official vagrant&rdquo; and that
+I am running in a bundler environment:</p>
+
+<blockquote>
+<p>Vagrant&rsquo;s built-in bundler management mechanism is disabled because
+Vagrant is running in an external bundler environment. In these
+cases, plugin management does not work with Vagrant. To install
+plugins, use your own Gemfile. To load plugins, either put the
+plugins in the <code>plugins</code> group in your Gemfile or manually require
+them in a Vagrantfile.</p>
+</blockquote>
+
+<h4 id="installing-the-base-box:7984b822e668ba97556d3e033abc0938">Installing the base box</h4>
+
+<p>The documentation says that the quickest way to get started is to install the dummy box.
+That&rsquo;s what I did:</p>
+
+<pre><code class="language-shell">$ bundle _1.5.2_ exec vagrant box add dummy https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
+...
+==&gt; box: Successfully added box 'dummy' (v0) for 'aws'!
+</code></pre>
+
+<h4 id="the-vagrantfile:7984b822e668ba97556d3e033abc0938">The Vagrantfile</h4>
+
+<p>The initial Vagrantfile looks like this:</p>
+
+<pre><code class="language-ruby">require &quot;vagrant-aws&quot;
+Vagrant.configure(&quot;2&quot;) do |config|
+  config.vm.box = &quot;dummy&quot;
+
+  config.vm.provider :aws do |aws, override|
+    aws.access_key_id = &quot;YOUR KEY&quot;
+    aws.secret_access_key = &quot;YOUR SECRET KEY&quot;
+    aws.session_token = &quot;SESSION TOKEN&quot;
+    aws.keypair_name = &quot;KEYPAIR NAME&quot;
+
+    aws.ami = &quot;ami-7747d01e&quot;
+
+    override.ssh.username = &quot;ubuntu&quot;
+    override.ssh.private_key_path = &quot;PATH TO YOUR PRIVATE KEY&quot;
+  end
+end
+</code></pre>
+
+<p>So all the rest in the basic implementation of the vagrant file and the provisioning.sh for the Openvpn configuration.
+but that goes far behind the topic of this post which was to introduce myself to BDD and TDD.</p>
+
+<h1 id="conclusion:7984b822e668ba97556d3e033abc0938">Conclusion</h1>
+
+<p>I&rsquo;ve learned a lot about the ruby and cucumber environment in this post.
+Too bad I couldn&rsquo;t end with a fully running example because of my Chromebook.</p>
+
+<p>Anyway the expected results were for me to:</p>
+
+<ul>
+<li>learn about BDD</li>
+<li>learn about cucumber</li>
+<li>learn about Ruby</li>
+<li>learn about vagrant</li>
+</ul>
+
+<p>I can say that I&rsquo;ve reach my goals anyway. I will try to finish the implementation on a true Linux box locally, or on my
+Macbook if I have time to do so.</p>
+
+</div>
+
+
+  <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html" title="RVM from a USB stick on a Chromebook">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/index.html" title="Which solution should I choose? Don&#39;t think too much and ask a bot!">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+</footer>
+
+
+</div>
+</div>
+      <footer class="footer">
+    <div class="container hidden-print">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="#">back to top</a>
+</div>
+<div class="pull-right">
+  
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+          <small>
+              
+    
+<div class="container footline">
+  
+
+</div>
+
+
+    
+<div class="container copyright">
+  
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
+
+
+</div>
+
+
+
+          </small>
+        </div>
+     </div>
+    </div>
+</footer>
+
+    <script src="/js/jquery.min-2.1.4.js"></script>
+<script src="/js/bootstrap.min-3.3.5.js"></script>
+
+
+
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="/js/highlight.pack.js"></script>
+<script src="/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-69673850-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+  </body>
+</html>
+

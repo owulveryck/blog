@@ -21,13 +21,13 @@ As all my peers, I have the opportunity to talk about different technological as
 As all my peers, I'm asked to present a bunch of slides (powerpoint or keynote, or whatever).
 
 In this post I won't dig into what's good or not to put in a presentation, and if that's what interest you, I 
-recommend you to take a look at [Garr Reynold's tips and tricks](http://reference).
+recommend you to take a look at [Garr Reynold's tips and tricks](http://www.presentationzen.com/).
 
 _Steve Jobs_ said:
 
 > People who knows what they're talking about don't need PowerPoint
 
-(actually it has been reported in its book) (TODO: references)
+(actually it has been quoted in Walter Isaacson's biography see [this reference](http://blog.jgc.org/2011/11/people-who-know-what-theyre-talking.html)).
 
 As an attendee I tend to agree; usually PowerPoints are boring and they hardly give any interest besides for the writer to say "hey look, I've worked for this presentation".
 
@@ -44,7 +44,7 @@ fancy and eye-candy animations.
 
 ### The basic
 
-[reveal.js](http://reference) is an almost perfect candidate:
+[reveal.js](http://lab.hakim.se/reveal-js/) is an almost perfect candidate:
 
 * it is a framework written in JavaScript therefore, I can easily ass code
 * it's well designed
@@ -58,7 +58,10 @@ I could process them in whatever server-side application (php, go-template base,
 the idiomatic way of doing modern web content. Actually, I would need anyway to deal with device (mobile, desktop), screen size,
 browser... So what's best, I think, is to get the data on the client side and process it via Javascript.
 
-[Data Driver Document (D3)](http://reference) is the framework I will use to process and display the data I will get from the client.
+[Data Driver Documents](https://d3js.org/) is the framework I will use to process and display the data I will get from the client.
+
+It actually uses SVG to represent the graphs; I would have liked to use a full HTML5 to be more... 2016, but the D3 is actually very very good 
+framework I wanted to use for a while.
 
 ### The attendees 
 
@@ -70,7 +73,7 @@ It has two advantages:
 * it is their own device, I looks more realistic and unexpected: therefore I would get a better reception of the message I'm trying to pass.
 * it usually has a Webkit based web browser with a decent Javascript engine.
 
-I won't develop a native app, instead I will a webpage mobile compliant based on the [bootstrap](http://reference) framework.
+I won't develop a native app, instead I will a webpage mobile compliant based on the [bootstrap](http://getbootstrap.com/) framework.
 
 ### The HUB
 
@@ -78,6 +81,14 @@ The point now, is how to make my clients and my presentation to exchange data.
 As I said before, I would not be an easy task to setup a pure browser based peer-to-peer communication, so I will fall 
 back to the traditional web server based hub.
 
-the first idea is to use a RESTfull mechanism, but this has the major disadvantage of not being real-timed
+the first idea is to use a RESTfull mechanism, but this has the major disadvantage of not being real-timed.
+What I would like is a communication HUB that would broadcast events as soon as they are reveived.
+
+I've implemented a server in go to do so. The clients will talk to the server over websockets which are now natively present in every
+modern browsers.
 
 #### the server
+
+I've used the [Implementation from gorilla](https://github.com/gorilla/websocket) because it seemed to be the best as of today.
+It implements all the RFC and the development is up-to-date.
+

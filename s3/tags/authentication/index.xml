@@ -14,10 +14,10 @@
     
     <item>
       <title>Playing with (Openstack) Keystone</title>
-      <link>/2015/11/17/playing-with-openstack-keystone/</link>
+      <link>/2015/11/17/playing-with-openstack-keystone/index.html</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>/2015/11/17/playing-with-openstack-keystone/</guid>
+      <guid>/2015/11/17/playing-with-openstack-keystone/index.html</guid>
       <description>
 
 &lt;p&gt;In the cloud computing, alongside of the hosting monsters such as amazon or google, there is the &lt;a href=&#34;https://www.openstack.org&#34;&gt;Openstack Platform&lt;/a&gt;.&lt;/p&gt;
