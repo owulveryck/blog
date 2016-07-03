@@ -92,3 +92,16 @@ modern browsers.
 I've used the [Implementation from gorilla](https://github.com/gorilla/websocket) because it seemed to be the best as of today.
 It implements all the RFC and the development is up-to-date.
 
+The code heavily relies on channels to broadcast the messages between the different peers.
+ I've taken the chat example present in the gorilla's package.
+
+At first I did code all the mechanism is a simple go package. After a bunch of code, I've decided to split the code into two different
+projects: The main presentation and the [gowmb](http://github.com/owulveryck/gowmb). The gowmb package is usable in others projects.
+
+# Conclusion.
+
+I don't go into the implementation details in this post, instead I will refer to the [github](https://github.com/owulveryck/topology-presentation)
+repository where the presentation is hosted.
+
+By now I have a good animated slideshow, and the ability to join the slides with a mobile phone.
+I can also draw a topology of the attendees via D3 and interact with them.
