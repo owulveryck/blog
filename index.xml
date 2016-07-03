@@ -2,22 +2,129 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://dev.owulveryck.info/blog/</link>
+    <link>https://blog.owulveryck.info/</link>
     <description>Recent content on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
-    <lastBuildDate>Fri, 20 May 2016 12:50:59 +0200</lastBuildDate>
-    <atom:link href="http://dev.owulveryck.info/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 23 Jun 2016 15:32:54 +0200</lastBuildDate>
+    <atom:link href="https://blog.owulveryck.info/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote</title>
+      <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</link>
+      <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</guid>
+      <description>
+
+&lt;h1 id=&#34;the-goal:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;the goal&lt;/h1&gt;
+
+&lt;p&gt;As all my peers, I have the opportunity to talk about different technological aspects.
+As all my peers, I&amp;rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).&lt;/p&gt;
+
+&lt;p&gt;In this post I won&amp;rsquo;t dig into what&amp;rsquo;s good or not to put in a presentation, and if that&amp;rsquo;s what interest you, I
+recommend you to take a look at &lt;a href=&#34;http://www.presentationzen.com/&#34;&gt;Garr Reynold&amp;rsquo;s tips and tricks&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Steve Jobs&lt;/em&gt; said:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;People who knows what they&amp;rsquo;re talking about don&amp;rsquo;t need PowerPoint&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;(actually it has been quoted in Walter Isaacson&amp;rsquo;s biography see &lt;a href=&#34;http://blog.jgc.org/2011/11/people-who-know-what-theyre-talking.html&#34;&gt;this reference&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;As an attendee I tend to agree; usually PowerPoints are boring and they hardly give any interest besides for the writer to say &amp;ldquo;hey look, I&amp;rsquo;ve worked for this presentation&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Indeed, they are a must. So for my next presentation I thought:&lt;/p&gt;
+
+&lt;p&gt;wouldn&amp;rsquo;t it be nice to use this wide display area to make the presentation more interactive.
+One of the key point in communication is to federate people. So what if people could get represented for real in the presentation.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-to-the-architecture:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;how to: the architecture&lt;/h2&gt;
+
+&lt;p&gt;Obviously I cannot use conventional tools, such as PowerPoint, Keynote, Impress, google slides and so.
+I need something that I can program; something that can interact with a server, and something that is not a console so I can get
+fancy and eye-candy animations.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-basic:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;The basic&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://lab.hakim.se/reveal-js/&#34;&gt;reveal.js&lt;/a&gt; is an almost perfect candidate:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;it is a framework written in JavaScript therefore, I can easily ass code&lt;/li&gt;
+&lt;li&gt;it&amp;rsquo;s well designed&lt;/li&gt;
+&lt;li&gt;it can be used alongside with any other JavaScript framework&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;graphs-animations-etc:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;Graphs, animations, etc&amp;hellip;&lt;/h3&gt;
+
+&lt;p&gt;A good presentation has animations, graphs, diagrams, and stuffs that cannot be expressed simply with words.
+I will interact with the audience. I will explain how later, but anyway they will send me some data.
+I could process them in whatever server-side application (php, go-template base, python) but I have the feeling that&amp;rsquo;s not
+the idiomatic way of doing modern web content. Actually, I would need anyway to deal with device (mobile, desktop), screen size,
+browser&amp;hellip; So what&amp;rsquo;s best, I think, is to get the data on the client side and process it via Javascript.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://d3js.org/&#34;&gt;Data Driver Documents&lt;/a&gt; is the framework I will use to process and display the data I will get from the client.&lt;/p&gt;
+
+&lt;p&gt;It actually uses SVG to represent the graphs; I would have liked to use a full HTML5 to be more&amp;hellip; 2016, but the D3 is actually very very good
+framework I wanted to use for a while.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-attendees:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;The attendees&lt;/h3&gt;
+
+&lt;p&gt;If I want the attendees to participate they need a device, to act as a client.
+About all people I will talk to have a smartphone; that is what I will use.&lt;/p&gt;
+
+&lt;p&gt;It has two advantages:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;it is their own device, I looks more realistic and unexpected: therefore I would get a better reception of the message I&amp;rsquo;m trying to pass.&lt;/li&gt;
+&lt;li&gt;it usually has a Webkit based web browser with a decent Javascript engine.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I won&amp;rsquo;t develop a native app, instead I will a webpage mobile compliant based on the &lt;a href=&#34;http://getbootstrap.com/&#34;&gt;bootstrap&lt;/a&gt; framework.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-hub:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;The HUB&lt;/h3&gt;
+
+&lt;p&gt;The point now, is how to make my clients and my presentation to exchange data.
+As I said before, I would not be an easy task to setup a pure browser based peer-to-peer communication, so I will fall
+back to the traditional web server based hub.&lt;/p&gt;
+
+&lt;p&gt;the first idea is to use a RESTfull mechanism, but this has the major disadvantage of not being real-timed.
+What I would like is a communication HUB that would broadcast events as soon as they are reveived.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve implemented a server in go to do so. The clients will talk to the server over websockets which are now natively present in every
+modern browsers.&lt;/p&gt;
+
+&lt;h4 id=&#34;the-server:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;the server&lt;/h4&gt;
+
+&lt;p&gt;I&amp;rsquo;ve used the &lt;a href=&#34;https://github.com/gorilla/websocket&#34;&gt;Implementation from gorilla&lt;/a&gt; because it seemed to be the best as of today.
+It implements all the RFC and the development is up-to-date.&lt;/p&gt;
+
+&lt;p&gt;The code heavily relies on channels to broadcast the messages between the different peers.
+ I&amp;rsquo;ve taken the chat example present in the gorilla&amp;rsquo;s package.&lt;/p&gt;
+
+&lt;p&gt;At first I did code all the mechanism is a simple go package. After a bunch of code, I&amp;rsquo;ve decided to split the code into two different
+projects: The main presentation and the &lt;a href=&#34;http://github.com/owulveryck/gowmb&#34;&gt;gowmb&lt;/a&gt;. The gowmb package is usable in others projects.&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;Conclusion.&lt;/h1&gt;
+
+&lt;p&gt;I don&amp;rsquo;t go into the implementation details in this post, instead I will refer to the &lt;a href=&#34;https://github.com/owulveryck/topology-presentation&#34;&gt;github&lt;/a&gt;
+repository where the presentation is hosted.&lt;/p&gt;
+
+&lt;p&gt;By now I have a good animated slideshow, and the ability to join the slides with a mobile phone.
+I can also draw a topology of the attendees via D3 and interact with them.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Which solution should I choose? Don&#39;t think too much and ask a bot!</title>
-      <link>http://dev.owulveryck.info/blog/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/</link>
+      <link>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/index.html</link>
       <pubDate>Fri, 20 May 2016 12:50:59 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/</guid>
+      <guid>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/index.html</guid>
       <description>
 
 &lt;h1 id=&#34;let-me-tell-you-a-story-the-why:f9b1a1ed53e4ef825dd6193bcdc715da&#34;&gt;Let me tell you a story: the why!&lt;/h1&gt;
@@ -151,10 +258,10 @@ As usual, one is good in a certain area, while another one is weak, etc.&lt;/p&g
 &lt;p&gt;(I&amp;rsquo;ve uploaded my samples here):&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/blog/assets/ml/solution1.csv&#34;&gt;solution 1&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/blog/assets/ml/solution2.csv&#34;&gt;solution 2&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/blog/assets/ml/solution3.csv&#34;&gt;solution 3&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/blog/assets/ml/solution4.csv&#34;&gt;solution 4&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/ml/solution1.csv&#34;&gt;solution 1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/ml/solution2.csv&#34;&gt;solution 2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/ml/solution3.csv&#34;&gt;solution 3&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/ml/solution4.csv&#34;&gt;solution 4&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;finding-a-solution:f9b1a1ed53e4ef825dd6193bcdc715da&#34;&gt;Finding a solution&lt;/h3&gt;
@@ -203,7 +310,7 @@ Let&amp;rsquo;s do that.&lt;/p&gt;
 
 &lt;p&gt;First, let&amp;rsquo;s plot the training set.
 &lt;center&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ml/trainingset.jpg&#34; alt=&#34;Training set&#34;/&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/ml/trainingset.jpg&#34; alt=&#34;Training set&#34;/&gt;
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;note&lt;/strong&gt; the representation is not accurate because there may be several bunk points&lt;/p&gt;
@@ -215,7 +322,7 @@ adjust it. (actually this is a very basic and week implementation; a lot more co
 This line may look like this:&lt;/p&gt;
 
 &lt;p&gt;&lt;center&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ml/x-1_5.jpg&#34; alt=&#34;x^(-1/5)&#34;/&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/ml/x-1_5.jpg&#34; alt=&#34;x^(-1/5)&#34;/&gt;
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;This is actually a representation of the function $ x^{\frac{1}{5}} $&lt;/p&gt;
@@ -236,7 +343,7 @@ I won&amp;rsquo;t go into the details of this algorithm, as it takes a complete 
 
 &lt;p&gt;Here is a figure representing the function for one particular solution:
 &lt;center&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ml/trainingset_plot.jpg&#34; alt=&#34;Training set with the function&#34;/&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/ml/trainingset_plot.jpg&#34; alt=&#34;Training set with the function&#34;/&gt;
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;We can see that the curve is &amp;ldquo;under fitting&amp;rdquo; the data.
@@ -345,10 +452,10 @@ the life of the IT specialist.&lt;/p&gt;
     
     <item>
       <title>Behaviour Driven Development with Gherkin and Cucumber (an introduction)</title>
-      <link>http://dev.owulveryck.info/blog/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/</link>
+      <link>https://blog.owulveryck.info/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/index.html</link>
       <pubDate>Thu, 31 Mar 2016 23:39:35 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/</guid>
+      <guid>https://blog.owulveryck.info/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/index.html</guid>
       <description>
 
 &lt;h4 id=&#34;opening-remarks:7984b822e668ba97556d3e033abc0938&#34;&gt;Opening remarks&lt;/h4&gt;
@@ -385,7 +492,6 @@ Specifications are hard to follow, but even more they&amp;rsquo;re hard to evalu
 
 &lt;p&gt;&lt;center&gt;
 &lt;img src=&#34;http://imgs.xkcd.com/comics/babies.png&#34; alt=&#34;Babies (xkcd)&#34; /&gt;
-
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;The &lt;strong&gt;B&lt;/strong&gt;ehavior &lt;strong&gt;D&lt;/strong&gt;riven &lt;strong&gt;D&lt;/strong&gt;evelopment is the assurance that everything have been made respectfully i
@@ -501,7 +607,7 @@ It may also be a good idea to use &lt;code&gt;bundle&lt;/code&gt; if we plan to 
 &lt;h4 id=&#34;the-test-environment-with-bundler:7984b822e668ba97556d3e033abc0938&#34;&gt;The test environment with bundler&lt;/h4&gt;
 
 &lt;p&gt;The whole development will run with the help of bundler (and RVM).
-See this &lt;a href=&#34;http://dev.owulveryck.info/blog/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/&#34;&gt;post&lt;/a&gt; for more explanation on
+See this &lt;a href=&#34;http://dev.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/&#34;&gt;post&lt;/a&gt; for more explanation on
 how I set it up on my Chromebook.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;&amp;gt; mkdir /media/removable/Lexar/tools/vpn-blog
@@ -515,7 +621,7 @@ Writing new Gemfile to /home/chronos/user/gherkin/Gemfile
 
 &lt;h4 id=&#34;the-gemfile:7984b822e668ba97556d3e033abc0938&#34;&gt;the &lt;em&gt;Gemfile&lt;/em&gt;&lt;/h4&gt;
 
-&lt;p&gt;Let&amp;rsquo;s add the cucumber, vagrant (as installed in a previous &lt;a href=&#34;http://dev.owulveryck.info/blog/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/&#34;&gt;post&lt;/a&gt; ),
+&lt;p&gt;Let&amp;rsquo;s add the cucumber, vagrant (as installed in a previous &lt;a href=&#34;http://dev.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/&#34;&gt;post&lt;/a&gt; ),
 and vagrant-aws dependencies in the Gemfile:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;&amp;gt; cat Gemfile
@@ -781,10 +887,10 @@ Macbook if I have time to do so.&lt;/p&gt;
     
     <item>
       <title>RVM from a USB stick on a Chromebook</title>
-      <link>http://dev.owulveryck.info/blog/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/</link>
+      <link>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</link>
       <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/</guid>
+      <guid>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</guid>
       <description>
 
 &lt;h1 id=&#34;introduction:39e2516bb4b456809312ff15c8c6eea2&#34;&gt;Introduction&lt;/h1&gt;
@@ -987,10 +1093,10 @@ official packages from vagrantup.com.
     
     <item>
       <title>Is there a Markov model hidden in the choreography?</title>
-      <link>http://dev.owulveryck.info/blog/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/</link>
+      <link>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/index.html</link>
       <pubDate>Mon, 29 Feb 2016 20:55:01 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/</guid>
+      <guid>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/index.html</guid>
       <description>
 
 &lt;h1 id=&#34;introduction:8ff21f56669823562f41e250370cd700&#34;&gt;Introduction&lt;/h1&gt;
@@ -1071,8 +1177,7 @@ for an introduction of markov reprentation with this software)&lt;/p&gt;
 
 &lt;p&gt;which is represented by:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ExecutionPlan.svg&#34; alt=&#34;Representation&#34; /&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blog.owulveryck.info/assets/images/ExecutionPlan.svg&#34; alt=&#34;Representation&#34; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;knowing-part-of-the-plan:8ff21f56669823562f41e250370cd700&#34;&gt;Knowing part of the plan&amp;hellip;&lt;/h4&gt;
 
@@ -1086,8 +1191,7 @@ P=\begin{pmatrix}
 0 &amp;amp; \frac{1}{2} &amp;amp; \frac{1}{2}
 \end{pmatrix}
 $
-which is represented this way &lt;img src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ExecutionPlan2.svg&#34; alt=&#34;Representation&#34; /&gt;
-&lt;/p&gt;
+which is represented this way &lt;img src=&#34;https://blog.owulveryck.info/assets/images/ExecutionPlan2.svg&#34; alt=&#34;Representation&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The transition matrix is regular - we can see, for example that $P^2$ contains all non nil numbers:&lt;/p&gt;
 
@@ -1115,7 +1219,7 @@ which is represented this way &lt;img src=&#34;http://dev.owulveryck.info/blog/b
 
 &lt;p&gt;To find the steady state vector, we must solve the equation: $P\mathbf{v}=\mathbf{v}$. $\mathbf{v}$ is actually an eigenvector for an eigenvalue $\lambda = 1$.&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Note from &lt;a href=&#34;https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors&#34;&gt;wikipedia&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;_Note from &lt;a href=&#34;https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors&#34;&gt;wikipedia&lt;/a&gt;_&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;In linear algebra, an eigenvector or characteristic vector of a square matrix is a vector that does not change its direction under the associated linear transformation.
@@ -1191,10 +1295,10 @@ So yes, there is a Markov model hidden in the choreography!&lt;/p&gt;
     
     <item>
       <title>Configuration management, choreography and self-aware applications</title>
-      <link>http://dev.owulveryck.info/blog/2016/02/10/configuration-management-choreography-and-self-aware-applications/</link>
+      <link>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2016/02/10/configuration-management-choreography-and-self-aware-applications/</guid>
+      <guid>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</guid>
       <description>
 
 &lt;p&gt;Thanks to the &lt;a href=&#34;https://www.linkedin.com/company/techsys?trk=company_logo&#34;&gt;company I&amp;rsquo;m working for (Techsys)&lt;/a&gt; I&amp;rsquo;ve had the opportunity to attend the &lt;a href=&#34;http://cfgmgmtcamp.eu/&#34;&gt;configuration management camp&lt;/a&gt; in Gent (&lt;em&gt;be&lt;/em&gt;) for its 2016 edition.&lt;/p&gt;
@@ -1288,7 +1392,6 @@ Cause or consequence, Gartner has nominated Ansible as a &lt;em&gt;cool vendor&l
 that the position of Ansible is near the &amp;ldquo;late majority&amp;rdquo;
 &lt;center&gt;
 &lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Diffusionofideas.PNG/330px-Diffusionofideas.PNG&#34; alt=&#34;Diffusion of ideas&#34; /&gt;
-
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;What does this mean ?&lt;/p&gt;
@@ -1439,7 +1542,7 @@ Two machines are used (linked by a VPN):&lt;/p&gt;
 
 &lt;p&gt;Both machines are part of an etcd cluster.
 The topology is composed of 8 nodes with dependencies which can be represented like this (same example as the one I used in a previous post):
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Nodes 0-3 are targeted on the chromebook while nodes 5-7 are targeted on the BSD machine.&lt;/p&gt;
 
@@ -1502,10 +1605,10 @@ machine learning for every node to teach them how to react to different events i
     
     <item>
       <title>Orchestrate a digraph with goroutine, a concurrent orchestrator</title>
-      <link>http://dev.owulveryck.info/blog/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</link>
+      <link>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html</link>
       <pubDate>Wed, 02 Dec 2015 14:24:21 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/</guid>
+      <guid>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html</guid>
       <description>
 
 &lt;p&gt;I&amp;rsquo;ve read a lot about graph theory recently.
@@ -1519,11 +1622,11 @@ They have changed the world a lot. From the simple representation to Bayesian ne
 
 &lt;p&gt;If we consider this very simple graph (example taken from the french wikipedia page)&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;its corresponding adjacency matrix is:&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/matrix1.png&#34; alt=&#34;Adjacency matrix&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/matrix1.png&#34; alt=&#34;Adjacency matrix&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;its dimension is 8x8&lt;/p&gt;
 
@@ -1552,49 +1655,49 @@ This information is simply the adjacency matrix up-to-date. That means that is a
 &lt;li&gt;&lt;strong&gt;(1)&lt;/strong&gt; The conductors feed the nodes with the matrix&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(2)&lt;/strong&gt; Every node get the data and analyse the matrix&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step2.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step2.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(3)&lt;/strong&gt; Nodes 3, 5 and 7 have no predecessor (their column in the matrix sums to zero): they can run&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step3.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step3.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(4)&lt;/strong&gt; Nodes 3 and 5 are done, they informs the conductor&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step4.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step4.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(5)&lt;/strong&gt; conductor update the matrix. It fills the rows 3 and 5 with zeros (actually rows 4 and 6, because our first node is 0)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step5.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step5.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(6)&lt;/strong&gt; The conductor feeds the nodes with the matrix&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step6.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step6.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(7)&lt;/strong&gt; The nodes analyse the matrix&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step7.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step7.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;(8)&lt;/strong&gt; Node 2 can run&amp;hellip;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/digraph_step8.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step8.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;the-representation-of-the-use-case-in-go:9620ade525eed39043f6d770d3b7c4fc&#34;&gt;The representation of the use case in go&lt;/h2&gt;
 
@@ -1767,10 +1870,10 @@ and then we would be able to see the progession in a graphical way.&lt;/li&gt;
     
     <item>
       <title>KSH93 cool features for scripting</title>
-      <link>http://dev.owulveryck.info/blog/2015/11/30/ksh93-cool-features-for-scripting/</link>
+      <link>https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting/index.html</link>
       <pubDate>Mon, 30 Nov 2015 13:17:41 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/11/30/ksh93-cool-features-for-scripting/</guid>
+      <guid>https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting/index.html</guid>
       <description>
 
 &lt;p&gt;From time to time, I&amp;rsquo;m involved into a trolling conversation when any linux kiddie tells me:&lt;/p&gt;
@@ -2039,10 +2142,10 @@ Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Executi
     
     <item>
       <title>TOSCA lifecycle as a digraph</title>
-      <link>http://dev.owulveryck.info/blog/2015/11/20/tosca-lifecycle-as-a-digraph/</link>
+      <link>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</link>
       <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/11/20/tosca-lifecycle-as-a-digraph/</guid>
+      <guid>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</guid>
       <description>
 
 &lt;h1 id=&#34;about-tosca:8cf993f2ffc57e79f07e9de1887ed972&#34;&gt;About TOSCA&lt;/h1&gt;
@@ -2081,10 +2184,10 @@ To be clear, It may act on the hosting and execution plan of the application, an
 &lt;hr/&gt;
 
 &lt;p&gt;&lt;em&gt;The graph representation of a &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/toscaviewer_template_def.png&#34; alt=&#34;Tosca view ofthe single instance wordpress&#34;/&gt;&lt;/p&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/toscaviewer_template_def.png&#34; alt=&#34;Tosca view ofthe single instance wordpress&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;The graph representation of a lifecycle of &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/toscaviewer_lifecycle_def.png&#34; alt=&#34;Lifecycle representation of the single wordpress instance representation&#34;/&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/toscaviewer_lifecycle_def.png&#34; alt=&#34;Lifecycle representation of the single wordpress instance representation&#34;/&gt;
 &lt;hr/&gt;&lt;/p&gt;
 
 &lt;p&gt;The TOSCA file is parsed with the help of the &lt;code&gt;TOSCALIB&lt;/code&gt; and then it fills an adjacency matrix (see &lt;a href=&#34;https://godoc.org/github.com/owulveryck/toscalib#ToscaDefinition.FillAdjacencyMatrix&#34;&gt;FillAdjacencyMatrix&lt;/a&gt;)&lt;/p&gt;
@@ -2279,10 +2382,10 @@ wordpress:Start
     
     <item>
       <title>Playing with (Openstack) Keystone</title>
-      <link>http://dev.owulveryck.info/blog/2015/11/17/playing-with-openstack-keystone/</link>
+      <link>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone/index.html</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/11/17/playing-with-openstack-keystone/</guid>
+      <guid>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone/index.html</guid>
       <description>
 
 &lt;p&gt;In the cloud computing, alongside of the hosting monsters such as amazon or google, there is the &lt;a href=&#34;https://www.openstack.org&#34;&gt;Openstack Platform&lt;/a&gt;.&lt;/p&gt;
@@ -2651,10 +2754,10 @@ The tool may be useful, but the TCO sounds high and the entry ticket is not negl
     
     <item>
       <title>Simple IaaS API documentation with swagger</title>
-      <link>http://dev.owulveryck.info/blog/2015/11/11/simple-iaas-api-documentation-with-swagger/</link>
+      <link>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger/index.html</link>
       <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/11/11/simple-iaas-api-documentation-with-swagger/</guid>
+      <guid>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger/index.html</guid>
       <description>
 
 &lt;p&gt;In a &lt;a href=&#34;http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/&#34;&gt;previous post&lt;/a&gt; I have explained how to develop a very simple API server.&lt;/p&gt;
@@ -2920,7 +3023,7 @@ The loop used in the &lt;code&gt;router.go&lt;/code&gt; is using the &lt;code&gt
 &lt;p&gt;&lt;em&gt;Et voilà!&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;center&gt;
-&lt;img class=&#34;img-square img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/assets/images/swagger.png&#34; alt=&#34;Result&#34;/&gt;
+&lt;img class=&#34;img-square img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/swagger.png&#34; alt=&#34;Result&#34;/&gt;
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;h1 id=&#34;final-word:6885d873cca9f64e761bb42572892f34&#34;&gt;Final word&lt;/h1&gt;
@@ -2940,10 +3043,10 @@ Once the API is fully implemented, any client binding may also be generated with
     
     <item>
       <title>IaaS-like RESTfull API based on microservices</title>
-      <link>http://dev.owulveryck.info/blog/2015/11/10/iaas-like-restfull-api-based-on-microservices/</link>
+      <link>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/index.html</link>
       <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/11/10/iaas-like-restfull-api-based-on-microservices/</guid>
+      <guid>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/index.html</guid>
       <description>
 
 &lt;h1 id=&#34;abstracts:1574d51e403296c43e921da78612bc7c&#34;&gt;Abstracts&lt;/h1&gt;
@@ -3151,10 +3254,10 @@ ok
     
     <item>
       <title>Developping &#34;Google Apps&#34; on my Chromebook</title>
-      <link>http://dev.owulveryck.info/blog/2015/10/26/developping-google-apps-on-my-chromebook/</link>
+      <link>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</link>
       <pubDate>Mon, 26 Oct 2015 10:41:57 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/10/26/developping-google-apps-on-my-chromebook/</guid>
+      <guid>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</guid>
       <description>
 
 &lt;p&gt;It is a week now that I&amp;rsquo;m playing with my chromebook.
@@ -3270,10 +3373,10 @@ INFO     2015-10-26 15:48:16,701 api_server.py:651] Saving search indexes
     
     <item>
       <title>Simple polling, a cloud native app - part 1</title>
-      <link>http://dev.owulveryck.info/blog/2015/10/23/simple-polling-a-cloud-native-app---part-1/</link>
+      <link>https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1/index.html</link>
       <pubDate>Fri, 23 Oct 2015 09:54:27 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/10/23/simple-polling-a-cloud-native-app---part-1/</guid>
+      <guid>https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1/index.html</guid>
       <description>
 
 &lt;p&gt;In this series of posts I&amp;rsquo;ll explain how to setup a simple polling app, the cloud way.
@@ -3313,16 +3416,14 @@ It is a &lt;a href=&#34;http://golang.org&#34;&gt;GO&lt;/a&gt; developement.&lt;
 &lt;h2 id=&#34;the-web-pages:154917605c8b60fbfe1ec11d0e3a2450&#34;&gt;The web pages&lt;/h2&gt;
 
 &lt;ul&gt;
-&lt;li&gt;the question &amp;ldquo;will you participate&amp;rdquo; and a form input where you will be able to write your name and three buttons &amp;ldquo;yes&amp;rdquo;, &amp;ldquo;no&amp;rdquo; and &amp;ldquo;&amp;ldquo;maybe&amp;rdquo;&amp;ldquo;.&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;p&gt;the question &amp;ldquo;will you participate&amp;rdquo; and a form input where you will be able to write your name and three buttons &amp;ldquo;yes&amp;rdquo;, &amp;ldquo;no&amp;rdquo; and &amp;ldquo;&amp;ldquo;maybe&amp;rdquo;&amp;ldquo;.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;Will you participate 
 +------------------+  +-----+ +-----+ +-------+
 |  Your name       |  | YES | |  NO | | Maybe |
 +------------------+  +-----+ +-----+ +-------+
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
 
-&lt;ul&gt;
 &lt;li&gt;&lt;p&gt;a simple table with two columns:&lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;One will hold the participant name&lt;/p&gt;&lt;/li&gt;
@@ -3395,10 +3496,10 @@ Hello, world!
     
     <item>
       <title>Ruby / ZeroMQ / GO</title>
-      <link>http://dev.owulveryck.info/blog/2015/10/22/ruby-/-zeromq-/-go/</link>
+      <link>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/index.html</link>
       <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/10/22/ruby-/-zeromq-/-go/</guid>
+      <guid>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/index.html</guid>
       <description>
 
 &lt;h1 id=&#34;abtract:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Abtract&lt;/h1&gt;
@@ -3458,33 +3559,30 @@ I will use the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/example
 &lt;p&gt;The hello world client/server is implementing a Request-Reply patternt and are communicating via a TCP socket.&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;The server is the &lt;em&gt;replier&lt;/em&gt; and is listening on the TCP port 5555&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;...
+&lt;li&gt;The server is the &lt;em&gt;replier&lt;/em&gt; and is listening on the TCP port 5555
+&lt;code&gt;go
+...
 func main() {
-    //  Socket to talk to clients
-    responder, _ := zmq.NewSocket(zmq.REP)
-    defer responder.Close()
-    responder.Bind(&amp;quot;tcp://*:5555&amp;quot;)
-    ...
+//  Socket to talk to clients
+responder, _ := zmq.NewSocket(zmq.REP)
+defer responder.Close()
+responder.Bind(&amp;quot;tcp://*:5555&amp;quot;)
+...
 }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;The client is the &lt;em&gt;requester&lt;/em&gt; and is dialing the same TCP port&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;...
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;The client is the &lt;em&gt;requester&lt;/em&gt; and is dialing the same TCP port
+&lt;code&gt;go
+...
 func main() {
-    //  Socket to talk to server
-    fmt.Println(&amp;quot;Connecting to hello world server...&amp;quot;)
-    requester, _ := zmq.NewSocket(zmq.REQ)
-    defer requester.Close()
-    requester.Connect(&amp;quot;tcp://localhost:5555&amp;quot;)
-    ...
+//  Socket to talk to server
+fmt.Println(&amp;quot;Connecting to hello world server...&amp;quot;)
+requester, _ := zmq.NewSocket(zmq.REQ)
+defer requester.Close()
+requester.Connect(&amp;quot;tcp://localhost:5555&amp;quot;)
+...
 }
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Then, the client is sending (requesting) a &lt;em&gt;hello&lt;/em&gt; message, and the server is replying a &lt;em&gt;world&lt;/em&gt; message.&lt;/p&gt;
 
@@ -3601,16 +3699,6 @@ Received  Ruby says Hello
 Indeed, I&amp;rsquo;ve found an &lt;a href=&#34;https://github.com/chuckremes/ffi-rzmq/issues/118&#34;&gt;issue&lt;/a&gt;&amp;hellip;&lt;/p&gt;
 
 &lt;p&gt;I will check again later, or I will try on another environement but the essential is here.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Welcome</title>
-      <link>http://dev.owulveryck.info/blog/2015/10/22/welcome/</link>
-      <pubDate>Thu, 22 Oct 2015 15:59:07 +0100</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/10/22/welcome/</guid>
-      <description>&lt;p&gt;You are in a place where a new technical blog will stand soon.&lt;/p&gt;
 </description>
     </item>
     

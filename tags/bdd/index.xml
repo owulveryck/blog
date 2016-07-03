@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Bdd on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://dev.owulveryck.info/blog/tags/bdd/</link>
+    <link>https://blog.owulveryck.info/tags/bdd/</link>
     <description>Recent content in Bdd on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Thu, 31 Mar 2016 23:39:35 +0100</lastBuildDate>
-    <atom:link href="http://dev.owulveryck.info/blog/tags/bdd/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.owulveryck.info/tags/bdd/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Behaviour Driven Development with Gherkin and Cucumber (an introduction)</title>
-      <link>http://dev.owulveryck.info/blog/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/</link>
+      <link>https://blog.owulveryck.info/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/index.html</link>
       <pubDate>Thu, 31 Mar 2016 23:39:35 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/</guid>
+      <guid>https://blog.owulveryck.info/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/index.html</guid>
       <description>
 
 &lt;h4 id=&#34;opening-remarks:7984b822e668ba97556d3e033abc0938&#34;&gt;Opening remarks&lt;/h4&gt;
@@ -54,7 +54,6 @@ Specifications are hard to follow, but even more they&amp;rsquo;re hard to evalu
 
 &lt;p&gt;&lt;center&gt;
 &lt;img src=&#34;http://imgs.xkcd.com/comics/babies.png&#34; alt=&#34;Babies (xkcd)&#34; /&gt;
-
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;The &lt;strong&gt;B&lt;/strong&gt;ehavior &lt;strong&gt;D&lt;/strong&gt;riven &lt;strong&gt;D&lt;/strong&gt;evelopment is the assurance that everything have been made respectfully i
@@ -170,7 +169,7 @@ It may also be a good idea to use &lt;code&gt;bundle&lt;/code&gt; if we plan to 
 &lt;h4 id=&#34;the-test-environment-with-bundler:7984b822e668ba97556d3e033abc0938&#34;&gt;The test environment with bundler&lt;/h4&gt;
 
 &lt;p&gt;The whole development will run with the help of bundler (and RVM).
-See this &lt;a href=&#34;http://dev.owulveryck.info/blog/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/&#34;&gt;post&lt;/a&gt; for more explanation on
+See this &lt;a href=&#34;http://dev.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/&#34;&gt;post&lt;/a&gt; for more explanation on
 how I set it up on my Chromebook.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;&amp;gt; mkdir /media/removable/Lexar/tools/vpn-blog
@@ -184,7 +183,7 @@ Writing new Gemfile to /home/chronos/user/gherkin/Gemfile
 
 &lt;h4 id=&#34;the-gemfile:7984b822e668ba97556d3e033abc0938&#34;&gt;the &lt;em&gt;Gemfile&lt;/em&gt;&lt;/h4&gt;
 
-&lt;p&gt;Let&amp;rsquo;s add the cucumber, vagrant (as installed in a previous &lt;a href=&#34;http://dev.owulveryck.info/blog/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/&#34;&gt;post&lt;/a&gt; ),
+&lt;p&gt;Let&amp;rsquo;s add the cucumber, vagrant (as installed in a previous &lt;a href=&#34;http://dev.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/&#34;&gt;post&lt;/a&gt; ),
 and vagrant-aws dependencies in the Gemfile:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;&amp;gt; cat Gemfile

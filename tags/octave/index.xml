@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Octave on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://dev.owulveryck.info/blog/tags/octave/</link>
+    <link>https://blog.owulveryck.info/tags/octave/</link>
     <description>Recent content in Octave on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Fri, 20 May 2016 12:50:59 +0200</lastBuildDate>
-    <atom:link href="http://dev.owulveryck.info/blog/tags/octave/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.owulveryck.info/tags/octave/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Which solution should I choose? Don&#39;t think too much and ask a bot!</title>
-      <link>http://dev.owulveryck.info/blog/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/</link>
+      <link>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/index.html</link>
       <pubDate>Fri, 20 May 2016 12:50:59 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/</guid>
+      <guid>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/index.html</guid>
       <description>
 
 &lt;h1 id=&#34;let-me-tell-you-a-story-the-why:f9b1a1ed53e4ef825dd6193bcdc715da&#34;&gt;Let me tell you a story: the why!&lt;/h1&gt;
@@ -151,10 +151,10 @@ As usual, one is good in a certain area, while another one is weak, etc.&lt;/p&g
 &lt;p&gt;(I&amp;rsquo;ve uploaded my samples here):&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/blog/assets/ml/solution1.csv&#34;&gt;solution 1&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/blog/assets/ml/solution2.csv&#34;&gt;solution 2&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/blog/assets/ml/solution3.csv&#34;&gt;solution 3&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://dev.owulveryck.info/blog/blog/assets/ml/solution4.csv&#34;&gt;solution 4&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/ml/solution1.csv&#34;&gt;solution 1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/ml/solution2.csv&#34;&gt;solution 2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/ml/solution3.csv&#34;&gt;solution 3&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/ml/solution4.csv&#34;&gt;solution 4&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;finding-a-solution:f9b1a1ed53e4ef825dd6193bcdc715da&#34;&gt;Finding a solution&lt;/h3&gt;
@@ -203,7 +203,7 @@ Let&amp;rsquo;s do that.&lt;/p&gt;
 
 &lt;p&gt;First, let&amp;rsquo;s plot the training set.
 &lt;center&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ml/trainingset.jpg&#34; alt=&#34;Training set&#34;/&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/ml/trainingset.jpg&#34; alt=&#34;Training set&#34;/&gt;
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;note&lt;/strong&gt; the representation is not accurate because there may be several bunk points&lt;/p&gt;
@@ -215,7 +215,7 @@ adjust it. (actually this is a very basic and week implementation; a lot more co
 This line may look like this:&lt;/p&gt;
 
 &lt;p&gt;&lt;center&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ml/x-1_5.jpg&#34; alt=&#34;x^(-1/5)&#34;/&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/ml/x-1_5.jpg&#34; alt=&#34;x^(-1/5)&#34;/&gt;
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;This is actually a representation of the function $ x^{\frac{1}{5}} $&lt;/p&gt;
@@ -236,7 +236,7 @@ I won&amp;rsquo;t go into the details of this algorithm, as it takes a complete 
 
 &lt;p&gt;Here is a figure representing the function for one particular solution:
 &lt;center&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ml/trainingset_plot.jpg&#34; alt=&#34;Training set with the function&#34;/&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/ml/trainingset_plot.jpg&#34; alt=&#34;Training set with the function&#34;/&gt;
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;We can see that the curve is &amp;ldquo;under fitting&amp;rdquo; the data.

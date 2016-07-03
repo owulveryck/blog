@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Eigenvectors on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://dev.owulveryck.info/blog/tags/eigenvectors/</link>
+    <link>https://blog.owulveryck.info/tags/eigenvectors/</link>
     <description>Recent content in Eigenvectors on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Mon, 29 Feb 2016 20:55:01 +0100</lastBuildDate>
-    <atom:link href="http://dev.owulveryck.info/blog/tags/eigenvectors/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.owulveryck.info/tags/eigenvectors/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Is there a Markov model hidden in the choreography?</title>
-      <link>http://dev.owulveryck.info/blog/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/</link>
+      <link>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/index.html</link>
       <pubDate>Mon, 29 Feb 2016 20:55:01 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/</guid>
+      <guid>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/index.html</guid>
       <description>
 
 &lt;h1 id=&#34;introduction:8ff21f56669823562f41e250370cd700&#34;&gt;Introduction&lt;/h1&gt;
@@ -98,8 +98,7 @@ for an introduction of markov reprentation with this software)&lt;/p&gt;
 
 &lt;p&gt;which is represented by:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ExecutionPlan.svg&#34; alt=&#34;Representation&#34; /&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://blog.owulveryck.info/assets/images/ExecutionPlan.svg&#34; alt=&#34;Representation&#34; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;knowing-part-of-the-plan:8ff21f56669823562f41e250370cd700&#34;&gt;Knowing part of the plan&amp;hellip;&lt;/h4&gt;
 
@@ -113,8 +112,7 @@ P=\begin{pmatrix}
 0 &amp;amp; \frac{1}{2} &amp;amp; \frac{1}{2}
 \end{pmatrix}
 $
-which is represented this way &lt;img src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/ExecutionPlan2.svg&#34; alt=&#34;Representation&#34; /&gt;
-&lt;/p&gt;
+which is represented this way &lt;img src=&#34;https://blog.owulveryck.info/assets/images/ExecutionPlan2.svg&#34; alt=&#34;Representation&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The transition matrix is regular - we can see, for example that $P^2$ contains all non nil numbers:&lt;/p&gt;
 
@@ -142,7 +140,7 @@ which is represented this way &lt;img src=&#34;http://dev.owulveryck.info/blog/b
 
 &lt;p&gt;To find the steady state vector, we must solve the equation: $P\mathbf{v}=\mathbf{v}$. $\mathbf{v}$ is actually an eigenvector for an eigenvalue $\lambda = 1$.&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Note from &lt;a href=&#34;https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors&#34;&gt;wikipedia&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;_Note from &lt;a href=&#34;https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors&#34;&gt;wikipedia&lt;/a&gt;_&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;In linear algebra, an eigenvector or characteristic vector of a square matrix is a vector that does not change its direction under the associated linear transformation.

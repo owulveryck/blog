@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reveal.Js on Olivier Wulveryck&#39;s Tech Blog</title>
+    <link>https://blog.owulveryck.info/tags/reveal/index.js/</link>
+    <description>Recent content in Reveal.Js on Olivier Wulveryck&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved - 2015/2016</copyright>
+    <lastBuildDate>Thu, 23 Jun 2016 15:32:54 +0200</lastBuildDate>
+    <atom:link href="https://blog.owulveryck.info/tags/reveal.js/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote</title>
+      <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</link>
+      <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</guid>
+      <description>
+
+&lt;h1 id=&#34;the-goal:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;the goal&lt;/h1&gt;
+
+&lt;p&gt;As all my peers, I have the opportunity to talk about different technological aspects.
+As all my peers, I&amp;rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).&lt;/p&gt;
+
+&lt;p&gt;In this post I won&amp;rsquo;t dig into what&amp;rsquo;s good or not to put in a presentation, and if that&amp;rsquo;s what interest you, I
+recommend you to take a look at &lt;a href=&#34;http://www.presentationzen.com/&#34;&gt;Garr Reynold&amp;rsquo;s tips and tricks&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Steve Jobs&lt;/em&gt; said:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;People who knows what they&amp;rsquo;re talking about don&amp;rsquo;t need PowerPoint&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;(actually it has been quoted in Walter Isaacson&amp;rsquo;s biography see &lt;a href=&#34;http://blog.jgc.org/2011/11/people-who-know-what-theyre-talking.html&#34;&gt;this reference&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;As an attendee I tend to agree; usually PowerPoints are boring and they hardly give any interest besides for the writer to say &amp;ldquo;hey look, I&amp;rsquo;ve worked for this presentation&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Indeed, they are a must. So for my next presentation I thought:&lt;/p&gt;
+
+&lt;p&gt;wouldn&amp;rsquo;t it be nice to use this wide display area to make the presentation more interactive.
+One of the key point in communication is to federate people. So what if people could get represented for real in the presentation.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-to-the-architecture:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;how to: the architecture&lt;/h2&gt;
+
+&lt;p&gt;Obviously I cannot use conventional tools, such as PowerPoint, Keynote, Impress, google slides and so.
+I need something that I can program; something that can interact with a server, and something that is not a console so I can get
+fancy and eye-candy animations.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-basic:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;The basic&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://lab.hakim.se/reveal-js/&#34;&gt;reveal.js&lt;/a&gt; is an almost perfect candidate:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;it is a framework written in JavaScript therefore, I can easily ass code&lt;/li&gt;
+&lt;li&gt;it&amp;rsquo;s well designed&lt;/li&gt;
+&lt;li&gt;it can be used alongside with any other JavaScript framework&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;graphs-animations-etc:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;Graphs, animations, etc&amp;hellip;&lt;/h3&gt;
+
+&lt;p&gt;A good presentation has animations, graphs, diagrams, and stuffs that cannot be expressed simply with words.
+I will interact with the audience. I will explain how later, but anyway they will send me some data.
+I could process them in whatever server-side application (php, go-template base, python) but I have the feeling that&amp;rsquo;s not
+the idiomatic way of doing modern web content. Actually, I would need anyway to deal with device (mobile, desktop), screen size,
+browser&amp;hellip; So what&amp;rsquo;s best, I think, is to get the data on the client side and process it via Javascript.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://d3js.org/&#34;&gt;Data Driver Documents&lt;/a&gt; is the framework I will use to process and display the data I will get from the client.&lt;/p&gt;
+
+&lt;p&gt;It actually uses SVG to represent the graphs; I would have liked to use a full HTML5 to be more&amp;hellip; 2016, but the D3 is actually very very good
+framework I wanted to use for a while.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-attendees:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;The attendees&lt;/h3&gt;
+
+&lt;p&gt;If I want the attendees to participate they need a device, to act as a client.
+About all people I will talk to have a smartphone; that is what I will use.&lt;/p&gt;
+
+&lt;p&gt;It has two advantages:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;it is their own device, I looks more realistic and unexpected: therefore I would get a better reception of the message I&amp;rsquo;m trying to pass.&lt;/li&gt;
+&lt;li&gt;it usually has a Webkit based web browser with a decent Javascript engine.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I won&amp;rsquo;t develop a native app, instead I will a webpage mobile compliant based on the &lt;a href=&#34;http://getbootstrap.com/&#34;&gt;bootstrap&lt;/a&gt; framework.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-hub:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;The HUB&lt;/h3&gt;
+
+&lt;p&gt;The point now, is how to make my clients and my presentation to exchange data.
+As I said before, I would not be an easy task to setup a pure browser based peer-to-peer communication, so I will fall
+back to the traditional web server based hub.&lt;/p&gt;
+
+&lt;p&gt;the first idea is to use a RESTfull mechanism, but this has the major disadvantage of not being real-timed.
+What I would like is a communication HUB that would broadcast events as soon as they are reveived.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve implemented a server in go to do so. The clients will talk to the server over websockets which are now natively present in every
+modern browsers.&lt;/p&gt;
+
+&lt;h4 id=&#34;the-server:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;the server&lt;/h4&gt;
+
+&lt;p&gt;I&amp;rsquo;ve used the &lt;a href=&#34;https://github.com/gorilla/websocket&#34;&gt;Implementation from gorilla&lt;/a&gt; because it seemed to be the best as of today.
+It implements all the RFC and the development is up-to-date.&lt;/p&gt;
+
+&lt;p&gt;The code heavily relies on channels to broadcast the messages between the different peers.
+ I&amp;rsquo;ve taken the chat example present in the gorilla&amp;rsquo;s package.&lt;/p&gt;
+
+&lt;p&gt;At first I did code all the mechanism is a simple go package. After a bunch of code, I&amp;rsquo;ve decided to split the code into two different
+projects: The main presentation and the &lt;a href=&#34;http://github.com/owulveryck/gowmb&#34;&gt;gowmb&lt;/a&gt;. The gowmb package is usable in others projects.&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion:fe604e13bbd9bc0ab13be4ce88f5f533&#34;&gt;Conclusion.&lt;/h1&gt;
+
+&lt;p&gt;I don&amp;rsquo;t go into the implementation details in this post, instead I will refer to the &lt;a href=&#34;https://github.com/owulveryck/topology-presentation&#34;&gt;github&lt;/a&gt;
+repository where the presentation is hosted.&lt;/p&gt;
+
+&lt;p&gt;By now I have a good animated slideshow, and the ability to join the slides with a mobile phone.
+I can also draw a topology of the attendees via D3 and interact with them.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

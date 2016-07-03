@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ksh on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://dev.owulveryck.info/blog/tags/ksh/</link>
+    <link>https://blog.owulveryck.info/tags/ksh/</link>
     <description>Recent content in Ksh on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Mon, 30 Nov 2015 13:17:41 +0000</lastBuildDate>
-    <atom:link href="http://dev.owulveryck.info/blog/tags/ksh/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.owulveryck.info/tags/ksh/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>KSH93 cool features for scripting</title>
-      <link>http://dev.owulveryck.info/blog/2015/11/30/ksh93-cool-features-for-scripting/</link>
+      <link>https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting/index.html</link>
       <pubDate>Mon, 30 Nov 2015 13:17:41 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/11/30/ksh93-cool-features-for-scripting/</guid>
+      <guid>https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting/index.html</guid>
       <description>
 
 &lt;p&gt;From time to time, I&amp;rsquo;m involved into a trolling conversation when any linux kiddie tells me:&lt;/p&gt;

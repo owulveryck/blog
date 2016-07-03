@@ -2,7 +2,7 @@
 author: Olivier Wulveryck
 date: 2016-06-23T15:32:54+02:00
 description: Playing with websocket for a dynamic presentation.
-draft: true
+draft: false
 tags:
 - websocket
 - bootstrap

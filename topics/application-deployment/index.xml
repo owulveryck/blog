@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Application Deployment on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://dev.owulveryck.info/blog/topics/application-deployment/</link>
+    <link>https://blog.owulveryck.info/topics/application-deployment/</link>
     <description>Recent content in Application Deployment on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Wed, 10 Feb 2016 17:19:47 +0100</lastBuildDate>
-    <atom:link href="http://dev.owulveryck.info/blog/topics/application-deployment/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.owulveryck.info/topics/application-deployment/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Configuration management, choreography and self-aware applications</title>
-      <link>http://dev.owulveryck.info/blog/2016/02/10/configuration-management-choreography-and-self-aware-applications/</link>
+      <link>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2016/02/10/configuration-management-choreography-and-self-aware-applications/</guid>
+      <guid>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</guid>
       <description>
 
 &lt;p&gt;Thanks to the &lt;a href=&#34;https://www.linkedin.com/company/techsys?trk=company_logo&#34;&gt;company I&amp;rsquo;m working for (Techsys)&lt;/a&gt; I&amp;rsquo;ve had the opportunity to attend the &lt;a href=&#34;http://cfgmgmtcamp.eu/&#34;&gt;configuration management camp&lt;/a&gt; in Gent (&lt;em&gt;be&lt;/em&gt;) for its 2016 edition.&lt;/p&gt;
@@ -111,7 +111,6 @@ Cause or consequence, Gartner has nominated Ansible as a &lt;em&gt;cool vendor&l
 that the position of Ansible is near the &amp;ldquo;late majority&amp;rdquo;
 &lt;center&gt;
 &lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Diffusionofideas.PNG/330px-Diffusionofideas.PNG&#34; alt=&#34;Diffusion of ideas&#34; /&gt;
-
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;What does this mean ?&lt;/p&gt;
@@ -262,7 +261,7 @@ Two machines are used (linked by a VPN):&lt;/p&gt;
 
 &lt;p&gt;Both machines are part of an etcd cluster.
 The topology is composed of 8 nodes with dependencies which can be represented like this (same example as the one I used in a previous post):
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Nodes 0-3 are targeted on the chromebook while nodes 5-7 are targeted on the BSD machine.&lt;/p&gt;
 

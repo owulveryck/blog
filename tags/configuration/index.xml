@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Configuration on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://dev.owulveryck.info/blog/tags/configuration/</link>
+    <link>https://blog.owulveryck.info/tags/configuration/</link>
     <description>Recent content in Configuration on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Mon, 26 Oct 2015 10:41:57 +0000</lastBuildDate>
-    <atom:link href="http://dev.owulveryck.info/blog/tags/configuration/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.owulveryck.info/tags/configuration/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Developping &#34;Google Apps&#34; on my Chromebook</title>
-      <link>http://dev.owulveryck.info/blog/2015/10/26/developping-google-apps-on-my-chromebook/</link>
+      <link>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</link>
       <pubDate>Mon, 26 Oct 2015 10:41:57 +0000</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/10/26/developping-google-apps-on-my-chromebook/</guid>
+      <guid>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</guid>
       <description>
 
 &lt;p&gt;It is a week now that I&amp;rsquo;m playing with my chromebook.

@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Go on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>http://dev.owulveryck.info/blog/tags/go/</link>
+    <link>https://blog.owulveryck.info/tags/go/</link>
     <description>Recent content in Go on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Wed, 10 Feb 2016 17:19:47 +0100</lastBuildDate>
-    <atom:link href="http://dev.owulveryck.info/blog/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.owulveryck.info/tags/go/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Configuration management, choreography and self-aware applications</title>
-      <link>http://dev.owulveryck.info/blog/2016/02/10/configuration-management-choreography-and-self-aware-applications/</link>
+      <link>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2016/02/10/configuration-management-choreography-and-self-aware-applications/</guid>
+      <guid>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</guid>
       <description>
 
 &lt;p&gt;Thanks to the &lt;a href=&#34;https://www.linkedin.com/company/techsys?trk=company_logo&#34;&gt;company I&amp;rsquo;m working for (Techsys)&lt;/a&gt; I&amp;rsquo;ve had the opportunity to attend the &lt;a href=&#34;http://cfgmgmtcamp.eu/&#34;&gt;configuration management camp&lt;/a&gt; in Gent (&lt;em&gt;be&lt;/em&gt;) for its 2016 edition.&lt;/p&gt;
@@ -111,7 +111,6 @@ Cause or consequence, Gartner has nominated Ansible as a &lt;em&gt;cool vendor&l
 that the position of Ansible is near the &amp;ldquo;late majority&amp;rdquo;
 &lt;center&gt;
 &lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Diffusionofideas.PNG/330px-Diffusionofideas.PNG&#34; alt=&#34;Diffusion of ideas&#34; /&gt;
-
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;What does this mean ?&lt;/p&gt;
@@ -262,7 +261,7 @@ Two machines are used (linked by a VPN):&lt;/p&gt;
 
 &lt;p&gt;Both machines are part of an etcd cluster.
 The topology is composed of 8 nodes with dependencies which can be represented like this (same example as the one I used in a previous post):
-&lt;img class=&#34;img-responsive&#34; src=&#34;http://dev.owulveryck.info/blog/blog/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Nodes 0-3 are targeted on the chromebook while nodes 5-7 are targeted on the BSD machine.&lt;/p&gt;
 
@@ -325,10 +324,10 @@ machine learning for every node to teach them how to react to different events i
     
     <item>
       <title>IaaS-like RESTfull API based on microservices</title>
-      <link>http://dev.owulveryck.info/blog/2015/11/10/iaas-like-restfull-api-based-on-microservices/</link>
+      <link>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/index.html</link>
       <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/11/10/iaas-like-restfull-api-based-on-microservices/</guid>
+      <guid>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/index.html</guid>
       <description>
 
 &lt;h1 id=&#34;abstracts:1574d51e403296c43e921da78612bc7c&#34;&gt;Abstracts&lt;/h1&gt;
@@ -536,10 +535,10 @@ ok
     
     <item>
       <title>Ruby / ZeroMQ / GO</title>
-      <link>http://dev.owulveryck.info/blog/2015/10/22/ruby-/-zeromq-/-go/</link>
+      <link>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/index.html</link>
       <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>http://dev.owulveryck.info/blog/2015/10/22/ruby-/-zeromq-/-go/</guid>
+      <guid>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/index.html</guid>
       <description>
 
 &lt;h1 id=&#34;abtract:0c52c1f9d165cef19abe8f54df707cfc&#34;&gt;Abtract&lt;/h1&gt;
@@ -599,33 +598,30 @@ I will use the &lt;a href=&#34;https://github.com/pebbe/zmq4/blob/master/example
 &lt;p&gt;The hello world client/server is implementing a Request-Reply patternt and are communicating via a TCP socket.&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;The server is the &lt;em&gt;replier&lt;/em&gt; and is listening on the TCP port 5555&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;...
+&lt;li&gt;The server is the &lt;em&gt;replier&lt;/em&gt; and is listening on the TCP port 5555
+&lt;code&gt;go
+...
 func main() {
-    //  Socket to talk to clients
-    responder, _ := zmq.NewSocket(zmq.REP)
-    defer responder.Close()
-    responder.Bind(&amp;quot;tcp://*:5555&amp;quot;)
-    ...
+//  Socket to talk to clients
+responder, _ := zmq.NewSocket(zmq.REP)
+defer responder.Close()
+responder.Bind(&amp;quot;tcp://*:5555&amp;quot;)
+...
 }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;The client is the &lt;em&gt;requester&lt;/em&gt; and is dialing the same TCP port&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;...
+&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;The client is the &lt;em&gt;requester&lt;/em&gt; and is dialing the same TCP port
+&lt;code&gt;go
+...
 func main() {
-    //  Socket to talk to server
-    fmt.Println(&amp;quot;Connecting to hello world server...&amp;quot;)
-    requester, _ := zmq.NewSocket(zmq.REQ)
-    defer requester.Close()
-    requester.Connect(&amp;quot;tcp://localhost:5555&amp;quot;)
-    ...
+//  Socket to talk to server
+fmt.Println(&amp;quot;Connecting to hello world server...&amp;quot;)
+requester, _ := zmq.NewSocket(zmq.REQ)
+defer requester.Close()
+requester.Connect(&amp;quot;tcp://localhost:5555&amp;quot;)
+...
 }
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;Then, the client is sending (requesting) a &lt;em&gt;hello&lt;/em&gt; message, and the server is replying a &lt;em&gt;world&lt;/em&gt; message.&lt;/p&gt;
 
