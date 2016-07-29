@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Golang on Olivier Wulveryck&#39;s Tech Blog</title>
+    <link>https://blog.owulveryck.info/tags/golang/</link>
+    <description>Recent content in Golang on Olivier Wulveryck&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved - 2015/2016</copyright>
+    <lastBuildDate>Thu, 23 Jun 2016 15:32:54 +0200</lastBuildDate>
+    <atom:link href="https://blog.owulveryck.info/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote</title>
+      <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</link>
+      <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</guid>
+      <description>
+
+&lt;h1 id=&#34;the-goal&#34;&gt;the goal&lt;/h1&gt;
+
+&lt;p&gt;As all my peers, I have the opportunity to talk about different technological aspects.
+As all my peers, I&amp;rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).&lt;/p&gt;
+
+&lt;p&gt;In this post I won&amp;rsquo;t dig into what&amp;rsquo;s good or not to put in a presentation, and if that&amp;rsquo;s what interest you, I
+recommend you to take a look at &lt;a href=&#34;http://www.presentationzen.com/&#34;&gt;Garr Reynold&amp;rsquo;s tips and tricks&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Steve Jobs&lt;/em&gt; said:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;People who knows what they&amp;rsquo;re talking about don&amp;rsquo;t need PowerPoint&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;(actually it has been quoted in Walter Isaacson&amp;rsquo;s biography see &lt;a href=&#34;http://blog.jgc.org/2011/11/people-who-know-what-theyre-talking.html&#34;&gt;this reference&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;As an attendee I tend to agree; usually PowerPoints are boring and they hardly give any interest besides for the writer to say &amp;ldquo;hey look, I&amp;rsquo;ve worked for this presentation&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;Indeed, they are a must. So for my next presentation I thought:&lt;/p&gt;
+
+&lt;p&gt;wouldn&amp;rsquo;t it be nice to use this wide display area to make the presentation more interactive.
+One of the key point in communication is to federate people. So what if people could get represented for real in the presentation.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-to-the-architecture&#34;&gt;how to: the architecture&lt;/h2&gt;
+
+&lt;p&gt;Obviously I cannot use conventional tools, such as PowerPoint, Keynote, Impress, google slides and so.
+I need something that I can program; something that can interact with a server, and something that is not a console so I can get
+fancy and eye-candy animations.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-basic&#34;&gt;The basic&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://lab.hakim.se/reveal-js/&#34;&gt;reveal.js&lt;/a&gt; is an almost perfect candidate:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;it is a framework written in JavaScript therefore, I can easily ass code&lt;/li&gt;
+&lt;li&gt;it&amp;rsquo;s well designed&lt;/li&gt;
+&lt;li&gt;it can be used alongside with any other JavaScript framework&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;graphs-animations-etc&#34;&gt;Graphs, animations, etc&amp;hellip;&lt;/h3&gt;
+
+&lt;p&gt;A good presentation has animations, graphs, diagrams, and stuffs that cannot be expressed simply with words.
+I will interact with the audience. I will explain how later, but anyway they will send me some data.
+I could process them in whatever server-side application (php, go-template base, python) but I have the feeling that&amp;rsquo;s not
+the idiomatic way of doing modern web content. Actually, I would need anyway to deal with device (mobile, desktop), screen size,
+browser&amp;hellip; So what&amp;rsquo;s best, I think, is to get the data on the client side and process it via Javascript.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://d3js.org/&#34;&gt;Data Driver Documents&lt;/a&gt; is the framework I will use to process and display the data I will get from the client.&lt;/p&gt;
+
+&lt;p&gt;It actually uses SVG to represent the graphs; I would have liked to use a full HTML5 to be more&amp;hellip; 2016, but the D3 is actually very very good
+framework I wanted to use for a while.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-attendees&#34;&gt;The attendees&lt;/h3&gt;
+
+&lt;p&gt;If I want the attendees to participate they need a device, to act as a client.
+About all people I will talk to have a smartphone; that is what I will use.&lt;/p&gt;
+
+&lt;p&gt;It has two advantages:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;it is their own device, I looks more realistic and unexpected: therefore I would get a better reception of the message I&amp;rsquo;m trying to pass.&lt;/li&gt;
+&lt;li&gt;it usually has a Webkit based web browser with a decent Javascript engine.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I won&amp;rsquo;t develop a native app, instead I will a webpage mobile compliant based on the &lt;a href=&#34;http://getbootstrap.com/&#34;&gt;bootstrap&lt;/a&gt; framework.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-hub&#34;&gt;The HUB&lt;/h3&gt;
+
+&lt;p&gt;The point now, is how to make my clients and my presentation to exchange data.
+As I said before, I would not be an easy task to setup a pure browser based peer-to-peer communication, so I will fall
+back to the traditional web server based hub.&lt;/p&gt;
+
+&lt;p&gt;the first idea is to use a RESTfull mechanism, but this has the major disadvantage of not being real-timed.
+What I would like is a communication HUB that would broadcast events as soon as they are reveived.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve implemented a server in go to do so. The clients will talk to the server over websockets which are now natively present in every
+modern browsers.&lt;/p&gt;
+
+&lt;h4 id=&#34;the-server&#34;&gt;the server&lt;/h4&gt;
+
+&lt;p&gt;I&amp;rsquo;ve used the &lt;a href=&#34;https://github.com/gorilla/websocket&#34;&gt;Implementation from gorilla&lt;/a&gt; because it seemed to be the best as of today.
+It implements all the RFC and the development is up-to-date.&lt;/p&gt;
+
+&lt;p&gt;The code heavily relies on channels to broadcast the messages between the different peers.
+ I&amp;rsquo;ve taken the chat example present in the gorilla&amp;rsquo;s package.&lt;/p&gt;
+
+&lt;p&gt;At first I did code all the mechanism is a simple go package. After a bunch of code, I&amp;rsquo;ve decided to split the code into two different
+projects: The main presentation and the &lt;a href=&#34;http://github.com/owulveryck/gowmb&#34;&gt;gowmb&lt;/a&gt;. The gowmb package is usable in others projects.&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion.&lt;/h1&gt;
+
+&lt;p&gt;I don&amp;rsquo;t go into the implementation details in this post, instead I will refer to the &lt;a href=&#34;https://github.com/owulveryck/topology-presentation&#34;&gt;github&lt;/a&gt;
+repository where the presentation is hosted.&lt;/p&gt;
+
+&lt;p&gt;By now I have a good animated slideshow, and the ability to join the slides with a mobile phone.
+I can also draw a topology of the attendees via D3 and interact with them.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Orchestrate a digraph with goroutine, a concurrent orchestrator</title>
+      <link>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html</link>
+      <pubDate>Wed, 02 Dec 2015 14:24:21 +0000</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html</guid>
+      <description>
+
+&lt;p&gt;I&amp;rsquo;ve read a lot about graph theory recently.
+They have changed the world a lot. From the simple representation to Bayesian network via Markov chains, the applications are numerous.&lt;/p&gt;
+
+&lt;p&gt;Today I would like to imagine a graph as a workflow of execution. Every node would be considered as runnable. And every  edge would be a dependency.&lt;/p&gt;
+
+&lt;p&gt;It is an important framework that may be used to as an orchestrator for any model, and of course I am a lot thinkingabout &lt;strong&gt;TOSCA&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;the-use-case&#34;&gt;The use case&lt;/h1&gt;
+
+&lt;p&gt;If we consider this very simple graph (example taken from the french wikipedia page)&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;its corresponding adjacency matrix is:&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/matrix1.png&#34; alt=&#34;Adjacency matrix&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;its dimension is 8x8&lt;/p&gt;
+
+&lt;p&gt;For the lab, I will consider that each node has to do a simple task which is to wait for a random number of millisecond (such as Rob Pike&amp;rsquo;s &lt;em&gt;boring&lt;/em&gt; function, see references)&lt;/p&gt;
+
+&lt;h1 id=&#34;let-s-go&#34;&gt;Let&amp;rsquo;s GO&lt;/h1&gt;
+
+&lt;h2 id=&#34;how-will-it-work&#34;&gt;How will it work&lt;/h2&gt;
+
+&lt;p&gt;Every node will be run in a &lt;code&gt;goroutine&lt;/code&gt;. That is a point. But how do I deal with concurrency ?&lt;/p&gt;
+
+&lt;p&gt;Every single goroutine will be initially launched and then wait for an information.&lt;/p&gt;
+
+&lt;p&gt;It will have an input communication channel, and a &lt;em&gt;conductor&lt;/em&gt; will feed this channel with enough information for the goroutine to decides whether it should run or not.
+This information is simply the adjacency matrix up-to-date. That means that is a node is done, its value is set to zero.&lt;/p&gt;
+
+&lt;p&gt;Every goroutine will then check in the adjacency matrix, whether it has predecessor (that means if the corresponding vector is null, or every digit in column N is 0) and therefore will execute the step or not.&lt;/p&gt;
+
+&lt;p&gt;Once the execution of task is over, the goroutine will then feed another channel to tell the conductor that its job is done. and then the conductor will broadcast the information.&lt;/p&gt;
+
+&lt;h3 id=&#34;example&#34;&gt;Example&lt;/h3&gt;
+
+&lt;p&gt;In our example, nodes &lt;em&gt;3&lt;/em&gt;, &lt;em&gt;5&lt;/em&gt;, and &lt;em&gt;7&lt;/em&gt; do not have any predecessor, so they will be able to run first.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(1)&lt;/strong&gt; The conductors feed the nodes with the matrix&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(2)&lt;/strong&gt; Every node get the data and analyse the matrix&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step2.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(3)&lt;/strong&gt; Nodes 3, 5 and 7 have no predecessor (their column in the matrix sums to zero): they can run&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step3.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(4)&lt;/strong&gt; Nodes 3 and 5 are done, they informs the conductor&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step4.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(5)&lt;/strong&gt; conductor update the matrix. It fills the rows 3 and 5 with zeros (actually rows 4 and 6, because our first node is 0)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step5.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(6)&lt;/strong&gt; The conductor feeds the nodes with the matrix&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step6.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(7)&lt;/strong&gt; The nodes analyse the matrix&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step7.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;(8)&lt;/strong&gt; Node 2 can run&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step8.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-representation-of-the-use-case-in-go&#34;&gt;The representation of the use case in go&lt;/h2&gt;
+
+&lt;h3 id=&#34;data-representation&#34;&gt;Data representation&lt;/h3&gt;
+
+&lt;p&gt;to keep it simple, I won&amp;rsquo;t use a &lt;code&gt;list&lt;/code&gt; or a &lt;code&gt;slice&lt;/code&gt; to represent the matrix, but instead I will rely on the &lt;a href=&#34;https://godoc.org/github.com/gonum/matrix/mat64&#34;&gt;package mat64&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;A slice may be more efficient, but by now it is not an issue.&lt;/p&gt;
+
+&lt;p&gt;On top of that, I may need later to transpose or look for eigenvalues, and this package does implement the correct method to do so.
+For clarity of the description, I didn&amp;rsquo;t use a &lt;code&gt;float64&lt;/code&gt; array to initialize the matrix.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;// Allocate a zeroed array of size 8×8
+m := mat64.NewDense(8, 8, nil)
+m.Set(0, 1, 1); m.Set(0, 4, 1) // First row
+m.Set(1, 6, 1); m.Set(1, 6, 1) // second row
+m.Set(3, 2, 1); m.Set(3, 6, 1) // fourth row
+m.Set(5, 0, 1); m.Set(5, 1, 1); m.Set(5, 2, 1) // fifth row
+m.Set(7, 6, 1) // seventh row
+fa := mat64.Formatted(m, mat64.Prefix(&amp;quot;    &amp;quot;))
+fmt.Printf(&amp;quot;\nm = %v\n\n&amp;quot;, fa)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;the-node-execution-function-run&#34;&gt;The node execution function (&lt;em&gt;run&lt;/em&gt;)&lt;/h3&gt;
+
+&lt;p&gt;The node execution is performed by a &lt;code&gt;run&lt;/code&gt; function that takes two arguments:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The ID of the node&lt;/li&gt;
+&lt;li&gt;The duration of the sleep it performs&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This function returns a channel that will be used to exchange a &lt;code&gt;Message&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;func run(id int, duration time.Duration) &amp;lt;-chan Message { }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A &lt;code&gt;Message&lt;/code&gt; is a structure that will holds:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;the id of the node who have issued the message&lt;/li&gt;
+&lt;li&gt;a boolean which act as a flag that says whether it has already run&lt;/li&gt;
+&lt;li&gt;a wait channel which take a matrix as argument. This channel acts as the communication back mechanism from the conductor to the node&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;type Message struct {
+	id   int
+	run  bool
+	wait chan mat64.Dense
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The run function will launch a goroutine which will remain active thanks to a loop.
+It allows the run function to finish an returns the channel as soon as possible to it can be used by the conductor.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-conductor&#34;&gt;The conductor&lt;/h3&gt;
+
+&lt;p&gt;The conductor will be executed inside the main function in our example.&lt;/p&gt;
+
+&lt;p&gt;The first step is to launch as many &lt;code&gt;run&lt;/code&gt; function as needed.&lt;/p&gt;
+
+&lt;p&gt;There is no need to launch them in separate goroutines, because, as explained before,
+the run function will returns the channel immediately because the intelligence is living in a goroutine already.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;for i := 0; i &amp;lt; n; i++ { // n is the dimension of the matrix
+    cs[i] = run(i, time.Duration(rand.Intn(1e3))*time.Millisecond)
+    ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, as we have launched our workers, and as the communication channel exists, we should launch &lt;code&gt;n&lt;/code&gt; &amp;ldquo;angel&amp;rdquo; goroutines, that will take care of
+sending back the matrix to all the workers.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;    ...
+	node := &amp;lt;-cs[i]
+	go func() {
+		for {
+			node.wait &amp;lt;- *m
+		}
+	}()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then we shall collect all the messages sent back by the goroutines to treat them and update the matrix as soon as a goroutine has finished.
+I will use the &lt;code&gt;fanIn&lt;/code&gt; function as described by &lt;em&gt;Rob Pike&lt;/em&gt; in the IO Takl of 2012 (see references) and then go in a &lt;code&gt;for loop&lt;/code&gt; to get the results
+as soon as they arrived:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;c := fanIn(cs...)
+timeout := time.After(5 * time.Second)
+for {
+    select {
+    case node := &amp;lt;-c:
+        if node.run == true {
+            fmt.Printf(&amp;quot;%v has finished\n&amp;quot;, node.id)
+            // 0 its row in the matrix
+            for c := 0; c &amp;lt; n; c++ {
+                m.Set(node.id, c, 0)
+            }
+        }
+    case &amp;lt;-timeout:
+        fmt.Println(&amp;quot;Timeout&amp;quot;)
+        return
+    default:
+        if mat64.Sum(m) == 0 {
+            fmt.Println(&amp;quot;All done!&amp;quot;)
+            return
+        }
+    }
+}
+fmt.Println(&amp;quot;This is the end!&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; I have set up a timeout, just in case (&lt;a href=&#34;https://talks.golang.org/2012/concurrency.slide#36&#34;&gt;reference&lt;/a&gt;)&amp;hellip;
+&lt;strong&gt;Note2&lt;/strong&gt; I do not talk about the fanIn funtion which is described &lt;a href=&#34;https://talks.golang.org/2012/concurrency.slide#28&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-test&#34;&gt;The test&lt;/h2&gt;
+
+&lt;p&gt;Here is what I got when I launch the test:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;go run orchestrator.go 
+I am 7, and I am running
+I am 3, and I am running
+I am 5, and I am running
+3 has finished
+5 has finished
+I am 2, and I am running
+I am 0, and I am running
+0 has finished
+I am 1, and I am running
+I am 4, and I am running
+4 has finished
+7 has finished
+2 has finished
+1 has finished
+All done!
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pretty cool&lt;/p&gt;
+
+&lt;p&gt;The complete source can be found &lt;a href=&#34;https://github.com/owulveryck/gorchestrator&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you want to play: download go, setup a directory and a &lt;code&gt;$GOPATH&lt;/code&gt; then simply&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;go get github.com/owulveryck/gorchestrator
+cd $GOPATH/src/github.com/owulveryck/gorchestrator
+go run orchestrator.go
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;conclusions&#34;&gt;Conclusions&lt;/h1&gt;
+
+&lt;p&gt;I&amp;rsquo;m really happy about this implementation. It is clear and concise, and no too far to be idiomatic go.&lt;/p&gt;
+
+&lt;p&gt;What I would like to do now:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Read a TOSCA file (again) and pass the adjacency matrix to the orchestrator. That would do a complete orchestrator for cheap.&lt;/li&gt;
+&lt;li&gt;Re-use an old implemenation of the &lt;a href=&#34;https://github.com/owulveryck/toscaviewer&#34;&gt;toscaviewer&lt;/a&gt;.
+The idea is to implement a web server that serves the matrix as a json stream. This json will be used to update the SVG (via jquery),
+and then we would be able to see the progession in a graphical way.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;STAY TUNED!!!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://talks.golang.org/2012/concurrency.slide&#34;&gt;Go Concurrency Patterns (Rob Pike)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>TOSCA lifecycle as a digraph</title>
+      <link>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</link>
+      <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</guid>
+      <description>
+
+&lt;h1 id=&#34;about-tosca&#34;&gt;About TOSCA&lt;/h1&gt;
+
+&lt;p&gt;The &lt;a href=&#34;https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=tosca&#34;&gt;TOSCA&lt;/a&gt; acronym stands for
+&lt;em&gt;Topology and Orchestration Specification for Cloud Applications&lt;/em&gt;. It&amp;rsquo;s an &lt;a href=&#34;https://www.oasis-open.org&#34;&gt;OASIS&lt;/a&gt; standard.&lt;/p&gt;
+
+&lt;p&gt;The purpose of the TOSCA project is to represent an application by its topology and formalize it using the TOSCA grammar.&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simp$le-Profile-YAML-v1.0-csprd01.html&#34;&gt;[TOSCA-Simple-Profile-YAML-v1.0]&lt;/a&gt;
+current specification in YAML introduces the following concepts.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;TOSCA YAML service template: A YAML document artifact containing a (TOSCA) service template that represents a Cloud application.&lt;/li&gt;
+&lt;li&gt;TOSCA processor: An engine or tool that is capable of parsing and interpreting a TOSCA YAML service template for a particular purpose. For example, the purpose could be validation, translation or visual rendering.&lt;/li&gt;
+&lt;li&gt;TOSCA orchestrator (also called orchestration engine): A TOSCA processor that interprets a TOSCA YAML service template then instantiates and deploys the described application in a Cloud.&lt;/li&gt;
+&lt;li&gt;TOSCA generator: A tool that generates a TOSCA YAML service template. An example of generator is a modeling tool capable of generating or editing a TOSCA YAML service template (often such a tool would also be a TOSCA processor).&lt;/li&gt;
+&lt;li&gt;TOSCA archive (or TOSCA Cloud Service Archive, or “CSAR”): a package artifact that contains a TOSCA YAML service template and other artifacts usable by a TOSCA orchestrator to deploy an application.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;my-work-with-tosca&#34;&gt;My work with TOSCA&lt;/h2&gt;
+
+&lt;p&gt;I do believe that TOSCA may be a very good leverage to port a &amp;ldquo;legacy application&amp;rdquo; (aka &lt;em&gt;born in the datacenter&lt;/em&gt; application) into a cloud ready application without rewriting it completely to be cloud compliant.
+To be clear, It may act on the hosting and execution plan of the application, and not on the application itself.&lt;/p&gt;
+
+&lt;p&gt;A single wordpress installation in a TOSCA way as written &lt;a href=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html#_Toc430015847&#34;&gt;here&lt;/a&gt; is represented like that&lt;/p&gt;
+
+&lt;p&gt;&lt;img class=&#34;img-square img-responsive&#34; src=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01_files/image035.png&#34; alt=&#34;Single Wordpress representation&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;While I was learnig GO, I have developped a &lt;a href=&#34;https://github.com/owulveryck/toscalib&#34;&gt;TOSCA lib&lt;/a&gt; and a &lt;a href=&#34;https://github.com/owulveryck/toscaviewer&#34;&gt;TOSCA processor&lt;/a&gt; which are, by far, not &lt;em&gt;idiomatic GO&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Here are two screenshots of the rendering in a web page made with my tool (and the graphviz product):&lt;/p&gt;
+
+&lt;hr/&gt;
+
+&lt;p&gt;&lt;em&gt;The graph representation of a &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/toscaviewer_template_def.png&#34; alt=&#34;Tosca view ofthe single instance wordpress&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;The graph representation of a lifecycle of &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
+&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/toscaviewer_lifecycle_def.png&#34; alt=&#34;Lifecycle representation of the single wordpress instance representation&#34;/&gt;
+&lt;hr/&gt;&lt;/p&gt;
+
+&lt;p&gt;The TOSCA file is parsed with the help of the &lt;code&gt;TOSCALIB&lt;/code&gt; and then it fills an adjacency matrix (see &lt;a href=&#34;https://godoc.org/github.com/owulveryck/toscalib#ToscaDefinition.FillAdjacencyMatrix&#34;&gt;FillAdjacencyMatrix&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&#34;http://graphviz.org&#34;&gt;graphviz&lt;/a&gt; take care of the (di)graph representation.&lt;/p&gt;
+
+&lt;p&gt;What I would like to do now, is a little bit more: I would like to play with the graph and query it
+Then I should perform requests on this graph. For example I could ask:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;What are the steps to go from the state Initial of the application, to the state running&lt;/em&gt; ?&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;What are the steps to go from stop to delete&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;and that would be &lt;strong&gt;the premise of a TOSCA orchestrator&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-digraph-go-code&#34;&gt;The digraph go code&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve recently discoverd the &lt;a href=&#34;https://github.com/golang/tools/tree/master/cmd/digraph&#34;&gt;digraph&lt;/a&gt; tool, that I will use for querying the graphs.
+The &lt;code&gt;digraph&lt;/code&gt; is represented as a map with a node as a key and its immediates successors as values:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// A graph maps nodes to the non-nil set of their immediate successors.
+type graph map[string]nodeset
+
+type nodeset map[string]bool
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;from-tosca-to-digraph&#34;&gt;From TOSCA to digraph&lt;/h2&gt;
+
+&lt;p&gt;What I must do is to parse the adjacency matrix, get the &amp;ldquo;lifecycle action&amp;rdquo; related to the id and fill the graph g.&lt;/p&gt;
+
+&lt;h1 id=&#34;let-s-go&#34;&gt;Let&amp;rsquo;s go&lt;/h1&gt;
+
+&lt;p&gt;Considering the digraph code, what I need to do is simply to override the &lt;code&gt;parse&lt;/code&gt; method.&lt;/p&gt;
+
+&lt;h2 id=&#34;principle&#34;&gt;Principle&lt;/h2&gt;
+
+&lt;p&gt;I will fill the &lt;code&gt;graph&lt;/code&gt; with a string composed of &lt;em&gt;nodename:action&lt;/em&gt; as key.
+For example, if I need to do a &amp;ldquo;Configure&amp;rdquo; action of node &amp;ldquo;A&amp;rdquo; after a &amp;ldquo;Start&amp;rdquo; action on node &amp;ldquo;B&amp;rdquo;, I will have the following entry in the map:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;g[&amp;quot;B:Start&amp;quot;] = &amp;quot;A:Configure&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So What I need to do is to parse the adjjacency matrix, do a matching with the row id and the &amp;ldquo;node:action&amp;rdquo; name, and fill the &lt;code&gt;graph g&lt;/code&gt; with the matching of the corresponding &amp;ldquo;node:action&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;I will fill a &lt;code&gt;map&lt;/code&gt; with the id of the node:action as key and the corresponding label as values:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gloang&#34;&gt;for node, template := range toscaTemplate.TopologyTemplate.NodeTemplates {
+        ids[template.GetConfigureIndex()] = fmt.Sprintf(&amp;quot;%v:Configure&amp;quot;, node)
+        ids[template.GetCreateIndex()] = fmt.Sprintf(&amp;quot;%v:Create&amp;quot;, node)
+        ids[template.GetDeleteIndex()] = fmt.Sprintf(&amp;quot;%v:Delete&amp;quot;, node)
+        ids[template.GetInitialIndex()] = fmt.Sprintf(&amp;quot;%v:Initial&amp;quot;, node)
+        ids[template.GetPostConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PostConfigureSource&amp;quot;, node)
+        ids[template.GetPostConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PostconfigureTarget&amp;quot;, node)
+        ids[template.GetPreConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureSource&amp;quot;, node)
+        ids[template.GetPreConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureTarget&amp;quot;, node)
+        ids[template.GetStartIndex()] = fmt.Sprintf(&amp;quot;%v:Start&amp;quot;, node)
+        ids[template.GetStopIndex()] = fmt.Sprintf(&amp;quot;%v:Stop&amp;quot;, node)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then I can easily fill the &lt;code&gt;graph g&lt;/code&gt; from the adjacency matrix:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-gloang&#34;&gt;row, col := toscaTemplate.AdjacencyMatrix.Dims()
+        for r := 1; r &amp;lt; row; r++ {
+                for c := 1; c &amp;lt; col; c++ {
+                        if adjacencyMatrix.At(r, c) == 1 {
+                                g.addEdges(ids[r], ids[c])
+                        }
+                }
+        }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s it&lt;/p&gt;
+
+&lt;h1 id=&#34;the-final-function&#34;&gt;The final function&lt;/h1&gt;
+
+&lt;p&gt;Here is the final parse function&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func parse(rd io.Reader) (graph, error) {
+        g := make(graph)
+        // Parse the input graph.
+        var toscaTemplate toscalib.ToscaDefinition
+        err := toscaTemplate.Parse(rd)
+        if err != nil {
+                return nil, err
+        }
+        // a map containing the ID and the corresponding action
+        ids := make(map[int]string)
+        // Fill in the graph with the toscaTemplate via the adjacency matrix
+        for node, template := range toscaTemplate.TopologyTemplate.NodeTemplates {
+                // Find the edges of the current node and add them to the graph
+
+                ids[template.GetConfigureIndex()] = fmt.Sprintf(&amp;quot;%v:Configure&amp;quot;, node)
+                ids[template.GetCreateIndex()] = fmt.Sprintf(&amp;quot;%v:Create&amp;quot;, node)
+                ids[template.GetDeleteIndex()] = fmt.Sprintf(&amp;quot;%v:Delete&amp;quot;, node)
+                ids[template.GetInitialIndex()] = fmt.Sprintf(&amp;quot;%v:Initial&amp;quot;, node)
+                ids[template.GetPostConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PostConfigureSource&amp;quot;, node)
+                ids[template.GetPostConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PostconfigureTarget&amp;quot;, node)
+                ids[template.GetPreConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureSource&amp;quot;, node)
+                ids[template.GetPreConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureTarget&amp;quot;, node)
+                ids[template.GetStartIndex()] = fmt.Sprintf(&amp;quot;%v:Start&amp;quot;, node)
+                ids[template.GetStopIndex()] = fmt.Sprintf(&amp;quot;%v:Stop&amp;quot;, node)
+        }
+
+        row, col := toscaTemplate.AdjacencyMatrix.Dims()
+        for r := 1; r &amp;lt; row; r++ {
+                for c := 1; c &amp;lt; col; c++ {
+                        if adjacencyMatrix.At(r, c) == 1 {
+                                g.addEdges(ids[r], ids[c])
+                        }
+                }
+        }
+        return g, nil
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;grab-the-source-and-compile-it&#34;&gt;Grab the source and compile it&lt;/h1&gt;
+
+&lt;p&gt;I have a github repo with the source.
+It is go-gettable&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;go get github.com/owulveryck/digraph
+cd $GOPATH/src/github.com/owulveryck/digraph &amp;amp;&amp;amp; go build
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;EDIT&lt;/strong&gt; As I continue to work on this tool, I have created a &amp;ldquo;blog&amp;rdquo; branch in the github which holds the version related to this post&lt;/p&gt;
+
+&lt;h1 id=&#34;example&#34;&gt;Example&lt;/h1&gt;
+
+&lt;p&gt;I will use the the same example as described below: the single instance wordpress.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve extracted the YAML and placed in in the file &lt;a href=&#34;https://github.com/owulveryck/toscaviewer/blob/master/examples/tosca_single_instance_wordpress.yaml&#34;&gt;tosca_single_instance_wordpress.yaml&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s query the nodes first:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
+mysql_database:Configure
+mysql_database:Create
+mysql_database:Start
+mysql_dbms:Configure
+mysql_dbms:Create
+mysql_dbms:Start
+server:Configure
+server:Create
+server:Start
+webserver:Configure
+webserver:Create
+webserver:Start
+wordpress:Configure
+wordpress:Create
+wordpress:Start
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;so far, so good&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;Now, I can I go from a &lt;code&gt;Server:Create&lt;/code&gt; to a running instance &lt;code&gt;wordpress:Start&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph somepath server:Create wordpress:Start
+server:Create
+server:Configure
+server:Start
+mysql_dbms:Create
+mysql_dbms:Configure
+mysql_dbms:Start
+mysql_database:Create
+mysql_database:Configure
+mysql_database:Start
+wordpress:Create
+wordpress:Configure
+wordpress:Start
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Cool!&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;The tool sounds ok. What I may add:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a command to display the full lifecycle (finding the entry and the exit points in the matrix and call somepath with it)&lt;/li&gt;
+&lt;li&gt;get the tosca &lt;code&gt;artifacts&lt;/code&gt; and display them instead of the label to generate a deployment plan&lt;/li&gt;
+&lt;li&gt;execute the command in &lt;code&gt;goroutines&lt;/code&gt; to make them concurrent&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And of course validate any other TOSCA definition to go through a bug hunting party&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

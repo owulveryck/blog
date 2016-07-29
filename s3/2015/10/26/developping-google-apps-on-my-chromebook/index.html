@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Developping &#34;Google Apps&#34; on my Chromebook  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="" />
+
+<meta name="keywords" content="chromebook, configuration, ">
+
+<link rel="author" href="http://plus.google.com/+olivier.wulveryck">
+
+
+<meta property="og:title" content="Developping &#34;Google Apps&#34; on my Chromebook  &middot; Olivier Wulveryck&#39;s Tech Blog ">
+<meta property="og:site_name" content="Olivier Wulveryck&#39;s Tech Blog"/>
+<meta property="og:url" content="https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content=""/>
+<meta property="og:article:published_time" content="2015-10-26T10:41:57Z" />
+<meta property="og:article:modified_time" content="2015-10-26T10:41:57Z" />
+
+  
+    
+<meta property="og:article:tag" content="chromebook">
+    
+<meta property="og:article:tag" content="configuration">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@owulveryck" />
+<meta name="twitter:creator" content="@owulveryck" />
+<meta name="twitter:title" content="Developping &#34;Google Apps&#34; on my Chromebook" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:url" content="https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html" />
+<meta name="twitter:domain" content="https://blog.owulveryck.info/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Developping \x22Google Apps\x22 on my Chromebook",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+olivier.wulveryck?rel=author"
+    },
+    "datePublished": "2015-10-26",
+    "description": "",
+    "wordCount":  521 
+  }
+</script>
+
+
+
+<link rel="canonical" href="https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blog.owulveryck.info/touch-icon-144-precomposed.png">
+<link href="https://blog.owulveryck.info/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.16" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="https://blog.owulveryck.info/css/theme/default.css">
+
+
+<link rel="stylesheet" href="https://blog.owulveryck.info/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://blog.owulveryck.info/css/style.css">
+
+
+  <link rel="stylesheet" href="https://blog.owulveryck.info/css/highlight/default.css">
+
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+</head>
+<body>
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="https://blog.owulveryck.info/">Olivier Wulveryck&#39;s Tech Blog</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li>
+
+            <a href="https://blog.owulveryck.info/about"
+            >
+
+            
+                <i class="fa fa-info-circle"></i>
+            
+            
+            About
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="https://blog.owulveryck.info/post"
+             title="Show list of posts">
+
+            
+            
+            Posts
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="https://blog.owulveryck.info/tags"
+             title="Show list of tags">
+
+            
+            
+            Tags
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </div>
+  </nav>
+
+</header>
+
+
+<div class="container">
+<div class="row">
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Developping &#34;Google Apps&#34; on my Chromebook
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2015-10-26">26 Oct, 2015</time>
+</small>
+
+
+  <small>
+  &middot; Read in about 3 min
+  &middot; (521 Words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="https://blog.owulveryck.info/tags/chromebook" class="label label-primary">chromebook</a>
+  
+  <a href="https://blog.owulveryck.info/tags/configuration" class="label label-primary">configuration</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+  <div class="container content">
+  
+
+<p>It is a week now that I&rsquo;m playing with my chromebook.
+I really enjoy this little internet Terminal.</p>
+
+<p>I &ldquo;geeked&rdquo; it a little bit and I installed my favorites dev tools eg:</p>
+
+<ul>
+<li><a href="https://gist.github.com/johnbender/5018685">The solarized theme for the terminal</a></li>
+<li><code>zsh</code> with <a href="https://github.com/robbyrussell/oh-my-zsh">Oh-my-zsh</a></li>
+<li><code>tmux</code> (stared with <code>tmux -2</code> to get 256 colors)</li>
+<li><code>git</code></li>
+<li><code>vim</code></li>
+<li>a <code>Go</code> compiler</li>
+<li>The <a href="http://gohugo.io/overview/quickstart/"><code>HUGO</code></a> tool to write this blog.</li>
+</ul>
+
+<p>All of it has been installed thanks to the &ldquo;brew&rdquo; package manager and following <a href="https://github.com/Homebrew/linuxbrew/wiki/Chromebook-Install-Instructions">those instructions</a>.</p>
+
+<h2 id="google-development-environment">Google Development Environment</h2>
+
+<p>I&rsquo;ve installed the Google Development Environement as described <a href="https://cloud.google.com/appengine/docs/go/gettingstarted/devenvironment">here</a>.</p>
+
+<p>Python 2.7 is a requirements so I <code>brewed it</code> without any noticeable issue.</p>
+
+<p>When I wanted to serve locally my very first Google App developement, I ran into the following error:</p>
+
+<pre><code>~ go app serve $GOPATH/src/myapp
+...
+ImportError: No module named _sqlite3
+error while running dev_appserver.py: exit status 1
+</code></pre>
+
+<p>Too bad. I&rsquo;ve read that this module should be built with python, but a even a <code>find /</code> (I know it&rsquo;s evil) didn&rsquo;t return me any occurence.</p>
+
+<p>So, I have:</p>
+
+<ul>
+<li>Googled</li>
+<li>reinstalled sqlite with <code>brew reinstall sqlite</code></li>
+<li>reinstalled python with <code>brew reinstall python</code></li>
+<li>played with brew link, unlink and so</li>
+<li>&hellip;</li>
+</ul>
+
+<p>Still no luck!</p>
+
+<p>I&rsquo;ve also tried the compilation with a <code>verbose</code> option, and I the log file, there is an explicit message:</p>
+
+<pre><code>Python build finished, but the necessary bits to build these modules were not found:
+_bsddb  _sqlite3_tkinter
+...
+To find the necessary bits, look in setup.py in detect_modules() for the modules name.
+</code></pre>
+
+<p>That&rsquo;s where I am now, stuck with a stupid python error. I&rsquo;d like the folks at google to provide a pure go developement enrironement that would avoid the bootstraping problems.</p>
+
+<p>I&rsquo;ll post an update as soon as I have solved this issue !</p>
+
+<p><em>EDIT</em>:</p>
+
+<p>I&rsquo;ve had a look in the <code>setup.py</code> file. To compile the sqlite extension, it looks into the following paths:</p>
+
+<pre><code>...
+sqlite_incdir = sqlite_libdir = None
+sqlite_inc_paths = [ '/usr/include',
+                     '/usr/include/sqlite',
+                     '/usr/include/sqlite3',
+                     '/usr/local/include',
+                     '/usr/local/include/sqlite',
+                     '/usr/local/include/sqlite3',
+                   ]
+...
+</code></pre>
+
+<p>But in my configuration, the libraries are present in <code>/usr/local/linuxbrew/*</code>. Hence, simply linking the include and libs did the trick</p>
+
+<p>I&rsquo;m now facing another error when I try to run the <code>goapp serve</code> command:</p>
+
+<pre><code>...
+AttributeError: 'module' object has no attribute 'poll'
+error while running dev_appserver.py: exit status 1
+</code></pre>
+
+<p>Google told me, that on OSX the poll system call is broken and has been disabled.
+As brew is mainly developped on MacOS, that may be the reason</p>
+
+<p>I&rsquo;ve recompiled the python with the <code>--with-poll</code> option and that did the trick.</p>
+
+<h2 id="finally">Finally</h2>
+
+<p>Here are my options for compiling python:</p>
+
+<pre><code>~ brew reinstall python --with-brewed-openssl --with-brewed-sqlite --with-poll 
+...
+Warning: The given option --with-poll enables a somewhat broken poll() on OS X (https://bugs.python.org/issue5154)  Formula git:(master)).
+...
+</code></pre>
+
+<p>And the <code>goapp serve</code> is finally working on my Chromebook:</p>
+
+<pre><code>~ goapp serve /home/chronos/user/GOPROJECTS/src/github.com/owulveryck/google-app-example/
+INFO     2015-10-26 15:48:04,840 devappserver2.py:763] Skipping SDK update check.
+INFO     2015-10-26 15:48:04,935 api_server.py:205] Starting API server at: http://localhost:54116
+INFO     2015-10-26 15:48:06,092 dispatcher.py:197] Starting module &quot;default&quot; running at: http://localhost:8080
+INFO     2015-10-26 15:48:06,096 admin_server.py:116] Starting admin server at: http://localhost:8000
+INFO     2015-10-26 15:48:16,700 shutdown.py:45] Shutting down.
+INFO     2015-10-26 15:48:16,701 api_server.py:648] Applying all pending transactions and saving the datastore
+INFO     2015-10-26 15:48:16,701 api_server.py:651] Saving search indexes
+</code></pre>
+
+</div>
+
+
+  <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1/index.html" title="Simple polling, a cloud native app - part 1">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+      <li class="next">
+        <a href="https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/index.html" title="IaaS-like RESTfull API based on microservices">
+            Next <span aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+</footer>
+
+
+</div>
+</div>
+      <footer class="footer">
+    <div class="container hidden-print">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="#">back to top</a>
+</div>
+<div class="pull-right">
+  
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+          <small>
+              
+    
+<div class="container footline">
+  
+
+</div>
+
+
+    
+<div class="container copyright">
+  
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
+
+
+</div>
+
+
+
+          </small>
+        </div>
+     </div>
+    </div>
+</footer>
+
+    <script src="https://blog.owulveryck.info/js/jquery.min-2.1.4.js"></script>
+<script src="https://blog.owulveryck.info/js/bootstrap.min-3.3.5.js"></script>
+
+
+
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="https://blog.owulveryck.info/js/highlight.pack.js"></script>
+<script src="https://blog.owulveryck.info/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-69673850-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+  </body>
+</html>
+

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="Playing with websocket for a dynamic presentation." />
+
+<meta name="keywords" content="websocket, bootstrap, golang, reveal.js, Javascript, D3.js, ">
+
+<link rel="author" href="http://plus.google.com/+olivier.wulveryck">
+
+
+<meta property="og:title" content="Websockets, Reveal.js, D3 and GO for a dynamic keynote  &middot; Olivier Wulveryck&#39;s Tech Blog ">
+<meta property="og:site_name" content="Olivier Wulveryck&#39;s Tech Blog"/>
+<meta property="og:url" content="https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Playing with websocket for a dynamic presentation."/>
+<meta property="og:article:published_time" content="2016-06-23T15:32:54&#43;02:00" />
+<meta property="og:article:modified_time" content="2016-06-23T15:32:54&#43;02:00" />
+
+  
+    
+<meta property="og:article:tag" content="websocket">
+    
+<meta property="og:article:tag" content="bootstrap">
+    
+<meta property="og:article:tag" content="golang">
+    
+<meta property="og:article:tag" content="reveal.js">
+    
+<meta property="og:article:tag" content="Javascript">
+    
+<meta property="og:article:tag" content="D3.js">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@owulveryck" />
+<meta name="twitter:creator" content="@owulveryck" />
+<meta name="twitter:title" content="Websockets, Reveal.js, D3 and GO for a dynamic keynote" />
+<meta name="twitter:description" content="Playing with websocket for a dynamic presentation." />
+<meta name="twitter:url" content="https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html" />
+<meta name="twitter:domain" content="https://blog.owulveryck.info/">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Websockets, Reveal.js, D3 and GO for a dynamic keynote",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+olivier.wulveryck?rel=author"
+    },
+    "datePublished": "2016-06-23",
+    "description": "Playing with websocket for a dynamic presentation.",
+    "wordCount":  770 
+  }
+</script>
+
+
+
+<link rel="canonical" href="https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blog.owulveryck.info/touch-icon-144-precomposed.png">
+<link href="https://blog.owulveryck.info/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.16" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="https://blog.owulveryck.info/css/theme/default.css">
+
+
+<link rel="stylesheet" href="https://blog.owulveryck.info/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://blog.owulveryck.info/css/style.css">
+
+
+  <link rel="stylesheet" href="https://blog.owulveryck.info/css/highlight/default.css">
+
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+<script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+</head>
+<body>
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="https://blog.owulveryck.info/">Olivier Wulveryck&#39;s Tech Blog</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li>
+
+            <a href="https://blog.owulveryck.info/about"
+            >
+
+            
+                <i class="fa fa-info-circle"></i>
+            
+            
+            About
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="https://blog.owulveryck.info/post"
+             title="Show list of posts">
+
+            
+            
+            Posts
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="https://blog.owulveryck.info/tags"
+             title="Show list of tags">
+
+            
+            
+            Tags
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </div>
+  </nav>
+
+</header>
+
+
+<div class="container">
+<div class="row">
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Websockets, Reveal.js, D3 and GO for a dynamic keynote
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2016-06-23">23 Jun, 2016</time>
+</small>
+
+
+  <small>
+    &middot; by Olivier Wulveryck
+  
+  &middot; Read in about 4 min
+  &middot; (770 Words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="https://blog.owulveryck.info/tags/websocket" class="label label-primary">websocket</a>
+  
+  <a href="https://blog.owulveryck.info/tags/bootstrap" class="label label-primary">bootstrap</a>
+  
+  <a href="https://blog.owulveryck.info/tags/golang" class="label label-primary">golang</a>
+  
+  <a href="https://blog.owulveryck.info/tags/reveal.js" class="label label-primary">reveal.js</a>
+  
+  <a href="https://blog.owulveryck.info/tags/javascript" class="label label-primary">Javascript</a>
+  
+  <a href="https://blog.owulveryck.info/tags/d3.js" class="label label-primary">D3.js</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+  <div class="container content">
+  
+
+<h1 id="the-goal">the goal</h1>
+
+<p>As all my peers, I have the opportunity to talk about different technological aspects.
+As all my peers, I&rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).</p>
+
+<p>In this post I won&rsquo;t dig into what&rsquo;s good or not to put in a presentation, and if that&rsquo;s what interest you, I
+recommend you to take a look at <a href="http://www.presentationzen.com/">Garr Reynold&rsquo;s tips and tricks</a>.</p>
+
+<p><em>Steve Jobs</em> said:</p>
+
+<blockquote>
+<p>People who knows what they&rsquo;re talking about don&rsquo;t need PowerPoint</p>
+</blockquote>
+
+<p>(actually it has been quoted in Walter Isaacson&rsquo;s biography see <a href="http://blog.jgc.org/2011/11/people-who-know-what-theyre-talking.html">this reference</a>).</p>
+
+<p>As an attendee I tend to agree; usually PowerPoints are boring and they hardly give any interest besides for the writer to say &ldquo;hey look, I&rsquo;ve worked for this presentation&rdquo;.</p>
+
+<p>Indeed, they are a must. So for my next presentation I thought:</p>
+
+<p>wouldn&rsquo;t it be nice to use this wide display area to make the presentation more interactive.
+One of the key point in communication is to federate people. So what if people could get represented for real in the presentation.</p>
+
+<h2 id="how-to-the-architecture">how to: the architecture</h2>
+
+<p>Obviously I cannot use conventional tools, such as PowerPoint, Keynote, Impress, google slides and so.
+I need something that I can program; something that can interact with a server, and something that is not a console so I can get
+fancy and eye-candy animations.</p>
+
+<h3 id="the-basic">The basic</h3>
+
+<p><a href="http://lab.hakim.se/reveal-js/">reveal.js</a> is an almost perfect candidate:</p>
+
+<ul>
+<li>it is a framework written in JavaScript therefore, I can easily ass code</li>
+<li>it&rsquo;s well designed</li>
+<li>it can be used alongside with any other JavaScript framework</li>
+</ul>
+
+<h3 id="graphs-animations-etc">Graphs, animations, etc&hellip;</h3>
+
+<p>A good presentation has animations, graphs, diagrams, and stuffs that cannot be expressed simply with words.
+I will interact with the audience. I will explain how later, but anyway they will send me some data.
+I could process them in whatever server-side application (php, go-template base, python) but I have the feeling that&rsquo;s not
+the idiomatic way of doing modern web content. Actually, I would need anyway to deal with device (mobile, desktop), screen size,
+browser&hellip; So what&rsquo;s best, I think, is to get the data on the client side and process it via Javascript.</p>
+
+<p><a href="https://d3js.org/">Data Driver Documents</a> is the framework I will use to process and display the data I will get from the client.</p>
+
+<p>It actually uses SVG to represent the graphs; I would have liked to use a full HTML5 to be more&hellip; 2016, but the D3 is actually very very good
+framework I wanted to use for a while.</p>
+
+<h3 id="the-attendees">The attendees</h3>
+
+<p>If I want the attendees to participate they need a device, to act as a client.
+About all people I will talk to have a smartphone; that is what I will use.</p>
+
+<p>It has two advantages:</p>
+
+<ul>
+<li>it is their own device, I looks more realistic and unexpected: therefore I would get a better reception of the message I&rsquo;m trying to pass.</li>
+<li>it usually has a Webkit based web browser with a decent Javascript engine.</li>
+</ul>
+
+<p>I won&rsquo;t develop a native app, instead I will a webpage mobile compliant based on the <a href="http://getbootstrap.com/">bootstrap</a> framework.</p>
+
+<h3 id="the-hub">The HUB</h3>
+
+<p>The point now, is how to make my clients and my presentation to exchange data.
+As I said before, I would not be an easy task to setup a pure browser based peer-to-peer communication, so I will fall
+back to the traditional web server based hub.</p>
+
+<p>the first idea is to use a RESTfull mechanism, but this has the major disadvantage of not being real-timed.
+What I would like is a communication HUB that would broadcast events as soon as they are reveived.</p>
+
+<p>I&rsquo;ve implemented a server in go to do so. The clients will talk to the server over websockets which are now natively present in every
+modern browsers.</p>
+
+<h4 id="the-server">the server</h4>
+
+<p>I&rsquo;ve used the <a href="https://github.com/gorilla/websocket">Implementation from gorilla</a> because it seemed to be the best as of today.
+It implements all the RFC and the development is up-to-date.</p>
+
+<p>The code heavily relies on channels to broadcast the messages between the different peers.
+ I&rsquo;ve taken the chat example present in the gorilla&rsquo;s package.</p>
+
+<p>At first I did code all the mechanism is a simple go package. After a bunch of code, I&rsquo;ve decided to split the code into two different
+projects: The main presentation and the <a href="http://github.com/owulveryck/gowmb">gowmb</a>. The gowmb package is usable in others projects.</p>
+
+<h1 id="conclusion">Conclusion.</h1>
+
+<p>I don&rsquo;t go into the implementation details in this post, instead I will refer to the <a href="https://github.com/owulveryck/topology-presentation">github</a>
+repository where the presentation is hosted.</p>
+
+<p>By now I have a good animated slideshow, and the ability to join the slides with a mobile phone.
+I can also draw a topology of the attendees via D3 and interact with them.</p>
+
+</div>
+
+
+  <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/index.html" title="Which solution should I choose? Don&#39;t think too much and ask a bot!">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+</footer>
+
+
+</div>
+</div>
+      <footer class="footer">
+    <div class="container hidden-print">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="#">back to top</a>
+</div>
+<div class="pull-right">
+  
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+          <small>
+              
+    
+<div class="container footline">
+  
+
+</div>
+
+
+    
+<div class="container copyright">
+  
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
+
+
+</div>
+
+
+
+          </small>
+        </div>
+     </div>
+    </div>
+</footer>
+
+    <script src="https://blog.owulveryck.info/js/jquery.min-2.1.4.js"></script>
+<script src="https://blog.owulveryck.info/js/bootstrap.min-3.3.5.js"></script>
+
+
+
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="https://blog.owulveryck.info/js/highlight.pack.js"></script>
+<script src="https://blog.owulveryck.info/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-69673850-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+  </body>
+</html>
+

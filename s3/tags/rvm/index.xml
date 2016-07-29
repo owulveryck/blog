@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rvm on Olivier Wulveryck&#39;s Tech Blog</title>
+    <link>https://blog.owulveryck.info/tags/rvm/</link>
+    <description>Recent content in Rvm on Olivier Wulveryck&#39;s Tech Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved - 2015/2016</copyright>
+    <lastBuildDate>Thu, 31 Mar 2016 10:23:02 +0200</lastBuildDate>
+    <atom:link href="https://blog.owulveryck.info/tags/rvm/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>RVM from a USB stick on a Chromebook</title>
+      <link>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</link>
+      <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</guid>
+      <description>
+
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+
+&lt;h4 id=&#34;opening-remarks&#34;&gt;Opening remarks&lt;/h4&gt;
+
+&lt;p&gt;I&amp;rsquo;m not a Ruby developer, and I&amp;rsquo;m heavily discovering the ecosystem by now.
+This are my notes, and if anything seems wrong to you, do not hesitate to send me remarks.&lt;/p&gt;
+
+&lt;h4 id=&#34;the-scenario&#34;&gt;The scenario&lt;/h4&gt;
+
+&lt;p&gt;For testing purpose, I wanted to play with vagrant-aws and more generally with ruby on my Chromebook.&lt;/p&gt;
+
+&lt;p&gt;Vagrant does not support &lt;em&gt;rubygems&lt;/em&gt; as installation method anymore (&lt;a href=&#34;http://mitchellh.com/abandoning-rubygems&#34;&gt;see Mitchell Hashimoto&amp;rsquo;s post&lt;/a&gt;)
+and of course, there is no binary distribution available for the Chromebook.&lt;/p&gt;
+
+&lt;p&gt;So I have to install it from the sources.&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&#34;https://github.com/mitchellh/vagrant/wiki/Installing-Vagrant-from-Source&#34;&gt;documentation&lt;/a&gt; says:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Do &lt;strong&gt;NOT&lt;/strong&gt; use the system Ruby - use a Ruby version manager like rvm, chruby, etc&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Alright, anyway I don&amp;rsquo;t want to mess with my system and break Homebrew, so using RVM seems to be a good idea.&lt;/p&gt;
+
+&lt;h2 id=&#34;installing-rvm&#34;&gt;Installing RVM&lt;/h2&gt;
+
+&lt;p&gt;The RVM installation is relatively easy; simply running &lt;code&gt;curl -sSL https://get.rvm.io | bash&lt;/code&gt; does the trick.
+And then those commands make ruby 2.3.0 available via rvm:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ source ~/.rvm/scripts/rvm  
+$ rvm install 2.3.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The stupid trick here is that everything is installed in my $HOME directory, and as my Chromebook is short on disk space: FS full !&lt;/p&gt;
+
+&lt;p&gt;Too bad.&lt;/p&gt;
+
+&lt;h2 id=&#34;using-a-usb-stick&#34;&gt;Using a USB stick&lt;/h2&gt;
+
+&lt;p&gt;So my idea is to install the RVM suite onto a USB stick (because with me I don&amp;rsquo;t have any SDHC card available).&lt;/p&gt;
+
+&lt;h3 id=&#34;preparing-the-stick&#34;&gt;Preparing the stick&lt;/h3&gt;
+
+&lt;p&gt;At first, the USB stick must be formatted in extendX (ext4) in order to be able to use symlinks, correct ownership etc.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sudo mkfs.ext4 -L Lexar /dev/sda1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: I&amp;rsquo;ve found that avoiding spaces in the volume name was good for rvm.&lt;/p&gt;
+
+&lt;p&gt;Once connected on the Chromebook, it&amp;rsquo;s automatically mounted on &lt;code&gt;/media/removable/Lexar&lt;/code&gt;.
+The problem are the options:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;/dev/sda1 on /media/removable/Lexar type ext4 (rw,nosuid,nodev,noexec,relatime,dirsync,data=ordered)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;the most problematic is &lt;code&gt;noexec&lt;/code&gt; because I want to install executables in it.&lt;/p&gt;
+
+&lt;p&gt;So what I did was simply:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo mount -o remount /dev/sda1 /media/removable/Lexar&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;and that did the trick.&lt;/p&gt;
+
+&lt;h2 id=&#34;installing-rvm-on-the-usb&#34;&gt;Installing RVM on the USB&lt;/h2&gt;
+
+&lt;p&gt;I will install rvm into &lt;code&gt;/media/removable/Lexar/rvm&lt;/code&gt;. In order to avoid any ownership and permission problem I did:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;mkdir /media/removable/Lexar/rvm
+chown chronos:chronos /media/removable/Lexar/rvm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And then I created a simple &lt;code&gt;~/.rvmrc&lt;/code&gt; file as indicated in the documentation with this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cat ~/.rvmrc                                          
+$ export rvm_path=/media/removable/Lexar/rvm
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I also included this in my &lt;code&gt;~/.zshrc&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;if [ -s &amp;quot;$HOME/.rvmrc&amp;quot;   ]; then
+    source &amp;quot;$HOME/.rvmrc&amp;quot;
+fi # to have $rvm_path defined if set
+if [ -s &amp;quot;${rvm_path-$HOME/.rvm}/scripts/rvm&amp;quot;   ]; then
+    source &amp;quot;${rvm_path-$HOME/.rvm}/scripts/rvm&amp;quot;
+fi
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;installing-rvm-1&#34;&gt;Installing rvm&lt;/h2&gt;
+
+&lt;p&gt;the command I executed were then:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -sSL https://get.rvm.io | bash
+$ source /media/removable/Lexar/rvm/scripts/rvm
+$ rvm autolibs enable
+$ rvm get stable
+$ rvm install 2.3.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And that did the trick&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ rvm list
+
+rvm rubies
+
+=* ruby-2.3.0 [ x84_64 ]
+
+# =&amp;gt; - current
+# =* - current &amp;amp;&amp;amp; default
+#  * - default
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;testing-with-vagrant&#34;&gt;Testing with vagrant&lt;/h2&gt;
+
+&lt;h3 id=&#34;cloning-the-vagrant-sources&#34;&gt;Cloning the vagrant sources&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ sudo mkdir /media/removable/Lexar/tools
+$ sudo chown chronos:chronos /media/removable/Lexar/tools
+$ cd /media/removable/Lexar/tools
+$ git clone https://github.com/mitchellh/vagrant.git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;preparing-the-rvm-file-for-vagrant&#34;&gt;Preparing the rvm file for vagrant&lt;/h3&gt;
+
+&lt;p&gt;To use the ruby 2.3.0 (that I&amp;rsquo;ve installed before) with vagrant, I need to create a .rvmrc in the vagrant directory:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd /media/removable/Lexar/tools/vagrant
+$ rvm --rvmrc --create 2.3.0@vagrant
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;installing-bundler&#34;&gt;Installing bundler&lt;/h3&gt;
+
+&lt;p&gt;The bundler version that is supported by vagrant must be &amp;lt;= 1.5.2 as written in the &lt;code&gt;Gemfile&lt;/code&gt;. So I&amp;rsquo;m installing version
+1.5.2&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cd /media/removable/Lexar/tools/vagrant
+$ source .rcmrv
+$ gem install bundler -v 1.5.2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;compiling-vagrant&#34;&gt;Compiling vagrant&lt;/h3&gt;
+
+&lt;p&gt;Back to the vagrant documentation, what I must do is now to &amp;ldquo;compile it&amp;rdquo;. To do so, the advice is to run:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ bundle _1.5.2_ install  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;(just in case several bundler are present )&lt;/p&gt;
+
+&lt;p&gt;I faced this error:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;NoMethodError: undefined method `spec&#39; for nil:NilClass
+Did you mean?  inspect
+An error occurred while installing vagrant (1.8.2.dev), and Bundler cannot continue.
+Make sure that `gem install vagrant -v &#39;1.8.2.dev&#39;` succeeds before bundling.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;According to google, this may be an issue with the version of bundler I&amp;rsquo;m using.
+As I cannot upgrade the bundler because of vagrant, I&amp;rsquo;ve decided to take a chance and use
+a lower version of Ruby&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ rvm install 2.2.0
+$ rvm --rvmrc --create 2.2.0@vagrant
+$ source .rvmrc
+# and reinstalling bundler
+$ gem install bundler -v 1.5.2            
+$ bundle _1.5.2_ install
+...
+Your bundle is complete!
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;voilà&#34;&gt;Voilà!&lt;/h1&gt;
+
+&lt;p&gt;I can now use vagrant installed fully on the USB stick with&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ bundle _1.5.2_ exec vagrant
+Vagrant appears to be running in a Bundler environment. Your 
+existing Gemfile will be used. Vagrant will not auto-load any plugins
+installed with `vagrant plugin`. Vagrant will autoload any plugins in
+the &#39;plugins&#39; group in your Gemfile. You can force Vagrant to take over
+with VAGRANT_FORCE_BUNDLER.
+
+You appear to be running Vagrant outside of the official installers.
+Note that the installers are what ensure that Vagrant has all required
+dependencies, and Vagrant assumes that these dependencies exist. By
+running outside of the installer environment, Vagrant may not function
+properly. To remove this warning, install Vagrant using one of the
+official packages from vagrantup.com.
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That&amp;rsquo;s it for this post; next I will try to install vagrant-aws and play a little bit with it.&lt;/p&gt;
+
+&lt;p&gt;stay tuned.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
