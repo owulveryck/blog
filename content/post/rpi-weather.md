@@ -267,4 +267,6 @@ go run main.go -device "0fde:ca01"
 
 OK! Here are the data, now what I need to figure out, is how to interpret them!
 
+## Decoding the Protocol
 
+Internet is a great tool: I've found a description of the protocol [here](http://www.bashewa.com/wmr200-protocol.php)
