@@ -182,4 +182,89 @@ and test it
           Endpoint 1 IN  interrupt - unsynchronized data [4 0]
       --------------
 
+## Rawread
+
+I want to read the raw data from the device.
+The gousb package comes along with an example named "rawread". I'm using it:
+
+<pre>
+# rawread git:(master) # go run main.go -device "0fde:ca01"
+2016/08/30 14:00:01 Scanning for device "0fde:ca01"...
+  Protocol: (Defined at Interface level)
+  Config 01:
+    --------------
+    Interface 00 Setup 00
+      Human Interface Device (No Subclass) None
+      Endpoint 1 IN  interrupt - unsynchronized data [8 0]
+    --------------
+2016/08/30 14:00:01 Connecting to endpoint...
+2016/08/30 14:00:01 - &usb.Descriptor{Bus:0x1, Address:0x4, Spec:0x110, Device:0x302, Vendor:0xfde, Product:0xca01, Class:0x0, SubClass:0x0, Protocol:0x0, Configs:[]usb.ConfigInfo{usb.ConfigInfo{Config:0x1, Attributes:0x80, MaxPower:0x32, Interfaces:[]usb.InterfaceInfo{usb.InterfaceInfo{Number:0x0, Setups:[]usb.InterfaceSetup{usb.InterfaceSetup{Number:0x0, Alternate:0x0, IfClass:0x3, IfSubClass:0x0, IfProtocol:0x0, Endpoints:[]usb.EndpointInfo{usb.EndpointInfo{Address:0x81, Attributes:0x3, MaxPacketSize:0x8, MaxIsoPacket:0x0, PollInterval:0xa, RefreshRate:0x0, SynchAddress:0x0}}}}}}}}}
+2016/08/30 14:00:01 open: usb: claim: libusb: device or resource busy [code -6]
+</pre>
+
+After digging into the documentation and forums about the libusb, it looks like the device is locked by a generic kernel driver.
+So I need to detach it first.
+
+The API call used to detach a kernel driver is `libusb_detach_kernel_driver`. Sadly it has not be bound to the golang's library.
+Indeed [Joseph Poirier](https://github.com/jpoirier) maintain an active fork from the gousb library and he does implement the call.
+It's a private method that is called implicitly by another call, so no need to modify the code from rawread to use it.
+
+I've switched to his version:
+
+<pre>
+# go get github.com/jpoirier/gousb/rawread
+./main -device "0fde:ca01"
+2016/08/30 14:12:28 Scanning for device "0fde:ca01"...
+  Protocol: (Defined at Interface level)
+  Config 01:
+    --------------
+    Interface 00 Setup 00
+      Human Interface Device (No Subclass) None
+      Endpoint 1 IN  interrupt - unsynchronized data [8 0]
+    --------------
+2016/08/30 14:12:28 Connecting to endpoint...
+2016/08/30 14:12:28 - &usb.Descriptor{Bus:0x1, Address:0x4, Spec:0x110, Device:0x302, Vendor:0xfde, Product:0xca01, Class:0x0, SubClass:0x0, Protocol:0x0, Configs:[]usb.ConfigInfo{usb.ConfigInfo{Config:0x1, Attributes:0x80, MaxPower:0x32, Interfaces:[]usb.InterfaceInfo{usb.InterfaceInfo{Number:0x0, Setups:[]usb.InterfaceSetup{usb.InterfaceSetup{Number:0x0, Alternate:0x0, IfClass:0x3, IfSubClass:0x0, IfProtocol:0x0, Endpoints:[]usb.EndpointInfo{usb.EndpointInfo{Address:0x81, Attributes:0x3, MaxPacketSize:0x8, MaxIsoPacket:0x0, PollInterval:0xa, RefreshRate:0x0, SynchAddress:0x0}}}}}}}}}
+</pre>
+
+Nothing more because the code ends by 
+
+```go
+  ep, err := dev.OpenEndpoint(uint8(*config), uint8(*iface), uint8(*setup), uint8(*endpoint)|uint8(usb.ENDPOINT_DIR_IN))
+  if err != nil {
+      log.Fatalf("open: %s", err)
+  }
+  _ = ep 
+```
+
+Cool... Now let's add some code to read from the endpoint 
+
+```go
+  b := make([]byte, 16)
+  _, err = ep.Read(b)
+  if err != nil {
+      log.Fatalf("read: %s", err)
+  }
+  log.Printf("%v", b)
+  _ = ep 
+```
+
+And run the code:
+
+<pre>
+go run main.go -device "0fde:ca01"
+2016/08/30 14:25:58 Scanning for device "0fde:ca01"...
+  Protocol: (Defined at Interface level)
+    Config 01:
+    --------------
+    Interface 00 Setup 00
+      Human Interface Device (No Subclass) None
+      Endpoint 1 IN  interrupt - unsynchronized data [8 0]
+    --------------
+2016/08/30 14:25:58 Connecting to endpoint...
+2016/08/30 14:25:58 - &usb.Descriptor{Bus:0x1, Address:0x4, Spec:0x110, Device:0x302, Vendor:0xfde, Product:0xca01, Class:0x0, SubClass:0x0, Protocol:0x0, Configs:[]usb.ConfigInfo{usb.ConfigInfo{Config:0x1, Attributes:0x80, MaxPower:0x32, Interfaces:[]usb.InterfaceInfo{usb.InterfaceInfo{Number:0x0, Setups:[]usb.InterfaceSetup{usb.InterfaceSetup{Number:0x0, Alternate:0x0, IfClass:0x3, IfSubClass:0x0, IfProtocol:0x0, Endpoints:[]usb.EndpointInfo{usb.EndpointInfo{Address:0x81, Attributes:0x3, MaxPacketSize:0x8, MaxIsoPacket:0x0, PollInterval:0xa, RefreshRate:0x0, SynchAddress:0x0}}}}}}}}}
+2016/08/30 14:25:59 [7 0 48 0 48 53 1 255 7 255 0 66 129 239 0 32]
+</pre>
+
+OK! Here are the data, now what I need to figure out, is how to interpret them!
+
 
