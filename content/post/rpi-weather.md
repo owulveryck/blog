@@ -236,7 +236,7 @@ Nothing more because the code ends by
   _ = ep 
 ```
 
-Cool... Now let's add some code to read from the endpoint 
+Cool... Now let's add some code to read from the endpoint (which is an interface and that implements a Read method as described [here](https://godoc.org/github.com/jpoirier/gousb/usb#Endpoint))
 
 ```go
   b := make([]byte, 16)
