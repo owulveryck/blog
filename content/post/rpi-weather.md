@@ -71,13 +71,87 @@ It is the one I will use for my experiment.
   That is the correct device. I will note the vendor ID and the product ID
 
 
-Let's create the udev file using the previous informations about the idVendor and the idProduct
+Let's create the udev file using the previous informations about the idVendor and the idProduct and create a special file `/dev/weather-station` to play with
 
 ```shell
 cat << EOF > /etc/udev/rules.d/50-weather-station.rules
 # Weather Station
-SUBSYSTEM=="usb", ATTRS{idVendor}=="0fde", ATTRS{idProduct}=="ca01", MODE="0660", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0fde", ATTRS{idProduct}=="ca01", MODE="0660", GROUP="plugdev", SYMLINK+="weather-station"
 EOF
 ```
 
 And finally restart udev with `sudo /etc/init.d/udev restart`
+
+You can check the logs by turnig the log level to info, reload the rules and look into the syslog file
+```
+# udevadm control -l info
+# udevadm control -R
+# # grep -i udev /var/log/syslog 
+# 
+```
+
+```
+# ls -lrt /dev/weather-station                                                                                                               
+lrwxrwxrwx 1 root root 15 Aug 29 21:32 /dev/weather-station -> bus/usb/001/007
+# ls -lrt /dev/bus/usb/001/007                                                                                                   
+crw-rw-r-- 1 root plugdev 189, 6 Aug 29 21:32 /dev/bus/usb/001/007
+```
+
+So far so good...
+
+
+# Accessing the data
+
+## The libusb
+Linux has a low level library "libusb" that make the developement of modules easy: [libusb-1.0](http://www.libusb.org/wiki/libusb-1.0).
+On my rpi, I can install the developement version with a simple `sudo apt-get install libusb-1.0-0-dev`.
+
+## Using GO: The `gousb` library
+
+A binding for the libusb is available through the [gousb](https://github.com/truveris/gousb)
+
+There is also a __lsusb__ version that is available as an exemple.
+Let's grab it with a simple
+`go get -v github.com/kylelemons/gousb/lsusb`
+
+and test it 
+```
+# ~GOPATH/bin/lsusb
+001.004 0fde:ca01 WMRS200 weather station (Oregon Scientific)
+  Protocol: (Defined at Interface level)
+  Config 01:
+    --------------
+    Interface 00 Setup 00
+      Human Interface Device (No Subclass) None
+      Endpoint 1 IN  interrupt - unsynchronized data [8 0]
+    --------------
+001.003 0424:ec00 SMSC9512/9514 Fast Ethernet Adapter (Standard Microsystems Corp.)
+  Protocol: Vendor Specific Class
+  Config 01:
+    --------------
+    Interface 00 Setup 00
+      Vendor Specific Class
+      Endpoint 1 IN  bulk - unsynchronized data [512 0]
+      Endpoint 2 OUT bulk - unsynchronized data [512 0]
+      Endpoint 3 IN  interrupt - unsynchronized data [16 0]
+    --------------
+001.002 0424:9514 SMC9514 Hub (Standard Microsystems Corp.)
+  Protocol: Hub (Unused) TT per port
+  Config 01:
+    --------------
+    Interface 00 Setup 00
+      Hub (Unused) Single TT
+      Endpoint 1 IN  interrupt - unsynchronized data [1 0]
+    Interface 00 Setup 01
+      Hub (Unused) TT per port
+      Endpoint 1 IN  interrupt - unsynchronized data [1 0]
+    --------------
+001.001 1d6b:0002 2.0 root hub (Linux Foundation)
+  Protocol: Hub (Unused) Single TT
+  Config 01:
+    --------------
+    Interface 00 Setup 00
+      Hub (Unused) Full speed (or root) hub
+      Endpoint 1 IN  interrupt - unsynchronized data [4 0]
+  --------------
+```
