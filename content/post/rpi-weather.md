@@ -2,8 +2,14 @@
 author: Olivier Wulveryck
 date: 2016-08-29T21:58:17+02:00
 description: A first geek interaction between my  raspberry pi 3 and my weather station
-draft: true
+draft: false
 tags:
+- libusb
+- udev
+- linux
+- weather station
+- oregon RMS300
+- golang
 - raspberry pi
 title: Getting weather data from the station to the raspberry
 topics:
@@ -270,3 +276,80 @@ OK! Here are the data, now what I need to figure out, is how to interpret them!
 ## Decoding the Protocol
 
 Internet is a great tool: I've found a description of the protocol [here](http://www.bashewa.com/wmr200-protocol.php)
+
+I've read that it was mandatory to send a heartbeat sequence every 30 seconds.
+I will implement the heartbeat later. For now I will send it initially to request data from the station:
+
+```go
+// This is a hearbeat request (9 bytes array)
+h := []byte{0x00, 0x01, 0xd0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+log.Println("Sending heartbeat")
+i, err := ep.Write(h)
+if err != nil {
+    log.Fatal("Cannot send heartbeat", err)
+}
+log.Println("%v bytes sent",i)
+```
+
+And then read the stream back. Every data payload is separate from the others by a 0xffff sequence.
+
+### Testing the sequence initialization request
+
+<pre>
+ go run main.go -device "0fde:ca01"
+2016/08/30 20:02:19 Scanning for device "0fde:ca01"...
+Protocol: (Defined at Interface level)
+  Config 01:
+  --------------
+  Interface 00 Setup 00
+    Human Interface Device (No Subclass) None
+    Endpoint 1 IN  interrupt - unsynchronized data [8 0]
+  --------------
+  2016/08/30 20:02:19 Connecting to endpoint...
+2016/08/30 20:02:19 Sending heartbeat
+2016/08/30 20:02:19 heartbeat failed: usb: write: not an OUT endpoint
+</pre>
+
+__What di I do wrong?__ 
+
+Easy, I didn't RTFM...
+Actually, I didnt read the specification of the USB.
+
+As described [here](http://events.linuxfoundation.org/sites/events/files/slides/elc_2014_usb_0.pdf) the USB is a __host-controlled__ bus which means that:
+
+* Nothing on the bus happens without the host first initiating it.
+* Devices cannot initiate a transaction.
+* The USB is a Polled Bus
+* The Host polls each device, requesting data or sending data
+
+The possibles transaction are:
+
+* IN : Device to Host
+* OUT: Host to Device
+
+On top of that, a device may handle 1 to N configuration which handles 1 to N endpoints whick may be considered IN or OUT.
+
+My weathr station has only one endpoint which is IN.
+Therefore I will not be able to send information to the station from the host. What I will be able to send is a IN token to get data on the bus.
+
+<pre>
+# lsusb -v
+...
+Endpoint Descriptor:
+  bLength                 7
+  bDescriptorType         5
+  bEndpointAddress     0x81  EP 1 IN
+  bmAttributes            3
+    Transfer Type            Interrupt
+    Synch Type               None
+    Usage Type               Data
+  wMaxPacketSize     0x0008  1x 8 bytes
+  bInterval              10
+</pre>
+
+__Note__ I also see that the endpoint is an interrupt
+
+# To be continued...
+
+This blog post is quiet long, and I haven't finished my research yet. Indeed I think that there is enough information for the post to go live.
+I will post a part II as soon as I will have time to continue my experiments with the USB device and the rpi.
