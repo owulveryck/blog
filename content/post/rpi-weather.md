@@ -310,10 +310,13 @@ Protocol: (Defined at Interface level)
 2016/08/30 20:02:19 heartbeat failed: usb: write: not an OUT endpoint
 </pre>
 
-__What di I do wrong?__ 
+__What did² I do wrong?__ 
+<center>
+![XKCD]( http://imgs.xkcd.com/comics/debugging.png)
+</center>
 
 Easy, I didn't RTFM...
-Actually, I didnt read the specification of the USB.
+Actually, I didn't read the specification of the USB.
 
 As described [here](http://events.linuxfoundation.org/sites/events/files/slides/elc_2014_usb_0.pdf) the USB is a __host-controlled__ bus which means that:
 
@@ -327,9 +330,9 @@ The possibles transaction are:
 * IN : Device to Host
 * OUT: Host to Device
 
-On top of that, a device may handle 1 to N configuration which handles 1 to N endpoints whick may be considered IN or OUT.
+On top of that, a device may handle 1 to N configuration which handles 1 to N endpoints which may be considered IN or OUT.
 
-My weathr station has only one endpoint which is IN.
+My weather station has only one endpoint which is IN.
 Therefore I will not be able to send information to the station from the host. What I will be able to send is a IN token to get data on the bus.
 
 <pre>
@@ -353,3 +356,5 @@ __Note__ I also see that the endpoint is an interrupt
 
 This blog post is quiet long, and I haven't finished my research yet. Indeed I think that there is enough information for the post to go live.
 I will post a part II as soon as I will have time to continue my experiments with the USB device and the rpi.
+
+
