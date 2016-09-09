@@ -310,10 +310,13 @@ Protocol: (Defined at Interface level)
 2016/08/30 20:02:19 heartbeat failed: usb: write: not an OUT endpoint
 &lt;/pre&gt;
 
-&lt;p&gt;&lt;strong&gt;What di I do wrong?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What did² I do wrong?&lt;/strong&gt;
+&lt;center&gt;
+&lt;img src=&#34;http://imgs.xkcd.com/comics/debugging.png&#34; alt=&#34;XKCD&#34; /&gt;
+&lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;Easy, I didn&amp;rsquo;t RTFM&amp;hellip;
-Actually, I didnt read the specification of the USB.&lt;/p&gt;
+Actually, I didn&amp;rsquo;t read the specification of the USB.&lt;/p&gt;
 
 &lt;p&gt;As described &lt;a href=&#34;http://events.linuxfoundation.org/sites/events/files/slides/elc_2014_usb_0.pdf&#34;&gt;here&lt;/a&gt; the USB is a &lt;strong&gt;host-controlled&lt;/strong&gt; bus which means that:&lt;/p&gt;
 
@@ -331,9 +334,9 @@ Actually, I didnt read the specification of the USB.&lt;/p&gt;
 &lt;li&gt;OUT: Host to Device&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;On top of that, a device may handle 1 to N configuration which handles 1 to N endpoints whick may be considered IN or OUT.&lt;/p&gt;
+&lt;p&gt;On top of that, a device may handle 1 to N configuration which handles 1 to N endpoints which may be considered IN or OUT.&lt;/p&gt;
 
-&lt;p&gt;My weathr station has only one endpoint which is IN.
+&lt;p&gt;My weather station has only one endpoint which is IN.
 Therefore I will not be able to send information to the station from the host. What I will be able to send is a IN token to get data on the bus.&lt;/p&gt;
 
 &lt;pre&gt;
