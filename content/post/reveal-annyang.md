@@ -2,7 +2,7 @@
 author: Olivier Wulveryck
 date: 2016-09-09T13:39:50+02:00
 description: People who know what they are talking about don't need Powerpoint said Steve Jobs. Indeed, it may be useful from time to time to have a single slide to display key words. But what I understand from Jobs's sentence is that relying on the slides is a bad idea. Good stuff that machine learning can pilot the slides for us!
-draft: true
+draft: false
 tags:
 - chrome
 - speech recognition
