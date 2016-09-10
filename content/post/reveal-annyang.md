@@ -22,7 +22,7 @@ I usually don't like slidewares.
 Actually as IT engineer working, by now, exclusively in France, I'm facing the PowerPoint problem:
 
 * Too many boring slides,
-* too many informations,
+* too much information per slide,
 * a presenter dedicated to read their content.
 
 Therefore, the audience is watching its watch while waiting for a coffee break.
@@ -39,7 +39,7 @@ In this post, I will go a little bit further with the integration of Speech Reco
 ## The Google Cloud Speech API
 
 It ain't no secret now, I'm a big fan of machine learning.
-Machines learn faster than people, and they can now assist them in a lot of boring tasks.
+Machines learn faster than people, and they can now assist us in a lot of boring tasks.
 
 On the base of a neuron network, Google provides an [API for speech recognition](https://cloud.google.com/speech/).
 It is fairly complete and multi lingual.
@@ -55,17 +55,17 @@ You can see an introduction [here](https://developers.google.com/web/updates/201
 # What can I use that for: A case study?
 
 I had to do a presentation recently.
-This presentation was about Agility and Devops. The main idea was to give my client a feedback about experiences I had regarding those principles in digital transformation.
+This presentation was about _Agility_ and _Devops_. The main idea was to give my client a feedback about experiences I had regarding those principles in digital transformation.
 
 I didn't want to loose my audience with slides. But I wanted to keep the key concepts alive and visible.
 
-So what I did was a one slide presentation only with the keywords I wanted to deal with.
+So what I did was a one slide presentation only with the keywords I wanted to talk about.
 
 The day before, I though:
 
 > "How nice it would be if as far as I speak, the key concepts would appear on screen..."
 
-You may think: So easy, learn your script and click on the right moment.
+You may think: _"that's easy, learn your script and click on the right moment"_.
 
 Ok, but there are drawbacks:
 
@@ -88,9 +88,9 @@ And another one in French.
 
 ## Annyang
 
-I have used the [annyang](https://github.com/TalAter/annyang) which is a javascript wrapper for the chrome functionnality.
+I have used the [annyang](https://github.com/TalAter/annyang) which is a javascript wrapper for the Chrome speech recognition functionnality.
 
-Instead of matching a sentence as explained in the example of annyang, I made it listen to my whole speech.
+Instead of matching a sentence as explained in the example of annyang, I made it listen to my whole speech in a loop.
 Then I passed every sentence detected by the framework to a javascript function that was applying regexp to look for keywords.
 
 ### Displaying words
@@ -125,12 +125,12 @@ And the corresponding html section for the communication keyword:
       <p> <span style="visibility: hidden;" id="communication">communication</span> </p>            
 ```
 
-The speech recognition engine detect the sentence and give a confidence note about its recognition.
+The speech recognition engine detects the sentence and gives a confidence note about its recognition.
 All the potential results are stored in an array (here <code>phrases</code>). I've used them all so I was more confident not to miss a word.
 
 ### Making them blink
 
-As I was not fully confident in the solution (it was late in the night and the show was the next morning), I made a fall-back solution.
+As I was not fully confident in the solution (it was late in the night and the show was the next morning), Therefore I made a fall-back solution.
 All the words were displayed, and I used a little CSS tweak to make them blink when they were pronounced. 
 This was done by adding and removing a css class to the concerned node.
 The logic remains the same.
@@ -175,6 +175,6 @@ What I need to do is to code a tiny javascript library in order to get a JSON as
 
 Anyway, as a quick and dirty solution, the goal is achieved.
 
-Another Idea would be to plug is with a NLP engine to perform stemming or lemmatization to do a better decoding and be even more machine learning compliant. This could be done with the help of [MITIE](https://github.com/mit-nlp/MITIE)
+Another Idea would be to plug this with a NLP engine to perform stemming or lemmatization to do a better decoding and be even more machine learning compliant. This could be done with the help of [MITIE](https://github.com/mit-nlp/MITIE)
 
 

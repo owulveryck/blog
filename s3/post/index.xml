@@ -9,8 +9,182 @@
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
-    <lastBuildDate>Mon, 29 Aug 2016 21:58:17 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 09 Sep 2016 13:39:50 +0200</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Being a better public speaker with a little help of Speech Recognition, Javascript and Chrome</title>
+      <link>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome/index.html</link>
+      <pubDate>Fri, 09 Sep 2016 13:39:50 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome/index.html</guid>
+      <description>
+
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+
+&lt;p&gt;I usually don&amp;rsquo;t like slidewares.&lt;/p&gt;
+
+&lt;p&gt;Actually as IT engineer working, by now, exclusively in France, I&amp;rsquo;m facing the PowerPoint problem:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Too many boring slides,&lt;/li&gt;
+&lt;li&gt;too many informations,&lt;/li&gt;
+&lt;li&gt;a presenter dedicated to read their content.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Therefore, the audience is watching its watch while waiting for a coffee break.&lt;/p&gt;
+
+&lt;p&gt;I won&amp;rsquo;t redo the introduction I already did in a &lt;a href=&#34;https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html&#34;&gt;previous post&lt;/a&gt; but indeed slides can,
+from time to time, be a value-add to a presentation.&lt;/p&gt;
+
+&lt;p&gt;Is the previous post, I introduced reveal.js, this excellent javascript framework. And I already did an interactive presentation.&lt;/p&gt;
+
+&lt;p&gt;In this post, I will go a little bit further with the integration of Speech Recognition.&lt;/p&gt;
+
+&lt;h1 id=&#34;speech-recognition-by-google&#34;&gt;Speech Recognition by Google&lt;/h1&gt;
+
+&lt;h2 id=&#34;the-google-cloud-speech-api&#34;&gt;The Google Cloud Speech API&lt;/h2&gt;
+
+&lt;p&gt;It ain&amp;rsquo;t no secret now, I&amp;rsquo;m a big fan of machine learning.
+Machines learn faster than people, and they can now assist them in a lot of boring tasks.&lt;/p&gt;
+
+&lt;p&gt;On the base of a neuron network, Google provides an &lt;a href=&#34;https://cloud.google.com/speech/&#34;&gt;API for speech recognition&lt;/a&gt;.
+It is fairly complete and multi lingual.&lt;/p&gt;
+
+&lt;h2 id=&#34;chrome-speech-recognition&#34;&gt;Chrome speech recognition&lt;/h2&gt;
+
+&lt;p&gt;They &amp;ldquo;&lt;em&gt;eat their own dog food&lt;/em&gt;&amp;rdquo; and use their engine for android and&amp;hellip; Chrome.
+Best of all, they provide a userland access via a Javascript API to this functionality in Chrome.&lt;/p&gt;
+
+&lt;p&gt;This means that you can develop a web page that will access you microphone, sends what you say to the Google cloud, get the result back and process it in your page.&lt;/p&gt;
+
+&lt;p&gt;You can see an introduction &lt;a href=&#34;https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;what-can-i-use-that-for-a-case-study&#34;&gt;What can I use that for: A case study?&lt;/h1&gt;
+
+&lt;p&gt;I had to do a presentation recently.
+This presentation was about Agility and Devops. The main idea was to give my client a feedback about experiences I had regarding those principles in digital transformation.&lt;/p&gt;
+
+&lt;p&gt;I didn&amp;rsquo;t want to loose my audience with slides. But I wanted to keep the key concepts alive and visible.&lt;/p&gt;
+
+&lt;p&gt;So what I did was a one slide presentation only with the keywords I wanted to deal with.&lt;/p&gt;
+
+&lt;p&gt;The day before, I though:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;How nice it would be if as far as I speak, the key concepts would appear on screen&amp;hellip;&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;You may think: So easy, learn your script and click on the right moment.&lt;/p&gt;
+
+&lt;p&gt;Ok, but there are drawbacks:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;You have to learn the script&lt;/li&gt;
+&lt;li&gt;You cannot be spontaneous anymore&lt;/li&gt;
+&lt;li&gt;It&amp;rsquo;s a one shot, one displayed, you cannot interact with the points anymore.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;What I need is &amp;ldquo;an assistant&amp;rdquo; that will &lt;em&gt;listen to me&lt;/em&gt; and &lt;em&gt;act as soon as he/she/it hear a buzz word&lt;/em&gt;.
+It&amp;rsquo;s 2016, this assistant is a machine, and I can teach it to act correctly.&lt;/p&gt;
+
+&lt;p&gt;Here is a little demo of the end product (don&amp;rsquo;t pay to much attention to the content, I said nonsense for the demo)&lt;/p&gt;
+
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/MOmmBufEwPo&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;And another one in French.&lt;/p&gt;
+
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/3Uyr0G0add4&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;h1 id=&#34;the-implementation&#34;&gt;The implementation&lt;/h1&gt;
+
+&lt;h2 id=&#34;annyang&#34;&gt;Annyang&lt;/h2&gt;
+
+&lt;p&gt;I have used the &lt;a href=&#34;https://github.com/TalAter/annyang&#34;&gt;annyang&lt;/a&gt; which is a javascript wrapper for the chrome functionnality.&lt;/p&gt;
+
+&lt;p&gt;Instead of matching a sentence as explained in the example of annyang, I made it listen to my whole speech.
+Then I passed every sentence detected by the framework to a javascript function that was applying regexp to look for keywords.&lt;/p&gt;
+
+&lt;h3 id=&#34;displaying-words&#34;&gt;Displaying words&lt;/h3&gt;
+
+&lt;p&gt;For every keyword I did a match to an object of my DOM and simply changed its &lt;code&gt;visibility&lt;/code&gt; style from &lt;code&gt;hidden&lt;/code&gt; to &lt;code&gt;visible&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Here is the javascript code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;if (annyang) {
+  annyang.debug(true);
+  annyang.setLanguage(&#39;fr-FR&#39;);
+  annyang.addCallback(&#39;result&#39;, function(phrases) {
+  for (s of phrases) {
+     str = s.toLowerCase();
+     switch (str) {
+        case (str.match(/communication/) || {}).input:nnyang.start();                                                                                              
+        document.getElementById(&#39;communication&#39;).style.visibility = &#39;visible&#39;;
+        ...
+    // Start listening. You can call this here, or attach this call to an event, button, etc.
+    annyang.start();       
+    ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And the corresponding html section for the communication keyword:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;div class=&amp;quot;reveal&amp;quot;&amp;gt;
+  &amp;lt;div class=&amp;quot;slides&amp;quot;&amp;gt;
+    &amp;lt;section&amp;gt;
+      &amp;lt;h3 style=&amp;quot;visibility: visible&amp;quot; id=&amp;quot;agile&amp;quot;&amp;gt;Agile&amp;lt;/h3&amp;gt;
+      &amp;lt;p&amp;gt; &amp;lt;span style=&amp;quot;visibility: hidden;&amp;quot; id=&amp;quot;communication&amp;quot;&amp;gt;communication&amp;lt;/span&amp;gt; &amp;lt;/p&amp;gt;            
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The speech recognition engine detect the sentence and give a confidence note about its recognition.
+All the potential results are stored in an array (here &lt;code&gt;phrases&lt;/code&gt;). I&amp;rsquo;ve used them all so I was more confident not to miss a word.&lt;/p&gt;
+
+&lt;h3 id=&#34;making-them-blink&#34;&gt;Making them blink&lt;/h3&gt;
+
+&lt;p&gt;As I was not fully confident in the solution (it was late in the night and the show was the next morning), I made a fall-back solution.
+All the words were displayed, and I used a little CSS tweak to make them blink when they were pronounced.
+This was done by adding and removing a css class to the concerned node.
+The logic remains the same.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;/* Chrome &amp;amp; Safari */
+@-webkit-keyframes blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.blink {
+  -webkit-animation: blink 750ms 2;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-Javascript&#34;&gt;case (str.match(/communication/) || {}).input:                                                                                       
+   document.getElementById(&amp;quot;b_communication&amp;quot;).classList.toggle(&#39;blink&#39;);
+   setTimeout(function () {
+     document.getElementById(&amp;quot;b_communication&amp;quot;).classList.remove(&#39;blink&#39;);
+   }, 1500);
+   break;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;conclusion-and-todo&#34;&gt;Conclusion and TODO&lt;/h1&gt;
+
+&lt;p&gt;The speech recognition engine is efficient and usable.
+What I need to do is to code a tiny javascript library in order to get a JSON associative array between the list of spoken words that would trigger an action for an element for example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  &amp;quot;tag&amp;quot;: &amp;quot;communication&amp;quot;,
+  &amp;quot;words&amp;quot;: [&amp;quot;communication&amp;quot;, &amp;quot;communicate&amp;quot;],
+  &amp;quot;fuction&amp;quot;: &amp;quot;blink&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Anyway, as a quick and dirty solution, the goal is achieved.&lt;/p&gt;
+
+&lt;p&gt;Another Idea would be to plug is with a NLP engine to perform stemming or lemmatization to do a better decoding and be even more machine learning compliant. This could be done with the help of &lt;a href=&#34;https://github.com/mit-nlp/MITIE&#34;&gt;MITIE&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Getting weather data from the station to the raspberry</title>
@@ -3719,129 +3893,6 @@ INFO     2015-10-26 15:48:16,700 shutdown.py:45] Shutting down.
 INFO     2015-10-26 15:48:16,701 api_server.py:648] Applying all pending transactions and saving the datastore
 INFO     2015-10-26 15:48:16,701 api_server.py:651] Saving search indexes
 &lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Simple polling, a cloud native app - part 1</title>
-      <link>https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1/index.html</link>
-      <pubDate>Fri, 23 Oct 2015 09:54:27 +0100</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1/index.html</guid>
-      <description>
-
-&lt;p&gt;In this series of posts I&amp;rsquo;ll explain how to setup a simple polling app, the cloud way.
-This app, written in go, will be hosted on a PAAS, and I&amp;rsquo;ve chosen the &lt;a href=&#34;https://cloud.google.com/appengine/docs&#34;&gt;Google App Engine&lt;/a&gt; for convenience.&lt;/p&gt;
-
-&lt;p&gt;I will not explain in this post how to setup the Development environment as it is described &lt;a href=&#34;https://cloud.google.com/appengine/docs/go/gettingstarted/devenvironment&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;a-word-about-the-hosting&#34;&gt;A word about the Hosting&lt;/h1&gt;
-
-&lt;p&gt;Google Apps Engine is a cloud service aim to host applications without worrying about scalability, and technical architecture of the hosting environement.
-The application is seen as a web service and proxyfied and load balanced in several compute nodes.
-The storage service is provided via a schemaless NoSQL datastore, featuring:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;high availability&lt;/li&gt;
-&lt;li&gt;consistency&lt;/li&gt;
-&lt;li&gt;&amp;hellip;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;and basically all the strong features you would expect from a decent production ready database provider.&lt;/p&gt;
-
-&lt;p&gt;To be simple: Take care of the functionnality of your app and respect the cloud principles (see for example the &lt;a href=&#34;http://12factor.net&#34;&gt;12factor.net&lt;/a&gt; ), and google will take care that it can run in the best conditions.&lt;/p&gt;
-
-&lt;h1 id=&#34;the-principles-of-the-application&#34;&gt;The principles of the application&lt;/h1&gt;
-
-&lt;p&gt;The application is composed of a stateless engine, a data bucket and some web pages for the presentation.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-engine&#34;&gt;The engine&lt;/h2&gt;
-
-&lt;p&gt;The engine is the core of the application. It is the &amp;ldquo;computational element&amp;rdquo; that will take care of the inputs of the user and interact with the storage.
-It is a &lt;a href=&#34;http://golang.org&#34;&gt;GO&lt;/a&gt; developement.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-bucket&#34;&gt;The bucket&lt;/h2&gt;
-
-&lt;p&gt;It is the data warehouse. It will store the participant name and its answer. It will be NoSQL based, the key will be the username and the value its answer.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-web-pages&#34;&gt;The web pages&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;the question &amp;ldquo;will you participate&amp;rdquo; and a form input where you will be able to write your name and three buttons &amp;ldquo;yes&amp;rdquo;, &amp;ldquo;no&amp;rdquo; and &amp;ldquo;&amp;ldquo;maybe&amp;rdquo;&amp;ldquo;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Will you participate 
-+------------------+  +-----+ +-----+ +-------+
-|  Your name       |  | YES | |  NO | | Maybe |
-+------------------+  +-----+ +-----+ +-------+
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;a simple table with two columns:&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;One will hold the participant name&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;The other one will display its response&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code&gt;+---------------------+-------+
-|  John doe           | YES   |
-+---------------------+-------+
-|  Johnny Vacances    | NO    |
-+---------------------+-------+
-|  Foo Bar            | YES   |
-+---------------------+-------+
-|  Toto Titi          | NO    |
-+---------------------+-------+
-|  Pascal Obistro     | YES   |
-+---------------------+-------+
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;setting-up-the-development-environment&#34;&gt;Setting up the development environment&lt;/h1&gt;
-
-&lt;p&gt;First, we will create a directory that will host the sources of our application in our &lt;code&gt;GOPATH/src&lt;/code&gt;.
-&lt;em&gt;Note&lt;/em&gt;: For convenience I&amp;rsquo;ve created a github repo named &amp;ldquo;google-app-example&amp;rdquo; to host the complete source.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~ mkdir -p $GOPATH/src/github.com/owulveryck/google-app-example
-~ cd $GOPATH/src/github.com/owulveryck/google-app-example
-~ git init
-~ git remote add origin https://github.com/owulveryck/google-app-example
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;hello-world&#34;&gt;Hello World!&lt;/h2&gt;
-
-&lt;p&gt;Let&amp;rsquo;s create the hello world first to validate the whole development chain.
-As written in the doc, create the two files &lt;code&gt;hello.go&lt;/code&gt; and &lt;code&gt;app.yaml&lt;/code&gt;.
-Obviously the &lt;code&gt;simple-polling.go&lt;/code&gt; file will hold the code of the application. Let&amp;rsquo;s focus a bit on the &lt;em&gt;app.yaml&lt;/em&gt; file.
-The documentation of the &lt;em&gt;app.yaml&lt;/em&gt; file is &lt;a href=&#34;https://cloud.google.com/appengine/docs/go/config/appconfig&#34;&gt;here&lt;/a&gt;. The goal of this file is to specifiy the runtime configuration of the engine.
-This simple file replace the &amp;ldquo;integration&amp;rdquo; task for an application typed &amp;ldquo;born in the datacenter&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;Here is my app.yaml&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;application: simple-polling
-version: 1
-runtime: go
-api_version: go1
-
-handlers:
-- url: /.*
-  script: _go_app
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And then we try our application with the command &lt;code&gt;goapp serve $GOPATH/src/github.com/owulveryck/google-app-example/&lt;/code&gt;
-which should display something similar to:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;INFO     2015-10-26 21:02:10,295 devappserver2.py:763] Skipping SDK update check.
-INFO     2015-10-26 21:02:10,468 api_server.py:205] Starting API server at: http://localhost:52457
-INFO     2015-10-26 21:02:12,011 dispatcher.py:197] Starting module &amp;quot;default&amp;quot; running at: http://localhost:8080
-INFO     2015-10-26 21:02:12,014 admin_server.py:116] Starting admin server at: http://localhost:8000
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then I can open my browser (or curl) and point it to &lt;a href=&#34;http://localhost:8080&#34;&gt;http://localhost:8080&lt;/a&gt; to see my brand new &amp;ldquo;Hello World!&amp;rdquo; displayed&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~ curl http://localhost:8080
-Hello, world!
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This ends the part 1 of this serie of articles.&lt;/p&gt;
 </description>
     </item>
     
