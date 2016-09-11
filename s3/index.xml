@@ -279,12 +279,12 @@ What I need to do is to code a tiny javascript library in order to get a JSON as
 
 &lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
 
-&lt;p&gt;A bunch of friends/colleagues offered me a raspberry pi 3.
+&lt;p&gt;A bunch of friends/colleagues offered me a &lt;a type=amzn&gt;raspberry pi 3&lt;/a&gt;.
 It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe the center of an alarm&amp;hellip;. Maybe a spotify player&amp;hellip;&lt;/p&gt;
 
 &lt;p&gt;Anyway, I have installed raspbian and I&amp;rsquo;m now playing with it.&lt;/p&gt;
 
-&lt;p&gt;Yesterday evening, as I was about to go to bed, I&amp;rsquo;ve had a very bad idea&amp;hellip; I&amp;rsquo;ve linked together my RPI and my Oregon Weather Station.
+&lt;p&gt;Yesterday evening, as I was about to go to bed, I&amp;rsquo;ve had a very bad idea&amp;hellip; I&amp;rsquo;ve linked together my &lt;a type=amzn&gt;rpi&lt;/a&gt; and my &lt;a type=&#34;amzn&#34;&gt;Oregon&lt;/a&gt; Weather Station.
 3 hours later, I was still geeking&amp;hellip;&lt;/p&gt;
 
 &lt;p&gt;As usual in the blog I will explain what I did, what did work, and what did not.&lt;/p&gt;
@@ -305,7 +305,7 @@ It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe 
 
 &lt;h2 id=&#34;finding-the-device&#34;&gt;Finding the device&lt;/h2&gt;
 
-&lt;p&gt;&lt;code&gt;lsusb&lt;/code&gt; gives me the list of the usb devices on my rpi:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;lsusb&lt;/code&gt; gives me the list of the usb devices on my &lt;a type=amzn&gt;rpi&lt;/a&gt;:&lt;/p&gt;
 
 &lt;pre&gt;
 # lsusb 
@@ -395,7 +395,7 @@ crw-rw-r-- 1 root plugdev 189, 6 Aug 29 21:32 /dev/bus/usb/001/007
 &lt;h2 id=&#34;the-libusb&#34;&gt;The libusb&lt;/h2&gt;
 
 &lt;p&gt;Linux has a low level library &amp;ldquo;libusb&amp;rdquo; that make the development of modules easy: &lt;a href=&#34;http://www.libusb.org/wiki/libusb-1.0&#34;&gt;libusb-1.0&lt;/a&gt;.
-On my rpi, I can install the development version with a simple &lt;code&gt;sudo apt-get install libusb-1.0-0-dev&lt;/code&gt;.&lt;/p&gt;
+On my &lt;a type=amzn&gt;rpi&lt;/a&gt;, I can install the development version with a simple &lt;code&gt;sudo apt-get install libusb-1.0-0-dev&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;using-go-the-gousb-library&#34;&gt;Using GO: The &lt;code&gt;gousb&lt;/code&gt; library&lt;/h2&gt;
 
@@ -616,7 +616,7 @@ Endpoint Descriptor:
 &lt;h1 id=&#34;to-be-continued&#34;&gt;To be continued&amp;hellip;&lt;/h1&gt;
 
 &lt;p&gt;This blog post is quiet long, and I haven&amp;rsquo;t finished my research yet. Indeed I think that there is enough information for the post to go live.
-I will post a part II as soon as I will have time to continue my experiments with the USB device and the rpi.&lt;/p&gt;
+I will post a part II as soon as I will have time to continue my experiments with the USB device and the &lt;a type=amzn&gt;rpi&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     

@@ -101,6 +101,7 @@
 
 <script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
 <script src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<SCRIPT charset="utf-8" type="text/javascript" src="http://ws-eu.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&MarketPlace=FR&ID=V20070822%2FFR%2Foliwulstecblo-21%2F8005%2F9e85dd7f-4818-4a41-8970-af7c747be820"> </SCRIPT> <NOSCRIPT><A rel="nofollow" HREF="http://ws-eu.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&MarketPlace=FR&ID=V20070822%2FFR%2Foliwulstecblo-21%2F8005%2F9e85dd7f-4818-4a41-8970-af7c747be820&Operation=NoScript">Widgets Amazon.fr</A></NOSCRIPT>
 </head>
 <body>
     <header id="main-header">
@@ -217,12 +218,12 @@
 
 <h1 id="introduction">Introduction</h1>
 
-<p>A bunch of friends/colleagues offered me a raspberry pi 3.
+<p>A bunch of friends/colleagues offered me a <a type=amzn>raspberry pi 3</a>.
 It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe the center of an alarm&hellip;. Maybe a spotify player&hellip;</p>
 
 <p>Anyway, I have installed raspbian and I&rsquo;m now playing with it.</p>
 
-<p>Yesterday evening, as I was about to go to bed, I&rsquo;ve had a very bad idea&hellip; I&rsquo;ve linked together my RPI and my Oregon Weather Station.
+<p>Yesterday evening, as I was about to go to bed, I&rsquo;ve had a very bad idea&hellip; I&rsquo;ve linked together my <a type=amzn>rpi</a> and my <a type="amzn">Oregon</a> Weather Station.
 3 hours later, I was still geeking&hellip;</p>
 
 <p>As usual in the blog I will explain what I did, what did work, and what did not.</p>
@@ -243,7 +244,7 @@ It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe 
 
 <h2 id="finding-the-device">Finding the device</h2>
 
-<p><code>lsusb</code> gives me the list of the usb devices on my rpi:</p>
+<p><code>lsusb</code> gives me the list of the usb devices on my <a type=amzn>rpi</a>:</p>
 
 <pre>
 # lsusb 
@@ -333,7 +334,7 @@ crw-rw-r-- 1 root plugdev 189, 6 Aug 29 21:32 /dev/bus/usb/001/007
 <h2 id="the-libusb">The libusb</h2>
 
 <p>Linux has a low level library &ldquo;libusb&rdquo; that make the development of modules easy: <a href="http://www.libusb.org/wiki/libusb-1.0">libusb-1.0</a>.
-On my rpi, I can install the development version with a simple <code>sudo apt-get install libusb-1.0-0-dev</code>.</p>
+On my <a type=amzn>rpi</a>, I can install the development version with a simple <code>sudo apt-get install libusb-1.0-0-dev</code>.</p>
 
 <h2 id="using-go-the-gousb-library">Using GO: The <code>gousb</code> library</h2>
 
@@ -554,7 +555,7 @@ Endpoint Descriptor:
 <h1 id="to-be-continued">To be continued&hellip;</h1>
 
 <p>This blog post is quiet long, and I haven&rsquo;t finished my research yet. Indeed I think that there is enough information for the post to go live.
-I will post a part II as soon as I will have time to continue my experiments with the USB device and the rpi.</p>
+I will post a part II as soon as I will have time to continue my experiments with the USB device and the <a type=amzn>rpi</a>.</p>
 
 </div>
 

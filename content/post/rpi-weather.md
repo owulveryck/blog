@@ -19,12 +19,12 @@ type: post
 
 # Introduction
 
-A bunch of friends/colleagues offered me a raspberry pi 3.
+A bunch of friends/colleagues offered me a <a type=amzn>raspberry pi 3</a>.
 It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe the center of an alarm.... Maybe a spotify player...
 
 Anyway, I have installed raspbian and I'm now playing with it.
 
-Yesterday evening, as I was about to go to bed, I've had a very bad idea... I've linked together my RPI and my Oregon Weather Station.
+Yesterday evening, as I was about to go to bed, I've had a very bad idea... I've linked together my <a type=amzn>rpi</a> and my <a type="amzn">Oregon</a> Weather Station.
 3 hours later, I was still geeking...
 
 As usual in the blog I will explain what I did, what did work, and what did not.
@@ -45,7 +45,7 @@ What `dmesg` tells me is simply
 
 ## Finding the device
 
-`lsusb` gives me the list of the usb devices on my rpi:
+`lsusb` gives me the list of the usb devices on my <a type=amzn>rpi</a>:
 
 <pre>
 # lsusb 
@@ -136,7 +136,7 @@ So far so good...
 
 ## The libusb
 Linux has a low level library "libusb" that make the development of modules easy: [libusb-1.0](http://www.libusb.org/wiki/libusb-1.0).
-On my rpi, I can install the development version with a simple `sudo apt-get install libusb-1.0-0-dev`.
+On my <a type=amzn>rpi</a>, I can install the development version with a simple `sudo apt-get install libusb-1.0-0-dev`.
 
 ## Using GO: The `gousb` library
 
@@ -355,6 +355,6 @@ __Note__ I also see that the endpoint is an interrupt
 # To be continued...
 
 This blog post is quiet long, and I haven't finished my research yet. Indeed I think that there is enough information for the post to go live.
-I will post a part II as soon as I will have time to continue my experiments with the USB device and the rpi.
+I will post a part II as soon as I will have time to continue my experiments with the USB device and the <a type=amzn>rpi</a>.
 
 
