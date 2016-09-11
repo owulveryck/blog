@@ -5,40 +5,46 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <title>Welcome  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
+  <title>Processing CSV files with golang, python and perl  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="description" content="" />
+<meta name="description" content="Which language gives the best performances to process a big/huge csv file between Python, Perl and Golang" />
 
-<meta name="keywords" content="">
+<meta name="keywords" content="golang, csv, ">
 
 <link rel="author" href="http://plus.google.com/+olivier.wulveryck">
 
 
-<meta property="og:title" content="Welcome  &middot; Olivier Wulveryck&#39;s Tech Blog ">
+<meta property="og:title" content="Processing CSV files with golang, python and perl  &middot; Olivier Wulveryck&#39;s Tech Blog ">
 <meta property="og:site_name" content="Olivier Wulveryck&#39;s Tech Blog"/>
-<meta property="og:url" content="https://blog.owulveryck.info/2015/10/22/welcome/index.html" />
+<meta property="og:url" content="https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl/index.html" />
 <meta property="og:locale" content="en-us">
 
 
 <meta property="og:type" content="article" />
-<meta property="og:description" content=""/>
-<meta property="og:article:published_time" content="2015-10-22T15:59:07&#43;01:00" />
-<meta property="og:article:modified_time" content="2015-10-22T15:59:07&#43;01:00" />
+<meta property="og:description" content="Which language gives the best performances to process a big/huge csv file between Python, Perl and Golang"/>
+<meta property="og:article:published_time" content="2016-09-11T20:27:49&#43;02:00" />
+<meta property="og:article:modified_time" content="2016-09-11T20:27:49&#43;02:00" />
 
+  
+    
+<meta property="og:article:tag" content="golang">
+    
+<meta property="og:article:tag" content="csv">
+    
   
 
   
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:site" content="@owulveryck" />
 <meta name="twitter:creator" content="@owulveryck" />
-<meta name="twitter:title" content="Welcome" />
-<meta name="twitter:description" content="" />
-<meta name="twitter:url" content="https://blog.owulveryck.info/2015/10/22/welcome/index.html" />
+<meta name="twitter:title" content="Processing CSV files with golang, python and perl" />
+<meta name="twitter:description" content="Which language gives the best performances to process a big/huge csv file between Python, Perl and Golang" />
+<meta name="twitter:url" content="https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl/index.html" />
 <meta name="twitter:domain" content="https://blog.owulveryck.info/">
   
 
@@ -46,20 +52,20 @@
   {
     "@context": "http://schema.org",
     "@type": "Article",
-    "headline": "Welcome",
+    "headline": "Processing CSV files with golang, python and perl",
     "author": {
       "@type": "Person",
       "name": "http://profiles.google.com/+olivier.wulveryck?rel=author"
     },
-    "datePublished": "2015-10-22",
-    "description": "",
-    "wordCount":  13 
+    "datePublished": "2016-09-11",
+    "description": "Which language gives the best performances to process a big\/huge csv file between Python, Perl and Golang",
+    "wordCount":  487 
   }
 </script>
 
 
 
-<link rel="canonical" href="https://blog.owulveryck.info/2015/10/22/welcome/index.html" />
+<link rel="canonical" href="https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl/index.html" />
 
 <link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blog.owulveryck.info/touch-icon-144-precomposed.png">
 <link href="https://blog.owulveryck.info/favicon.png" rel="icon">
@@ -152,19 +158,21 @@
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
   <div class="text-center">
 
-    <h1>Welcome
+    <h1>Processing CSV files with golang, python and perl
 </h1>
 
     <div class="metas">
 <small>
   <i class="fa fa-calendar"></i>
-  <time datetime="2015-10-22">22 Oct, 2015</time>
+  <time datetime="2016-09-11">11 Sep, 2016</time>
 </small>
 
 
   <small>
-  &middot; Read in about 1 min
-  &middot; (13 Words)
+    &middot; by Olivier Wulveryck
+  
+  &middot; Read in about 3 min
+  &middot; (487 Words)
 </small>
 
 
@@ -178,7 +186,80 @@
 </div>
 
   <div class="container content">
-  <p>You are in a place where a new technical blog will stand soon.</p>
+  
+
+<h1 id="introduction">Introduction</h1>
+
+<p>System engineers are used to CSV files.
+They may be considered as a good bridge between Excel and the CLI.
+They are also a common way to format the output of a script so data can be exploited easily from command lines tools such as <em>sort</em> , <em>awk</em>,<em>uniq</em>, <em>grep</em>, and so on.</p>
+
+<p>The point is that when there is a significant amount of data, parsing it with shell may be painful and extremely slow.</p>
+
+<p>This is a very simple and quick post about parsing CSV files in python, perl and golang.</p>
+
+<h1 id="the-use-case">The use case</h1>
+
+<p>I consider that I have a CSV file with 4 fields per row.
+The first field is a server name, and I may have 700 different servers.
+The second field is a supposed disk size for a certain partition. The other fields are just present to discriminate the rows in my example</p>
+
+<p>What I would like to know is the total disk size per server.</p>
+
+<p>I will implement three versions of parsing, and I will look for the result of a certain server to see if the computation is ok.
+Then I will compare the exeuction time of each implementation</p>
+
+<h2 id="generating-the-samples">Generating the samples</h2>
+
+<p>I&rsquo;m using a very simple shell loop to generate the samples. I&rsquo;m generating a file with 600000 lines.</p>
+
+<script src="//gist.github.com/owulveryck/4f9ddb952c5f1ef708b60a9907733969.js?file=Generation.sh"></script>
+
+<p>I&rsquo;ve randmly chosen to check the size of SERVER788 (but I will compute the size for all the servers).</p>
+
+<p>I have a lot of entries for my server.</p>
+
+<pre><code class="language-bash">grep SERVER788 sample.csv| wc -l
+3012
+</code></pre>
+
+<h2 id="the-implementations">The implementations</h2>
+
+<p>Here are the implementation in each language:</p>
+
+<h3 id="the-go-implementation">The go implementation</h3>
+
+<p>The go implementation relies on the <code>encoding/csv</code> package.
+The package has implemented a <code>Reader</code> method that can take the famous <code>io.Reader</code> as input. Therefore I will read a stream of data and not load the whole file in memory.</p>
+
+<script src="//gist.github.com/owulveryck/4f9ddb952c5f1ef708b60a9907733969.js?file=main.go"></script>
+
+<h3 id="the-perl-implementation">The perl implementation</h3>
+
+<p>I did not find a csv implementation in perl that would be more efficient than the code below. Any pointer appreciated.
+<script src="//gist.github.com/owulveryck/4f9ddb952c5f1ef708b60a9907733969.js?file=main.pl"></script></p>
+
+<h3 id="the-python-implementation">The python implementation</h3>
+
+<p>Python does have a <em>csv</em> module. This module is optimized and seems to be as flexible as the implementation of go. It reads a stream as well.
+<script src="//gist.github.com/owulveryck/4f9ddb952c5f1ef708b60a9907733969.js?file=main.py"></script></p>
+
+<h2 id="the-results">The results</h2>
+
+<p>I&rsquo;ve run all the scripts through the <em>GNU time</em> command. I didn&rsquo;t used the built-in time command because
+I wanted to check the memory footprint as well as the execution time.</p>
+
+<p>Here are the results
+<script src="//gist.github.com/owulveryck/4f9ddb952c5f1ef708b60a9907733969.js?file=result.sh"></script></p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>All of the languages have very nice execution time: below 4 seconds to process the sample file. Go gives the best performances, but it&rsquo;s insignificant as long as the files do not exceed millions of records.
+The memory footprint is low for eache implementation.</p>
+
+<p>It&rsquo;s definitly worth a bit of work to implement a decent parser in a &ldquo;modern language&rdquo;
+instead of relying on a <code>while read</code> loop or a <code>for i in $(cat...</code> in shell.
+I didn&rsquo;t write a shell implementation, but it would have take ages to run on my chromebook anyway.</p>
 
 </div>
 
@@ -189,13 +270,13 @@
   
     <nav><ul class="pager">
     
-
+        <li class="previous">
+          <a href="https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome/index.html" title="Being a better public speaker with a little help of Speech Recognition, Javascript and Chrome">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
     
-      <li class="next">
-        <a href="https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/index.html" title="Ruby / ZeroMQ / GO">
-            Next <span aria-hidden="true">&rarr;</span>
-        </a>
-      </li>
+
     
     </ul> </nav>
   

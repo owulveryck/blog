@@ -9,8 +9,91 @@
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
-    <lastBuildDate>Fri, 09 Sep 2016 13:39:50 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 11 Sep 2016 20:27:49 +0200</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Processing CSV files with golang, python and perl</title>
+      <link>https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl/index.html</link>
+      <pubDate>Sun, 11 Sep 2016 20:27:49 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl/index.html</guid>
+      <description>
+
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+
+&lt;p&gt;System engineers are used to CSV files.
+They may be considered as a good bridge between Excel and the CLI.
+They are also a common way to format the output of a script so data can be exploited easily from command lines tools such as &lt;em&gt;sort&lt;/em&gt; , &lt;em&gt;awk&lt;/em&gt;,&lt;em&gt;uniq&lt;/em&gt;, &lt;em&gt;grep&lt;/em&gt;, and so on.&lt;/p&gt;
+
+&lt;p&gt;The point is that when there is a significant amount of data, parsing it with shell may be painful and extremely slow.&lt;/p&gt;
+
+&lt;p&gt;This is a very simple and quick post about parsing CSV files in python, perl and golang.&lt;/p&gt;
+
+&lt;h1 id=&#34;the-use-case&#34;&gt;The use case&lt;/h1&gt;
+
+&lt;p&gt;I consider that I have a CSV file with 4 fields per row.
+The first field is a server name, and I may have 700 different servers.
+The second field is a supposed disk size for a certain partition. The other fields are just present to discriminate the rows in my example&lt;/p&gt;
+
+&lt;p&gt;What I would like to know is the total disk size per server.&lt;/p&gt;
+
+&lt;p&gt;I will implement three versions of parsing, and I will look for the result of a certain server to see if the computation is ok.
+Then I will compare the exeuction time of each implementation&lt;/p&gt;
+
+&lt;h2 id=&#34;generating-the-samples&#34;&gt;Generating the samples&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;m using a very simple shell loop to generate the samples. I&amp;rsquo;m generating a file with 600000 lines.&lt;/p&gt;
+
+&lt;script src=&#34;//gist.github.com/owulveryck/4f9ddb952c5f1ef708b60a9907733969.js?file=Generation.sh&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;I&amp;rsquo;ve randmly chosen to check the size of SERVER788 (but I will compute the size for all the servers).&lt;/p&gt;
+
+&lt;p&gt;I have a lot of entries for my server.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;grep SERVER788 sample.csv| wc -l
+3012
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;the-implementations&#34;&gt;The implementations&lt;/h2&gt;
+
+&lt;p&gt;Here are the implementation in each language:&lt;/p&gt;
+
+&lt;h3 id=&#34;the-go-implementation&#34;&gt;The go implementation&lt;/h3&gt;
+
+&lt;p&gt;The go implementation relies on the &lt;code&gt;encoding/csv&lt;/code&gt; package.
+The package has implemented a &lt;code&gt;Reader&lt;/code&gt; method that can take the famous &lt;code&gt;io.Reader&lt;/code&gt; as input. Therefore I will read a stream of data and not load the whole file in memory.&lt;/p&gt;
+
+&lt;script src=&#34;//gist.github.com/owulveryck/4f9ddb952c5f1ef708b60a9907733969.js?file=main.go&#34;&gt;&lt;/script&gt;
+
+&lt;h3 id=&#34;the-perl-implementation&#34;&gt;The perl implementation&lt;/h3&gt;
+
+&lt;p&gt;I did not find a csv implementation in perl that would be more efficient than the code below. Any pointer appreciated.
+&lt;script src=&#34;//gist.github.com/owulveryck/4f9ddb952c5f1ef708b60a9907733969.js?file=main.pl&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;the-python-implementation&#34;&gt;The python implementation&lt;/h3&gt;
+
+&lt;p&gt;Python does have a &lt;em&gt;csv&lt;/em&gt; module. This module is optimized and seems to be as flexible as the implementation of go. It reads a stream as well.
+&lt;script src=&#34;//gist.github.com/owulveryck/4f9ddb952c5f1ef708b60a9907733969.js?file=main.py&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-results&#34;&gt;The results&lt;/h2&gt;
+
+&lt;p&gt;I&amp;rsquo;ve run all the scripts through the &lt;em&gt;GNU time&lt;/em&gt; command. I didn&amp;rsquo;t used the built-in time command because
+I wanted to check the memory footprint as well as the execution time.&lt;/p&gt;
+
+&lt;p&gt;Here are the results
+&lt;script src=&#34;//gist.github.com/owulveryck/4f9ddb952c5f1ef708b60a9907733969.js?file=result.sh&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;All of the languages have very nice execution time: below 4 seconds to process the sample file. Go gives the best performances, but it&amp;rsquo;s insignificant as long as the files do not exceed millions of records.
+The memory footprint is low for eache implementation.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s definitly worth a bit of work to implement a decent parser in a &amp;ldquo;modern language&amp;rdquo;
+instead of relying on a &lt;code&gt;while read&lt;/code&gt; loop or a &lt;code&gt;for i in $(cat...&lt;/code&gt; in shell.
+I didn&amp;rsquo;t write a shell implementation, but it would have take ages to run on my chromebook anyway.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Being a better public speaker with a little help of Speech Recognition, Javascript and Chrome</title>
@@ -3774,125 +3857,6 @@ ok
 &lt;/ul&gt;
 
 &lt;p&gt;You can find all the codes in the github repository &lt;a href=&#34;https://github.com/owulveryck/example-iaas&#34;&gt;here&lt;/a&gt; in the branch &lt;code&gt;iaas-like-restfull-api-based-on-microservices&lt;/code&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Developping &#34;Google Apps&#34; on my Chromebook</title>
-      <link>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</link>
-      <pubDate>Mon, 26 Oct 2015 10:41:57 +0000</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</guid>
-      <description>
-
-&lt;p&gt;It is a week now that I&amp;rsquo;m playing with my chromebook.
-I really enjoy this little internet Terminal.&lt;/p&gt;
-
-&lt;p&gt;I &amp;ldquo;geeked&amp;rdquo; it a little bit and I installed my favorites dev tools eg:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://gist.github.com/johnbender/5018685&#34;&gt;The solarized theme for the terminal&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;zsh&lt;/code&gt; with &lt;a href=&#34;https://github.com/robbyrussell/oh-my-zsh&#34;&gt;Oh-my-zsh&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;tmux&lt;/code&gt; (stared with &lt;code&gt;tmux -2&lt;/code&gt; to get 256 colors)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;git&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;vim&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;a &lt;code&gt;Go&lt;/code&gt; compiler&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&#34;http://gohugo.io/overview/quickstart/&#34;&gt;&lt;code&gt;HUGO&lt;/code&gt;&lt;/a&gt; tool to write this blog.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;All of it has been installed thanks to the &amp;ldquo;brew&amp;rdquo; package manager and following &lt;a href=&#34;https://github.com/Homebrew/linuxbrew/wiki/Chromebook-Install-Instructions&#34;&gt;those instructions&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;google-development-environment&#34;&gt;Google Development Environment&lt;/h2&gt;
-
-&lt;p&gt;I&amp;rsquo;ve installed the Google Development Environement as described &lt;a href=&#34;https://cloud.google.com/appengine/docs/go/gettingstarted/devenvironment&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Python 2.7 is a requirements so I &lt;code&gt;brewed it&lt;/code&gt; without any noticeable issue.&lt;/p&gt;
-
-&lt;p&gt;When I wanted to serve locally my very first Google App developement, I ran into the following error:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~ go app serve $GOPATH/src/myapp
-...
-ImportError: No module named _sqlite3
-error while running dev_appserver.py: exit status 1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Too bad. I&amp;rsquo;ve read that this module should be built with python, but a even a &lt;code&gt;find /&lt;/code&gt; (I know it&amp;rsquo;s evil) didn&amp;rsquo;t return me any occurence.&lt;/p&gt;
-
-&lt;p&gt;So, I have:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Googled&lt;/li&gt;
-&lt;li&gt;reinstalled sqlite with &lt;code&gt;brew reinstall sqlite&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;reinstalled python with &lt;code&gt;brew reinstall python&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;played with brew link, unlink and so&lt;/li&gt;
-&lt;li&gt;&amp;hellip;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Still no luck!&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve also tried the compilation with a &lt;code&gt;verbose&lt;/code&gt; option, and I the log file, there is an explicit message:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Python build finished, but the necessary bits to build these modules were not found:
-_bsddb  _sqlite3_tkinter
-...
-To find the necessary bits, look in setup.py in detect_modules() for the modules name.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;That&amp;rsquo;s where I am now, stuck with a stupid python error. I&amp;rsquo;d like the folks at google to provide a pure go developement enrironement that would avoid the bootstraping problems.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ll post an update as soon as I have solved this issue !&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;EDIT&lt;/em&gt;:&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve had a look in the &lt;code&gt;setup.py&lt;/code&gt; file. To compile the sqlite extension, it looks into the following paths:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;...
-sqlite_incdir = sqlite_libdir = None
-sqlite_inc_paths = [ &#39;/usr/include&#39;,
-                     &#39;/usr/include/sqlite&#39;,
-                     &#39;/usr/include/sqlite3&#39;,
-                     &#39;/usr/local/include&#39;,
-                     &#39;/usr/local/include/sqlite&#39;,
-                     &#39;/usr/local/include/sqlite3&#39;,
-                   ]
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;But in my configuration, the libraries are present in &lt;code&gt;/usr/local/linuxbrew/*&lt;/code&gt;. Hence, simply linking the include and libs did the trick&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;m now facing another error when I try to run the &lt;code&gt;goapp serve&lt;/code&gt; command:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;...
-AttributeError: &#39;module&#39; object has no attribute &#39;poll&#39;
-error while running dev_appserver.py: exit status 1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Google told me, that on OSX the poll system call is broken and has been disabled.
-As brew is mainly developped on MacOS, that may be the reason&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve recompiled the python with the &lt;code&gt;--with-poll&lt;/code&gt; option and that did the trick.&lt;/p&gt;
-
-&lt;h2 id=&#34;finally&#34;&gt;Finally&lt;/h2&gt;
-
-&lt;p&gt;Here are my options for compiling python:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~ brew reinstall python --with-brewed-openssl --with-brewed-sqlite --with-poll 
-...
-Warning: The given option --with-poll enables a somewhat broken poll() on OS X (https://bugs.python.org/issue5154)  Formula git:(master)).
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And the &lt;code&gt;goapp serve&lt;/code&gt; is finally working on my Chromebook:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~ goapp serve /home/chronos/user/GOPROJECTS/src/github.com/owulveryck/google-app-example/
-INFO     2015-10-26 15:48:04,840 devappserver2.py:763] Skipping SDK update check.
-INFO     2015-10-26 15:48:04,935 api_server.py:205] Starting API server at: http://localhost:54116
-INFO     2015-10-26 15:48:06,092 dispatcher.py:197] Starting module &amp;quot;default&amp;quot; running at: http://localhost:8080
-INFO     2015-10-26 15:48:06,096 admin_server.py:116] Starting admin server at: http://localhost:8000
-INFO     2015-10-26 15:48:16,700 shutdown.py:45] Shutting down.
-INFO     2015-10-26 15:48:16,701 api_server.py:648] Applying all pending transactions and saving the datastore
-INFO     2015-10-26 15:48:16,701 api_server.py:651] Saving search indexes
-&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     
