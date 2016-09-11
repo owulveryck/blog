@@ -1,14 +1,14 @@
 [about]
     Name = "About"
     IconClass = "fa-info-circle"
-    URL = "/about"
+    URL = "/about/index.html"
 
 [posts]
     Name = "Posts"
     Title = "Show list of posts"
-    URL = "/post"
+    URL = "/post/index.html"
 
 [tags]
     Name = "Tags"
     Title = "Show list of tags"
-    URL = "/tags"
+    URL = "/tags/index.html"

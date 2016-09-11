@@ -28,7 +28,7 @@
 
 &lt;ul&gt;
 &lt;li&gt;Too many boring slides,&lt;/li&gt;
-&lt;li&gt;too many informations,&lt;/li&gt;
+&lt;li&gt;too much information per slide,&lt;/li&gt;
 &lt;li&gt;a presenter dedicated to read their content.&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -46,7 +46,7 @@ from time to time, be a value-add to a presentation.&lt;/p&gt;
 &lt;h2 id=&#34;the-google-cloud-speech-api&#34;&gt;The Google Cloud Speech API&lt;/h2&gt;
 
 &lt;p&gt;It ain&amp;rsquo;t no secret now, I&amp;rsquo;m a big fan of machine learning.
-Machines learn faster than people, and they can now assist them in a lot of boring tasks.&lt;/p&gt;
+Machines learn faster than people, and they can now assist us in a lot of boring tasks.&lt;/p&gt;
 
 &lt;p&gt;On the base of a neuron network, Google provides an &lt;a href=&#34;https://cloud.google.com/speech/&#34;&gt;API for speech recognition&lt;/a&gt;.
 It is fairly complete and multi lingual.&lt;/p&gt;
@@ -63,11 +63,11 @@ Best of all, they provide a userland access via a Javascript API to this functio
 &lt;h1 id=&#34;what-can-i-use-that-for-a-case-study&#34;&gt;What can I use that for: A case study?&lt;/h1&gt;
 
 &lt;p&gt;I had to do a presentation recently.
-This presentation was about Agility and Devops. The main idea was to give my client a feedback about experiences I had regarding those principles in digital transformation.&lt;/p&gt;
+This presentation was about &lt;em&gt;Agility&lt;/em&gt; and &lt;em&gt;Devops&lt;/em&gt;. The main idea was to give my client a feedback about experiences I had regarding those principles in digital transformation.&lt;/p&gt;
 
 &lt;p&gt;I didn&amp;rsquo;t want to loose my audience with slides. But I wanted to keep the key concepts alive and visible.&lt;/p&gt;
 
-&lt;p&gt;So what I did was a one slide presentation only with the keywords I wanted to deal with.&lt;/p&gt;
+&lt;p&gt;So what I did was a one slide presentation only with the keywords I wanted to talk about.&lt;/p&gt;
 
 &lt;p&gt;The day before, I though:&lt;/p&gt;
 
@@ -75,7 +75,7 @@ This presentation was about Agility and Devops. The main idea was to give my cli
 &lt;p&gt;&amp;ldquo;How nice it would be if as far as I speak, the key concepts would appear on screen&amp;hellip;&amp;rdquo;&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;You may think: So easy, learn your script and click on the right moment.&lt;/p&gt;
+&lt;p&gt;You may think: &lt;em&gt;&amp;ldquo;that&amp;rsquo;s easy, learn your script and click on the right moment&amp;rdquo;&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;Ok, but there are drawbacks:&lt;/p&gt;
 
@@ -100,9 +100,9 @@ It&amp;rsquo;s 2016, this assistant is a machine, and I can teach it to act corr
 
 &lt;h2 id=&#34;annyang&#34;&gt;Annyang&lt;/h2&gt;
 
-&lt;p&gt;I have used the &lt;a href=&#34;https://github.com/TalAter/annyang&#34;&gt;annyang&lt;/a&gt; which is a javascript wrapper for the chrome functionnality.&lt;/p&gt;
+&lt;p&gt;I have used the &lt;a href=&#34;https://github.com/TalAter/annyang&#34;&gt;annyang&lt;/a&gt; which is a javascript wrapper for the Chrome speech recognition functionnality.&lt;/p&gt;
 
-&lt;p&gt;Instead of matching a sentence as explained in the example of annyang, I made it listen to my whole speech.
+&lt;p&gt;Instead of matching a sentence as explained in the example of annyang, I made it listen to my whole speech in a loop.
 Then I passed every sentence detected by the framework to a javascript function that was applying regexp to look for keywords.&lt;/p&gt;
 
 &lt;h3 id=&#34;displaying-words&#34;&gt;Displaying words&lt;/h3&gt;
@@ -135,12 +135,12 @@ Then I passed every sentence detected by the framework to a javascript function 
       &amp;lt;p&amp;gt; &amp;lt;span style=&amp;quot;visibility: hidden;&amp;quot; id=&amp;quot;communication&amp;quot;&amp;gt;communication&amp;lt;/span&amp;gt; &amp;lt;/p&amp;gt;            
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The speech recognition engine detect the sentence and give a confidence note about its recognition.
+&lt;p&gt;The speech recognition engine detects the sentence and gives a confidence note about its recognition.
 All the potential results are stored in an array (here &lt;code&gt;phrases&lt;/code&gt;). I&amp;rsquo;ve used them all so I was more confident not to miss a word.&lt;/p&gt;
 
 &lt;h3 id=&#34;making-them-blink&#34;&gt;Making them blink&lt;/h3&gt;
 
-&lt;p&gt;As I was not fully confident in the solution (it was late in the night and the show was the next morning), I made a fall-back solution.
+&lt;p&gt;As I was not fully confident in the solution (it was late in the night and the show was the next morning), Therefore I made a fall-back solution.
 All the words were displayed, and I used a little CSS tweak to make them blink when they were pronounced.
 This was done by adding and removing a css class to the concerned node.
 The logic remains the same.&lt;/p&gt;
@@ -182,7 +182,7 @@ What I need to do is to code a tiny javascript library in order to get a JSON as
 
 &lt;p&gt;Anyway, as a quick and dirty solution, the goal is achieved.&lt;/p&gt;
 
-&lt;p&gt;Another Idea would be to plug is with a NLP engine to perform stemming or lemmatization to do a better decoding and be even more machine learning compliant. This could be done with the help of &lt;a href=&#34;https://github.com/mit-nlp/MITIE&#34;&gt;MITIE&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Another Idea would be to plug this with a NLP engine to perform stemming or lemmatization to do a better decoding and be even more machine learning compliant. This could be done with the help of &lt;a href=&#34;https://github.com/mit-nlp/MITIE&#34;&gt;MITIE&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

@@ -65,7 +65,7 @@
     },
     "datePublished": "2016-09-09",
     "description": "People who know what they are talking about don\x27t need Powerpoint said Steve Jobs. Indeed, it may be useful from time to time to have a single slide to display key words. But what I understand from Jobs\x27s sentence is that relying on the slides is a bad idea. Good stuff that machine learning can pilot the slides for us!",
-    "wordCount":  859 
+    "wordCount":  867 
   }
 </script>
 
@@ -116,7 +116,7 @@
           
           <li>
 
-            <a href="https://blog.owulveryck.info/about"
+            <a href="https://blog.owulveryck.info/about/index.html"
             >
 
             
@@ -129,7 +129,7 @@
           
           <li>
 
-            <a href="https://blog.owulveryck.info/post"
+            <a href="https://blog.owulveryck.info/post/index.html"
              title="Show list of posts">
 
             
@@ -140,7 +140,7 @@
           
           <li>
 
-            <a href="https://blog.owulveryck.info/tags"
+            <a href="https://blog.owulveryck.info/tags/index.html"
              title="Show list of tags">
 
             
@@ -178,7 +178,7 @@
     &middot; by Olivier Wulveryck
   
   &middot; Read in about 5 min
-  &middot; (859 Words)
+  &middot; (867 Words)
 </small>
 
 
@@ -215,7 +215,7 @@
 
 <ul>
 <li>Too many boring slides,</li>
-<li>too many informations,</li>
+<li>too much information per slide,</li>
 <li>a presenter dedicated to read their content.</li>
 </ul>
 
@@ -233,7 +233,7 @@ from time to time, be a value-add to a presentation.</p>
 <h2 id="the-google-cloud-speech-api">The Google Cloud Speech API</h2>
 
 <p>It ain&rsquo;t no secret now, I&rsquo;m a big fan of machine learning.
-Machines learn faster than people, and they can now assist them in a lot of boring tasks.</p>
+Machines learn faster than people, and they can now assist us in a lot of boring tasks.</p>
 
 <p>On the base of a neuron network, Google provides an <a href="https://cloud.google.com/speech/">API for speech recognition</a>.
 It is fairly complete and multi lingual.</p>
@@ -250,11 +250,11 @@ Best of all, they provide a userland access via a Javascript API to this functio
 <h1 id="what-can-i-use-that-for-a-case-study">What can I use that for: A case study?</h1>
 
 <p>I had to do a presentation recently.
-This presentation was about Agility and Devops. The main idea was to give my client a feedback about experiences I had regarding those principles in digital transformation.</p>
+This presentation was about <em>Agility</em> and <em>Devops</em>. The main idea was to give my client a feedback about experiences I had regarding those principles in digital transformation.</p>
 
 <p>I didn&rsquo;t want to loose my audience with slides. But I wanted to keep the key concepts alive and visible.</p>
 
-<p>So what I did was a one slide presentation only with the keywords I wanted to deal with.</p>
+<p>So what I did was a one slide presentation only with the keywords I wanted to talk about.</p>
 
 <p>The day before, I though:</p>
 
@@ -262,7 +262,7 @@ This presentation was about Agility and Devops. The main idea was to give my cli
 <p>&ldquo;How nice it would be if as far as I speak, the key concepts would appear on screen&hellip;&rdquo;</p>
 </blockquote>
 
-<p>You may think: So easy, learn your script and click on the right moment.</p>
+<p>You may think: <em>&ldquo;that&rsquo;s easy, learn your script and click on the right moment&rdquo;</em>.</p>
 
 <p>Ok, but there are drawbacks:</p>
 
@@ -287,9 +287,9 @@ It&rsquo;s 2016, this assistant is a machine, and I can teach it to act correctl
 
 <h2 id="annyang">Annyang</h2>
 
-<p>I have used the <a href="https://github.com/TalAter/annyang">annyang</a> which is a javascript wrapper for the chrome functionnality.</p>
+<p>I have used the <a href="https://github.com/TalAter/annyang">annyang</a> which is a javascript wrapper for the Chrome speech recognition functionnality.</p>
 
-<p>Instead of matching a sentence as explained in the example of annyang, I made it listen to my whole speech.
+<p>Instead of matching a sentence as explained in the example of annyang, I made it listen to my whole speech in a loop.
 Then I passed every sentence detected by the framework to a javascript function that was applying regexp to look for keywords.</p>
 
 <h3 id="displaying-words">Displaying words</h3>
@@ -322,12 +322,12 @@ Then I passed every sentence detected by the framework to a javascript function 
       &lt;p&gt; &lt;span style=&quot;visibility: hidden;&quot; id=&quot;communication&quot;&gt;communication&lt;/span&gt; &lt;/p&gt;            
 </code></pre>
 
-<p>The speech recognition engine detect the sentence and give a confidence note about its recognition.
+<p>The speech recognition engine detects the sentence and gives a confidence note about its recognition.
 All the potential results are stored in an array (here <code>phrases</code>). I&rsquo;ve used them all so I was more confident not to miss a word.</p>
 
 <h3 id="making-them-blink">Making them blink</h3>
 
-<p>As I was not fully confident in the solution (it was late in the night and the show was the next morning), I made a fall-back solution.
+<p>As I was not fully confident in the solution (it was late in the night and the show was the next morning), Therefore I made a fall-back solution.
 All the words were displayed, and I used a little CSS tweak to make them blink when they were pronounced.
 This was done by adding and removing a css class to the concerned node.
 The logic remains the same.</p>
@@ -369,7 +369,7 @@ What I need to do is to code a tiny javascript library in order to get a JSON as
 
 <p>Anyway, as a quick and dirty solution, the goal is achieved.</p>
 
-<p>Another Idea would be to plug is with a NLP engine to perform stemming or lemmatization to do a better decoding and be even more machine learning compliant. This could be done with the help of <a href="https://github.com/mit-nlp/MITIE">MITIE</a></p>
+<p>Another Idea would be to plug this with a NLP engine to perform stemming or lemmatization to do a better decoding and be even more machine learning compliant. This could be done with the help of <a href="https://github.com/mit-nlp/MITIE">MITIE</a></p>
 
 </div>
 
