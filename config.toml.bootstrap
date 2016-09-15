@@ -1,0 +1,63 @@
+baseurl = "https://blog.owulveryck.info/"
+languageCode = "en-us"
+title = "Olivier Wulveryck's Tech Blog"
+Copyright = "All rights reserved - 2015/2016"
+#canonifyurls = true
+
+# Metadata format
+# "yaml", "toml", "json"
+metaDataFormat = "yaml"
+
+# filesystem path to write files to
+publishdir = "public"
+# # color-codes for highlighting derived from this style
+pygmentsStyle = "monokai"
+# # true: use pygments-css or false: color-codes directly
+pygmentsUseClasses = false
+
+# Theme to use (located in /themes/THEMENAME/)
+theme = "hugo-bootstrap"
+
+# Pagination
+paginate = 10
+paginatePath = "page"
+
+# Enable Disqus integration
+disqusShortname = "owulveryck"
+
+[permalinks]
+    post = "/:year/:month/:day/:slug/index.html"
+    code = "/:slug/index.html"
+
+[taxonomies]
+    tag = "tags"
+    topic = "topics"
+
+[author]
+    name = "Olivier Wulveryck"
+    email = "olivier.wulveryck@gmail.com"
+
+[params]
+    topline = "To share my technical experiences alongside my life of IT professional"
+    #footline = "code with <i class='fa fa-heart'></i>"
+
+    # Text for the top menu link, which goes the root URL for the site.
+    # Default (if omitted) is "Home"
+
+    # Select a syntax highight.
+# Check the static/css/highlight directory for options.
+    highlight = "default"
+
+# Google Analytics.
+    googleAnalytics = "UA-69673850-1"
+
+# Sidebar social links.
+    github = "owulveryck" # Your Github profile ID
+    #bitbucket = "" # Your Bitbucket profile ID
+    linkedin = "olivierwulveryck" # Your LinkedIn profile ID (from public URL)
+    googleplus = "olivier.wulveryck" # Your Google+ profile ID
+    #facebook = "" # Your Facebook profile ID
+    twitter = "owulveryck" # Your Twitter profile ID
+    #youtube = ""  # Your Youtube channel ID
+    flattr = "owulveryck"  # populate with your flattr uid
+

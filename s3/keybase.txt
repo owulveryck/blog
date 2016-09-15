@@ -1,0 +1,68 @@
+==================================================================
+https://keybase.io/owulveryck
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://blog.owulveryck.info
+  * I am owulveryck (https://keybase.io/owulveryck) on keybase.
+  * I have a public key with fingerprint D156 4498 8384 6F9B 95E0  8A5C F1A9 CEA2 D3B9 B439
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "01019e93cb70969fbea7eadce5a8c84f96af42ee25444f08afb6fee55e2787b6ba2e0a",
+            "fingerprint": "d156449883846f9b95e08a5cf1a9cea2d3b9b439",
+            "host": "keybase.io",
+            "key_id": "f1a9cea2d3b9b439",
+            "kid": "01019e93cb70969fbea7eadce5a8c84f96af42ee25444f08afb6fee55e2787b6ba2e0a",
+            "uid": "4000318e341190cce07a1475ab79fe19",
+            "username": "owulveryck"
+        },
+        "service": {
+            "hostname": "blog.owulveryck.info",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1473943276,
+    "expire_in": 157680000,
+    "prev": "58e1178703aeebde6d04660025bde155615cd74cc2aac8d9ea43857bdc173cc3",
+    "seqno": 4,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.0.56
+Comment: https://keybase.io/crypto
+
+yMItAnicrVJbSBRhFN7tpllC0oNWEDRUdNmW+Wf+uS1RRL10eQgjxLS2f/45s47a
+zLoza22bEV20jOohU7pRRhe7YFhURBEqPpRKRklQSFgUUloQURQk9Y8YvfTY0+Ec
+vu8733c4HdljA1nB/UsGTt5T37wOdrU1JgMFL+uH0pzuGCkukubKYKRAuQGuFy2z
+DC7C8YhHGmgi1RVekzVTB6IAMShIRKUqNjWZmFgAECSMscmrxNRlE0CSQFBURZd1
+IgBPuBBnWnYMEvGEZXtM1kCSjLGmqqKKZVPTNQkYV6ImIhoFIhiirulY1BixxHF9
+BjOnExfClsNmrImO2PsH/j/7To7IYZ7nRaSCiBHSeEqBVwjCikR0RTMB+XuTLiRs
+sgUY2tmaLK+ERIqWcVUhjs0rLQr+af0soxi93ImF/wLDlm36yeIJx3OoU84QJZ4X
+dyO+gpeK+5StoEdHxaK6ZRvsoozB+K7l2FwEMST1LF+dWRM1LAqKHOJgW9xKQNTy
+EZIiqywJ7++BSiYpqYAQC8yLBEA3QDZ4LMs8L0isQZIkI4kaCqZUIISqhgYEi6qk
+6AZFikipyPnxKmyHi2Bmk8SYpGvFbOIlE8BVtbcWjwsEswITxo/xPy2QNXHKn//b
+1Z3xa/XSNQcPlYYq8nY2r7fapyrdAwXBm48nFx67O/w9u7F46viw0Blr4mtnz1i4
+Ib/uyI+szoz8q2eCypjWtk9Pz11BLXW7a34++IG6cqYPrt2Rc7djqCavZEn/6nel
+r5JFc/vdFbPyVg0f2d3Z4716f7lY/lZ2+m3K7qvr/fh1qMM4/PBDb3um9VPJ/TJ3
+u5WxpzS7ef48FRWe5KaF9/Vu23T+UUP6Eqo+OvNqwdeW28uffXFrD6SmG3eWVYea
+XtxfWVudPnMqpyYyaXhdT1/Xick3nmdWFQ0/aVh1v7P22sbrre3Fg68XpBcd27wD
+Pp+9MOf44Ol679avfcEtFw9cy92QWVSweO+L3x3iT6A=
+=f/y6
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/owulveryck
+
+==================================================================
