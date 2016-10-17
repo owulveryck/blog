@@ -1,17 +1,9 @@
 ---
-author: author
+author: Olivier Wulveryck
 date: 2016-10-10T07:43:05+02:00
-description: description
+description: A very basic implementation of a household Butler as a support for an automation speech.
 draft: true
-keywords:
-- key
-- words
-tags:
-- one
-- two
-title: jarvis
-topics:
-- topic 1
+title: J.A.R.V.I.S., show them how go, javascript, and aws ec2 can change the way we do IaaS (and more) (and more)
 type: post
 ---
 
