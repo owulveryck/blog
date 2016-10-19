@@ -1,4 +1,4 @@
-baseurl = "https://blog.owulveryck.info/"
+baseurl = "https://blog.owulveryck.info"
 languageCode = "en-us"
 title = "Olivier Wulveryck's Tech Blog"
 Copyright = "All rights reserved - 2015/2016"
@@ -24,6 +24,8 @@ paginatePath = "page"
 
 # Enable Disqus integration
 disqusShortname = "owulveryck"
+
+uglyURLs = true
 
 [permalinks]
     post = "/:year/:month/:day/:slug/index.html"

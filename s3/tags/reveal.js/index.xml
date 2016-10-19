@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Reveal.Js on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>https://blog.owulveryck.info/tags/reveal/index.js/</link>
+    <link>https://blog.owulveryck.info/tags/reveal.js</link>
     <description>Recent content in Reveal.Js on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,7 +10,7 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Fri, 09 Sep 2016 13:39:50 +0200</lastBuildDate>
-    <atom:link href="https://blog.owulveryck.info/tags/reveal.js/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.owulveryck.info/tags/reveal.js.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Being a better public speaker with a little help of Speech Recognition, Javascript and Chrome</title>

@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Topic 1 on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>https://blog.owulveryck.info/topics/topic-1/</link>
+    <link>https://blog.owulveryck.info/topics/topic-1.html</link>
     <description>Recent content in Topic 1 on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,7 +10,7 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Sun, 11 Sep 2016 20:27:49 +0200</lastBuildDate>
-    <atom:link href="https://blog.owulveryck.info/topics/topic-1/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.owulveryck.info/topics/topic-1.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Processing CSV files with golang, python and perl</title>

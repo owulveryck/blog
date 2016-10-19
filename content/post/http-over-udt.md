@@ -1,7 +1,7 @@
 ---
 author: Olivier Wulveryck
 date: 2016-10-17T20:50:18+02:00
-description: How UDT (UDP-based Data Transfer Protocol) can be used with HTTP to tranfers file between two AWS instances hosted in different regions.
+description: How UDT (UDP-based Data Transfer Protocol) can be used with HTTP to tranfer files between two AWS instances hosted in different regions.
 draft: false
 keywords:
 - udt

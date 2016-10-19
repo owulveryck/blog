@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Documentation on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>https://blog.owulveryck.info/tags/documentation/</link>
+    <link>https://blog.owulveryck.info/tags/documentation.html</link>
     <description>Recent content in Documentation on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,7 +10,7 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Wed, 11 Nov 2015 14:24:43 +0100</lastBuildDate>
-    <atom:link href="https://blog.owulveryck.info/tags/documentation/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.owulveryck.info/tags/documentation.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Simple IaaS API documentation with swagger</title>

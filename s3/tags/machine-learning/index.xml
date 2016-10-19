@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Machine Learning on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>https://blog.owulveryck.info/tags/machine-learning/</link>
+    <link>https://blog.owulveryck.info/tags/machine-learning.html</link>
     <description>Recent content in Machine Learning on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,7 +10,7 @@
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
     <lastBuildDate>Fri, 20 May 2016 12:50:59 +0200</lastBuildDate>
-    <atom:link href="https://blog.owulveryck.info/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://blog.owulveryck.info/tags/machine-learning.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Which solution should I choose? Don&#39;t think too much and ask a bot!</title>
