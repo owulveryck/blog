@@ -60,7 +60,7 @@ Let's resume:
 
 I dig a little bit and I've found this blog post: [Do you really want an SPA framework?](https://mmikowski.github.io/no-frameworks/) that leads me to "the solution": 
 
-I will code my controller from scratch.
+I will code my controller with JQuery and gopherjs!
 
 # Examples
 
@@ -132,33 +132,12 @@ The first thing to do is to include the js file at the end of the `index.html`
 ```
 
 Then I will create a GO type _Router_ that will correspond to the Router objet in javascript.
-To do so, the Router type must be a [*js.Object](https://godoc.org/github.com/gopherjs/gopherjs/js#Object)
+The type must be __*js.Object__ 
 
 ```go
-import "github.com/gopherjs/gopherjs/js"
-
 type Router struct {
     *js.Object
 }
 ```
-
-Then I define a constructor, that simply get the router object from the global scope of the javascript engine:
-```go
-func NewRouter() *Router {
-    return &Router{js.Global.Get("Router").New()}
-}
-```
-
-Then, to actually implement my [adhoc-routing](https://github.com/flatiron/director#adhoc-routing) as described in the doc of director.js,
-I must implement the `on` and the `init` bindings.
-
-Once done, I add the routes in my `main` func:
-
-{{< gist owulveryck 3256d582ad2241eeeaf118d5bf9c1cd0 "router.go" >}}
-
-If I launch the page, I can now click on the links and it will diplay hello in my console.
-
-# Conclusion
-
-Gopherjs is not trivial, but it has the ability to make the web development more structured.
+https://github.com/flatiron/director#adhoc-routing
 
