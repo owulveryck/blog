@@ -64,5 +64,29 @@ I will code my controller with JQuery and gopherjs!
 
 # An example
 
+I will code a little page based on bootstrap.
+It will display three tabs accessible by their names (for demo purpose):
 
+* /#
+* /#about
+* /#contact
+
+Each tab will only display its name
+
+## The page
+
+The structure of the main page is taken from bootstrap's [basic template](http://getbootstrap.com/examples/starter-template/#) 
+
+### index.html
+
+The basic webpage does 
+
+## Routing
+
+A good SPA needs routing to deal with # hrefs.
+
+There are several implementation of gopherjs based routing mechanism.
+For the purpose of this blog post, I will use the [Director.js](https://github.com/flatiron/director#routing-table). It's the router used in the todoMVC example and it will allow me to show how to interact with global javascript objects.
+
+https://github.com/flatiron/director#adhoc-routing
 
