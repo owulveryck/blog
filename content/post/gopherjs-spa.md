@@ -2,16 +2,18 @@
 author: Olivier Wulveryck
 date: 2016-10-19T07:24:51+02:00
 description: How to write a Single Page Application MVC without blowing your mind with Javascript and a Framework.
-draft: true
+draft: false
 keywords:
-- key
-- words
 tags:
-- one
-- two
+- javascript
+- jQuery
+- Gopherjs
+- SPA
+- WebUI
+- Cordova
 title: SPA with Gopherjs
 topics:
-- topic 1
+- Wed UI
 type: post
 ---
 
