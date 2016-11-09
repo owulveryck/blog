@@ -9,8 +9,212 @@
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
-    <lastBuildDate>Mon, 17 Oct 2016 20:50:18 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 19 Oct 2016 07:24:51 +0200</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/post.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>SPA with Gopherjs</title>
+      <link>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs/index.html</link>
+      <pubDate>Wed, 19 Oct 2016 07:24:51 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs/index.html</guid>
+      <description>
+
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+
+&lt;p&gt;Single page application (SPA) are a standard when dealing with mobile apps.
+Unfortunately, by now, JavaScript is the only programming language supported by a browser.&lt;/p&gt;
+
+&lt;p&gt;Therefore, to code web UI it remains a must.&lt;/p&gt;
+
+&lt;h2 id=&#34;life-of-an-ex-sysadmin-who-wants-to-code-a-web-app-getting-depressed&#34;&gt;Life of an ex sysadmin who wants to code a web app: getting depressed&lt;/h2&gt;
+
+&lt;p&gt;To make the development easier, your friend, who is &amp;ldquo;web developer&amp;rdquo; will recommend you to use a marvelous framework.
+Depending on the orientation of the wind, the moon or its reading, he will encourage you to use &lt;code&gt;reactjs&lt;/code&gt;, &lt;code&gt;angular&lt;/code&gt;, &lt;code&gt;ember&lt;/code&gt; or whatever exotic
+tool.&lt;/p&gt;
+
+&lt;p&gt;With some recommendation from my real friends and from Google, I&amp;rsquo;ve started an app based on &lt;a href=&#34;http://ionicframework.com/&#34;&gt;ionic&lt;/a&gt; which is based on &lt;a href=&#34;https://angularjs.org/&#34;&gt;angular&lt;/a&gt;.
+As I did not know anything about angular, I&amp;rsquo;ve watched a (very good) &lt;a href=&#34;https://www.youtube.com/watch?v=i9MHigUZKEM&#34;&gt;introduction&lt;/a&gt; and followed the ionic tutorial.&lt;/p&gt;
+
+&lt;p&gt;So far so good&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;Then I implemented a SSO with Facebook. I wrote a backend in &lt;code&gt;go&lt;/code&gt; to handle the token generation and the used database connection.
+I started to code it by hand, until a friend tells me about the angular module &lt;a href=&#34;https://github.com/sahat/satellizer&#34;&gt;Satellizer&lt;/a&gt; that was suppose to handle the logic for me.
+And it did&amp;hellip;. It was suddenly automagic:&lt;/p&gt;
+
+&lt;p&gt;Everything was working on my browser. I was happy, So I decided to deploy my app on my iPhone and enjoy the power of Cordova.&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s when the headache started: There was something wrong on the mobile phone version. A bug!&lt;/p&gt;
+
+&lt;p&gt;I tried to debug it, with Xcode, with Safari&amp;hellip; The more I was searching, the more I had to dive into the framework. Too many magic in it for
+something that was, in fine, not a bug &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a rel=&#34;footnote&#34; href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;I asked some help from a friend and his first reply was: &amp;ldquo;which version of angular? Because in version 2 they have changed a lot of concepts&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;That was too much.
+I considered that this world made of JavaScript, frameworks, grunt, bower, gulp, npm or whatever fancy tool was definitely not for me.
+Too many work to learn something already outdated.&lt;/p&gt;
+
+&lt;p&gt;On top of that, I&amp;rsquo;ve never been a callback man, I hate them since my X11/Motif programming course. I do like CSP!&lt;/p&gt;
+
+&lt;h2 id=&#34;out-of-the-depression&#34;&gt;Out of the depression!&lt;/h2&gt;
+
+&lt;p&gt;Ok, I abandoned those tools. But I still want to code my app, and I&amp;rsquo;m not the kind of guy that easily give up.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s resume my needs:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;I need a MVC, because it&amp;rsquo;s the most natural way to code web ui today&lt;/li&gt;
+&lt;li&gt;MVC is not framework dependent&lt;/li&gt;
+&lt;li&gt;A SPA is the good choice for a mobile app and Cordova makes things easy&lt;/li&gt;
+&lt;li&gt;Javascript is mandatory&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I&amp;rsquo;ve digge a little bit and I&amp;rsquo;ve found this blog post: &lt;a href=&#34;https://mmikowski.github.io/no-frameworks/&#34;&gt;Do you really want an SPA framework?&lt;/a&gt; which leads me to &amp;ldquo;the solution&amp;rdquo;:&lt;/p&gt;
+
+&lt;p&gt;I will code my model/view/controller from scratch.
+But as I want to preserve my health and stay away from Javacript, I will code it with something fun: go.&lt;/p&gt;
+
+&lt;p&gt;At the last doGo.eu &lt;a href=&#34;https://twitter.com/shurcool&#34;&gt;Dmitri Shuralyov&lt;/a&gt; gave a very good introduction about &lt;a href=&#34;https://github.com/gopherjs/gopherjs&#34;&gt;gopherjs&lt;/a&gt;. Gopherjs is a &lt;a href=&#34;https://en.wikipedia.org/wiki/Source-to-source_compiler&#34;&gt;transpiler&lt;/a&gt; that converts go code into javascript.&lt;/p&gt;
+
+&lt;p&gt;You can code all your logic in go and transpile it in javascript, or you can use is to access you DOM or other javascript libraries.&lt;/p&gt;
+
+&lt;p&gt;A bunch of bindings to famous javascript libraries such as jQuery already exists on gihtub,&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s see an example and implement a very basic routing mechanism relying on a pure js library.&lt;/p&gt;
+
+&lt;h1 id=&#34;examples&#34;&gt;Examples&lt;/h1&gt;
+
+&lt;p&gt;I will code a little page based on bootstrap.&lt;/p&gt;
+
+&lt;h2 id=&#34;a-basic-go-code&#34;&gt;A basic go code&lt;/h2&gt;
+
+&lt;p&gt;The dynamic part will be coded in pure GO in a file called &lt;code&gt;main.go&lt;/code&gt; and transpiled into javscript code with the help of the &lt;code&gt;gopherjs&lt;/code&gt; command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;gopherjs build main.go -o js/app.js -m
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To make things easier, I can add some directives in my go code in the form of a comment:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+//go:generate gopherjs build main.go -o js/app.js -m
+// +build ignore
+
+import (
+  &amp;quot;log&amp;quot;
+)
+
+func main() {
+    log.Println(&amp;quot;Hello World&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Therefore I will be able to generate my code directly with a simple call to &lt;code&gt;go generate&lt;/code&gt; and it will produce the &lt;code&gt;js/app.js&lt;/code&gt; file for me.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-page&#34;&gt;The page&lt;/h2&gt;
+
+&lt;p&gt;The structure of the main page is taken from bootstrap&amp;rsquo;s &lt;a href=&#34;http://getbootstrap.com/examples/starter-template/#&#34;&gt;starter template&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I simply add my javascript file generated with gopherjs :&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;script src=&amp;quot;js/app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If I launch my page, I will have a &amp;ldquo;hello world&amp;rdquo; written in the javascript browser of my console.&lt;/p&gt;
+
+&lt;h1 id=&#34;the-spa&#34;&gt;the SPA&lt;/h1&gt;
+
+&lt;p&gt;Now, I will implement a very basic SPA.
+It will display three tabs accessible by their names (for demo purpose):&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/#&#34;&gt;/#&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/#about&#34;&gt;/#about&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/#contact&#34;&gt;/#contact&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I want to trigger a javascript code that could change the content of the body by clicking on the links.&lt;/p&gt;
+
+&lt;h2 id=&#34;routing&#34;&gt;Routing&lt;/h2&gt;
+
+&lt;p&gt;A good SPA needs a good routing system to deal with anchor refs.&lt;/p&gt;
+
+&lt;p&gt;There are several implementation of gopherjs based routing mechanism.&lt;/p&gt;
+
+&lt;p&gt;But, for the purpose of this blog post, I will use a pure Javascript routing library: &lt;a href=&#34;https://github.com/flatiron/director#routing-table&#34;&gt;Director.js&lt;/a&gt;. It&amp;rsquo;s the router used in the todoMVC example and it will allow me to show how to interact with global javascript objects.&lt;/p&gt;
+
+&lt;p&gt;The first thing to do is to include the js file at the end of the &lt;code&gt;index.html&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;script src=&amp;quot;js/director.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&amp;quot;js/app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then I will create a GO type &lt;em&gt;Router&lt;/em&gt; that will correspond to the Router objet in javascript.
+To do so, the Router type must be a &lt;a href=&#34;https://godoc.org/github.com/gopherjs/gopherjs/js#Object&#34;&gt;*js.Object&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;import &amp;quot;github.com/gopherjs/gopherjs/js&amp;quot;
+
+type Router struct {
+    *js.Object
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then I define a constructor, that simply get the router object from the global scope of the javascript engine:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func NewRouter() *Router {
+    return &amp;amp;Router{js.Global.Get(&amp;quot;Router&amp;quot;).New()}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, to actually implement my &lt;a href=&#34;https://github.com/flatiron/director#adhoc-routing&#34;&gt;adhoc-routing&lt;/a&gt; as described in the doc of director.js,
+I must implement the &lt;code&gt;on&lt;/code&gt; and the &lt;code&gt;init&lt;/code&gt; bindings.&lt;/p&gt;
+
+&lt;p&gt;Once done, I add the routes in my &lt;code&gt;main&lt;/code&gt; func:&lt;/p&gt;
+
+&lt;script src=&#34;//gist.github.com/owulveryck/3256d582ad2241eeeaf118d5bf9c1cd0.js?file=router.go&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;If I launch the page, I can now click on the links and it will diplay hello in my console.&lt;/p&gt;
+
+&lt;p&gt;You can check the full code on &lt;a href=&#34;https://gist.github.com/owulveryck/3256d582ad2241eeeaf118d5bf9c1cd0&#34;&gt;this gist&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;You see that I&amp;rsquo;ve let the function as &lt;code&gt;notImplementedYet&lt;/code&gt;, but replacing it with a jQuery call is trivial:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;import &amp;quot;github.com/gopherjs/jquery&amp;quot;
+
+//convenience:
+var jQuery = jquery.NewJQuery
+
+func content() {
+    jQuery(&amp;quot;#main&amp;quot;).SetText(&amp;quot;Welcome to GopherJS&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;Gopherjs is not trivial, but it has the ability to make the web development more structured.
+I&amp;rsquo;ve started a web ui from scratch and reach the same goal as the one I reached in javacript in only 2 days (compared to 3 weeks).&lt;/p&gt;
+
+&lt;p&gt;Of course, a javascript-master-of-the-world would argue that he would implement it in 2 hours, but that&amp;rsquo;s not the point here.
+The point is that I can use all the &amp;ldquo;benefits&amp;rdquo; of the go principles easily to write a web ui.&lt;/p&gt;
+
+&lt;p&gt;You can check the development of the &lt;a href=&#34;https://github.com/nhite/frontend&#34;&gt;Nhite fronted&lt;/a&gt; to watch the progress I will make (or not) with this technology.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;1 - Actually, I figured out what the &amp;ldquo;bug&amp;rdquo; was later, when I finished the implementation in go and there was no magic anymore in the code.
+The oauth2 flow I use is &amp;ldquo;&lt;a href=&#34;https://tools.ietf.org/html/rfc6749#section-1.3.1&#34;&gt;Authorization code&lt;/a&gt;&amp;rdquo;. In this flow, you query the authorization server (here facebook) and send it the client identifier and &lt;em&gt;a redirection URI&lt;/em&gt;.
+In my dev environment this redirection URI is set to &amp;ldquo;&lt;a href=&#34;http://localhost&amp;quot;&#34;&gt;http://localhost&amp;quot;&lt;/a&gt;. Once the user is logged in (on the Facebook page), the navigation window redirects him in the application at localhost.
+When running on iOS with &lt;em&gt;cordova&lt;/em&gt; the files are served locally (file://,,,) and there is no way to specify a redirect URI that point to file://, therefore the redirect URI must point somewhere else&amp;hellip; but in this case, getting the code from the application becomes tricky because of the security policies. I could do a complete blog post about this.&lt;/p&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt; &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:1&#34;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
     
     <item>
       <title>HTTP over UDT for inter-region file transfer</title>
@@ -3511,295 +3715,6 @@ By now, I will continue the investigations and use this installation as a &lt;em
 &lt;p&gt;I may not have understood all the concepts behind the scene, but I can say that this product, at least in the current release, is by far too complex and has too much contributors to evaluate it in a simple way.
 Therefore, the quite complete but messy documentation, a mix in the releases and some major incompatibilities in the tools using V2.0 and V3 gave me a bad impression.
 The tool may be useful, but the TCO sounds high and the entry ticket is not negligible.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Simple IaaS API documentation with swagger</title>
-      <link>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger/index.html</link>
-      <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger/index.html</guid>
-      <description>
-
-&lt;p&gt;In a &lt;a href=&#34;http://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/&#34;&gt;previous post&lt;/a&gt; I have explained how to develop a very simple API server.&lt;/p&gt;
-
-&lt;p&gt;Without the associated documentation, the API will be useless. Let&amp;rsquo;s see how we can use &lt;a href=&#34;https://github.com/swagger-api/swagger-ui&#34;&gt;swagger-ui&lt;/a&gt;
-in this project to generate a beautiful documentation.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; I&amp;rsquo;m blogging and experimenting, of course, in the &amp;ldquo;real&amp;rdquo; life, it&amp;rsquo;s a lot better to code the API interface before implementing the middleware.&lt;/p&gt;
-
-&lt;h1 id=&#34;about-swagger&#34;&gt;About Swagger&lt;/h1&gt;
-
-&lt;p&gt;Swagger is a framework. On top of the swagger project is composed of several tools.&lt;/p&gt;
-
-&lt;p&gt;The entry point is to write the API interface using the &lt;a href=&#34;http://swagger.io/specification/&#34;&gt;Swagger Formal Specification&lt;/a&gt;. I will the use the &lt;a href=&#34;https://github.com/swagger-api/swagger-ui&#34;&gt;swagger-ui&lt;/a&gt; to display the documentation.
-The swagger-ui can be modified and recompiled, but I won&amp;rsquo;t do it (as I don&amp;rsquo;t want to play with nodejs). Instead I will rely on the &amp;ldquo;dist&amp;rdquo; part which can be used &amp;ldquo;as-is&amp;rdquo;&lt;/p&gt;
-
-&lt;h1 id=&#34;defining-the-api-interface-with-swagger&#34;&gt;Defining the API interface with Swagger&lt;/h1&gt;
-
-&lt;h2 id=&#34;header-and-specification-version&#34;&gt;Header and specification version:&lt;/h2&gt;
-
-&lt;p&gt;Swagger comes with an editor which can be used &lt;a href=&#34;http://editor.swagger.io/#/&#34;&gt;online&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;I will use swagger spec 2.0, as I don&amp;rsquo;t see any good reason not to do so. Moreover, I will describe the API using the &lt;code&gt;YAML&lt;/code&gt; format instead of the JSON format to be human-friendly.&lt;/p&gt;
-
-&lt;p&gt;Indeed, in my &lt;code&gt;YAML&lt;/code&gt; skeleton the header of my specs will then look like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;swagger: &#39;2.0&#39;
-info:
-  version: 1.0.0
-    title: &#39;Very Simple IAAS&#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;the-node-creation-a-post-method&#34;&gt;The node creation: a POST method&lt;/h2&gt;
-
-&lt;p&gt;Let&amp;rsquo;s document the Node creation (as it is the method that we have implemented before).&lt;/p&gt;
-
-&lt;p&gt;The node creation is a &lt;code&gt;POST&lt;/code&gt; method, that produces a JSON in output with the request ID of the node created.&lt;/p&gt;
-
-&lt;p&gt;The responses code may be:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;202 : if the request has been taken in account&lt;/li&gt;
-&lt;li&gt;400 : when the request is not formatted correctly&lt;/li&gt;
-&lt;li&gt;500 : if any unhanldled exception occurred&lt;/li&gt;
-&lt;li&gt;502 : if the backend is not accessible (either the RPC server or the backend)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;So far, the YAML spec will look like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;paths:
-  /v1/nodes:
-    post:
-      description: Create a node
-      produces:
-        - application/json
-      responses:
-        202:
-          description: A request ID.
-        400:
-          description: |
-            When the request is malformated or when mandatory arguments are missing
-        500:
-          desctiption: Unhandled error
-        502:
-          description: Execution backend not available
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;So far so good, let&amp;rsquo;s continue with the input payload. The payload will be formatted in JSON, so I add this directive to the model:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-YAML&#34;&gt;consumes:
-  - application/json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I&amp;rsquo;ve decided in my previous post that 6 parameters were needed:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;the kind of os&lt;/li&gt;
-&lt;li&gt;the size of the machine&lt;/li&gt;
-&lt;li&gt;the initial disk size allocated&lt;/li&gt;
-&lt;li&gt;the lease (in days)&lt;/li&gt;
-&lt;li&gt;the environment&lt;/li&gt;
-&lt;li&gt;the description&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;All the parameters will compose a payload and therefore will be present in the body of the request.
-The YAML representation of the parameters array is:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-YAML&#34;&gt;parameters:
-  - name: kind
-    in: body
-    description: &amp;quot;The OS type&amp;quot;
-    required: true
-  - name: size 
-    in: body
-    description: &amp;quot;The size of the (virtual) Machine&amp;quot;
-    required: true
-  - name: disksize
-    in: body
-    description: &amp;quot;The initial disk capacity allocated&amp;quot;
-    required: true
-  - name: leasedays
-    in: body
-    description: &amp;quot;The lease (in days)&amp;quot;
-    required: true
-  - name: environment_type
-    in: body
-    description: &amp;quot;The target environment&amp;quot;
-  - name: description
-    in: body
-    description: &amp;quot;The target environment&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Sounds ok, but when I test this implementation in the swagger editor for validation, I get this error:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Swagger Error
-Data does not match any schemas from &#39;oneOf&#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;em&gt;STFWing and RTFMing&amp;hellip;&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;in the &lt;a href=&#34;http://swagger.io/specification/#parameterObject&#34;&gt;Specifications&lt;/a&gt;, I have found this line:&lt;/p&gt;
-
-&lt;p&gt;&lt;html&gt;
-If &lt;a href=&#34;#parameterIn&#34;&gt;&lt;code&gt;in&lt;/code&gt;&lt;/a&gt; is &lt;code&gt;&amp;ldquo;body&amp;rdquo;&lt;/code&gt;:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Field Name&lt;/th&gt;
-&lt;th style=&#34;text-align: center;&#34;&gt;Type&lt;/th&gt;
-&lt;th&gt;Description&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;a name=&#34;parameterSchema&#34;&gt;&lt;/a&gt;schema&lt;/td&gt;
-&lt;td style=&#34;text-align: center;&#34;&gt;&lt;a href=&#34;#schemaObject&#34;&gt;Schema Object&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;&lt;stwrong&gt;Required.&lt;/strong&gt; The schema defining the type used for the body parameter.&lt;/td&gt;
-&lt;/table&gt;
-&lt;/html&gt;&lt;/p&gt;
-
-&lt;p&gt;Therefore, I should set a schema object for every parameter in order to define its type. In this example, I don&amp;rsquo;t want to go too deeply into the swagger specification, so I won&amp;rsquo;t define any type.&lt;/p&gt;
-
-&lt;p&gt;So I have tested the following:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-YAML&#34;&gt;parameters:
-  - name: kind
-    in: body
-    description: &amp;quot;The OS type&amp;quot;
-    required: true
-    schema:
-      type: string
-  - name: size 
-    in: body
-    description: &amp;quot;The size of the (virtual) Machine&amp;quot;
-    required: true
-    schema:
-      type: string
-    ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And again, I had a validation error from the editor:&lt;/p&gt;
-
-&lt;p&gt;&lt;span class=&#34;icon&#34;&gt;✖&lt;/span&gt; Swagger Error&lt;/h5&gt;&lt;p class=&#34;error-description&#34; ng-bind-html=&#34;error.description&#34;&gt;Operation cannot have multiple body parameters&lt;/p&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;RTFMing&amp;hellip;&lt;/em&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Body - The payload that&amp;rsquo;s appended to the HTTP request.
-Since there can only be one payload, there can only be one body parameter.
-The name of the body parameter has no effect on the parameter itself and is used for documentation purposes only.
-Since Form parameters are also in the payload, body and form parameters cannot exist together for the same operation.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;What I must do, is to create a custom type &lt;em&gt;nodeRequest&lt;/em&gt; with the input fields as properties and reference it in the body.&lt;/p&gt;
-
-&lt;p&gt;Here is the complete structure:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-YAML&#34;&gt;parameters:
-  - name: nodeRequest 
-    in: body
-    description: a node request
-    required: true
-    schema:
-        $ref: &#39;#/definitions/NodeRequest&#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And the proper NodeRequest definition in the &lt;em&gt;definition&lt;/em&gt; area:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-YAML&#34;&gt;definitions:
-  NodeRequest:
-    description: A Node Request object
-    properties:
-      kind:
-        type: string
-        description: The OS type
-      size:
-        type: string
-        description: The size of the (virtual) machine
-      disksize:
-        type: integer
-        format: int32
-        description: The initial disk capacity size (in GB)
-      leasedays:
-        type: integer
-        format: int32
-        description: The lease
-      environment_type:
-        type: string
-        description: the target environment
-      description:
-        type: string
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;OK ! The swagger file is valid&amp;hellip; Now let&amp;rsquo;s glue it together with swagger-ui and serve it from the GO API server I have developed before&lt;/p&gt;
-
-&lt;h1 id=&#34;integrating-swagger-ui&#34;&gt;Integrating swagger-ui&lt;/h1&gt;
-
-&lt;p&gt;As written in the README in the github of the project, swagger-ui can be used &amp;ldquo;as-is&amp;rdquo; using the files in the &lt;em&gt;dist&lt;/em&gt; folder. Let&amp;rsquo;s get the files from github:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;/tmp #  git clone https://github.com/swagger-api/swagger-ui.git
-Cloning into &#39;swagger-ui&#39;...
-remote: Counting objects: 7292, done.
-remote: Compressing objects: 100% (33/33), done.
-remote: Total 7292 (delta 8), reused 0 (delta 0), pack-reused 7256
-Receiving objects: 100% (7292/7292), 19.20 MiB | 1021.00 KiB/s, done.
-Resolving deltas: 100% (3628/3628), done.
-Checking connectivity... done.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Let&amp;rsquo;s checkout our project:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;/tmp # git clone https://github.com/owulveryck/example-iaas.git 
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;and move the &lt;code&gt;dist&lt;/code&gt; folder into the project:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;mv /tmp/swagger-ui/dist /tmp/example-iaas
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;adding-a-route-to-the-go-server-to-serve-the-static-files&#34;&gt;Adding a route to the GO server to serve the static files&lt;/h2&gt;
-
-&lt;p&gt;I cannot simply add a route in the &lt;code&gt;routes.go&lt;/code&gt; file for this very simple reason:
-The loop used in the &lt;code&gt;router.go&lt;/code&gt; is using the &lt;code&gt;Path&lt;/code&gt; method, and to serve the content of the directory, I need to use the &lt;code&gt;PathPrefix&lt;/code&gt; method (see &lt;a href=&#34;http://www.gorillatoolkit.org/pkg/mux#Route.PathPrefix&#34;&gt;The Gorilla Documentation&lt;/a&gt; for more information).&lt;/p&gt;
-
-&lt;p&gt;To serve the content, I add this entry to the muxrouter in the &lt;code&gt;router.go&lt;/code&gt; file:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;router.
-       Methods(&amp;quot;GET&amp;quot;).
-       PathPrefix(&amp;quot;/apidocs&amp;quot;).
-       Name(&amp;quot;Apidocs&amp;quot;).
-       Handler(http.StripPrefix(&amp;quot;/apidocs&amp;quot;, http.FileServer(http.Dir(&amp;quot;./dist&amp;quot;))))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then I start the server and point my browser to &lt;a href=&#34;http://localhost:8080/apidocs..&#34;&gt;http://localhost:8080/apidocs..&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Wait, nothing is displayed&amp;hellip;&lt;/p&gt;
-
-&lt;h1 id=&#34;the-final-test&#34;&gt;The final test&lt;/h1&gt;
-
-&lt;p&gt;As I serve the files from the &lt;code&gt;./dist&lt;/code&gt; directory, what I need to do is to move my &lt;code&gt;swagger.yaml&lt;/code&gt; spec file into the dist subfolder and tell swagger to read it.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Et voilà!&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img class=&#34;img-square img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/swagger.png&#34; alt=&#34;Result&#34;/&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;final-word&#34;&gt;Final word&lt;/h1&gt;
-
-&lt;p&gt;As you can see, there is a &amp;ldquo;Try out&amp;rdquo; button, which triggers a &lt;code&gt;curl&lt;/code&gt; command&amp;hellip; Very helpful to enter a test driven development mode.&lt;/p&gt;
-
-&lt;p&gt;On top of that swagger is really helpful and may be a great tool to synthesize the need of a client in term of an interface.
-Once the API is fully implemented, any client binding may also be generated with the swagger framework.&lt;/p&gt;
-
-&lt;p&gt;No not hesitate to clone the source code from &lt;a href=&#34;https://github.com/owulveryck/example-iaas&#34;&gt;github&lt;/a&gt; and test the swagger.yaml file in the editor to see how the bindings are generated&lt;/p&gt;
-
-&lt;p&gt;You can find all the codes in the github repository &lt;a href=&#34;https://github.com/owulveryck/example-iaas&#34;&gt;here&lt;/a&gt; in the branch &lt;code&gt;simple-iaas-api-documentation-with-swagger&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;The final YAML file can be found &lt;a href=&#34;https://github.com/owulveryck/example-iaas/blob/simple-iaas-api-documentation-with-swagger/swagger.yaml&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     

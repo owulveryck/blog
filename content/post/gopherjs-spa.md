@@ -54,6 +54,9 @@ Too many work to learn something already outdated.
 
 On top of that, I've never been a callback man, I hate them since my X11/Motif programming course. I do like CSP!
 
+<center>
+![Matt Holt's Tweet](/assets/images/not_my_type.png)
+</center>
 ## Out of the depression!
 
 Ok, I abandoned those tools. But I still want to code my app, and I'm not the kind of guy that easily give up.
