@@ -33,16 +33,21 @@ As I did not know anything about angular, I've watched a (very good) [introducti
 
 So far so good...
 
-Then I implemented a SSO with Facebook. I wrote a backend in go to handle the callback. Everything was working on my browser.
+Then I implemented a SSO with Facebook. I wrote a backend in `go` to handle the token generation and the used database connection.
+I started to code it by hand, until a friend tells me about the angular module [Satellizer](https://github.com/sahat/satellizer) that was suppose to handle the logic for me.
+And it did.... It was suddenly automagic:
 
-But... There was something wrong on the mobile phone version. A bug!
+Everything was working on my browser. I was happy, So I decided to deploy my app on my iPhone and enjoy the power of Cordova.
 
-I tried to debug it, with Xcode, with Safari... The more I was searching, the more I had to dive into the framework.
+That's when the headache started: There was something wrong on the mobile phone version. A bug!
 
-I asked a friend and his first reply was: "which version of angular? Because in version 2 they have changed a lot of concepts"
+I tried to debug it, with Xcode, with Safari... The more I was searching, the more I had to dive into the framework. Too many magic in it for 
+something that was, in fine, not a bug [^1].
+
+I asked some help from a friend and his first reply was: "which version of angular? Because in version 2 they have changed a lot of concepts"
 
 That was too much.
-I though that definitely this world made of JavaScript, frameworks, grunt, bower, gulp, npm or whatever fancy tool was not for me.
+I considered that this world made of JavaScript, frameworks, grunt, bower, gulp, npm or whatever fancy tool was definitely not for me.
 Too many work to learn something already outdated.
 
 On top of that, I've never been a callback man, I hate them since my X11/Motif programming course. I do like CSP!
@@ -51,16 +56,25 @@ On top of that, I've never been a callback man, I hate them since my X11/Motif p
 
 Ok, I abandoned those tools. But I still want to code my app, and I'm not the kind of guy that easily give up.
 
-Let's resume:
+Let's resume my needs:
 
 * I need a MVC, because it's the most natural way to code web ui today
 * MVC is not framework dependent
 * A SPA is the good choice for a mobile app and Cordova makes things easy
 * Javascript is mandatory
 
-I dig a little bit and I've found this blog post: [Do you really want an SPA framework?](https://mmikowski.github.io/no-frameworks/) that leads me to "the solution": 
+I've digge a little bit and I've found this blog post: [Do you really want an SPA framework?](https://mmikowski.github.io/no-frameworks/) which leads me to "the solution": 
 
-I will code my controller from scratch.
+I will code my model/view/controller from scratch.
+But as I want to preserve my health and stay away from Javacript, I will code it with something fun: go.
+
+At the last doGo.eu [Dmitri Shuralyov](https://twitter.com/shurcool) gave a very good introduction about [gopherjs](https://github.com/gopherjs/gopherjs). Gopherjs is a [transpiler](https://en.wikipedia.org/wiki/Source-to-source_compiler) that converts go code into javascript.
+
+You can code all your logic in go and transpile it in javascript, or you can use is to access you DOM or other javascript libraries.
+
+A bunch of bindings to famous javascript libraries such as jQuery already exists on gihtub,
+
+Let's see an example and implement a very basic routing mechanism relying on a pure js library.
 
 # Examples
 
@@ -113,7 +127,7 @@ It will display three tabs accessible by their names (for demo purpose):
 * [/#about](/#about)
 * [/#contact](/#contact)
 
-Each tab will only display its name.
+I want to trigger a javascript code that could change the content of the body by clicking on the links.
 
 
 ## Routing
@@ -158,7 +172,35 @@ Once done, I add the routes in my `main` func:
 
 If I launch the page, I can now click on the links and it will diplay hello in my console.
 
+You can check the full code on [this gist](https://gist.github.com/owulveryck/3256d582ad2241eeeaf118d5bf9c1cd0)
+
+You see that I've let the function as `notImplementedYet`, but replacing it with a jQuery call is trivial:
+
+```go
+import "github.com/gopherjs/jquery"
+
+//convenience:
+var jQuery = jquery.NewJQuery
+
+func content() {
+    jQuery("#main").SetText("Welcome to GopherJS")
+}
+```
+
 # Conclusion
 
-Gopherjs is not trivial, but it has the ability to make the web development more structured.
+Gopherjs is not trivial, but it has the ability to make the web development more structured. 
+I've started a web ui from scratch and reach the same goal as the one I reached in javacript in only 2 days (compared to 3 weeks).
+
+Of course, a javascript-master-of-the-world would argue that he would implement it in 2 hours, but that's not the point here.
+The point is that I can use all the "benefits" of the go principles easily to write a web ui.
+
+You can check the development of the [Nhite fronted](https://github.com/nhite/frontend) to watch the progress I will make (or not) with this technology.
+
+----
+[^1]:
+1 - Actually, I figured out what the "bug" was later, when I finished the implementation in go and there was no magic anymore in the code.
+The oauth2 flow I use is "[Authorization code](https://tools.ietf.org/html/rfc6749#section-1.3.1)". In this flow, you query the authorization server (here facebook) and send it the client identifier and _a redirection URI_.
+In my dev environment this redirection URI is set to "http://localhost". Once the user is logged in (on the Facebook page), the navigation window redirects him in the application at localhost.
+When running on iOS with _cordova_ the files are served locally (file://,,,) and there is no way to specify a redirect URI that point to file://, therefore the redirect URI must point somewhere else... but in this case, getting the code from the application becomes tricky because of the security policies. I could do a complete blog post about this.
 
