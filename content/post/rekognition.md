@@ -2,8 +2,9 @@
 author: Olivier Wulveryck
 date: 2016-12-16T14:51:18+01:00
 description: Very quick post to present a piece of code that grabs an image from a webcam and send it to amazon's image recognition service.
-draft: true
+draft: false
 tags:
+- webcam
 - golang
 - aws
 title: Image reKognition with a webcam, go and AWS.

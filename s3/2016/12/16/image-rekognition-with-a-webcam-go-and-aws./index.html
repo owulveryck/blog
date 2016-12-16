@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Image reKognition with a webcam, go and AWS.  &middot; Olivier Wulveryck&#39;s Tech Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="description" content="Very quick post to present a piece of code that grabs an image from a webcam and send it to amazon&#39;s image recognition service." />
+
+<meta name="keywords" content="webcam, golang, aws, ">
+
+<link rel="author" href="http://plus.google.com/+olivier.wulveryck">
+
+
+<meta property="og:title" content="Image reKognition with a webcam, go and AWS.  &middot; Olivier Wulveryck&#39;s Tech Blog ">
+<meta property="og:site_name" content="Olivier Wulveryck&#39;s Tech Blog"/>
+<meta property="og:url" content="https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html" />
+<meta property="og:locale" content="en-us">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="Very quick post to present a piece of code that grabs an image from a webcam and send it to amazon&#39;s image recognition service."/>
+<meta property="og:article:published_time" content="2016-12-16T14:51:18&#43;01:00" />
+<meta property="og:article:modified_time" content="2016-12-16T14:51:18&#43;01:00" />
+
+  
+    
+<meta property="og:article:tag" content="webcam">
+    
+<meta property="og:article:tag" content="golang">
+    
+<meta property="og:article:tag" content="aws">
+    
+  
+
+  
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@owulveryck" />
+<meta name="twitter:creator" content="@owulveryck" />
+<meta name="twitter:title" content="Image reKognition with a webcam, go and AWS." />
+<meta name="twitter:description" content="Very quick post to present a piece of code that grabs an image from a webcam and send it to amazon&#39;s image recognition service." />
+<meta name="twitter:url" content="https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html" />
+<meta name="twitter:domain" content="https://blog.owulveryck.info">
+  
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "headline": "Image reKognition with a webcam, go and AWS.",
+    "author": {
+      "@type": "Person",
+      "name": "http://profiles.google.com/+olivier.wulveryck?rel=author"
+    },
+    "datePublished": "2016-12-16",
+    "description": "Very quick post to present a piece of code that grabs an image from a webcam and send it to amazon\x27s image recognition service.",
+    "wordCount":  627 
+  }
+</script>
+
+
+
+<link rel="canonical" href="https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html" />
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blog.owulveryck.info/touch-icon-144-precomposed.png">
+<link href="https://blog.owulveryck.info/favicon.png" rel="icon">
+
+<meta name="generator" content="Hugo 0.16" />
+
+  <!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+
+    <link rel="stylesheet" href="https://blog.owulveryck.info/css/theme/default.css">
+
+
+<link rel="stylesheet" href="https://blog.owulveryck.info/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://blog.owulveryck.info/css/style.css">
+
+
+  <link rel="stylesheet" href="https://blog.owulveryck.info/css/highlight/default.css">
+
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+<script src='//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<SCRIPT charset="utf-8" type="text/javascript" src="http://ws-eu.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&MarketPlace=FR&ID=V20070822%2FFR%2Foliwulstecblo-21%2F8005%2F9e85dd7f-4818-4a41-8970-af7c747be820"> </SCRIPT> <NOSCRIPT><A rel="nofollow" HREF="http://ws-eu.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&MarketPlace=FR&ID=V20070822%2FFR%2Foliwulstecblo-21%2F8005%2F9e85dd7f-4818-4a41-8970-af7c747be820&Operation=NoScript">Widgets Amazon.fr</A></NOSCRIPT>
+</head>
+<body>
+    <header id="main-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="https://blog.owulveryck.info">Olivier Wulveryck&#39;s Tech Blog</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          
+          <li>
+
+            <a href="https://blog.owulveryck.info/about/index.html"
+            >
+
+            
+                <i class="fa fa-info-circle"></i>
+            
+            
+            About
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="https://blog.owulveryck.info/post/index.html"
+             title="Show list of posts">
+
+            
+            
+            Posts
+            </a>
+          </li>
+          
+          <li>
+
+            <a href="https://blog.owulveryck.info/tags/index.html"
+             title="Show list of tags">
+
+            
+            
+            Tags
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </div>
+  </nav>
+
+</header>
+
+
+<div class="container">
+<div class="row">
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="text-center">
+
+    <h1>Image reKognition with a webcam, go and AWS.
+</h1>
+
+    <div class="metas">
+<small>
+  <i class="fa fa-calendar"></i>
+  <time datetime="2016-12-16">16 Dec, 2016</time>
+</small>
+
+
+  <small>
+    &middot; by Olivier Wulveryck
+  
+  &middot; Read in about 3 min
+  &middot; (627 Words)
+</small>
+
+
+<div class="margin-10">
+  <i class="fa fa-tags"></i>
+  
+  <a href="https://blog.owulveryck.info/tags/webcam" class="label label-primary">webcam</a>
+  
+  <a href="https://blog.owulveryck.info/tags/golang" class="label label-primary">golang</a>
+  
+  <a href="https://blog.owulveryck.info/tags/aws" class="label label-primary">aws</a>
+  
+
+
+</div>
+<br>
+</div>
+
+  </div>
+</div>
+
+  <div class="container content">
+  
+
+<p>It&rsquo;s been a while since I last posted something. I will fill the gap with a quick post about <em>rekognition</em>.</p>
+
+<p><a href="https://aws.amazon.com/rekognition/?nc1=h_ls">rekognition</a> is a service from AWS that is described as:</p>
+
+<blockquote>
+<p>Deep learning-based image recognition</p>
+
+<p>Search, verify, and organize millions of images</p>
+</blockquote>
+
+<p>In this light post, I will present a simple method to grab a picture from my webcam, send it to rekognition and display the result.</p>
+
+<p>The part of the result I will focus on is the emotion. In other word, I will ask amazon: &ldquo;An I happy?&rdquo;.</p>
+
+<h1 id="getting-the-picture-from-the-webcam">Getting the picture from the webcam</h1>
+
+<p>I am using the package <a href="github.com/blackjack/webcam">github.com/blackjack/webcam</a> to grab the picture.</p>
+
+<h2 id="capabilities-of-the-webcam-and-image-format">Capabilities of the webcam and image format</h2>
+
+<p>My webcam is handling the MJPEG format.
+Therefore, after thte creation of a <em>cam</em> object and set the correct settings to grab mjpeg, I can read a frame in JPEG:</p>
+
+<pre><code class="language-go">// ...
+cam, err := webcam.Open(&quot;/dev/video0&quot;) // Open webcam
+// ...
+// Setting the format:
+_,_,_, err := cam.SetImageFormat(format, uint32(size.MaxWidth), uint32(size.MaxHeight))
+</code></pre>
+
+<p><code>format</code> is of type <code>uint32</code> and computable thanks to the informations present in <a href="http://lxr.free-electrons.com/source/include/uapi/linux/videodev2.h">/usr/include/linux/videodev2.h</a></p>
+
+<p>MJPEG is: 1196444237</p>
+
+<p><em>Note</em>: To be honnest, I did not evaluate the FOURCC method; I have requested the supported format of my webcam with their descriptions :)</p>
+
+<h2 id="grabbing-the-picture">Grabbing the picture</h2>
+
+<p>In a endless <code>for</code> loop, a frame is read with a call to <code>ReadFrame</code>:</p>
+
+<pre><code class="language-go">for {
+    timeout := uint32(5) //5 seconds
+    err = cam.WaitForFrame(timeout)
+    frame, err := cam.ReadFrame()
+}
+</code></pre>
+
+<h1 id="aws">AWS</h1>
+
+<p>The API to import to use the service is <code>github.com/aws/aws-sdk-go/service/rekognition</code> and is documented here: <a href="http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/">http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/</a></p>
+
+<p>The operation that I am using to detect the emotion is <a href="http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/#Rekognition.DetectFaces">DetectFaces</a> that takes an pointer to <a href="http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/#DetectFacesInput">DetectFacesInput</a> with is composed of a pointer to an <a href="http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/#Image">Image</a>.</p>
+
+<h2 id="creating-the-input">Creating the input</h2>
+
+<p>The first thing that needs to be created is the <a href="http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/#Image">Image</a> object from our <code>frame</code>:</p>
+
+<pre><code class="language-go">if len(frame) != 0 {
+    image := &amp;rekognition.Image{ // Required
+        Bytes: frame,
+    }
+</code></pre>
+
+<p>Then we create the DetectFacesInput:</p>
+
+<pre><code class="language-go">params := &amp;rekognition.DetectFacesInput{
+        Image: image,
+        Attributes: []*string{
+                aws.String(&quot;ALL&quot;), 
+        },
+}
+</code></pre>
+
+<p>The <code>ALL</code> attributes is present, otherwise AWS does not return the complete description of what it has found.</p>
+
+<h2 id="sending-the-query">Sending the query</h2>
+
+<h3 id="princing-notice-and-warning">Princing notice and <strong>warning</strong></h3>
+
+<p>The price of the service as of today is 1 dollar per 1000 request. That sounds cheap, but at 25 FPS, this may cost a lot.
+Therefore, I have set up a read request that only process a picture if we press <em>enter</em></p>
+
+<pre><code class="language-go">bufio.NewReader(os.Stdin).ReadBytes('\n')
+</code></pre>
+
+<h3 id="session">Session</h3>
+
+<p>As usual, to query AWS we need to create a session:</p>
+
+<pre><code class="language-go">var err error
+sess, err = session.NewSession(&amp;aws.Config{Region: aws.String(&quot;us-east-1&quot;)})
+if err != nil {
+    fmt.Println(&quot;failed to create session,&quot;, err)
+    return
+}
+svc = rekognition.New(sess)
+</code></pre>
+
+<p><em>Note</em>: The <code>session</code> library will take care of connections informations such as environment variables like:</p>
+
+<ul>
+<li><code>AWS_ACCESS_KEY_ID</code></li>
+<li><code>AWS_SECRET_ ACCESS_KEY_ID</code></li>
+</ul>
+
+<h3 id="query-and-result">Query and result</h3>
+
+<p>Simply send the query</p>
+
+<pre><code class="language-go">esp, err := svc.DetectFaces(params)
+
+if err != nil {
+        fmt.Println(err.Error())
+        return
+}
+</code></pre>
+
+<p>The result is of type <a href="http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/#DetectFacesOutput">DetectFacesOutput</a>.
+This type is composed of a array of FaceDetails because obviously there can me more than one person per image.
+So we will loop and display the emotion for each face detected:</p>
+
+<pre><code class="language-go">for i, fd := range resp.FaceDetails {
+        fmt.Printf(&quot;The person %v is &quot;, i)
+        for _, e := range fd.Emotions {
+                fmt.Printf(&quot;%v, &quot;, *e.Type)
+        }
+        fmt.Printf(&quot;\n&quot;)
+}
+</code></pre>
+
+<h1 id="run">Run:</h1>
+
+<pre>
+Resulting image format: MJPEG (320x240)
+Press enter to process 
+The person 0 is HAPPY, CONFUSED, CALM, 
+</pre>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>That&rsquo;s all folks. The full code can be found <a href="https://gist.github.com/owulveryck/33753125afa6284cd5dbbb1bd4d1eb54">here</a>.</p>
+
+<p>In the test I made, I was always happy. I&rsquo;ve tried to be angry or sad, without success&hellip; Maybe I have a happy face.
+I should try with someone else maybe.</p>
+
+<p>The service is nice and opens the door to a lot of applications:
+For example to monitor my home and sends an alert is someone is in my place and <strong>not from my family</strong> (or not the cat :).</p>
+
+</div>
+
+
+  <footer>
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      
+  
+    <nav><ul class="pager">
+    
+        <li class="previous">
+          <a href="https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs/index.html" title="SPA with Gopherjs">
+            <span aria-hidden="true">&larr;</span>Previous
+          </a>
+        </li>
+    
+
+    
+    </ul> </nav>
+  
+
+
+</div>
+
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+</div>
+
+</footer>
+
+
+</div>
+</div>
+      <footer class="footer">
+    <div class="container hidden-print">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <div class="pull-left">
+  <a class="toplink" href="#">back to top</a>
+</div>
+<div class="pull-right">
+  
+</div>
+
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+          <small>
+              
+    
+<div class="container footline">
+  
+
+</div>
+
+
+    
+<div class="container copyright">
+  
+  All rights reserved - <sup>2015</sup>&frasl;<sub>2016</sub>
+
+
+</div>
+
+
+
+          </small>
+        </div>
+     </div>
+    </div>
+</footer>
+
+    <script src="https://blog.owulveryck.info/js/jquery.min-2.1.4.js"></script>
+<script src="https://blog.owulveryck.info/js/bootstrap.min-3.3.5.js"></script>
+
+
+
+<script type="text/javascript">
+  (function() {
+    
+    
+    if (window.location.hostname == "localhost")
+      return;
+
+    var dsq = document.createElement('script'); dsq.async = true; dsq.type = 'text/javascript';
+    dsq.src = '//owulveryck.disqus.com/count.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="https://blog.owulveryck.info/js/highlight.pack.js"></script>
+<script src="https://blog.owulveryck.info/js/site.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script>
+  var _gaq=[['_setAccount','UA-69673850-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+  </body>
+</html>
+
