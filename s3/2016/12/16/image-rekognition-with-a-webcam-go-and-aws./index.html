@@ -221,7 +221,7 @@
 <h2 id="capabilities-of-the-webcam-and-image-format">Capabilities of the webcam and image format</h2>
 
 <p>My webcam is handling the MJPEG format.
-Therefore, after thte creation of a <em>cam</em> object and set the correct settings to grab mjpeg, I can read a frame in JPEG:</p>
+Therefore, after the creation of a <em>cam</em> object and set the correct settings to grab mjpeg, I can read a frame in JPEG:</p>
 
 <pre><code class="language-go">// ...
 cam, err := webcam.Open(&quot;/dev/video0&quot;) // Open webcam
@@ -234,7 +234,7 @@ _,_,_, err := cam.SetImageFormat(format, uint32(size.MaxWidth), uint32(size.MaxH
 
 <p>MJPEG is: 1196444237</p>
 
-<p><em>Note</em>: To be honnest, I did not evaluate the FOURCC method; I have requested the supported format of my webcam with their descriptions :)</p>
+<p><em>Note</em>: To be honest, I did not evaluate the FOURCC method; I have requested the supported format of my webcam with their descriptions :)</p>
 
 <h2 id="grabbing-the-picture">Grabbing the picture</h2>
 
@@ -277,7 +277,7 @@ _,_,_, err := cam.SetImageFormat(format, uint32(size.MaxWidth), uint32(size.MaxH
 
 <h2 id="sending-the-query">Sending the query</h2>
 
-<h3 id="princing-notice-and-warning">Princing notice and <strong>warning</strong></h3>
+<h3 id="pricing-notice-and-warning">Pricing notice and <strong>warning</strong></h3>
 
 <p>The price of the service as of today is 1 dollar per 1000 request. That sounds cheap, but at 25 FPS, this may cost a lot.
 Therefore, I have set up a read request that only process a picture if we press <em>enter</em></p>
@@ -346,7 +346,7 @@ The person 0 is HAPPY, CONFUSED, CALM,
 I should try with someone else maybe.</p>
 
 <p>The service is nice and opens the door to a lot of applications:
-For example to monitor my home and sends an alert is someone is in my place and <strong>not from my family</strong> (or not the cat :).</p>
+For example to monitor my home and sends an alert if someone is in my place and <strong>not from my family</strong> (or not the cat :).</p>
 
 </div>
 

@@ -41,7 +41,7 @@
 &lt;h2 id=&#34;capabilities-of-the-webcam-and-image-format&#34;&gt;Capabilities of the webcam and image format&lt;/h2&gt;
 
 &lt;p&gt;My webcam is handling the MJPEG format.
-Therefore, after thte creation of a &lt;em&gt;cam&lt;/em&gt; object and set the correct settings to grab mjpeg, I can read a frame in JPEG:&lt;/p&gt;
+Therefore, after the creation of a &lt;em&gt;cam&lt;/em&gt; object and set the correct settings to grab mjpeg, I can read a frame in JPEG:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ...
 cam, err := webcam.Open(&amp;quot;/dev/video0&amp;quot;) // Open webcam
@@ -54,7 +54,7 @@ _,_,_, err := cam.SetImageFormat(format, uint32(size.MaxWidth), uint32(size.MaxH
 
 &lt;p&gt;MJPEG is: 1196444237&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: To be honnest, I did not evaluate the FOURCC method; I have requested the supported format of my webcam with their descriptions :)&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: To be honest, I did not evaluate the FOURCC method; I have requested the supported format of my webcam with their descriptions :)&lt;/p&gt;
 
 &lt;h2 id=&#34;grabbing-the-picture&#34;&gt;Grabbing the picture&lt;/h2&gt;
 
@@ -97,7 +97,7 @@ _,_,_, err := cam.SetImageFormat(format, uint32(size.MaxWidth), uint32(size.MaxH
 
 &lt;h2 id=&#34;sending-the-query&#34;&gt;Sending the query&lt;/h2&gt;
 
-&lt;h3 id=&#34;princing-notice-and-warning&#34;&gt;Princing notice and &lt;strong&gt;warning&lt;/strong&gt;&lt;/h3&gt;
+&lt;h3 id=&#34;pricing-notice-and-warning&#34;&gt;Pricing notice and &lt;strong&gt;warning&lt;/strong&gt;&lt;/h3&gt;
 
 &lt;p&gt;The price of the service as of today is 1 dollar per 1000 request. That sounds cheap, but at 25 FPS, this may cost a lot.
 Therefore, I have set up a read request that only process a picture if we press &lt;em&gt;enter&lt;/em&gt;&lt;/p&gt;
@@ -166,7 +166,7 @@ The person 0 is HAPPY, CONFUSED, CALM,
 I should try with someone else maybe.&lt;/p&gt;
 
 &lt;p&gt;The service is nice and opens the door to a lot of applications:
-For example to monitor my home and sends an alert is someone is in my place and &lt;strong&gt;not from my family&lt;/strong&gt; (or not the cat :).&lt;/p&gt;
+For example to monitor my home and sends an alert if someone is in my place and &lt;strong&gt;not from my family&lt;/strong&gt; (or not the cat :).&lt;/p&gt;
 </description>
     </item>
     

@@ -32,7 +32,7 @@ I am using the package [github.com/blackjack/webcam](github.com/blackjack/webcam
 ## Capabilities of the webcam and image format
 
 My webcam is handling the MJPEG format.
-Therefore, after thte creation of a _cam_ object and set the correct settings to grab mjpeg, I can read a frame in JPEG:
+Therefore, after the creation of a _cam_ object and set the correct settings to grab mjpeg, I can read a frame in JPEG:
 
 ```go
 // ...
@@ -46,7 +46,7 @@ _,_,_, err := cam.SetImageFormat(format, uint32(size.MaxWidth), uint32(size.MaxH
 
 MJPEG is: 1196444237
 
-_Note_: To be honnest, I did not evaluate the FOURCC method; I have requested the supported format of my webcam with their descriptions :)
+_Note_: To be honest, I did not evaluate the FOURCC method; I have requested the supported format of my webcam with their descriptions :)
 
 ## Grabbing the picture
 
@@ -92,7 +92,7 @@ The `ALL` attributes is present, otherwise AWS does not return the complete desc
 
 ## Sending the query
 
-### Princing notice and __warning__
+### Pricing notice and __warning__
 The price of the service as of today is 1 dollar per 1000 request. That sounds cheap, but at 25 FPS, this may cost a lot.
 Therefore, I have set up a read request that only process a picture if we press _enter_ 
 
@@ -161,4 +161,4 @@ In the test I made, I was always happy. I've tried to be angry or sad, without s
 I should try with someone else maybe.
 
 The service is nice and opens the door to a lot of applications:
-For example to monitor my home and sends an alert is someone is in my place and __not from my family__ (or not the cat :).
+For example to monitor my home and sends an alert if someone is in my place and __not from my family__ (or not the cat :).
