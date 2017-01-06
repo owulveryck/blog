@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tosca on Olivier Wulveryck&#39;s Tech Blog</title>
+    <title>Tosca on Unladen swallow</title>
     <link>https://blog.owulveryck.info/topics/tosca.xml</link>
-    <description>Recent content in Tosca on Olivier Wulveryck&#39;s Tech Blog</description>
+    <description>Recent content in Tosca on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2016</copyright>
+    <copyright>All rights reserved - 2015/2017</copyright>
     <atom:link href="https://blog.owulveryck.info/topics/tosca.xml" rel="self" type="application/rss+xml" />
     
     <item>

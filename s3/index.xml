@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Olivier Wulveryck&#39;s Tech Blog</title>
+    <title>Unladen swallow</title>
     <link>https://blog.owulveryck.info/index.xml</link>
-    <description>Recent content on Olivier Wulveryck&#39;s Tech Blog</description>
+    <description>Recent content on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2016</copyright>
+    <copyright>All rights reserved - 2015/2017</copyright>
     <lastBuildDate>Fri, 16 Dec 2016 14:51:18 +0100</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/index.xml" rel="self" type="application/rss+xml" />
     
