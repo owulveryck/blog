@@ -1,7 +1,7 @@
 baseurl = "https://blog.owulveryck.info/"
 languageCode = "en-us"
-title = "Olivier Wulveryck's Tech Blog"
-Copyright = "All rights reserved - 2015/2016"
+title = "Unladen swallow"
+Copyright = "All rights reserved - 2015/2017"
 #canonifyurls = true
 
 # Metadata format
@@ -42,7 +42,10 @@ uglyURLs = true
 
 [params]
     author = "Olivier Wulveryck"
-    topline = "To share my technical experiences alongside my life of IT professional"
+    description = "_Sir Bedevere_: How do know so much about swallows?<br> \
+                   _King Arthur_: Well, you have to know these things when you're a king, you know. <br> <br>\
+                   Welcome to my personnal blog. This is a place where I share my technical experiences alongside my life of IT professional<br> \
+                   Because even finding the air-speed velocity of an unladen swallow can be fun."
     #footline = "code with <i class='fa fa-heart'></i>"
 
     # Text for the top menu link, which goes the root URL for the site.
@@ -85,4 +88,5 @@ uglyURLs = true
     about = "Olivier Wulveryck's Tech Blog"
 
     # How many posts to show on the sidebar (Default: 5)
-    #num_recent_posts = 2
+    
+#num_recent_posts = 2
