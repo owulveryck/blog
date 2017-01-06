@@ -2,21 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tosca on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>https://blog.owulveryck.info/tags/tosca.html</link>
+    <link>https://blog.owulveryck.info/tags/tosca.xml</link>
     <description>Recent content in Tosca on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
-    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
-    <lastBuildDate>Wed, 10 Feb 2016 17:19:47 +0100</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/tags/tosca.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Configuration management, choreography and self-aware applications</title>
       <link>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</guid>
       <description>
 
@@ -326,7 +323,7 @@ machine learning for every node to teach them how to react to different events i
       <title>TOSCA lifecycle as a digraph</title>
       <link>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</link>
       <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</guid>
       <description>
 

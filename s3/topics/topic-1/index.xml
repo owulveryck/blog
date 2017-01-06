@@ -2,21 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Topic 1 on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>https://blog.owulveryck.info/topics/topic-1.html</link>
+    <link>https://blog.owulveryck.info/topics/topic-1.xml</link>
     <description>Recent content in Topic 1 on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
-    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
-    <lastBuildDate>Fri, 16 Dec 2016 14:51:18 +0100</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/topics/topic-1.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Image reKognition with a webcam, go and AWS.</title>
       <link>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html</link>
       <pubDate>Fri, 16 Dec 2016 14:51:18 +0100</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html</guid>
       <description>
 
@@ -174,7 +171,7 @@ For example to monitor my home and sends an alert if someone is in my place and 
       <title>Processing CSV files with golang, python and perl</title>
       <link>https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl/index.html</link>
       <pubDate>Sun, 11 Sep 2016 20:27:49 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl/index.html</guid>
       <description>
 
@@ -257,7 +254,7 @@ I didn&amp;rsquo;t write a shell implementation, but it would have take ages to 
       <title>Being a better public speaker with a little help of Speech Recognition, Javascript and Chrome</title>
       <link>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome/index.html</link>
       <pubDate>Fri, 09 Sep 2016 13:39:50 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome/index.html</guid>
       <description>
 
@@ -431,7 +428,7 @@ What I need to do is to code a tiny javascript library in order to get a JSON as
       <title>Getting weather data from the station to the raspberry</title>
       <link>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry/index.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry/index.html</guid>
       <description>
 
@@ -782,7 +779,7 @@ I will post a part II as soon as I will have time to continue my experiments wit
       <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote</title>
       <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</link>
       <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</guid>
       <description>
 
@@ -889,7 +886,7 @@ I can also draw a topology of the attendees via D3 and interact with them.&lt;/p
       <title>Which solution should I choose? Don&#39;t think too much and ask a bot!</title>
       <link>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/index.html</link>
       <pubDate>Fri, 20 May 2016 12:50:59 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/index.html</guid>
       <description>
 
@@ -1220,7 +1217,7 @@ the life of the IT specialist.&lt;/p&gt;
       <title>RVM from a USB stick on a Chromebook</title>
       <link>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</link>
       <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</guid>
       <description>
 
@@ -1426,7 +1423,7 @@ official packages from vagrantup.com.
       <title>Is there a Markov model hidden in the choreography?</title>
       <link>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/index.html</link>
       <pubDate>Mon, 29 Feb 2016 20:55:01 +0100</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/index.html</guid>
       <description>
 
@@ -1628,7 +1625,7 @@ So yes, there is a Markov model hidden in the choreography!&lt;/p&gt;
       <title>Playing with (Openstack) Keystone</title>
       <link>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone/index.html</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone/index.html</guid>
       <description>
 

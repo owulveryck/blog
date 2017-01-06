@@ -7,7 +7,7 @@ tags:
 - chrome
 - speech recognition
 - Javascript
-- reveal.js
+- revealjs
 - slides
 title: Being a better public speaker with a little help of Speech Recognition, Javascript and Chrome
 topics:

@@ -2,21 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Chromebook on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>https://blog.owulveryck.info/tags/chromebook.html</link>
+    <link>https://blog.owulveryck.info/tags/chromebook.xml</link>
     <description>Recent content in Chromebook on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
-    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
-    <lastBuildDate>Thu, 31 Mar 2016 10:23:02 +0200</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/tags/chromebook.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>RVM from a USB stick on a Chromebook</title>
       <link>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</link>
       <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</guid>
       <description>
 
@@ -222,7 +219,7 @@ official packages from vagrantup.com.
       <title>Developping &#34;Google Apps&#34; on my Chromebook</title>
       <link>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</link>
       <pubDate>Mon, 26 Oct 2015 10:41:57 +0000</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</guid>
       <description>
 

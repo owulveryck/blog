@@ -2,21 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Golang on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>https://blog.owulveryck.info/tags/golang.html</link>
+    <link>https://blog.owulveryck.info/tags/golang.xml</link>
     <description>Recent content in Golang on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
-    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
-    <lastBuildDate>Fri, 16 Dec 2016 14:51:18 +0100</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/tags/golang.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Image reKognition with a webcam, go and AWS.</title>
       <link>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html</link>
       <pubDate>Fri, 16 Dec 2016 14:51:18 +0100</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html</guid>
       <description>
 
@@ -174,7 +171,7 @@ For example to monitor my home and sends an alert if someone is in my place and 
       <title>HTTP over UDT for inter-region file transfer</title>
       <link>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer/index.html</link>
       <pubDate>Mon, 17 Oct 2016 20:50:18 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer/index.html</guid>
       <description>
 
@@ -328,7 +325,7 @@ I have developed a more complete tool for my client, but it cannot be published 
       <title>Getting weather data from the station to the raspberry</title>
       <link>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry/index.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry/index.html</guid>
       <description>
 
@@ -679,7 +676,7 @@ I will post a part II as soon as I will have time to continue my experiments wit
       <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote</title>
       <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</link>
       <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</guid>
       <description>
 
@@ -786,7 +783,7 @@ I can also draw a topology of the attendees via D3 and interact with them.&lt;/p
       <title>Orchestrate a digraph with goroutine, a concurrent orchestrator</title>
       <link>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html</link>
       <pubDate>Wed, 02 Dec 2015 14:24:21 +0000</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html</guid>
       <description>
 
@@ -1051,7 +1048,7 @@ and then we would be able to see the progession in a graphical way.&lt;/li&gt;
       <title>TOSCA lifecycle as a digraph</title>
       <link>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</link>
       <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</guid>
       <description>
 

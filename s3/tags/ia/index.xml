@@ -2,21 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ia on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>https://blog.owulveryck.info/tags/ia.html</link>
+    <link>https://blog.owulveryck.info/tags/ia.xml</link>
     <description>Recent content in Ia on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
-    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
-    <lastBuildDate>Mon, 29 Feb 2016 20:55:01 +0100</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/tags/ia.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Is there a Markov model hidden in the choreography?</title>
       <link>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/index.html</link>
       <pubDate>Mon, 29 Feb 2016 20:55:01 +0100</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/index.html</guid>
       <description>
 

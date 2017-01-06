@@ -2,21 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Go on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>https://blog.owulveryck.info/tags/go.html</link>
+    <link>https://blog.owulveryck.info/tags/go.xml</link>
     <description>Recent content in Go on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
-    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
-    <lastBuildDate>Wed, 10 Feb 2016 17:19:47 +0100</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/tags/go.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Configuration management, choreography and self-aware applications</title>
       <link>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</guid>
       <description>
 
@@ -326,7 +323,7 @@ machine learning for every node to teach them how to react to different events i
       <title>IaaS-like RESTfull API based on microservices</title>
       <link>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/index.html</link>
       <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/index.html</guid>
       <description>
 
@@ -537,7 +534,7 @@ ok
       <title>Ruby / ZeroMQ / GO</title>
       <link>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/index.html</link>
       <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/index.html</guid>
       <description>
 

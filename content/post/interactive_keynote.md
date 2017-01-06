@@ -7,9 +7,9 @@ tags:
 - websocket
 - bootstrap
 - golang
-- reveal.js 
+- revealjs 
 - Javascript
-- D3.js
+- D3js
 title: Websockets, Reveal.js, D3 and GO for a dynamic keynote
 topics:
 - topic 1

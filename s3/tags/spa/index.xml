@@ -2,21 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Spa on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>https://blog.owulveryck.info/tags/spa.html</link>
+    <link>https://blog.owulveryck.info/tags/spa.xml</link>
     <description>Recent content in Spa on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
-    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
-    <lastBuildDate>Wed, 19 Oct 2016 07:24:51 +0200</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/tags/spa.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>SPA with Gopherjs</title>
       <link>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs/index.html</link>
       <pubDate>Wed, 19 Oct 2016 07:24:51 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs/index.html</guid>
       <description>
 

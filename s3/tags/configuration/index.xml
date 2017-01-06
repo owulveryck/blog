@@ -2,21 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Configuration on Olivier Wulveryck&#39;s Tech Blog</title>
-    <link>https://blog.owulveryck.info/tags/configuration.html</link>
+    <link>https://blog.owulveryck.info/tags/configuration.xml</link>
     <description>Recent content in Configuration on Olivier Wulveryck&#39;s Tech Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
-    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved - 2015/2016</copyright>
-    <lastBuildDate>Mon, 26 Oct 2015 10:41:57 +0000</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/tags/configuration.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Developping &#34;Google Apps&#34; on my Chromebook</title>
       <link>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</link>
       <pubDate>Mon, 26 Oct 2015 10:41:57 +0000</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      
       <guid>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</guid>
       <description>
 
