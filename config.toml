@@ -42,10 +42,7 @@ uglyURLs = true
 
 [params]
     author = "Olivier Wulveryck"
-    description = "_Sir Bedevere_: How do know so much about swallows?<br> \
-                   _King Arthur_: Well, you have to know these things when you're a king, you know. <br> <br>\
-                   Welcome to my personnal blog. This is a place where I share my technical experiences alongside my life of IT professional<br> \
-                   Because even finding the air-speed velocity of an unladen swallow can be fun."
+    description = "Olivier Wulveryck's (tech) blog"
     #footline = "code with <i class='fa fa-heart'></i>"
 
     # Text for the top menu link, which goes the root URL for the site.
@@ -85,7 +82,10 @@ uglyURLs = true
 
 [params.sidebar]
     # Optional about block for sidebar (can be Markdown)
-    about = "Olivier Wulveryck's Tech Blog"
+    about = "This is a place where I share my technical experiences alongside my life of IT professional<br> \
+             Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> \
+            __Sir Bedevere__: _How do know so much about swallows?_<br>\
+           __King Arthur__: _Well, you have to know these things when you're a king, you know._<br><br>_Monty Python and the Holy Grail_"
 
     # How many posts to show on the sidebar (Default: 5)
     
