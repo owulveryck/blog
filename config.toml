@@ -16,10 +16,11 @@ pygmentsStyle = "monokai"
 pygmentsUseClasses = false
 
 # Theme to use (located in /themes/THEMENAME/)
-theme = "hugo-bootstrap"
+# theme = "hugo-bootstrap"
+theme = "hugo-theme-bootstrap4-blog"
 
 # Pagination
-paginate = 10
+paginate = 5
 paginatePath = "page"
 
 # Enable Disqus integration
@@ -40,6 +41,7 @@ uglyURLs = true
     email = "olivier.wulveryck@gmail.com"
 
 [params]
+    author = "Olivier Wulveryck"
     topline = "To share my technical experiences alongside my life of IT professional"
     #footline = "code with <i class='fa fa-heart'></i>"
 
@@ -63,3 +65,24 @@ uglyURLs = true
     #youtube = ""  # Your Youtube channel ID
     flattr = "owulveryck"  # populate with your flattr uid
 
+[params.social]
+    # Optional, used for attribution in Twitter cards
+    # See: https://dev.twitter.com/cards/types/summary-large-image
+    twitter = "owulveryck"
+
+[params.sharingicons]
+    # Hide the sharing icons on posts? (Default: false)
+    hide = false
+
+    # Optionally, set any of these to false to hide them:
+    #facebook = true
+    #googleplus = true
+    #linkedin = true
+    #twitter = true
+
+[params.sidebar]
+    # Optional about block for sidebar (can be Markdown)
+    about = "Olivier Wulveryck's Tech Blog"
+
+    # How many posts to show on the sidebar (Default: 5)
+    #num_recent_posts = 2
