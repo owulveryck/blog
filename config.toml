@@ -11,7 +11,7 @@ metaDataFormat = "yaml"
 # filesystem path to write files to
 publishdir = "public"
 # # color-codes for highlighting derived from this style
-pygmentsStyle = "monokai"
+pygmentsStyle = "default"
 # # true: use pygments-css or false: color-codes directly
 pygmentsUseClasses = false
 

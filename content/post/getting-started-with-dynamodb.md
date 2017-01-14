@@ -25,7 +25,7 @@ Each product is caracterized by its SKU's reference ([stock-keeping unit](https:
 ## Inventory management
 
 So finally, it is just about inventory management. In the retail, when you say "inventory management", the IT usually replies with millions dollars _ERP_.
-And the more items we have, the more CPU we need and then more dollar are involved... and the richer the IT specialists are (just kidding).
+And the more items we have, the more processing power we need and then more dollar are involved... and richer the IT specialists are (just kidding).
 
 Moreover enhancing an item by adding some attributes can be painfull and risky
 
@@ -38,30 +38,61 @@ The stock inventory is a business service. and placing it in a micro service arc
 
 More over, the key/value concept allows to store "anything" in a value. Therefore, you can store a list of attributes regardless of what the attributes are.
 
-
-# Storing the informations
-
-## Choosing the representation scheme
-
 When it comes to NoSQL, there are usuallly two approches to store the data:
 
 * simple Key/Value;
 * document-oriented.
 
-At first
+At first I did and experiment with a simple key/value store called BoldDB (which is more or less like Redis).
+In this approch the value stored was a json representation... A kind of document.
+Then I though that it could be a good idea to use a more document oriented service: DynamoDB
 
+# Geek time
 
+In this part I will explain how to get the data from AWS and to store them in the dynamoDB service. The code is written in GO and is just a proof of concept.
 
+## The product informations
 
+A product is described [here](http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/reading-an-offer.html).
+We have:
 
+{{< highlight js >}}
+"Product Details": {
+   "sku": {
+      "sku":"The SKU of the product",
+      "productFamily":"The product family of the product",
+      "attributes": {
+         "attributeName":"attributeValue",
+      }
+   }
+}
+{{< /highlight >}}
 
+There are three important entries:
 
+* SKU: A unique code for a product. 
+* Product Family The category for the type of product. For example, compute for Amazon EC2 or storage for Amazon S3.
+* Attributes: A list of all of the product attributes.
 
+## Creating the "table"
 
-So now 
+As my goal is for now to create a proof of concept and play with the data, I am creating the table manually.
+DynamoDB allows the creation of two indexes per table. So I create a table products with two indexes:
 
+* the SKU
+* the product family
 
 ![Create Table](/assets/images/bigdata/blog-dynamo-create-table.png)
+
+## Grabbing the data
+
+### Fetching
+
+### Decoding
+
+## Storing the informations
+
+# Execution and conclusion
 
 ![Result](/assets/images/bigdata/blog-dynamo-result.png)
 
