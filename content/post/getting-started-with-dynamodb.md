@@ -10,7 +10,7 @@ tags:
 - dynamodb
 - aws
 - golang
-title: A feet in NoSQL and a toe in big data
+title: A foot in NoSQL and a toe in big data
 ---
 
 The more I work with AWS, the more I understand their models. This goes far beyond the technical principles of micro service.
