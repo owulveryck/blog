@@ -27,14 +27,28 @@ Each product is caracterized by its SKU's reference ([stock-keeping unit](https:
 So finally, it is just about inventory management. In the retail, when you say "inventory management", the IT usually replies with millions dollars _ERP_.
 And the more items we have, the more CPU we need and then more dollar are involved... and the richer the IT specialists are (just kidding).
 
+Moreover enhancing an item by adding some attributes can be painfull and risky
+
+![xkcd](http://imgs.xkcd.com/comics/exploits_of_a_mom.png)
+
 ## The NoSQL approach 
 
 Due to the rise of the online shopping, inventory management must be real time.
 The stock inventory is a business service. and placing it in a micro service architecture bring constraints: the request should be satisfied in micro seconds.
 
-Luckily it is the promise made by NoSQL.
+More over, the key/value concept allows to store "anything" in a value. Therefore, you can store a list of attributes regardless of what the attributes are.
 
-# From the information to the Database
+
+# Storing the informations
+
+## Choosing the representation scheme
+
+When it comes to NoSQL, there are usuallly two approches to store the data:
+
+* simple Key/Value;
+* document-oriented.
+
+At first
 
 
 
