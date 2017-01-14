@@ -10,6 +10,245 @@
     <atom:link href="https://blog.owulveryck.info/tags/golang.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>A feet in NoSQL and a toe in big data</title>
+      <link>https://blog.owulveryck.info/2017/01/13/a-feet-in-nosql-and-a-toe-in-big-data/index.html</link>
+      <pubDate>Fri, 13 Jan 2017 22:22:46 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/01/13/a-feet-in-nosql-and-a-toe-in-big-data/index.html</guid>
+      <description>
+
+&lt;p&gt;The more I work with AWS, the more I understand their models. This goes far beyond the technical principles of micro service.
+As an example I recently had an opportunity to dig a bit into the billing process.
+I had an explanation given by a colleague whose understanding was more advanced than mine.
+In his explanation, he mentioned this blog post: &lt;a href=&#34;https://aws.amazon.com/blogs/aws/new-aws-price-list-api/&#34;&gt;New price list API&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;understanding-the-model&#34;&gt;Understanding the model&lt;/h1&gt;
+
+&lt;p&gt;By reading this post and this &lt;a href=&#34;http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/price-changes.html&#34;&gt;explanation&lt;/a&gt;, I understand that the offers are categorized in families (eg AmazonS3) and that an offer is composed of a set of products.
+Each product is characterized by its SKU&amp;rsquo;s reference (&lt;a href=&#34;https://en.wikipedia.org/wiki/Stock_keeping_unit&#34;&gt;stock-keeping unit&lt;/a&gt;)&lt;/p&gt;
+
+&lt;h2 id=&#34;inventory-management&#34;&gt;Inventory management&lt;/h2&gt;
+
+&lt;p&gt;So finally, it is just about inventory management. In the retail, when you say &amp;ldquo;inventory management&amp;rdquo;, the IT usually replies with millions dollars &lt;em&gt;ERP&lt;/em&gt;.
+And the more items we have, the more processing power we need and then more dollar are involved&amp;hellip; and richer the IT specialists are (just kidding).&lt;/p&gt;
+
+&lt;p&gt;Moreover enhancing an item by adding some attributes can be painful and risky&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://imgs.xkcd.com/comics/exploits_of_a_mom.png&#34; alt=&#34;xkcd&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-nosql-approach&#34;&gt;The NoSQL approach&lt;/h2&gt;
+
+&lt;p&gt;Due to the rise of the online shopping, inventory management must be real time.
+The stock inventory is a business service. and placing it in a micro service architecture bring constraints: the request should be satisfied in micro seconds.&lt;/p&gt;
+
+&lt;p&gt;More over, the key/value concept allows to store &amp;ldquo;anything&amp;rdquo; in a value. Therefore, you can store a list of attributes regardless of what the attributes are.&lt;/p&gt;
+
+&lt;p&gt;When it comes to NoSQL, there are usually two approaches to store the data:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;simple Key/Value;&lt;/li&gt;
+&lt;li&gt;document-oriented.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;At first I did and experiment with a simple key/value store called BoltDB (which is more or less like Redis).
+In this approach the value stored was a json representation&amp;hellip; A kind of document.
+Then I though that it could be a good idea to use a more document oriented service: DynamoDB&lt;/p&gt;
+
+&lt;h1 id=&#34;geek-time&#34;&gt;Geek time&lt;/h1&gt;
+
+&lt;p&gt;In this part I will explain how to get the data from AWS and to store them in the dynamoDB service. The code is written in GO and is just a proof of concept.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-product-informations&#34;&gt;The product informations&lt;/h2&gt;
+
+&lt;p&gt;A product&amp;rsquo;s technical representation is described &lt;a href=&#34;http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/reading-an-offer.html&#34;&gt;here&lt;/a&gt;.
+We have:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Product Details&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; {
+   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sku&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; {
+      &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sku&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;The SKU of the product&amp;quot;&lt;/span&gt;,
+      &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;productFamily&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;The product family of the product&amp;quot;&lt;/span&gt;,
+      &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;attributes&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; {
+         &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;attributeName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;attributeValue&amp;quot;&lt;/span&gt;,
+      }
+   }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;There are three important entries but only two are mandatories:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;SKU&lt;/em&gt;: A unique code for a product.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Product Family&lt;/em&gt;: The category for the type of product. For example, compute for Amazon EC2 or storage for Amazon S3.&lt;/li&gt;
+&lt;li&gt;Attributes: A list of all of the product attributes.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;creating-the-table&#34;&gt;Creating the &amp;ldquo;table&amp;rdquo;&lt;/h2&gt;
+
+&lt;p&gt;As my goal is for now to create a proof of concept and play with the data, I am creating the table manually.
+DynamoDB allows the creation of two indexes per table. So I create a table &lt;em&gt;Products&lt;/em&gt; with two indexes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;SKU&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ProductFamily&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://blog.owulveryck.info/assets/images/bigdata/blog-dynamo-create-table.png&#34; alt=&#34;Create Table&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;principle&#34;&gt;Principle&lt;/h2&gt;
+
+&lt;p&gt;The data is retrieved by a simple &lt;code&gt;http.Get&lt;/code&gt; method. Then a &lt;code&gt;json.Decoder&lt;/code&gt; takes the body (an &lt;code&gt;io.Reader&lt;/code&gt;) as argument and decode it in a predefined structure.
+Once the structure is filled, I will store it in the DynamoDB.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-structures&#34;&gt;The structures&lt;/h3&gt;
+
+&lt;p&gt;I need three go structures. Two will be used to decode and range through the offer index. The other one will hold all the product details for a specific offer.&lt;/p&gt;
+
+&lt;h4 id=&#34;offer-index&#34;&gt;Offer Index&lt;/h4&gt;
+
+&lt;p&gt;The offer index is composed of offers referenced in by an offer name (&lt;code&gt;map[string]offer&lt;/code&gt;)
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; offerIndex &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; {
+    FormatVersion   &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;           &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;formatVersion&amp;quot;`&lt;/span&gt;
+    Disclaimer      &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;           &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;disclaimer&amp;quot;`&lt;/span&gt;
+    PublicationDate time.Time        &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;publicationDate&amp;quot;`&lt;/span&gt;
+    Offers          &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;]offer &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;offers&amp;quot;`&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;An offer in the index is characterized by three elements. I am catching all of them, but only &lt;code&gt;CurrrentVersionURL&lt;/code&gt; is useful in my case.
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; offer &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; {
+    OfferCode         &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;offerCode:&amp;quot;`&lt;/span&gt;
+    VersionIndexURL   &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;versionIndexUrl&amp;quot;`&lt;/span&gt;
+    CurrentVersionURL &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;currentVersionUrl&amp;quot;`&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;products&#34;&gt;Products&lt;/h4&gt;
+
+&lt;p&gt;I hold all the product details in a structure. The product details holds all the products in a map whose key is the SKU. Therefore a SKU field is useless.
+The Attribute value is an interface{} because it can be of any type (more on this later in the post).&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; : In case of massive data flow, it would probably be better to decode the stream pieces by pieces (as written in the &lt;a href=&#34;https://golang.org/pkg/encoding/json/#Decoder.Decode&#34;&gt;the go documentation&lt;/a&gt;)&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; productDetails &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; {
+    Products &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; { &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// the key is SKU&lt;/span&gt;
+        ProductFamily &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;                 &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;productFamily&amp;quot;`&lt;/span&gt;
+        Attributes    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{} &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;attributes&amp;quot;`&lt;/span&gt;
+    } &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;products&amp;quot;`&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;getting-the-data&#34;&gt;Getting the data&lt;/h3&gt;
+
+&lt;h4 id=&#34;offers&#34;&gt;Offers&lt;/h4&gt;
+
+&lt;p&gt;The first action is to grab the json of the offer index and put it in a object of type &lt;code&gt;offerIndex&lt;/code&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;resp, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; http.Get(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/index.json&amp;quot;&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;var&lt;/span&gt; oi offerIndex
+err = json.NewDecoder(resp.Body).Decode(&lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;oi)
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// oi contains all the offers&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Then loop for each offer and do a &lt;code&gt;GET&lt;/code&gt; of every &lt;code&gt;CurrentVersionURL&lt;/code&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; _ , o &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; oi.Offers {
+        resp, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; http.Get(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;https://pricing.us-east-1.amazonaws.com&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; o.CurrentVersionURL)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;and-products&#34;&gt;And products&lt;/h4&gt;
+
+&lt;p&gt;The same principles applies for the products, we decode the stream in an object:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;var&lt;/span&gt; pd productDetails
+err = json.NewDecoder(resp.Body).Decode(&lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;pd)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now that we have all the informations we are ready to store them in the database.&lt;/p&gt;
+
+&lt;h2 id=&#34;storing-the-informations&#34;&gt;Storing the informations&lt;/h2&gt;
+
+&lt;p&gt;As usual with any AWS access, you need to create a &lt;code&gt;session&lt;/code&gt; and a &lt;code&gt;service&lt;/code&gt; object:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;sess, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; session.NewSession()
+svc &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; dynamodb.New(sess)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/aws/session/&#34;&gt;session&lt;/a&gt; will take care of the credentials by reading the appropriate files or environment variables.&lt;/p&gt;
+
+&lt;p&gt;the &lt;code&gt;svc&lt;/code&gt; object is used to interact with the DynamoDB service. To store an object we will use the method &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/service/dynamodb/#DynamoDB.PutItem&#34;&gt;PutItem&lt;/a&gt; which takes as argument a reference to &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/service/dynamodb/#PutItemInput&#34;&gt;PutItemInput&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; All of the AWS service have the same logic and work the same way: Action takes as a parameter a reference to a type ActionInput and returns a type ActionOutput.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s see how to create a &lt;code&gt;PutItemInput&lt;/code&gt; element from a &lt;code&gt;Product&lt;/code&gt; type.&lt;/p&gt;
+
+&lt;h4 id=&#34;the-dynamodb-item&#34;&gt;the Dynamodb Item&lt;/h4&gt;
+
+&lt;p&gt;The two mandatory fields I will use for the &lt;code&gt;PutItemInput&lt;/code&gt; are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;TableName&lt;/code&gt; (which is Product in my case)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Item&lt;/code&gt; (which obviously hold what to store)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Other fields exists, but to be honest, I don&amp;rsquo;t know whether I need them by now.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;Item&lt;/code&gt; expects a map whose key is the field name (In our case it can be &amp;ldquo;SKU&amp;rdquo;, &amp;ldquo;ProductFamily&amp;rdquo; or anything) and whose value is a reference to the special type &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/service/dynamodb/#AttributeValue&#34;&gt;AttributeValue&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;From the documentation the definition is:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;AttributeValue Represents the data for an attribute. You can set one, and only one, of the elements.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;The AttributeValue is &lt;em&gt;typed&lt;/em&gt; (The types are described &lt;a href=&#34;https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html&#34;&gt;here&lt;/a&gt;)
+Therefore our informations (remember the &lt;code&gt;map[string]inteface{}&lt;/code&gt;) must be &amp;ldquo;convrted&amp;rdquo; to a dynamodb format.
+This task has been made easy by using the package &lt;a href=&#34;https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html&#34;&gt;dynamodbattribute&lt;/a&gt; which does it for us:&lt;/p&gt;
+
+&lt;p&gt;To fill the item I need to loop for every product in the object &lt;code&gt;pd&lt;/code&gt; and create an item:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; k, v &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; pd.Products {
+      item[&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;SKU&amp;quot;&lt;/span&gt;], err = dynamodbattribute.Marshal(k)
+      item[&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;ProductFamily&amp;quot;&lt;/span&gt;], err = dynamodbattribute.Marshal(v.ProductFamily)
+      item[&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Attributes&amp;quot;&lt;/span&gt;], err = dynamodbattribute.Marshal(v.Attributes)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Once I have an Item, I can create the parameters and send the request to the DB:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;Item:      item,
+      TableName: aws.String(config.TableName),
+}
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Now put the item, discarding the result&lt;/span&gt;
+_ , err = svc.PutItem(params)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1 id=&#34;execution-and-conclusion&#34;&gt;Execution and conclusion&lt;/h1&gt;
+
+&lt;p&gt;Once compiled I can run the program that will take a couple of minute to execute (it can easily be optimized simply by processing each offer in a separate goroutine).
+Then I can find the informations in my DB:
+&lt;img src=&#34;https://blog.owulveryck.info/assets/images/bigdata/blog-dynamo-result.png&#34; alt=&#34;Result&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now that I have the informations, on the same principle I can grab the prices and put a little web service in front of it.
+And I could even code a little fronted for the service.&lt;/p&gt;
+
+&lt;p&gt;I am aware that if you are not an average go programmer the code may seem tricky, but I can assure you that it is not (the whole example is less than 100 lines long including the comments).
+The AWS API seems strange and not idiomatic, but it has the huge advantage to be efficient and coherent.&lt;/p&gt;
+
+&lt;p&gt;Regarding the inventory model. it can be used for any product or even any stock and prices. It is a cheap (and yet efficient) way to manage an inventory.&lt;/p&gt;
+
+&lt;h1 id=&#34;full-code&#34;&gt;Full code&lt;/h1&gt;
+
+&lt;p&gt;The full code of the example can be found on my &lt;a href=&#34;https://gist.github.com/owulveryck/f9665470e8334e8609434feeeddc6071&#34;&gt;gist&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Image reKognition with a webcam, go and AWS.</title>
       <link>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html</link>
       <pubDate>Fri, 16 Dec 2016 14:51:18 +0100</pubDate>

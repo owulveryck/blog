@@ -7,8 +7,247 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <lastBuildDate>Fri, 16 Dec 2016 14:51:18 +0100</lastBuildDate>
+    <lastBuildDate>Fri, 13 Jan 2017 22:22:46 +0100</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/post.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>A feet in NoSQL and a toe in big data</title>
+      <link>https://blog.owulveryck.info/2017/01/13/a-feet-in-nosql-and-a-toe-in-big-data/index.html</link>
+      <pubDate>Fri, 13 Jan 2017 22:22:46 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/01/13/a-feet-in-nosql-and-a-toe-in-big-data/index.html</guid>
+      <description>
+
+&lt;p&gt;The more I work with AWS, the more I understand their models. This goes far beyond the technical principles of micro service.
+As an example I recently had an opportunity to dig a bit into the billing process.
+I had an explanation given by a colleague whose understanding was more advanced than mine.
+In his explanation, he mentioned this blog post: &lt;a href=&#34;https://aws.amazon.com/blogs/aws/new-aws-price-list-api/&#34;&gt;New price list API&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;understanding-the-model&#34;&gt;Understanding the model&lt;/h1&gt;
+
+&lt;p&gt;By reading this post and this &lt;a href=&#34;http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/price-changes.html&#34;&gt;explanation&lt;/a&gt;, I understand that the offers are categorized in families (eg AmazonS3) and that an offer is composed of a set of products.
+Each product is characterized by its SKU&amp;rsquo;s reference (&lt;a href=&#34;https://en.wikipedia.org/wiki/Stock_keeping_unit&#34;&gt;stock-keeping unit&lt;/a&gt;)&lt;/p&gt;
+
+&lt;h2 id=&#34;inventory-management&#34;&gt;Inventory management&lt;/h2&gt;
+
+&lt;p&gt;So finally, it is just about inventory management. In the retail, when you say &amp;ldquo;inventory management&amp;rdquo;, the IT usually replies with millions dollars &lt;em&gt;ERP&lt;/em&gt;.
+And the more items we have, the more processing power we need and then more dollar are involved&amp;hellip; and richer the IT specialists are (just kidding).&lt;/p&gt;
+
+&lt;p&gt;Moreover enhancing an item by adding some attributes can be painful and risky&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://imgs.xkcd.com/comics/exploits_of_a_mom.png&#34; alt=&#34;xkcd&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-nosql-approach&#34;&gt;The NoSQL approach&lt;/h2&gt;
+
+&lt;p&gt;Due to the rise of the online shopping, inventory management must be real time.
+The stock inventory is a business service. and placing it in a micro service architecture bring constraints: the request should be satisfied in micro seconds.&lt;/p&gt;
+
+&lt;p&gt;More over, the key/value concept allows to store &amp;ldquo;anything&amp;rdquo; in a value. Therefore, you can store a list of attributes regardless of what the attributes are.&lt;/p&gt;
+
+&lt;p&gt;When it comes to NoSQL, there are usually two approaches to store the data:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;simple Key/Value;&lt;/li&gt;
+&lt;li&gt;document-oriented.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;At first I did and experiment with a simple key/value store called BoltDB (which is more or less like Redis).
+In this approach the value stored was a json representation&amp;hellip; A kind of document.
+Then I though that it could be a good idea to use a more document oriented service: DynamoDB&lt;/p&gt;
+
+&lt;h1 id=&#34;geek-time&#34;&gt;Geek time&lt;/h1&gt;
+
+&lt;p&gt;In this part I will explain how to get the data from AWS and to store them in the dynamoDB service. The code is written in GO and is just a proof of concept.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-product-informations&#34;&gt;The product informations&lt;/h2&gt;
+
+&lt;p&gt;A product&amp;rsquo;s technical representation is described &lt;a href=&#34;http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/reading-an-offer.html&#34;&gt;here&lt;/a&gt;.
+We have:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Product Details&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; {
+   &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sku&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; {
+      &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sku&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;The SKU of the product&amp;quot;&lt;/span&gt;,
+      &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;productFamily&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;The product family of the product&amp;quot;&lt;/span&gt;,
+      &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;attributes&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt; {
+         &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;attributeName&amp;quot;&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;attributeValue&amp;quot;&lt;/span&gt;,
+      }
+   }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;There are three important entries but only two are mandatories:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;SKU&lt;/em&gt;: A unique code for a product.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Product Family&lt;/em&gt;: The category for the type of product. For example, compute for Amazon EC2 or storage for Amazon S3.&lt;/li&gt;
+&lt;li&gt;Attributes: A list of all of the product attributes.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;creating-the-table&#34;&gt;Creating the &amp;ldquo;table&amp;rdquo;&lt;/h2&gt;
+
+&lt;p&gt;As my goal is for now to create a proof of concept and play with the data, I am creating the table manually.
+DynamoDB allows the creation of two indexes per table. So I create a table &lt;em&gt;Products&lt;/em&gt; with two indexes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;SKU&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ProductFamily&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://blog.owulveryck.info/assets/images/bigdata/blog-dynamo-create-table.png&#34; alt=&#34;Create Table&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;principle&#34;&gt;Principle&lt;/h2&gt;
+
+&lt;p&gt;The data is retrieved by a simple &lt;code&gt;http.Get&lt;/code&gt; method. Then a &lt;code&gt;json.Decoder&lt;/code&gt; takes the body (an &lt;code&gt;io.Reader&lt;/code&gt;) as argument and decode it in a predefined structure.
+Once the structure is filled, I will store it in the DynamoDB.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-structures&#34;&gt;The structures&lt;/h3&gt;
+
+&lt;p&gt;I need three go structures. Two will be used to decode and range through the offer index. The other one will hold all the product details for a specific offer.&lt;/p&gt;
+
+&lt;h4 id=&#34;offer-index&#34;&gt;Offer Index&lt;/h4&gt;
+
+&lt;p&gt;The offer index is composed of offers referenced in by an offer name (&lt;code&gt;map[string]offer&lt;/code&gt;)
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; offerIndex &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; {
+    FormatVersion   &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;           &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;formatVersion&amp;quot;`&lt;/span&gt;
+    Disclaimer      &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;           &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;disclaimer&amp;quot;`&lt;/span&gt;
+    PublicationDate time.Time        &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;publicationDate&amp;quot;`&lt;/span&gt;
+    Offers          &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;]offer &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;offers&amp;quot;`&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;An offer in the index is characterized by three elements. I am catching all of them, but only &lt;code&gt;CurrrentVersionURL&lt;/code&gt; is useful in my case.
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; offer &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; {
+    OfferCode         &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;offerCode:&amp;quot;`&lt;/span&gt;
+    VersionIndexURL   &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;versionIndexUrl&amp;quot;`&lt;/span&gt;
+    CurrentVersionURL &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;currentVersionUrl&amp;quot;`&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;products&#34;&gt;Products&lt;/h4&gt;
+
+&lt;p&gt;I hold all the product details in a structure. The product details holds all the products in a map whose key is the SKU. Therefore a SKU field is useless.
+The Attribute value is an interface{} because it can be of any type (more on this later in the post).&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; : In case of massive data flow, it would probably be better to decode the stream pieces by pieces (as written in the &lt;a href=&#34;https://golang.org/pkg/encoding/json/#Decoder.Decode&#34;&gt;the go documentation&lt;/a&gt;)&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; productDetails &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; {
+    Products &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; { &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// the key is SKU&lt;/span&gt;
+        ProductFamily &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;                 &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;productFamily&amp;quot;`&lt;/span&gt;
+        Attributes    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{} &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;attributes&amp;quot;`&lt;/span&gt;
+    } &lt;span style=&#34;color: #BA2121&#34;&gt;`json:&amp;quot;products&amp;quot;`&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;getting-the-data&#34;&gt;Getting the data&lt;/h3&gt;
+
+&lt;h4 id=&#34;offers&#34;&gt;Offers&lt;/h4&gt;
+
+&lt;p&gt;The first action is to grab the json of the offer index and put it in a object of type &lt;code&gt;offerIndex&lt;/code&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;resp, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; http.Get(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/index.json&amp;quot;&lt;/span&gt;)
+
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;var&lt;/span&gt; oi offerIndex
+err = json.NewDecoder(resp.Body).Decode(&lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;oi)
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// oi contains all the offers&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Then loop for each offer and do a &lt;code&gt;GET&lt;/code&gt; of every &lt;code&gt;CurrentVersionURL&lt;/code&gt;
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; _ , o &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; oi.Offers {
+        resp, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; http.Get(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;https://pricing.us-east-1.amazonaws.com&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; o.CurrentVersionURL)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h4 id=&#34;and-products&#34;&gt;And products&lt;/h4&gt;
+
+&lt;p&gt;The same principles applies for the products, we decode the stream in an object:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;var&lt;/span&gt; pd productDetails
+err = json.NewDecoder(resp.Body).Decode(&lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;pd)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now that we have all the informations we are ready to store them in the database.&lt;/p&gt;
+
+&lt;h2 id=&#34;storing-the-informations&#34;&gt;Storing the informations&lt;/h2&gt;
+
+&lt;p&gt;As usual with any AWS access, you need to create a &lt;code&gt;session&lt;/code&gt; and a &lt;code&gt;service&lt;/code&gt; object:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;sess, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; session.NewSession()
+svc &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; dynamodb.New(sess)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/aws/session/&#34;&gt;session&lt;/a&gt; will take care of the credentials by reading the appropriate files or environment variables.&lt;/p&gt;
+
+&lt;p&gt;the &lt;code&gt;svc&lt;/code&gt; object is used to interact with the DynamoDB service. To store an object we will use the method &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/service/dynamodb/#DynamoDB.PutItem&#34;&gt;PutItem&lt;/a&gt; which takes as argument a reference to &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/service/dynamodb/#PutItemInput&#34;&gt;PutItemInput&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; All of the AWS service have the same logic and work the same way: Action takes as a parameter a reference to a type ActionInput and returns a type ActionOutput.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s see how to create a &lt;code&gt;PutItemInput&lt;/code&gt; element from a &lt;code&gt;Product&lt;/code&gt; type.&lt;/p&gt;
+
+&lt;h4 id=&#34;the-dynamodb-item&#34;&gt;the Dynamodb Item&lt;/h4&gt;
+
+&lt;p&gt;The two mandatory fields I will use for the &lt;code&gt;PutItemInput&lt;/code&gt; are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;TableName&lt;/code&gt; (which is Product in my case)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Item&lt;/code&gt; (which obviously hold what to store)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Other fields exists, but to be honest, I don&amp;rsquo;t know whether I need them by now.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;Item&lt;/code&gt; expects a map whose key is the field name (In our case it can be &amp;ldquo;SKU&amp;rdquo;, &amp;ldquo;ProductFamily&amp;rdquo; or anything) and whose value is a reference to the special type &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/service/dynamodb/#AttributeValue&#34;&gt;AttributeValue&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;From the documentation the definition is:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;AttributeValue Represents the data for an attribute. You can set one, and only one, of the elements.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;The AttributeValue is &lt;em&gt;typed&lt;/em&gt; (The types are described &lt;a href=&#34;https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html&#34;&gt;here&lt;/a&gt;)
+Therefore our informations (remember the &lt;code&gt;map[string]inteface{}&lt;/code&gt;) must be &amp;ldquo;convrted&amp;rdquo; to a dynamodb format.
+This task has been made easy by using the package &lt;a href=&#34;https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html&#34;&gt;dynamodbattribute&lt;/a&gt; which does it for us:&lt;/p&gt;
+
+&lt;p&gt;To fill the item I need to loop for every product in the object &lt;code&gt;pd&lt;/code&gt; and create an item:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; k, v &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; pd.Products {
+      item[&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;SKU&amp;quot;&lt;/span&gt;], err = dynamodbattribute.Marshal(k)
+      item[&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;ProductFamily&amp;quot;&lt;/span&gt;], err = dynamodbattribute.Marshal(v.ProductFamily)
+      item[&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Attributes&amp;quot;&lt;/span&gt;], err = dynamodbattribute.Marshal(v.Attributes)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Once I have an Item, I can create the parameters and send the request to the DB:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;Item:      item,
+      TableName: aws.String(config.TableName),
+}
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Now put the item, discarding the result&lt;/span&gt;
+_ , err = svc.PutItem(params)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1 id=&#34;execution-and-conclusion&#34;&gt;Execution and conclusion&lt;/h1&gt;
+
+&lt;p&gt;Once compiled I can run the program that will take a couple of minute to execute (it can easily be optimized simply by processing each offer in a separate goroutine).
+Then I can find the informations in my DB:
+&lt;img src=&#34;https://blog.owulveryck.info/assets/images/bigdata/blog-dynamo-result.png&#34; alt=&#34;Result&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now that I have the informations, on the same principle I can grab the prices and put a little web service in front of it.
+And I could even code a little fronted for the service.&lt;/p&gt;
+
+&lt;p&gt;I am aware that if you are not an average go programmer the code may seem tricky, but I can assure you that it is not (the whole example is less than 100 lines long including the comments).
+The AWS API seems strange and not idiomatic, but it has the huge advantage to be efficient and coherent.&lt;/p&gt;
+
+&lt;p&gt;Regarding the inventory model. it can be used for any product or even any stock and prices. It is a cheap (and yet efficient) way to manage an inventory.&lt;/p&gt;
+
+&lt;h1 id=&#34;full-code&#34;&gt;Full code&lt;/h1&gt;
+
+&lt;p&gt;The full code of the example can be found on my &lt;a href=&#34;https://gist.github.com/owulveryck/f9665470e8334e8609434feeeddc6071&#34;&gt;gist&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Image reKognition with a webcam, go and AWS.</title>
@@ -3263,246 +3502,6 @@ Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Executi
 &lt;p&gt;By now, KSH93 remains my favorite engine for shell scripts, but is sometimes replaced by ZSH.&lt;/p&gt;
 
 &lt;p&gt;Actually, ZSH seems as &amp;ldquo;smart&amp;rdquo; and efficient, but this &lt;code&gt;getopts&lt;/code&gt; feature is really nice for any script aim to be distributed widely.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>TOSCA lifecycle as a digraph</title>
-      <link>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</link>
-      <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
-      
-      <guid>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</guid>
-      <description>
-
-&lt;h1 id=&#34;about-tosca&#34;&gt;About TOSCA&lt;/h1&gt;
-
-&lt;p&gt;The &lt;a href=&#34;https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=tosca&#34;&gt;TOSCA&lt;/a&gt; acronym stands for
-&lt;em&gt;Topology and Orchestration Specification for Cloud Applications&lt;/em&gt;. It&amp;rsquo;s an &lt;a href=&#34;https://www.oasis-open.org&#34;&gt;OASIS&lt;/a&gt; standard.&lt;/p&gt;
-
-&lt;p&gt;The purpose of the TOSCA project is to represent an application by its topology and formalize it using the TOSCA grammar.&lt;/p&gt;
-
-&lt;p&gt;The &lt;a href=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simp$le-Profile-YAML-v1.0-csprd01.html&#34;&gt;[TOSCA-Simple-Profile-YAML-v1.0]&lt;/a&gt;
-current specification in YAML introduces the following concepts.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;TOSCA YAML service template: A YAML document artifact containing a (TOSCA) service template that represents a Cloud application.&lt;/li&gt;
-&lt;li&gt;TOSCA processor: An engine or tool that is capable of parsing and interpreting a TOSCA YAML service template for a particular purpose. For example, the purpose could be validation, translation or visual rendering.&lt;/li&gt;
-&lt;li&gt;TOSCA orchestrator (also called orchestration engine): A TOSCA processor that interprets a TOSCA YAML service template then instantiates and deploys the described application in a Cloud.&lt;/li&gt;
-&lt;li&gt;TOSCA generator: A tool that generates a TOSCA YAML service template. An example of generator is a modeling tool capable of generating or editing a TOSCA YAML service template (often such a tool would also be a TOSCA processor).&lt;/li&gt;
-&lt;li&gt;TOSCA archive (or TOSCA Cloud Service Archive, or “CSAR”): a package artifact that contains a TOSCA YAML service template and other artifacts usable by a TOSCA orchestrator to deploy an application.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&#34;my-work-with-tosca&#34;&gt;My work with TOSCA&lt;/h2&gt;
-
-&lt;p&gt;I do believe that TOSCA may be a very good leverage to port a &amp;ldquo;legacy application&amp;rdquo; (aka &lt;em&gt;born in the datacenter&lt;/em&gt; application) into a cloud ready application without rewriting it completely to be cloud compliant.
-To be clear, It may act on the hosting and execution plan of the application, and not on the application itself.&lt;/p&gt;
-
-&lt;p&gt;A single wordpress installation in a TOSCA way as written &lt;a href=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html#_Toc430015847&#34;&gt;here&lt;/a&gt; is represented like that&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&#34;img-square img-responsive&#34; src=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01_files/image035.png&#34; alt=&#34;Single Wordpress representation&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;While I was learnig GO, I have developped a &lt;a href=&#34;https://github.com/owulveryck/toscalib&#34;&gt;TOSCA lib&lt;/a&gt; and a &lt;a href=&#34;https://github.com/owulveryck/toscaviewer&#34;&gt;TOSCA processor&lt;/a&gt; which are, by far, not &lt;em&gt;idiomatic GO&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Here are two screenshots of the rendering in a web page made with my tool (and the graphviz product):&lt;/p&gt;
-
-&lt;hr/&gt;
-
-&lt;p&gt;&lt;em&gt;The graph representation of a &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/toscaviewer_template_def.png&#34; alt=&#34;Tosca view ofthe single instance wordpress&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;The graph representation of a lifecycle of &lt;em&gt;Single instance wordpress&lt;/em&gt;&lt;/em&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/toscaviewer_lifecycle_def.png&#34; alt=&#34;Lifecycle representation of the single wordpress instance representation&#34;/&gt;
-&lt;hr/&gt;&lt;/p&gt;
-
-&lt;p&gt;The TOSCA file is parsed with the help of the &lt;code&gt;TOSCALIB&lt;/code&gt; and then it fills an adjacency matrix (see &lt;a href=&#34;https://godoc.org/github.com/owulveryck/toscalib#ToscaDefinition.FillAdjacencyMatrix&#34;&gt;FillAdjacencyMatrix&lt;/a&gt;)&lt;/p&gt;
-
-&lt;p&gt;The &lt;a href=&#34;http://graphviz.org&#34;&gt;graphviz&lt;/a&gt; take care of the (di)graph representation.&lt;/p&gt;
-
-&lt;p&gt;What I would like to do now, is a little bit more: I would like to play with the graph and query it
-Then I should perform requests on this graph. For example I could ask:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;What are the steps to go from the state Initial of the application, to the state running&lt;/em&gt; ?&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;What are the steps to go from stop to delete&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;&amp;hellip;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;and that would be &lt;strong&gt;the premise of a TOSCA orchestrator&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-digraph-go-code&#34;&gt;The digraph go code&lt;/h2&gt;
-
-&lt;p&gt;I&amp;rsquo;ve recently discoverd the &lt;a href=&#34;https://github.com/golang/tools/tree/master/cmd/digraph&#34;&gt;digraph&lt;/a&gt; tool, that I will use for querying the graphs.
-The &lt;code&gt;digraph&lt;/code&gt; is represented as a map with a node as a key and its immediates successors as values:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// A graph maps nodes to the non-nil set of their immediate successors.
-type graph map[string]nodeset
-
-type nodeset map[string]bool
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;from-tosca-to-digraph&#34;&gt;From TOSCA to digraph&lt;/h2&gt;
-
-&lt;p&gt;What I must do is to parse the adjacency matrix, get the &amp;ldquo;lifecycle action&amp;rdquo; related to the id and fill the graph g.&lt;/p&gt;
-
-&lt;h1 id=&#34;let-s-go&#34;&gt;Let&amp;rsquo;s go&lt;/h1&gt;
-
-&lt;p&gt;Considering the digraph code, what I need to do is simply to override the &lt;code&gt;parse&lt;/code&gt; method.&lt;/p&gt;
-
-&lt;h2 id=&#34;principle&#34;&gt;Principle&lt;/h2&gt;
-
-&lt;p&gt;I will fill the &lt;code&gt;graph&lt;/code&gt; with a string composed of &lt;em&gt;nodename:action&lt;/em&gt; as key.
-For example, if I need to do a &amp;ldquo;Configure&amp;rdquo; action of node &amp;ldquo;A&amp;rdquo; after a &amp;ldquo;Start&amp;rdquo; action on node &amp;ldquo;B&amp;rdquo;, I will have the following entry in the map:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;g[&amp;quot;B:Start&amp;quot;] = &amp;quot;A:Configure&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;So What I need to do is to parse the adjjacency matrix, do a matching with the row id and the &amp;ldquo;node:action&amp;rdquo; name, and fill the &lt;code&gt;graph g&lt;/code&gt; with the matching of the corresponding &amp;ldquo;node:action&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;I will fill a &lt;code&gt;map&lt;/code&gt; with the id of the node:action as key and the corresponding label as values:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gloang&#34;&gt;for node, template := range toscaTemplate.TopologyTemplate.NodeTemplates {
-        ids[template.GetConfigureIndex()] = fmt.Sprintf(&amp;quot;%v:Configure&amp;quot;, node)
-        ids[template.GetCreateIndex()] = fmt.Sprintf(&amp;quot;%v:Create&amp;quot;, node)
-        ids[template.GetDeleteIndex()] = fmt.Sprintf(&amp;quot;%v:Delete&amp;quot;, node)
-        ids[template.GetInitialIndex()] = fmt.Sprintf(&amp;quot;%v:Initial&amp;quot;, node)
-        ids[template.GetPostConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PostConfigureSource&amp;quot;, node)
-        ids[template.GetPostConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PostconfigureTarget&amp;quot;, node)
-        ids[template.GetPreConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureSource&amp;quot;, node)
-        ids[template.GetPreConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureTarget&amp;quot;, node)
-        ids[template.GetStartIndex()] = fmt.Sprintf(&amp;quot;%v:Start&amp;quot;, node)
-        ids[template.GetStopIndex()] = fmt.Sprintf(&amp;quot;%v:Stop&amp;quot;, node)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then I can easily fill the &lt;code&gt;graph g&lt;/code&gt; from the adjacency matrix:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-gloang&#34;&gt;row, col := toscaTemplate.AdjacencyMatrix.Dims()
-        for r := 1; r &amp;lt; row; r++ {
-                for c := 1; c &amp;lt; col; c++ {
-                        if adjacencyMatrix.At(r, c) == 1 {
-                                g.addEdges(ids[r], ids[c])
-                        }
-                }
-        }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;That&amp;rsquo;s it&lt;/p&gt;
-
-&lt;h1 id=&#34;the-final-function&#34;&gt;The final function&lt;/h1&gt;
-
-&lt;p&gt;Here is the final parse function&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func parse(rd io.Reader) (graph, error) {
-        g := make(graph)
-        // Parse the input graph.
-        var toscaTemplate toscalib.ToscaDefinition
-        err := toscaTemplate.Parse(rd)
-        if err != nil {
-                return nil, err
-        }
-        // a map containing the ID and the corresponding action
-        ids := make(map[int]string)
-        // Fill in the graph with the toscaTemplate via the adjacency matrix
-        for node, template := range toscaTemplate.TopologyTemplate.NodeTemplates {
-                // Find the edges of the current node and add them to the graph
-
-                ids[template.GetConfigureIndex()] = fmt.Sprintf(&amp;quot;%v:Configure&amp;quot;, node)
-                ids[template.GetCreateIndex()] = fmt.Sprintf(&amp;quot;%v:Create&amp;quot;, node)
-                ids[template.GetDeleteIndex()] = fmt.Sprintf(&amp;quot;%v:Delete&amp;quot;, node)
-                ids[template.GetInitialIndex()] = fmt.Sprintf(&amp;quot;%v:Initial&amp;quot;, node)
-                ids[template.GetPostConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PostConfigureSource&amp;quot;, node)
-                ids[template.GetPostConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PostconfigureTarget&amp;quot;, node)
-                ids[template.GetPreConfigureSourceIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureSource&amp;quot;, node)
-                ids[template.GetPreConfigureTargetIndex()] = fmt.Sprintf(&amp;quot;%v:PreConfigureTarget&amp;quot;, node)
-                ids[template.GetStartIndex()] = fmt.Sprintf(&amp;quot;%v:Start&amp;quot;, node)
-                ids[template.GetStopIndex()] = fmt.Sprintf(&amp;quot;%v:Stop&amp;quot;, node)
-        }
-
-        row, col := toscaTemplate.AdjacencyMatrix.Dims()
-        for r := 1; r &amp;lt; row; r++ {
-                for c := 1; c &amp;lt; col; c++ {
-                        if adjacencyMatrix.At(r, c) == 1 {
-                                g.addEdges(ids[r], ids[c])
-                        }
-                }
-        }
-        return g, nil
-}
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;grab-the-source-and-compile-it&#34;&gt;Grab the source and compile it&lt;/h1&gt;
-
-&lt;p&gt;I have a github repo with the source.
-It is go-gettable&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;go get github.com/owulveryck/digraph
-cd $GOPATH/src/github.com/owulveryck/digraph &amp;amp;&amp;amp; go build
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;EDIT&lt;/strong&gt; As I continue to work on this tool, I have created a &amp;ldquo;blog&amp;rdquo; branch in the github which holds the version related to this post&lt;/p&gt;
-
-&lt;h1 id=&#34;example&#34;&gt;Example&lt;/h1&gt;
-
-&lt;p&gt;I will use the the same example as described below: the single instance wordpress.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve extracted the YAML and placed in in the file &lt;a href=&#34;https://github.com/owulveryck/toscaviewer/blob/master/examples/tosca_single_instance_wordpress.yaml&#34;&gt;tosca_single_instance_wordpress.yaml&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s query the nodes first:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph nodes
-mysql_database:Configure
-mysql_database:Create
-mysql_database:Start
-mysql_dbms:Configure
-mysql_dbms:Create
-mysql_dbms:Start
-server:Configure
-server:Create
-server:Start
-webserver:Configure
-webserver:Create
-webserver:Start
-wordpress:Configure
-wordpress:Create
-wordpress:Start
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;so far, so good&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;Now, I can I go from a &lt;code&gt;Server:Create&lt;/code&gt; to a running instance &lt;code&gt;wordpress:Start&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;curl -s https://raw.githubusercontent.com/owulveryck/toscaviewer/master/examples/tosca_single_instance_wordpress.yaml | ./digraph somepath server:Create wordpress:Start
-server:Create
-server:Configure
-server:Start
-mysql_dbms:Create
-mysql_dbms:Configure
-mysql_dbms:Start
-mysql_database:Create
-mysql_database:Configure
-mysql_database:Start
-wordpress:Create
-wordpress:Configure
-wordpress:Start
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Cool!&lt;/p&gt;
-
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;The tool sounds ok. What I may add:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;a command to display the full lifecycle (finding the entry and the exit points in the matrix and call somepath with it)&lt;/li&gt;
-&lt;li&gt;get the tosca &lt;code&gt;artifacts&lt;/code&gt; and display them instead of the label to generate a deployment plan&lt;/li&gt;
-&lt;li&gt;execute the command in &lt;code&gt;goroutines&lt;/code&gt; to make them concurrent&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;And of course validate any other TOSCA definition to go through a bug hunting party&lt;/p&gt;
 </description>
     </item>
     

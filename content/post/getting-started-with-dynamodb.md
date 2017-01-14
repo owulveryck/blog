@@ -3,7 +3,7 @@ categories:
 - aws
 date: 2017-01-13T22:22:46+01:00
 description: "In this post, I will explain how to extract, process and store informations from a webservice to a NoSQL database (DynamoDB)"
-draft: true
+draft: false
 images:
 - /assets/images/bigdata/stones-483138_640.png
 tags:
