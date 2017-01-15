@@ -1,6 +1,0 @@
-        socks shoes
-        "boxer shorts" pants
-        pants belt shoes
-        shirt tie sweater
-        sweater jacket
-        hat
