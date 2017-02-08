@@ -41,7 +41,7 @@ This leads to the idea that the application is a community of elements. And ever
 
 > __Don't communicate by sharing memory; share memory by communicating.__ - _R. Pike_
 
-How can thos elements share the information?
+How can those elements share the information?
 
 # [Tuple Spaces (or, Good Ideas Don't Always Win)](https://software-carpentry.org/blog/2011/03/tuple-spaces-or-good-ideas-dont-always-win.html)
 
@@ -73,7 +73,7 @@ Linda's principle is very simple as it relies on 4 basic operations:
 * _in(t)_ is used to get a tuple from the tuple space if the tuple matches the tuple t. In blocks until a matching tuples exists in the tuple space.
 * _rd(t)_ (read) is used to read a tuple from the tuple space if the tuple matches the tuple t. It does not remove it from the tuple space.
 * _out(t)_ puts a tuple in the tuple space
-* _eval(t)_ is a promise. It evaluates the function contained in a tuple t, immediatly returns and will place the result in the tuple space later.
+* _eval(t)_ is a promise. It evaluates the function contained in a tuple t, immediately returns and will place the result in the tuple space later.
 
 _Important_ A tuple can be __actual__ or __formal__. An actual tuple holds real values. Therefore the _in_ and _rd_ operations on an actual tuple succeed if every single value of the tuple matches.
 A formal tuple may holds "variables". Therefore the _in_ and _rd_ operations succeed if the real values match and if the type of the formal match the actual value.
@@ -84,11 +84,12 @@ You can find a more complete description of the language and examples [here](htt
 
 Since my colleague [Xavier Talon](https://www.linkedin.com/in/xavier-talon-7bb5261) told me about linda and the idea of using it with TOSCA, I have thousand ideas running around.
 What we would like is to use the linda language to coordinate the nodes of an application topology described by TOSCA.
-As the topology is  obviously distributed the tuple space I will use/implement must exists at the scale of a cloud plateform.
+As the topology is  obviously distributed the tuple space I will use/implement must exists at the scale of a cloud platform.
 
 A raft based key/value store could be used as a tuple space. 
 And of course the virtual operator that will implement the linda language and interact with the tuple space must be self-contained.
 GO would be a good choice for the implementation of the communication agent because of it self-contained, static binary design (maybe RUST would be too but I don't know RUST yet).
+Moreover the built-in concurrency could make the development easy (an eval can be triggered simply in a goroutine).
 
 So __let's POC__
 
@@ -103,7 +104,7 @@ My goals are:
 * To modify the code so it uses etcd as a tuple space
 * To run the philosopher problem on AWS with a philosopher per region
 * To use my TOSCAlib to read a topology and encode it in the tuple space
-* To run a deployement at scale...
+* To run a deployment at scale...
 
 In this post I will present a basic implementation of the language that solves the dinning problem locally.
 
@@ -164,7 +165,7 @@ type Linda struct {
 {{< /highlight  >}}
 
 #### The _Tuple_ type
-As a tuple I will use a flat go structure. Thereofe I can describe a tuple as an interface{}
+As a tuple I will use a flat go structure. Therefore I can describe a tuple as an interface{}
 
 {{< highlight go >}}
 type Tuple interface{}
