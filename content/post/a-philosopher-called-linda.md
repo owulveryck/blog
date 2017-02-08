@@ -30,7 +30,7 @@ Let me explain that:
 
 *Note* With a bunch of IT specialists from different major companies, we are trying to figure out the best way to achieve this goal. I will have the opportunity to talk about that in a dedicated post soon.
 
-To describe an application I have had the opportunity to work with [TOSCA](http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.1/cs0prd01/TOSCA-Simple-Profile-YAML-v1.1-csprd01.html) for a major bank last year (by the way, if you want to play with tosca, you can use my [toscalib by Cisco](https://github.com/CiscoCloud/toscalib).
+To describe an application I have had the opportunity to work with [TOSCA](http://docs.oasis-open.org/TOSCA/TOSCA-Simple-Profile-YAML/v1.1/cs0prd01/TOSCA-Simple-Profile-YAML-v1.1-csprd01.html) for a major bank last year (by the way, if you want to play with TOSCA, you can use my [TOSCAlib by Cisco](https://github.com/CiscoCloud/TOSCAlib).
 
 I have really liked the idea of an independent DSL that was able to fully describe an application in a way that it can be writable and understandable by a human as well as a machine.
 
@@ -52,7 +52,7 @@ The title of this section is taken from [this blog post](https://software-carpen
 A tuple is simply a finite list of element... the element can be of any type. Therefore a tuple set could be use to describe a lot of things. Because actually we can use a tuple set to describe a vector.
 And with several vectors we can describe a matrix...
 
-For example, a digraph can be represented by a tuple set that discribes its adjacency matrix. It can then be possible to transpile a TOSCA description to a tuple-set (cf [Orchestrate a digraph with goroutine, a concurrent orchestrator](https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html) for the decomposition of a tosca lifecycle in a matrix).
+For example, a digraph can be represented by a tuple set that discribes its adjacency matrix. It can then be possible to transpile a TOSCA description to a tuple-set (cf [Orchestrate a digraph with goroutine, a concurrent orchestrator](https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html) for the decomposition of a TOSCA lifecycle in a matrix).
 
 Now ok, we can describe a workflow... but in a distributed application, how can the node share memory?
 
@@ -82,20 +82,24 @@ You can find a more complete description of the language [here](http://www.cs.bu
 
 # The ideas of the geeks...
 
-What I would like is to use the linda language to coordinate the nodes of my TOSCA topology.
+Since my colleague [Xavier Talon](https://www.linkedin.com/in/xavier-talon-7bb5261) told me about linda and the idea of using it with TOSCA, I have thousand ideas running around.
+What we would like is to use the linda language to coordinate the nodes of an application topology described by TOSCA.
 Of course the topology is distributed so the tuple space I will use/implement must exists at the scale of a cloud plateform.
-A raft based kv could be used as a tuple space.
+A raft based kv could be used as a tuple space. Of course GO would be a good choice for the implementation of the communication agent because of it self-contained, static binary design.
+
+But every story needs a fresh start and we shoud move one step at a time.
+First we need to be sure that a distributed tuple-space could work in the cloud.
 
 As a proof of concept, I will use the philosophers dinning problem as simply described in page 452 of the paper [Linda in context](http://www.inf.ed.ac.uk/teaching/courses/ppls/linda.pdf) from Nicholas Carriero and David Gelernter.
 
 My goals are:
 
-* Implement a basic Linda language in go
-* Run the philosopher problem locally
-* Modify the code so it uses etcd as a tuple space
-* Run the philosopher problem on AWS with a philosopher per region
-* Use my toscalib to read a topology and encode it in the tuple space
-* Run a deployement at scale...
+* To implement a basic Linda language in go
+* To run the philosopher problem locally
+* To modify the code so it uses etcd as a tuple space
+* To run the philosopher problem on AWS with a philosopher per region
+* To use my TOSCAlib to read a topology and encode it in the tuple space
+* To run a deployement at scale...
 
 In this post I will present a basic implementation of the language that solves the dinning problem locally.
 
@@ -143,9 +147,10 @@ initialize()
 
 ### What is needed
 
-To solve the problem I don't have to fully implement the linda language. There is no need for the _rd_ action. _eval_ is simply a fork that I will implement using a goroutine and _in_ and _out_ do not use formal tuples.
+To solve this particular problem I don't have to fully implement the linda language. There is no need for the _rd_ action. _eval_ is simply a fork that I will implement using a goroutine and _in_ and _out_ do not use formal tuples.
 
 The actions will communicate with the tuple space via `channels`. Therefore I can create a type Linda composed of two channels for input and output. The actions will be methods of the Linda type.
+both _in_ and _rd_ method will get all the tuples in a loop and decide to put them back in the space or to keep it.
 
 {{< highlight go >}}
 type Linda struct {
@@ -181,9 +186,28 @@ func (l *Linda) In(m Tuple) {
 
 ### The _eval_ function
 
+The eval function is a bit trickier because we cannot simply pass the function as it would be evaluated before the substitution of the arguments.
+What I will do is to pass an array of interface{}. The first argument will hold the function as a first class citizen and the other elements are the arguments of the function.
+I will use the reflection to be sure that the argument is a function and executes it in a go routine.
 
+{{< highlight go >}}
+func (l *Linda) Eval(fns []interface{}) {
+	// The first argument of eval should be the function
+	if reflect.ValueOf(fns[0]).Kind() == reflect.Func {
+		fn := reflect.ValueOf(fns[0])
+		var args []reflect.Value
+		for i := 1; i < len(fns); i++ {
+			args = append(args, reflect.ValueOf(fns[i]))
+		}
+		go fn.Call(args)
+	}
+}
+{{< /highlight  >}}
+
+## Back to the philosophers...
 
 #### The Go-linda implementation
+Regarding the implementation of Linda, the transcription of the algorithm is simple:
 
 {{< highlight go >}}
 for i := 0; i < num; i++ {
@@ -214,15 +238,47 @@ func phil(i int) {
 }
 {{< /highlight >}}
 
+### The tuple space
+We have Linda... that can put and read tuples via channels... But we still need to plug those channels to the tuple space.
+As a first example, we won't store the information and simply pass them from output to input in an endless loop.
+
+{{< highlight go >}}
+go func() {
+    for i := range output {
+        input <- i
+    }
+}()
+{{< /highlight >}}
+
+## Execution
+
+After compiling and executing the code, I can see my philosophers are eating and thinking... 
+<pre>
+Philosopher 1 is born
+[1] is thinking
+Philosopher 0 is born
+[0] is thinking
+Philosopher 3 is born
+[3] is thinking
+Philosopher 2 is born
+[2] is thinking
+Philosopher 4 is born
+[4] is thinking
+[2] has finished thinking
+[2] is hungry
+[2] is eating
+[1] has finished thinking
+[1] is hungry
+[1] is eating
+[4] has finished thinking
+[4] is hungry
+[4] is eating
+...
+</pre>
+The code can be found here [github.com/owulveryck/go-linda](https://github.com/owulveryck/go-linda/releases/tag/v0.1)
+
 # Conclusion
-func (l *Linda) Eval(fns []interface{}) {
-	// The first argument of eval should be the function
-	if reflect.ValueOf(fns[0]).Kind() == reflect.Func {
-		fn := reflect.ValueOf(fns[0])
-		var args []reflect.Value
-		for i := 1; i < len(fns); i++ {
-			args = append(args, reflect.ValueOf(fns[i]))
-		}
-		go fn.Call(args)
-	}
-}
+
+This is a very basic implementation of the first step. 
+
+In my next experiment, I will try to plug etcd as a tuple space so the philosophers could be distributed around the world.
