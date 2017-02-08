@@ -3,7 +3,7 @@ categories:
 - Ideas
 date: 2017-02-03T20:57:30+01:00
 description: "A non geek article (for now) to talk about the dinner of the philosophers in the cloud"
-draft: true
+draft: false
 images:
 - /2016/10/image.jpg
 tags:
