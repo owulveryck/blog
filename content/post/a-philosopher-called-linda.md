@@ -18,7 +18,7 @@ title: Linda, 31yo, with 5 starving philosophers...
 It ain't no secret to anyone actually knowing me: I am a fan of automation. Automation and configuration management 
 have come a long way since [Mark Burgess](http://markburgess.org/) wrote the first version of [cfengine](https://cfengine.com/).
 
-But even if the landscape has changed, operators are still scripting (only the DLS has changed), and the area targeted by those scripts remains technical.
+But even if the landscape has changed, operators are still scripting (only the DSL has changed), and the area targeted by those scripts remains technical.
 
 There is no real abstraction nor automation of a design. 
 
@@ -26,7 +26,7 @@ Let me explain that:
 
 * You still need a human to read and understand the architecture of an application. 
 * You still need another human to transpile it into a language understandable by a CM tool.
-* And you need to configure/script this tool to react on some events to keep the application healthy (take for example the auto-scaling group or the elastic bean stalk from AWS)
+* And you need to configure/script this tool to react on some events to keep the application running and healthy. 
 
 *Note* With a bunch of IT specialists from different major companies, we are trying to figure out the best way to achieve this goal. I will have the opportunity to talk about that in a dedicated post soon.
 
@@ -37,30 +37,30 @@ I have really liked the idea of an independent DSL that was able to fully descri
 But it is not enough. TOSCA is based on the idea that you need an orchestrator to operate the workflow. And orchestrator is "bad". The management system must be distributed and autonomous.
 (for more about that cf [Configuration management, choreography and self-aware applications](https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html)
 
-The application is a community of elements. And every single element of the community will act regarding the information it gets from the environments and from its peers.
+This leads to the idea that the application is a community of elements. And every single element of the community will act regarding the information it gets from the environments and from its peers.
 
 > __Don't communicate by sharing memory; share memory by communicating.__ - _R. Pike_
 
-How can we share memory?
+How can thos elements share the information?
 
 # [Tuple Spaces (or, Good Ideas Don't Always Win)](https://software-carpentry.org/blog/2011/03/tuple-spaces-or-good-ideas-dont-always-win.html)
 
 The title of this section is taken from [this blog post](https://software-carpentry.org/blog/2011/03/tuple-spaces-or-good-ideas-dont-always-win.html) which is indeed a good introduction on the tuple-space and how to use them.
 
-## What is a tuple
+## First: What is a tuple
 
-A tuple is simply a finite list of element... the element can be of any type. Therefore a tuple set could be use to describe a lot of things. Because actually we can use a tuple set to describe a vector.
-And with several vectors we can describe a matrix...
+A tuple is simply a finite list of element... the element can be of any type. Therefore a tuple set could be used to describe a lot of things. Because actually we can use a tuple set to describe a vector.
+And with several vectors we can describe a matrix, and with matrix...
 
-For example, a digraph can be represented by a tuple set that discribes its adjacency matrix. It can then be possible to transpile a TOSCA description to a tuple-set (cf [Orchestrate a digraph with goroutine, a concurrent orchestrator](https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html) for the decomposition of a TOSCA lifecycle in a matrix).
+For example, a digraph can be represented by a tuple set that discribes its adjacency matrix. Therefore, for example, it can then be possible to transpile a TOSCA description to a tuple-set (cf [Orchestrate a digraph with goroutine, a concurrent orchestrator](https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html) for the decomposition of a TOSCA lifecycle in a matrix).
 
-Now ok, we can describe a workflow... but in a distributed application, how can the node share memory?
+Now ok, we can describe a workflow... but in a distributed application, how can the node share their states?
 
 ## Tuple space...
 
 In short, a tuple space is a repository of tuples that can be accessed concurrently. A tuple space can be seen as a big bucket full of tuple.
 
-The tuple space is visible and consistent through all nodes.
+The tuple space is visible and consistent through all nodes. The tuple space is the memory!
 
 Ok, so last question: How do we access the tuples? 
 
@@ -75,20 +75,24 @@ Linda's principle is very simple as it relies on 4 basic operations:
 * _out(t)_ puts a tuple in the tuple space
 * _eval(t)_ is a promise. It evaluates the function contained in a tuple t, immediatly returns and will place the result in the tuple space later.
 
-_Important_ A tuple can be __actual__ or __formal__. An acutal tuple holds real values. Therefore the _in_ and _rd_ operations on an actual tuple succeed if every single value of the tuple matches.
-A formal tuple may holds "variables". Therefore the _in_ and _ rd_ operations succeed if the real values match and if the type of the formal match the actual value.
+_Important_ A tuple can be __actual__ or __formal__. An actual tuple holds real values. Therefore the _in_ and _rd_ operations on an actual tuple succeed if every single value of the tuple matches.
+A formal tuple may holds "variables". Therefore the _in_ and _rd_ operations succeed if the real values match and if the type of the formal match the actual value.
 
-You can find a more complete description of the language [here](http://www.cs.bu.edu/~best/crs/cs551/lectures/lecture-22.html)
+You can find a more complete description of the language and examples [here](http://www.cs.bu.edu/~best/crs/cs551/lectures/lecture-22.html).
 
-# The ideas of the geeks...
+# Think big, start small, move fast
 
 Since my colleague [Xavier Talon](https://www.linkedin.com/in/xavier-talon-7bb5261) told me about linda and the idea of using it with TOSCA, I have thousand ideas running around.
 What we would like is to use the linda language to coordinate the nodes of an application topology described by TOSCA.
-Of course the topology is distributed so the tuple space I will use/implement must exists at the scale of a cloud plateform.
-A raft based kv could be used as a tuple space. Of course GO would be a good choice for the implementation of the communication agent because of it self-contained, static binary design.
+As the topology is  obviously distributed the tuple space I will use/implement must exists at the scale of a cloud plateform.
 
-But every story needs a fresh start and we shoud move one step at a time.
-First we need to be sure that a distributed tuple-space could work in the cloud.
+A raft based key/value store could be used as a tuple space. 
+And of course the virtual operator that will implement the linda language and interact with the tuple space must be self-contained.
+GO would be a good choice for the implementation of the communication agent because of it self-contained, static binary design (maybe RUST would be too but I don't know RUST yet).
+
+So __let's POC__
+
+First of all First we need to be sure that a distributed tuple-space could work in the cloud.
 
 As a proof of concept, I will use the philosophers dinning problem as simply described in page 452 of the paper [Linda in context](http://www.inf.ed.ac.uk/teaching/courses/ppls/linda.pdf) from Nicholas Carriero and David Gelernter.
 
