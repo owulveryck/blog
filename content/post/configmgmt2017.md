@@ -17,7 +17,11 @@ Last year, as I mentionned in [my review](/2016/02/10/configuration-management-c
 
 This year's edition was more about the maturity of the configuration management.
 
+Actually, the title of this blog post is the same as the keynote given by John Vincent.
+
 # The maturity of the tools
+
+![xkcd 1629 / tools](https://imgs.xkcd.com/comics/tools.png)
 
 # The economy around the tools
 
