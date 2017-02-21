@@ -10,6 +10,303 @@
     <atom:link href="https://blog.owulveryck.info/tags/topology.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Linda, 31yo, with 5 starving philosophers...</title>
+      <link>https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers.../index.html</link>
+      <pubDate>Fri, 03 Feb 2017 20:57:30 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers.../index.html</guid>
+      <description>
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;The hand is the tool of tools&lt;/strong&gt; - &lt;em&gt;Aristotle&lt;/em&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;It ain&amp;rsquo;t no secret to anyone actually knowing me: I am a fan of automation. Automation and configuration management
+have come a long way since &lt;a href=&#34;http://markburgess.org/&#34;&gt;Mark Burgess&lt;/a&gt; wrote the first version of &lt;a href=&#34;https://cfengine.com/&#34;&gt;cfengine&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;But even if the landscape has changed, operators are still scripting (only the DSL has changed), and the area targeted by those scripts remains technical.&lt;/p&gt;
+
+&lt;p&gt;There is no real abstraction nor automation of a design.&lt;/p&gt;
+
+&lt;p&gt;Let me explain that:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;You still need a human to read and understand the architecture of an application.&lt;/li&gt;
+&lt;li&gt;You still need another human to transpile it into a language understandable by a CM tool.&lt;/li&gt;
+&lt;li&gt;And you need to configure/script this tool to react on some events to keep the application running and healthy.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; With a bunch of IT specialists from different major companies, we are trying to figure out the best way to achieve this goal. I will have the opportunity to talk about that in a dedicated post soon.&lt;/p&gt;
+
+&lt;p&gt;To describe an application I have had the opportunity to work with &lt;a href=&#34;http://docs.oasis-open.org/TOSCA/TOSCA-Simple-Profile-YAML/v1.1/cs0prd01/TOSCA-Simple-Profile-YAML-v1.1-csprd01.html&#34;&gt;TOSCA&lt;/a&gt; for a major bank last year (by the way, if you want to play with TOSCA, you can use my &lt;a href=&#34;https://github.com/CiscoCloud/TOSCAlib&#34;&gt;TOSCAlib by Cisco&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I have really liked the idea of an independent DSL that was able to fully describe an application in a way that it can be writable and understandable by a human as well as a machine.&lt;/p&gt;
+
+&lt;p&gt;But it is not enough. TOSCA is based on the idea that you need an orchestrator to operate the workflow. And orchestrator is &amp;ldquo;bad&amp;rdquo;. The management system must be distributed and autonomous.
+(for more about that cf &lt;a href=&#34;https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html&#34;&gt;Configuration management, choreography and self-aware applications&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This leads to the idea that the application is a community of elements. And every single element of the community will act regarding the information it gets from the environments and from its peers.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Don&amp;rsquo;t communicate by sharing memory; share memory by communicating.&lt;/strong&gt; - &lt;em&gt;R. Pike&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;How can those elements share the information?&lt;/p&gt;
+
+&lt;h1 id=&#34;tuple-spaces-or-good-ideas-don-t-always-win-https-software-carpentry-org-blog-2011-03-tuple-spaces-or-good-ideas-dont-always-win-html&#34;&gt;&lt;a href=&#34;https://software-carpentry.org/blog/2011/03/tuple-spaces-or-good-ideas-dont-always-win.html&#34;&gt;Tuple Spaces (or, Good Ideas Don&amp;rsquo;t Always Win)&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;The title of this section is taken from &lt;a href=&#34;https://software-carpentry.org/blog/2011/03/tuple-spaces-or-good-ideas-dont-always-win.html&#34;&gt;this blog post&lt;/a&gt; which is indeed a good introduction on the tuple-space and how to use them.&lt;/p&gt;
+
+&lt;h2 id=&#34;first-what-is-a-tuple&#34;&gt;First: What is a tuple&lt;/h2&gt;
+
+&lt;p&gt;A tuple is simply a finite list of element&amp;hellip; the element can be of any type. Therefore a tuple set could be used to describe a lot of things. Because actually we can use a tuple set to describe a vector.
+And with several vectors we can describe a matrix, and with matrix&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;For example, a digraph can be represented by a tuple set that discribes its adjacency matrix. Therefore, for example, it can then be possible to transpile a TOSCA description to a tuple-set (cf &lt;a href=&#34;https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html&#34;&gt;Orchestrate a digraph with goroutine, a concurrent orchestrator&lt;/a&gt; for the decomposition of a TOSCA lifecycle in a matrix).&lt;/p&gt;
+
+&lt;p&gt;Now ok, we can describe a workflow&amp;hellip; but in a distributed application, how can the node share their states?&lt;/p&gt;
+
+&lt;h2 id=&#34;tuple-space&#34;&gt;Tuple space&amp;hellip;&lt;/h2&gt;
+
+&lt;p&gt;In short, a tuple space is a repository of tuples that can be accessed concurrently. A tuple space can be seen as a big bucket full of tuple.&lt;/p&gt;
+
+&lt;p&gt;The tuple space is visible and consistent through all nodes. The tuple space is the memory!&lt;/p&gt;
+
+&lt;p&gt;Ok, so last question: How do we access the tuples?&lt;/p&gt;
+
+&lt;h1 id=&#34;meet-linda&#34;&gt;Meet Linda&lt;/h1&gt;
+
+&lt;p&gt;Linda is a &amp;ldquo;coordination language&amp;rdquo; developed by Sudhir Ahuja at AT&amp;amp;T Bell Laboratories in collaboration with David Gelernter and Nicholas Carriero at Yale University in 1986 (&lt;a href=&#34;https://en.wikipedia.org/wiki/Linda_(coordination_language)&#34;&gt;cf wikipedia&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;Linda&amp;rsquo;s principle is very simple as it relies on 4 basic operations:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;in(t)&lt;/em&gt; is used to get a tuple from the tuple space if the tuple matches the tuple t. In blocks until a matching tuples exists in the tuple space.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;rd(t)&lt;/em&gt; (read) is used to read a tuple from the tuple space if the tuple matches the tuple t. It does not remove it from the tuple space.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;out(t)&lt;/em&gt; puts a tuple in the tuple space&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;eval(t)&lt;/em&gt; is a promise. It evaluates the function contained in a tuple t, immediately returns and will place the result in the tuple space later.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;Important&lt;/em&gt; A tuple can be &lt;strong&gt;actual&lt;/strong&gt; or &lt;strong&gt;formal&lt;/strong&gt;. An actual tuple holds real values. Therefore the &lt;em&gt;in&lt;/em&gt; and &lt;em&gt;rd&lt;/em&gt; operations on an actual tuple succeed if every single value of the tuple matches.
+A formal tuple may holds &amp;ldquo;variables&amp;rdquo;. Therefore the &lt;em&gt;in&lt;/em&gt; and &lt;em&gt;rd&lt;/em&gt; operations succeed if the real values match and if the type of the formal match the actual value.&lt;/p&gt;
+
+&lt;p&gt;You can find a more complete description of the language and examples &lt;a href=&#34;http://www.cs.bu.edu/~best/crs/cs551/lectures/lecture-22.html&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;think-big-start-small-move-fast&#34;&gt;Think big, start small, move fast&lt;/h1&gt;
+
+&lt;p&gt;Since my colleague &lt;a href=&#34;https://www.linkedin.com/in/xavier-talon-7bb5261&#34;&gt;Xavier Talon&lt;/a&gt; told me about linda and the idea of using it with TOSCA, I have thousand ideas running around.
+What we would like is to use the linda language to coordinate the nodes of an application topology described by TOSCA.
+As the topology is  obviously distributed the tuple space I will use/implement must exists at the scale of a cloud platform.&lt;/p&gt;
+
+&lt;p&gt;A raft based key/value store could be used as a tuple space.
+And of course the virtual operator that will implement the linda language and interact with the tuple space must be self-contained.
+GO would be a good choice for the implementation of the communication agent because of it self-contained, static binary design (maybe RUST would be too but I don&amp;rsquo;t know RUST yet).
+Moreover the built-in concurrency could make the development easy (an eval can be triggered simply in a goroutine).&lt;/p&gt;
+
+&lt;p&gt;So &lt;strong&gt;let&amp;rsquo;s POC&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;First of all First we need to be sure that a distributed tuple-space could work in the cloud.&lt;/p&gt;
+
+&lt;p&gt;As a proof of concept, I will use the philosophers dinning problem as simply described in page 452 of the paper &lt;a href=&#34;http://www.inf.ed.ac.uk/teaching/courses/ppls/linda.pdf&#34;&gt;Linda in context&lt;/a&gt; from Nicholas Carriero and David Gelernter.&lt;/p&gt;
+
+&lt;p&gt;My goals are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;To implement a basic Linda language in go&lt;/li&gt;
+&lt;li&gt;To run the philosopher problem locally&lt;/li&gt;
+&lt;li&gt;To modify the code so it uses etcd as a tuple space&lt;/li&gt;
+&lt;li&gt;To run the philosopher problem on AWS with a philosopher per region&lt;/li&gt;
+&lt;li&gt;To use my TOSCAlib to read a topology and encode it in the tuple space&lt;/li&gt;
+&lt;li&gt;To run a deployment at scale&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In this post I will present a basic implementation of the language that solves the dinning problem locally.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-problem&#34;&gt;The problem&lt;/h2&gt;
+
+&lt;p&gt;Here is the problem as exposed in the paper:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;A round table is set with some number of plates (traditionally five); there is a single chopstick between each two plates, and a bowl of rice in the center of the table. Philosophers think, then enter the room, eat, leave the room and repeat the cycle. A philosopher can eat without two chopsticks in hand; the two he needs are the ones to the left and the right of the plate at which he is seated.  If the table is full and all philosophers simultaneously grab their left chopsticks, no right chopsticks are available and deadlock ensues. To prevent deadlock, we allow only four philosophers (or one less than the total number of plates) into the room at any one time.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-implementation&#34;&gt;The implementation&lt;/h2&gt;
+
+&lt;p&gt;I have extracted the C-Linda implementation of this problem and copied it here.&lt;/p&gt;
+
+&lt;h4 id=&#34;the-c-linda-implenentation&#34;&gt;The C linda implenentation&lt;/h4&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;Phil(i)
+  &lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt; i;
+{
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;while&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) {
+      think();
+      in(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;);
+      in(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt;, i) ;
+      in(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt;, (i&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt;l)&lt;span style=&#34;color: #666666&#34;&gt;%&lt;/span&gt;Num) ;
+      eat();
+      out(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt;, i);
+      out(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt;, (i&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt;i)&lt;span style=&#34;color: #666666&#34;&gt;%&lt;/span&gt;Num);
+      out(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;);
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;initialize()
+{
+  &lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt; i;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;; i &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt; Hum; i&lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt;) C
+    out(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt;, i);
+    eval(phil(i));
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; (i &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt; (Num&lt;span style=&#34;color: #666666&#34;&gt;-1&lt;/span&gt;)) 
+      out(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;);
+  }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;what-is-needed&#34;&gt;What is needed&lt;/h3&gt;
+
+&lt;p&gt;To solve this particular problem I don&amp;rsquo;t have to fully implement the linda language. There is no need for the &lt;em&gt;rd&lt;/em&gt; action. &lt;em&gt;eval&lt;/em&gt; is simply a fork that I will implement using a goroutine and &lt;em&gt;in&lt;/em&gt; and &lt;em&gt;out&lt;/em&gt; do not use formal tuples.&lt;/p&gt;
+
+&lt;p&gt;The actions will communicate with the tuple space via &lt;code&gt;channels&lt;/code&gt;. Therefore I can create a type Linda composed of two channels for input and output. The actions will be methods of the Linda type.
+both &lt;em&gt;in&lt;/em&gt; and &lt;em&gt;rd&lt;/em&gt; method will get all the tuples in a loop and decide to put them back in the space or to keep it.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; Linda &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; {
+  Input  &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{}
+  Output &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;chan&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{}
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4 id=&#34;the-tuple-type&#34;&gt;The &lt;em&gt;Tuple&lt;/em&gt; type&lt;/h4&gt;
+
+&lt;p&gt;As a tuple I will use a flat go structure. Therefore I can describe a tuple as an interface{}&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; Tuple &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4 id=&#34;the-in-action&#34;&gt;The &lt;em&gt;in&lt;/em&gt; action&lt;/h4&gt;
+
+&lt;p&gt;In will read from the input channel until an object matching its argument is present. If the object read is different, It is sent back in the tuple space via the output channels:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt; (l &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;Linda) In(m Tuple) {
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; t &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; l.Input {
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; match(m, t) {
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Assign t to m&lt;/span&gt;
+        m = t
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt;
+      }
+      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Not for me, put the tuple back&lt;/span&gt;
+      l.Output &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;-&lt;/span&gt; m
+  }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;the-eval-function&#34;&gt;The &lt;em&gt;eval&lt;/em&gt; function&lt;/h3&gt;
+
+&lt;p&gt;The eval function is a bit trickier because we cannot simply pass the function as it would be evaluated before the substitution of the arguments.
+What I will do is to pass an array of interface{}. The first argument will hold the function as a first class citizen and the other elements are the arguments of the function.
+I will use the reflection to be sure that the argument is a function and executes it in a go routine.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt; (l &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;Linda) Eval(fns []&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{}) {
+	&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// The first argument of eval should be the function&lt;/span&gt;
+	&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; reflect.ValueOf(fns[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]).Kind() &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; reflect.Func {
+		fn &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; reflect.ValueOf(fns[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;])
+		&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;var&lt;/span&gt; args []reflect.Value
+		&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;; i &amp;lt; &lt;span style=&#34;color: #008000&#34;&gt;len&lt;/span&gt;(fns); i&lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; {
+			args = &lt;span style=&#34;color: #008000&#34;&gt;append&lt;/span&gt;(args, reflect.ValueOf(fns[i]))
+		}
+		&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;go&lt;/span&gt; fn.Call(args)
+	}
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;back-to-the-philosophers&#34;&gt;Back to the philosophers&amp;hellip;&lt;/h2&gt;
+
+&lt;h4 id=&#34;the-go-linda-implementation&#34;&gt;The Go-linda implementation&lt;/h4&gt;
+
+&lt;p&gt;Regarding the implementation of Linda, the transcription of the algorithm is simple:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;; i &amp;lt; num; i&lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; {
+    ld.Out(chopstick(i))
+    ld.Eval([]&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{}{phil, i})
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; i &amp;lt; (num &lt;span style=&#34;color: #666666&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) {
+        ld.Out(ticket{})
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt; phil(i &lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;) {
+    p &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; philosopher{i}
+    fmt.Printf(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Philosopher %v is born\n&amp;quot;&lt;/span&gt;, p.ID)
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; {
+        p.think()
+        fmt.Printf(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;[%v] is hungry\n&amp;quot;&lt;/span&gt;, p.ID)
+        ld.In(ticket{})
+        ld.In(chopstick(i))
+        ld.In(chopstick((i &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;%&lt;/span&gt; num))
+        p.eat()
+        ld.Out(chopstick(i))
+        ld.Out(chopstick((i &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;%&lt;/span&gt; num))
+        ld.Out(ticket{})
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;the-tuple-space&#34;&gt;The tuple space&lt;/h3&gt;
+
+&lt;p&gt;We have Linda&amp;hellip; that can put and read tuples via channels&amp;hellip; But we still need to plug those channels to the tuple space.
+As a first example, we won&amp;rsquo;t store the information and simply pass them from output to input in an endless loop.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt;() {
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; output {
+        input &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;-&lt;/span&gt; i
+    }
+}()
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;execution&#34;&gt;Execution&lt;/h2&gt;
+
+&lt;p&gt;After compiling and executing the code, I can see my philosophers are eating and thinking&amp;hellip;
+&lt;pre&gt;
+Philosopher 1 is born
+[1] is thinking
+Philosopher 0 is born
+[0] is thinking
+Philosopher 3 is born
+[3] is thinking
+Philosopher 2 is born
+[2] is thinking
+Philosopher 4 is born
+[4] is thinking
+[2] has finished thinking
+[2] is hungry
+[2] is eating
+[1] has finished thinking
+[1] is hungry
+[1] is eating
+[4] has finished thinking
+[4] is hungry
+[4] is eating
+&amp;hellip;
+&lt;/pre&gt;
+The code can be found here &lt;a href=&#34;https://github.com/owulveryck/go-linda/releases/tag/v0.1&#34;&gt;github.com/owulveryck/go-linda&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;This is a very basic implementation of the first step.&lt;/p&gt;
+
+&lt;p&gt;In my next experiment, I will try to plug etcd as a tuple space so the philosophers could be distributed around the world.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Configuration management, choreography and self-aware applications</title>
       <link>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>

@@ -7,8 +7,305 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <lastBuildDate>Fri, 13 Jan 2017 22:22:46 +0100</lastBuildDate>
+    <lastBuildDate>Fri, 03 Feb 2017 20:57:30 +0100</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Linda, 31yo, with 5 starving philosophers...</title>
+      <link>https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers.../index.html</link>
+      <pubDate>Fri, 03 Feb 2017 20:57:30 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers.../index.html</guid>
+      <description>
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;The hand is the tool of tools&lt;/strong&gt; - &lt;em&gt;Aristotle&lt;/em&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;It ain&amp;rsquo;t no secret to anyone actually knowing me: I am a fan of automation. Automation and configuration management
+have come a long way since &lt;a href=&#34;http://markburgess.org/&#34;&gt;Mark Burgess&lt;/a&gt; wrote the first version of &lt;a href=&#34;https://cfengine.com/&#34;&gt;cfengine&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;But even if the landscape has changed, operators are still scripting (only the DSL has changed), and the area targeted by those scripts remains technical.&lt;/p&gt;
+
+&lt;p&gt;There is no real abstraction nor automation of a design.&lt;/p&gt;
+
+&lt;p&gt;Let me explain that:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;You still need a human to read and understand the architecture of an application.&lt;/li&gt;
+&lt;li&gt;You still need another human to transpile it into a language understandable by a CM tool.&lt;/li&gt;
+&lt;li&gt;And you need to configure/script this tool to react on some events to keep the application running and healthy.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt; With a bunch of IT specialists from different major companies, we are trying to figure out the best way to achieve this goal. I will have the opportunity to talk about that in a dedicated post soon.&lt;/p&gt;
+
+&lt;p&gt;To describe an application I have had the opportunity to work with &lt;a href=&#34;http://docs.oasis-open.org/TOSCA/TOSCA-Simple-Profile-YAML/v1.1/cs0prd01/TOSCA-Simple-Profile-YAML-v1.1-csprd01.html&#34;&gt;TOSCA&lt;/a&gt; for a major bank last year (by the way, if you want to play with TOSCA, you can use my &lt;a href=&#34;https://github.com/CiscoCloud/TOSCAlib&#34;&gt;TOSCAlib by Cisco&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I have really liked the idea of an independent DSL that was able to fully describe an application in a way that it can be writable and understandable by a human as well as a machine.&lt;/p&gt;
+
+&lt;p&gt;But it is not enough. TOSCA is based on the idea that you need an orchestrator to operate the workflow. And orchestrator is &amp;ldquo;bad&amp;rdquo;. The management system must be distributed and autonomous.
+(for more about that cf &lt;a href=&#34;https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html&#34;&gt;Configuration management, choreography and self-aware applications&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;This leads to the idea that the application is a community of elements. And every single element of the community will act regarding the information it gets from the environments and from its peers.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Don&amp;rsquo;t communicate by sharing memory; share memory by communicating.&lt;/strong&gt; - &lt;em&gt;R. Pike&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;How can those elements share the information?&lt;/p&gt;
+
+&lt;h1 id=&#34;tuple-spaces-or-good-ideas-don-t-always-win-https-software-carpentry-org-blog-2011-03-tuple-spaces-or-good-ideas-dont-always-win-html&#34;&gt;&lt;a href=&#34;https://software-carpentry.org/blog/2011/03/tuple-spaces-or-good-ideas-dont-always-win.html&#34;&gt;Tuple Spaces (or, Good Ideas Don&amp;rsquo;t Always Win)&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;The title of this section is taken from &lt;a href=&#34;https://software-carpentry.org/blog/2011/03/tuple-spaces-or-good-ideas-dont-always-win.html&#34;&gt;this blog post&lt;/a&gt; which is indeed a good introduction on the tuple-space and how to use them.&lt;/p&gt;
+
+&lt;h2 id=&#34;first-what-is-a-tuple&#34;&gt;First: What is a tuple&lt;/h2&gt;
+
+&lt;p&gt;A tuple is simply a finite list of element&amp;hellip; the element can be of any type. Therefore a tuple set could be used to describe a lot of things. Because actually we can use a tuple set to describe a vector.
+And with several vectors we can describe a matrix, and with matrix&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;For example, a digraph can be represented by a tuple set that discribes its adjacency matrix. Therefore, for example, it can then be possible to transpile a TOSCA description to a tuple-set (cf &lt;a href=&#34;https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html&#34;&gt;Orchestrate a digraph with goroutine, a concurrent orchestrator&lt;/a&gt; for the decomposition of a TOSCA lifecycle in a matrix).&lt;/p&gt;
+
+&lt;p&gt;Now ok, we can describe a workflow&amp;hellip; but in a distributed application, how can the node share their states?&lt;/p&gt;
+
+&lt;h2 id=&#34;tuple-space&#34;&gt;Tuple space&amp;hellip;&lt;/h2&gt;
+
+&lt;p&gt;In short, a tuple space is a repository of tuples that can be accessed concurrently. A tuple space can be seen as a big bucket full of tuple.&lt;/p&gt;
+
+&lt;p&gt;The tuple space is visible and consistent through all nodes. The tuple space is the memory!&lt;/p&gt;
+
+&lt;p&gt;Ok, so last question: How do we access the tuples?&lt;/p&gt;
+
+&lt;h1 id=&#34;meet-linda&#34;&gt;Meet Linda&lt;/h1&gt;
+
+&lt;p&gt;Linda is a &amp;ldquo;coordination language&amp;rdquo; developed by Sudhir Ahuja at AT&amp;amp;T Bell Laboratories in collaboration with David Gelernter and Nicholas Carriero at Yale University in 1986 (&lt;a href=&#34;https://en.wikipedia.org/wiki/Linda_(coordination_language)&#34;&gt;cf wikipedia&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;Linda&amp;rsquo;s principle is very simple as it relies on 4 basic operations:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;in(t)&lt;/em&gt; is used to get a tuple from the tuple space if the tuple matches the tuple t. In blocks until a matching tuples exists in the tuple space.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;rd(t)&lt;/em&gt; (read) is used to read a tuple from the tuple space if the tuple matches the tuple t. It does not remove it from the tuple space.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;out(t)&lt;/em&gt; puts a tuple in the tuple space&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;eval(t)&lt;/em&gt; is a promise. It evaluates the function contained in a tuple t, immediately returns and will place the result in the tuple space later.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;Important&lt;/em&gt; A tuple can be &lt;strong&gt;actual&lt;/strong&gt; or &lt;strong&gt;formal&lt;/strong&gt;. An actual tuple holds real values. Therefore the &lt;em&gt;in&lt;/em&gt; and &lt;em&gt;rd&lt;/em&gt; operations on an actual tuple succeed if every single value of the tuple matches.
+A formal tuple may holds &amp;ldquo;variables&amp;rdquo;. Therefore the &lt;em&gt;in&lt;/em&gt; and &lt;em&gt;rd&lt;/em&gt; operations succeed if the real values match and if the type of the formal match the actual value.&lt;/p&gt;
+
+&lt;p&gt;You can find a more complete description of the language and examples &lt;a href=&#34;http://www.cs.bu.edu/~best/crs/cs551/lectures/lecture-22.html&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;think-big-start-small-move-fast&#34;&gt;Think big, start small, move fast&lt;/h1&gt;
+
+&lt;p&gt;Since my colleague &lt;a href=&#34;https://www.linkedin.com/in/xavier-talon-7bb5261&#34;&gt;Xavier Talon&lt;/a&gt; told me about linda and the idea of using it with TOSCA, I have thousand ideas running around.
+What we would like is to use the linda language to coordinate the nodes of an application topology described by TOSCA.
+As the topology is  obviously distributed the tuple space I will use/implement must exists at the scale of a cloud platform.&lt;/p&gt;
+
+&lt;p&gt;A raft based key/value store could be used as a tuple space.
+And of course the virtual operator that will implement the linda language and interact with the tuple space must be self-contained.
+GO would be a good choice for the implementation of the communication agent because of it self-contained, static binary design (maybe RUST would be too but I don&amp;rsquo;t know RUST yet).
+Moreover the built-in concurrency could make the development easy (an eval can be triggered simply in a goroutine).&lt;/p&gt;
+
+&lt;p&gt;So &lt;strong&gt;let&amp;rsquo;s POC&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;First of all First we need to be sure that a distributed tuple-space could work in the cloud.&lt;/p&gt;
+
+&lt;p&gt;As a proof of concept, I will use the philosophers dinning problem as simply described in page 452 of the paper &lt;a href=&#34;http://www.inf.ed.ac.uk/teaching/courses/ppls/linda.pdf&#34;&gt;Linda in context&lt;/a&gt; from Nicholas Carriero and David Gelernter.&lt;/p&gt;
+
+&lt;p&gt;My goals are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;To implement a basic Linda language in go&lt;/li&gt;
+&lt;li&gt;To run the philosopher problem locally&lt;/li&gt;
+&lt;li&gt;To modify the code so it uses etcd as a tuple space&lt;/li&gt;
+&lt;li&gt;To run the philosopher problem on AWS with a philosopher per region&lt;/li&gt;
+&lt;li&gt;To use my TOSCAlib to read a topology and encode it in the tuple space&lt;/li&gt;
+&lt;li&gt;To run a deployment at scale&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In this post I will present a basic implementation of the language that solves the dinning problem locally.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-problem&#34;&gt;The problem&lt;/h2&gt;
+
+&lt;p&gt;Here is the problem as exposed in the paper:&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;A round table is set with some number of plates (traditionally five); there is a single chopstick between each two plates, and a bowl of rice in the center of the table. Philosophers think, then enter the room, eat, leave the room and repeat the cycle. A philosopher can eat without two chopsticks in hand; the two he needs are the ones to the left and the right of the plate at which he is seated.  If the table is full and all philosophers simultaneously grab their left chopsticks, no right chopsticks are available and deadlock ensues. To prevent deadlock, we allow only four philosophers (or one less than the total number of plates) into the room at any one time.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-implementation&#34;&gt;The implementation&lt;/h2&gt;
+
+&lt;p&gt;I have extracted the C-Linda implementation of this problem and copied it here.&lt;/p&gt;
+
+&lt;h4 id=&#34;the-c-linda-implenentation&#34;&gt;The C linda implenentation&lt;/h4&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;Phil(i)
+  &lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt; i;
+{
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;while&lt;/span&gt;(&lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) {
+      think();
+      in(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;);
+      in(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt;, i) ;
+      in(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt;, (i&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt;l)&lt;span style=&#34;color: #666666&#34;&gt;%&lt;/span&gt;Num) ;
+      eat();
+      out(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt;, i);
+      out(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt;, (i&lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt;i)&lt;span style=&#34;color: #666666&#34;&gt;%&lt;/span&gt;Num);
+      out(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;);
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;initialize()
+{
+  &lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt; i;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color: #666666&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;; i &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt; Hum; i&lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt;) C
+    out(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt;, i);
+    eval(phil(i));
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; (i &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;&lt;/span&gt; (Num&lt;span style=&#34;color: #666666&#34;&gt;-1&lt;/span&gt;)) 
+      out(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;);
+  }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;what-is-needed&#34;&gt;What is needed&lt;/h3&gt;
+
+&lt;p&gt;To solve this particular problem I don&amp;rsquo;t have to fully implement the linda language. There is no need for the &lt;em&gt;rd&lt;/em&gt; action. &lt;em&gt;eval&lt;/em&gt; is simply a fork that I will implement using a goroutine and &lt;em&gt;in&lt;/em&gt; and &lt;em&gt;out&lt;/em&gt; do not use formal tuples.&lt;/p&gt;
+
+&lt;p&gt;The actions will communicate with the tuple space via &lt;code&gt;channels&lt;/code&gt;. Therefore I can create a type Linda composed of two channels for input and output. The actions will be methods of the Linda type.
+both &lt;em&gt;in&lt;/em&gt; and &lt;em&gt;rd&lt;/em&gt; method will get all the tuples in a loop and decide to put them back in the space or to keep it.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; Linda &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; {
+  Input  &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{}
+  Output &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;chan&lt;/span&gt;&lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{}
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4 id=&#34;the-tuple-type&#34;&gt;The &lt;em&gt;Tuple&lt;/em&gt; type&lt;/h4&gt;
+
+&lt;p&gt;As a tuple I will use a flat go structure. Therefore I can describe a tuple as an interface{}&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; Tuple &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h4 id=&#34;the-in-action&#34;&gt;The &lt;em&gt;in&lt;/em&gt; action&lt;/h4&gt;
+
+&lt;p&gt;In will read from the input channel until an object matching its argument is present. If the object read is different, It is sent back in the tuple space via the output channels:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt; (l &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;Linda) In(m Tuple) {
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; t &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; l.Input {
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; match(m, t) {
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Assign t to m&lt;/span&gt;
+        m = t
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt;
+      }
+      &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Not for me, put the tuple back&lt;/span&gt;
+      l.Output &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;-&lt;/span&gt; m
+  }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;the-eval-function&#34;&gt;The &lt;em&gt;eval&lt;/em&gt; function&lt;/h3&gt;
+
+&lt;p&gt;The eval function is a bit trickier because we cannot simply pass the function as it would be evaluated before the substitution of the arguments.
+What I will do is to pass an array of interface{}. The first argument will hold the function as a first class citizen and the other elements are the arguments of the function.
+I will use the reflection to be sure that the argument is a function and executes it in a go routine.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt; (l &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;Linda) Eval(fns []&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{}) {
+	&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// The first argument of eval should be the function&lt;/span&gt;
+	&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; reflect.ValueOf(fns[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;]).Kind() &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; reflect.Func {
+		fn &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; reflect.ValueOf(fns[&lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;])
+		&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;var&lt;/span&gt; args []reflect.Value
+		&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;; i &amp;lt; &lt;span style=&#34;color: #008000&#34;&gt;len&lt;/span&gt;(fns); i&lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; {
+			args = &lt;span style=&#34;color: #008000&#34;&gt;append&lt;/span&gt;(args, reflect.ValueOf(fns[i]))
+		}
+		&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;go&lt;/span&gt; fn.Call(args)
+	}
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;back-to-the-philosophers&#34;&gt;Back to the philosophers&amp;hellip;&lt;/h2&gt;
+
+&lt;h4 id=&#34;the-go-linda-implementation&#34;&gt;The Go-linda implementation&lt;/h4&gt;
+
+&lt;p&gt;Regarding the implementation of Linda, the transcription of the algorithm is simple:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;; i &amp;lt; num; i&lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; {
+    ld.Out(chopstick(i))
+    ld.Eval([]&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{}{phil, i})
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; i &amp;lt; (num &lt;span style=&#34;color: #666666&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) {
+        ld.Out(ticket{})
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt; phil(i &lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;) {
+    p &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; philosopher{i}
+    fmt.Printf(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Philosopher %v is born\n&amp;quot;&lt;/span&gt;, p.ID)
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; {
+        p.think()
+        fmt.Printf(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;[%v] is hungry\n&amp;quot;&lt;/span&gt;, p.ID)
+        ld.In(ticket{})
+        ld.In(chopstick(i))
+        ld.In(chopstick((i &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;%&lt;/span&gt; num))
+        p.eat()
+        ld.Out(chopstick(i))
+        ld.Out(chopstick((i &lt;span style=&#34;color: #666666&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #666666&#34;&gt;%&lt;/span&gt; num))
+        ld.Out(ticket{})
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;the-tuple-space&#34;&gt;The tuple space&lt;/h3&gt;
+
+&lt;p&gt;We have Linda&amp;hellip; that can put and read tuples via channels&amp;hellip; But we still need to plug those channels to the tuple space.
+As a first example, we won&amp;rsquo;t store the information and simply pass them from output to input in an endless loop.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt;() {
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; output {
+        input &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;-&lt;/span&gt; i
+    }
+}()
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;execution&#34;&gt;Execution&lt;/h2&gt;
+
+&lt;p&gt;After compiling and executing the code, I can see my philosophers are eating and thinking&amp;hellip;
+&lt;pre&gt;
+Philosopher 1 is born
+[1] is thinking
+Philosopher 0 is born
+[0] is thinking
+Philosopher 3 is born
+[3] is thinking
+Philosopher 2 is born
+[2] is thinking
+Philosopher 4 is born
+[4] is thinking
+[2] has finished thinking
+[2] is hungry
+[2] is eating
+[1] has finished thinking
+[1] is hungry
+[1] is eating
+[4] has finished thinking
+[4] is hungry
+[4] is eating
+&amp;hellip;
+&lt;/pre&gt;
+The code can be found here &lt;a href=&#34;https://github.com/owulveryck/go-linda/releases/tag/v0.1&#34;&gt;github.com/owulveryck/go-linda&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;This is a very basic implementation of the first step.&lt;/p&gt;
+
+&lt;p&gt;In my next experiment, I will try to plug etcd as a tuple space so the philosophers could be distributed around the world.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>A foot in NoSQL and a toe in big data</title>
@@ -3230,278 +3527,6 @@ and then we would be able to see the progession in a graphical way.&lt;/li&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://talks.golang.org/2012/concurrency.slide&#34;&gt;Go Concurrency Patterns (Rob Pike)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>KSH93 cool features for scripting</title>
-      <link>https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting/index.html</link>
-      <pubDate>Mon, 30 Nov 2015 13:17:41 +0000</pubDate>
-      
-      <guid>https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting/index.html</guid>
-      <description>
-
-&lt;p&gt;From time to time, I&amp;rsquo;m involved into a trolling conversation when any linux kiddie tells me:&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Bash is really the superior shell&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;I totally disagree, but as I&amp;rsquo;m getting older, I don&amp;rsquo;t argue anymore.&lt;/p&gt;
-
-&lt;p&gt;Anyway, in this post I will expose two arguments, or I should say two reasons, why I usually use &lt;code&gt;ksh93&lt;/code&gt; to run my scripts.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; I&amp;rsquo;m really talking about the engine of the script, (the shebang definition).
-set I&amp;rsquo;m used to the bourn shell syntax therefore I also exclude any C shell from the comparison.
-My &lt;code&gt;$SHELL&lt;/code&gt; for interactivity is &lt;code&gt;zsh&lt;/code&gt; because it&amp;rsquo;s efficient enough
-and it has a bunch of really cool features I won&amp;rsquo;t discuss in this post (maybe later)&lt;/p&gt;
-
-&lt;h1 id=&#34;read-loops-forks-and-efficiency&#34;&gt;Read, loops, forks and efficiency&amp;hellip;&lt;/h1&gt;
-
-&lt;p&gt;More than 10 years ago, as I was working for a project at IBM, my excellent team leader told me to refer to this book:
-&lt;a href=&#34;http://shop.oreilly.com/product/9780596003302.do&#34;&gt;Unix Power Tools&lt;/a&gt;. I did learn a lot with it.&lt;/p&gt;
-
-&lt;p&gt;And one feature I&amp;rsquo;ve always used is the &lt;code&gt;while read&lt;/code&gt; loop.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-use-case&#34;&gt;The use case&lt;/h2&gt;
-
-&lt;p&gt;Let&amp;rsquo;s take this script as example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ cat test                                                                                                         
-for i in $(seq 1 500)
-do
-    echo $i | read a
-    echo -ne &amp;quot;$a\r&amp;quot;
-done
-echo &amp;quot;&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;It simply iterate 500 times and display the counter on the screen.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-result-of-execution&#34;&gt;The result of execution&lt;/h2&gt;
-
-&lt;p&gt;Let&amp;rsquo;s execute it in different shells&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;for i in bash zsh ksh                                                                                         
-do
-    echo &amp;quot;$i =&amp;gt;&amp;quot;
-    eval $i test
-done
-bash =&amp;gt;
-
-zsh =&amp;gt;
-500
-ksh =&amp;gt;
-500
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Bash is the only one which does not display the expected result.
-The explanation is that the shell sees a pipe and the fork the process. The assignation to the variable &lt;code&gt;a&lt;/code&gt; is in another context and therefore,
-when the father wants to display &lt;code&gt;$a&lt;/code&gt; in the current shell, the variable is empty.&lt;/p&gt;
-
-&lt;p&gt;Wait, but why does &lt;code&gt;ksh&lt;/code&gt; (and &lt;code&gt;zsh&lt;/code&gt;) do display the correct result ?
-Simply because ksh and zsh have noticed that the command after the pipe was a builtin, and therefore that it was un-useful to fork.&lt;/p&gt;
-
-&lt;h3 id=&#34;strace-to-the-rescue&#34;&gt;Strace to the rescue&amp;hellip;&lt;/h3&gt;
-
-&lt;p&gt;To prove it, let&amp;rsquo;s check for syscalls with the &lt;code&gt;strace&lt;/code&gt; tool, and count how many clones and calls are performed:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ for i in bash zsh ksh                                                                                         
-do
-    echo &amp;quot;$i =&amp;gt;&amp;quot;
-    strace -c  $i  test 2&amp;gt;&amp;amp;1 | egrep &amp;quot;clone|calls&amp;quot;
-done
-bash =&amp;gt;
-% time     seconds  usecs/call     calls    errors syscall
-56.05    0.067081          67      1001           clone
-zsh =&amp;gt;
-% time     seconds  usecs/call     calls    errors syscall
-71.57    0.057681         115       501           clone
-ksh =&amp;gt;
-% time     seconds  usecs/call     calls    errors syscall
-68.50    0.042059          84       500           clone
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;em&gt;quod erat demonstrandum&lt;/em&gt;, twice as much clone in bash thant in ksh|zsh.&lt;/p&gt;
-
-&lt;h2 id=&#34;efficiency&#34;&gt;Efficiency&lt;/h2&gt;
-
-&lt;p&gt;Of course this as an impact on performances, because fork are expensive, let&amp;rsquo;s query the execution time:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;for i in bash zsh ksh                                                                                         
-do
-    echo &amp;quot;$i =&amp;gt;&amp;quot;
-    eval time $i test
-done
-bash =&amp;gt;
-
-bash test  0,17s user 0,86s system 95% cpu 1,079 total
-zsh =&amp;gt;
-500
-zsh test  0,08s user 0,46s system 82% cpu 0,648 total
-ksh =&amp;gt;
-500
-ksh test  0,07s user 0,46s system 65% cpu 0,819 total
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This sounds clear to me&amp;hellip;&lt;/p&gt;
-
-&lt;h1 id=&#34;the-ksh93-getopts-unknown-feature&#34;&gt;The KSH93 Getopts unknown feature&lt;/h1&gt;
-
-&lt;p&gt;Another cool feature I&amp;rsquo;ve discovered recently is the little addon of the getopts feature.&lt;/p&gt;
-
-&lt;p&gt;I wanted to use the &lt;code&gt;getopts&lt;/code&gt; built in in a script. As usual, I did &lt;em&gt;RTFM&lt;/em&gt; (because I never know when to use colon etc.).&lt;/p&gt;
-
-&lt;p&gt;Here is the extract of the man page of ksh93 relative to the getopts function:&lt;/p&gt;
-
-&lt;pre&gt;
-&lt;B&gt;getopts&lt;/B&gt; [ &lt;B&gt;-a&lt;/B&gt; &lt;I&gt;name&lt;/I&gt; ] &lt;I&gt;optstring vname&lt;/I&gt; [ &lt;I&gt;arg&lt;/I&gt; ... ]
-
-Checks &lt;I&gt;arg&lt;/I&gt; for legal options.  If &lt;I&gt;arg&lt;/I&gt; is omitted, the positional parameters are used.
-
-An option argument begins with a &lt;B&gt;+&lt;/B&gt; or a &lt;B&gt;-&lt;/B&gt;.  An option not beginning with &lt;B&gt;+&lt;/B&gt; or &lt;B&gt;-&lt;/B&gt; or the argument &lt;B&gt;--&lt;/B&gt; ends the options.
-Options beginning with &lt;B&gt;+&lt;/B&gt; are only recognized when &lt;I&gt;optstring&lt;/I&gt; begins with a &lt;B&gt;+&lt;/B&gt;.
-
-&lt;I&gt;optstring&lt;/I&gt; contains the letters that &lt;B&gt;getopts&lt;/B&gt; recognizes.
-If a letter is followed by a &lt;B&gt;:&lt;/B&gt;, that option is expected to have an argument.
-The options can be separated from the argument by blanks.
-The option &lt;B&gt;-?&lt;/B&gt; causes &lt;B&gt;getopts&lt;/B&gt; to generate a usage message on standard error.
-The &lt;B&gt;-a&lt;/B&gt; argument can be used to specify the name to use for the usage message, which defaults to &lt;B&gt;$0&lt;/B&gt;.
-
-&lt;B&gt;getopts&lt;/B&gt; places the next option letter it finds inside variable &lt;I&gt;vname&lt;/I&gt; each time it is invoked.
-The option letter will be prepended with a &lt;B&gt;+&lt;/B&gt; when &lt;I&gt;arg&lt;/I&gt; begins with a &lt;B&gt;+&lt;/B&gt;.
-The index of the next &lt;I&gt;arg&lt;/I&gt; is stored in &lt;FONT SIZE=&#34;-1&#34;&gt;&lt;B&gt;OPTIND&lt;/B&gt;.
-&lt;/FONT&gt; The option argument, if any, gets stored in &lt;FONT SIZE=&#34;-1&#34;&gt;&lt;B&gt;OPTARG&lt;/B&gt;.  &lt;/FONT&gt; 
-
-A leading &lt;B&gt;:&lt;/B&gt; in &lt;I&gt;optstring&lt;/I&gt; causes &lt;B&gt;getopts&lt;/B&gt; to store the letter of an invalid option in &lt;FONT SIZE=&#34;-1&#34;&gt;&lt;B&gt;OPTARG&lt;/B&gt;, &lt;/FONT&gt;
-and to set &lt;I&gt;vname&lt;/I&gt; to &lt;B&gt;?&lt;/B&gt; for an unknown option and to &lt;B&gt;:&lt;/B&gt; when a required option argument is missing.
-Otherwise, &lt;B&gt;getopts&lt;/B&gt; prints an error message.
-The exit status is non-zero when there are no more options.
-
-&lt;P&gt; There is no way to specify any of the options &lt;B&gt;:&lt;/B&gt;, &lt;B&gt;+&lt;/B&gt;, &lt;B&gt;-&lt;/B&gt;, &lt;B&gt;?&lt;/B&gt;, &lt;B&gt;[&lt;/B&gt;, and &lt;B&gt;]&lt;/B&gt;.
-
-The option &lt;B&gt;#&lt;/B&gt; can only be specified as the first option. 
-&lt;/pre&gt;
-
-&lt;p&gt;This particular sentence, in the middle of the documentation peaked my interest&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;The option -? causes getopts to generate a usage message on standard error.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;What? We can generate usage with getopts?&lt;/p&gt;
-
-&lt;p&gt;Cool, any script should be documented, but any documentation should not be difficult to implement.&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&#34;img-responsive center-block&#34; src=&#34;http://imgs.xkcd.com/comics/manuals.png&#34;&gt;
-&lt;center&gt;&lt;em&gt;&lt;a href=&#34;https://xkcd.com/1343/&#34;&gt;https://xkcd.com/1343/&lt;/a&gt;&lt;/em&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;I did googled and found this
-&lt;a href=&#34;http://docstore.mik.ua/orelly/unix3/korn/appb_11.htm&#34;&gt;web page&lt;/a&gt; which is an extract from this book &lt;a href=&#34;http://shop.oreilly.com/product/9780596001957.do&#34;&gt;Learning the Korn Shell&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;An example is sometimes better than an explanation (and the book is complete on this subject)&lt;/p&gt;
-
-&lt;h2 id=&#34;the-example&#34;&gt;The example&lt;/h2&gt;
-
-&lt;h3 id=&#34;the-script&#34;&gt;The script&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;#!/bin/ksh
-
-ENV=dev
-MPATH=/tmp
-##
-### Man usage and co...
-
-USAGE=&amp;quot;[-?The example script v1.0]&amp;quot;
-USAGE+=&amp;quot;[-author?Olivier Wulveryck]&amp;quot;
-USAGE+=&amp;quot;[-copyright?Copyright (C) My Blog]&amp;quot;
-USAGE+=&amp;quot;[+NAME?$0 --- The Example Script]&amp;quot;
-USAGE+=&amp;quot;[+DESCRIPTION?The description of the script]&amp;quot;
-USAGE+=&amp;quot;[u:user]:[user to run the command as:=$USER?Use the name of the user you want to sudo to: ]&amp;quot;
-USAGE+=&amp;quot;[e:env]:[environnement:=$ENV?environnement to use (eg: dev, prod) ]&amp;quot;
-USAGE+=&amp;quot;[p:path]:[Execution PATH:=$MPATH?prefix of the chroot]&amp;quot;
-USAGE+=&amp;quot;[+EXAMPLE?$0 action2]&amp;quot;
-USAGE+=&#39;[+SEE ALSO?My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting]&#39;
-USAGE+=&amp;quot;[+BUGS?A few, maybe...]&amp;quot;
-
-### Option Checking
-
-while getopts &amp;quot;$USAGE&amp;quot; optchar ; do
-    case $optchar in
-        u)  USER=$OPTARG
-        ;;
-        e)  ENV=$OPTARG
-        ;;
-        p)  PATH=$OPTARG
-        ;;
-    esac
-done
-shift OPTIND-1
-ACTION=$1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;the-invocation&#34;&gt;The invocation&lt;/h3&gt;
-
-&lt;p&gt;Here are two &lt;em&gt;singing&lt;/em&gt; examples of the usage output (sorry, I&amp;rsquo;m tired)&lt;/p&gt;
-
-&lt;h4 id=&#34;ballad-of-a-thin-man&#34;&gt;&lt;em&gt;Ballad of a thin man&lt;/em&gt;&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ ./blog.ksh --man
-NAME
-  ./blog.ksh --- The Example Script
-
-SYNOPSIS
-  ./blog.ksh [ options ]
-
-DESCRIPTION
-  The description of the script
-
-OPTIONS
-  -u, --user=user to run the command as
-                  Use the name of the user you want to sudo to: The default value is owulveryck.
-  -e, --env=environnement
-                  environnement to use (eg: dev, prod) The default value is dev.
-  -p, --path=Execution PATH
-                  prefix of the chroot The default value is /tmp.
-
-EXAMPLE
-  ./blog.ksh action2
-
-SEE ALSO
-  My Blog Post: http://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting
-
-BUGS
-  A few, maybe...
-
-IMPLEMENTATION
-  version         The example script v1.0
-  author          Olivier Wulveryck
-  copyright       Copyright (C) My Blog
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;i-m-gonna-try-with-a-little-help-from-my-friends&#34;&gt;I&amp;rsquo;m gonna try &lt;em&gt;with a little help (from my friends)&lt;/em&gt;&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ ./blog.ksh --help
-Usage: ./blog.ksh [ options ]
-OPTIONS
-  -u, --user=user to run the command as
-                  Use the name of the user you want to sudo to: The default value is owulveryck.
-  -e, --env=environnement
-                  environnement to use (eg: dev, prod) The default value is dev.
-  -p, --path=Execution PATH
-                  prefix of the chroot The default value is /tmp.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And let&amp;rsquo;s try with an invalid option&amp;hellip;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;  ./blog.ksh -t
-./blog.ksh: -t: unknown option
-Usage: ./blog.ksh [-u user to run the command as] [-e environnement] [-p Execution PATH]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;By now, KSH93 remains my favorite engine for shell scripts, but is sometimes replaced by ZSH.&lt;/p&gt;
-
-&lt;p&gt;Actually, ZSH seems as &amp;ldquo;smart&amp;rdquo; and efficient, but this &lt;code&gt;getopts&lt;/code&gt; feature is really nice for any script aim to be distributed widely.&lt;/p&gt;
 </description>
     </item>
     
