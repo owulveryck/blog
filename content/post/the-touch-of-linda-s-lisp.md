@@ -4,7 +4,7 @@ categories:
 - distributed systems
 date: 2017-02-28T20:57:38+01:00
 description: "This is the second part of a series on my attempt to build a deployement language on a cloud scale"
-draft: true
+draft: false
 images:
 - https://upload.wikimedia.org/wikipedia/commons/9/9d/SICP_cover.jpg
 tags:
