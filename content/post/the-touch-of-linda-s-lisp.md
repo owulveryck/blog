@@ -24,13 +24,13 @@ The ultimate goal is to use a distributed and abstract language to go straight f
 # The problem I've faced
 
 I want to use a GO implementation for the Linda language because a go binary is a container by itself. Therefore if I build my linda language within go, I will be able to run it easily across the computes nodes without any more dependencies.
-The point is that the Linda implementation may be seen as a go package. Therefore every implementation of every algorithm must be coded in go. Therefore I will lack a lot of flexibility as I will need on agent per host and per algorithm. For example the binary that will solve the problem of the dining of the philosophers will only be useful for this specific problem.
+The point is that the Linda implementation may be seen as a go package. Therefore every implementation of every algorithm must be coded in go. Therefore I will lack a lot of flexibility as I will need one agent per host __and__ per algorithm. For example the binary that will solve the problem of the dining of the philosophers will only be useful for this specific problem.
 
 What would be nice it to use an embedded scripting language. This language would implement the Linda primitives (_in, rd, eval, out_). And the go binary would be in charge to communicate with the tuple space.
 
 ## Tuple space: _I want your Sexp_
 
-I have though a lot about a way to encode my tuples for the tuple space.
+I have thought a lot about a way to encode my tuples for the tuple space.
 Of course go as a lot of encoding available:
 
 - json
@@ -41,14 +41,16 @@ Of course go as a lot of encoding available:
 None of them gave me entire satisfaction. The reason is that go is strongly typed. A tuple must be internally represented by an empty *interface{}* to remain flexible.
 Obviously I would need to use a lot of reflexion in my code. And reflexion is not always easy. And a bad implementation leads to an unpredictable code.
 
-So to keep it simple I though I would need a little refresh about the principles of the reflection. So I took my [book](https://books.google.fr/books/about/The_Go_Programming_Language.html?id=SJHvCgAAQBAJ) about go (I bought it when I started learning go).
+To keep it simple (and idiomatic) I took a little refresh about the principles of the reflection. So I took my [book](https://books.google.fr/books/about/The_Go_Programming_Language.html?id=SJHvCgAAQBAJ) about go (I bought it when I started learning the language).
 
-In this book there is a full example about encoding and decoding [s-expression](https://en.wikipedia.org/wiki/S-expression). And what is an s-expression? A tuple! __eureka__
+In this book there is a full example about encoding and decoding [s-expression](https://en.wikipedia.org/wiki/S-expression). And what is an s-expression? A tuple! 
+
+__Eureka__!
 
 ## Lisp/zygomys
 
-So I though about s-expression again.... I could use the parser described in my book and that would be enough for the purpose of my test.
-I could just create a package _encoding/sexpr_ and that would do the job.
+I started working on s-expression... I could have used the parser described in my book and that would be enough for the purpose of my test.
+I could have created a package _encoding/sexpr_ and that would do the job.
 
 But the more I was reading about s-expression, the more I was digging in list processing. 
 
@@ -57,7 +59,7 @@ List processing, s-expression, embedded language, functional programming.... Tha
 ![xkcd 297](https://imgs.xkcd.com/comics/lisp_cycles.png)
 
 I found [Zygomys](https://github.com/glycerine/zygomys). This project was a perfect fit for my needs because it seemed stable enough and easily extensible.
-The main drawback is that its author decided not to use the godoc format. That is a bit annoying but the documentation exists and is in a wiki. On the other hand the author has replied to all of my solicitations.
+The main drawback is that its author decided not to use the godoc format. That is a bit annoying but the documentation exists and is in a wiki. On the other hand the author has replied to all of my solicitations. So I gave it a go.
 
 # The POC
 
