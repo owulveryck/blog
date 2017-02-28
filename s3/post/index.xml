@@ -7,8 +7,199 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <lastBuildDate>Fri, 03 Feb 2017 20:57:30 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 28 Feb 2017 20:57:38 +0100</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/post.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>To go and touch Linda&#39;s Lisp</title>
+      <link>https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp/index.html</link>
+      <pubDate>Tue, 28 Feb 2017 20:57:38 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp/index.html</guid>
+      <description>
+
+&lt;p&gt;The title is not a typo nor dyslexia. I will really talk about Lisp.&lt;/p&gt;
+
+&lt;p&gt;In a &lt;a href=&#34;https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers.../index.html&#34;&gt;previous post&lt;/a&gt; I explained my will to implement the dining of the philosophers with Linda in GO.&lt;/p&gt;
+
+&lt;p&gt;The ultimate goal is to use a distributed and abstract language to go straight from the design to the runtime of an application.&lt;/p&gt;
+
+&lt;h1 id=&#34;the-problem-i-ve-faced&#34;&gt;The problem I&amp;rsquo;ve faced&lt;/h1&gt;
+
+&lt;p&gt;I want to use a GO implementation for the Linda language because a go binary is a container by itself. Therefore if I build my linda language within go, I will be able to run it easily across the computes nodes without any more dependencies.
+The point is that the Linda implementation may be seen as a go package. Therefore every implementation of every algorithm must be coded in go. Therefore I will lack a lot of flexibility as I will need one agent per host &lt;strong&gt;and&lt;/strong&gt; per algorithm. For example the binary that will solve the problem of the dining of the philosophers will only be useful for this specific problem.&lt;/p&gt;
+
+&lt;p&gt;What would be nice it to use an embedded scripting language. This language would implement the Linda primitives (&lt;em&gt;in, rd, eval, out&lt;/em&gt;). And the go binary would be in charge to communicate with the tuple space.&lt;/p&gt;
+
+&lt;h2 id=&#34;tuple-space-i-want-your-sexp&#34;&gt;Tuple space: &lt;em&gt;I want your Sexp&lt;/em&gt;&lt;/h2&gt;
+
+&lt;p&gt;I have thought a lot about a way to encode my tuples for the tuple space.
+Of course go as a lot of encoding available:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;json&lt;/li&gt;
+&lt;li&gt;xml&lt;/li&gt;
+&lt;li&gt;protobuf&lt;/li&gt;
+&lt;li&gt;gob&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;None of them gave me entire satisfaction. The reason is that go is strongly typed. A tuple must be internally represented by an empty &lt;em&gt;interface{}&lt;/em&gt; to remain flexible.
+Obviously I would need to use a lot of reflexion in my code. And reflexion is not always easy. And a bad implementation leads to an unpredictable code.&lt;/p&gt;
+
+&lt;p&gt;To keep it simple (and idiomatic) I took a little refresh about the principles of the reflection. So I took my &lt;a href=&#34;https://books.google.fr/books/about/The_Go_Programming_Language.html?id=SJHvCgAAQBAJ&#34;&gt;book&lt;/a&gt; about go (I bought it when I started learning the language).&lt;/p&gt;
+
+&lt;p&gt;In this book there is a full example about encoding and decoding &lt;a href=&#34;https://en.wikipedia.org/wiki/S-expression&#34;&gt;s-expression&lt;/a&gt;. And what is an s-expression? A tuple!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Eureka&lt;/strong&gt;!&lt;/p&gt;
+
+&lt;h2 id=&#34;lisp-zygomys&#34;&gt;Lisp/zygomys&lt;/h2&gt;
+
+&lt;p&gt;I started working on s-expression&amp;hellip; I could have used the parser described in my book and that would be enough for the purpose of my test.
+I could have created a package &lt;em&gt;encoding/sexpr&lt;/em&gt; and that would do the job.&lt;/p&gt;
+
+&lt;p&gt;But the more I was reading about s-expression, the more I was digging in list processing.&lt;/p&gt;
+
+&lt;p&gt;List processing, s-expression, embedded language, functional programming&amp;hellip;. That was it: I really needed a lisp based embedded language to implement my linda solution.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://imgs.xkcd.com/comics/lisp_cycles.png&#34; alt=&#34;xkcd 297&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I found &lt;a href=&#34;https://github.com/glycerine/zygomys&#34;&gt;Zygomys&lt;/a&gt;. This project was a perfect fit for my needs because it seemed stable enough and easily extensible.
+The main drawback is that its author decided not to use the godoc format. That is a bit annoying but the documentation exists and is in a wiki. On the other hand the author has replied to all of my solicitations. So I gave it a go.&lt;/p&gt;
+
+&lt;h1 id=&#34;the-poc&#34;&gt;The POC&lt;/h1&gt;
+
+&lt;h2 id=&#34;implementing-the-linda-primitives-in-the-repl&#34;&gt;Implementing the linda primitives in the REPL&lt;/h2&gt;
+
+&lt;p&gt;The linda primitives are implemented as GO functions. I will more or less use the same structure as the one I have already used in my first attempt.
+The go functions will be exported into the repl as documented in the &lt;a href=&#34;https://github.com/glycerine/zygomys/wiki/Go-API&#34;&gt;wiki of zygomys&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;For example the Out function is implemented with this signature:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt; (l &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;Linda) Out(env &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;zygo.Glisp, name &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;, args []zygo.Sexp) (zygo.Sexp, &lt;span style=&#34;color: #B00040&#34;&gt;error&lt;/span&gt;) {
+    &lt;span style=&#34;color: #666666&#34;&gt;...&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and it will be presented to the repl by this command:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;lda &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;linda.Linda{}
+env &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; zygo.NewGlisp()
+env.AddFunction(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;out&amp;quot;&lt;/span&gt;, lda.Out)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;I have decided to let the linda implementation in a separate package and to implement the repl ad a separate command.&lt;/p&gt;
+
+&lt;h2 id=&#34;etcd-as-a-tuple-space&#34;&gt;&lt;em&gt;etcd&lt;/em&gt; as a tuple space&lt;/h2&gt;
+
+&lt;p&gt;My trivial implementation of tuple space based on channels was inaccurate. So I need to implement something more robust.
+In the future the tuple space will be distributed at the scale of the cloud.&lt;/p&gt;
+
+&lt;p&gt;A raft-based key value store is nowadays a good choice.
+I have chosen to play with etcd by now (but I will try consul later on).&lt;/p&gt;
+
+&lt;p&gt;For the moment I will run a single instance locally.&lt;/p&gt;
+
+&lt;h3 id=&#34;linda-and-etcd&#34;&gt;Linda and etcd&lt;/h3&gt;
+
+&lt;p&gt;The &lt;em&gt;out&lt;/em&gt; and &lt;em&gt;eval&lt;/em&gt; statements will write the tuple as the value of a key prefixed by something fixed per session and suffixed by a uuid.&lt;/p&gt;
+
+&lt;p&gt;The &lt;em&gt;In&lt;/em&gt; statement is a bit trickier:&lt;/p&gt;
+
+&lt;p&gt;It will read all the tuples prefixed by the constant defined and try to match the tuple passed as argument.
+If it succeeds it will try to delete it.
+If it succeeds it will return the tuple. This is needed to avoid a race condition on a single tuple.&lt;/p&gt;
+
+&lt;p&gt;If no matching tuple is present in the tuple space, the function watch any PUT event. If the value associated to the event matches the arguments, it tries to delete the tuple from the kv store and returns it.&lt;/p&gt;
+
+&lt;h2 id=&#34;implementing-the-algorithm-in-zygomys&#34;&gt;Implementing the algorithm in &lt;em&gt;zygomys&lt;/em&gt;&lt;/h2&gt;
+
+&lt;p&gt;This tasks gave me a lot of pain.
+To be honest I started (once more) to read the book &lt;a href=&#34;https://mitpress.mit.edu/sicp/full-text/book/book.html&#34;&gt;structure and interpretation of computer program&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;There is a beautiful and functional way to implement the algorithm in lisp. I am sure about that.&lt;/p&gt;
+
+&lt;p&gt;But I will figure it out later.&lt;/p&gt;
+
+&lt;p&gt;By now, what I did was simply to transpile the algorithm in the lisp syntax thanks to the &lt;code&gt;begin&lt;/code&gt; statement of &lt;em&gt;zygo&lt;/em&gt; (see the &lt;a href=&#34;https://github.com/glycerine/zygomys/wiki/Language&#34;&gt;section Sequencing in the wiki of zygomys&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;This is how it looks like:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;(&lt;span style=&#34;color: #19177C&#34;&gt;defn&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;phil&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;[i&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;num]&lt;/span&gt; (
+  (&lt;span style=&#34;color: #19177C&#34;&gt;begin&lt;/span&gt;
+    (&lt;span style=&#34;color: #19177C&#34;&gt;think&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;mod&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;))
+    (&lt;span style=&#34;color: #19177C&#34;&gt;eat&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;mod&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;))
+    (&lt;span style=&#34;color: #19177C&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;phil&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;))))
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;execution&#34;&gt;Execution&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;etcd&lt;/em&gt; daemon needs to be launched first. And by now it needs a clean database to avoid any side effect (I still have a lot of TODO in my code).&lt;/p&gt;
+
+&lt;p&gt;Then launch the linda repl with the example:&lt;/p&gt;
+
+&lt;pre&gt;
+=&gt; localhost cmd git:(master) # ./cmd ../example/dinner/dinner.zy
+Creating chopstick 0
+Creating philosopher 0
+Creating room ticket
+0 is thinking
+Creating chopstick 1
+Creating philosopher 1
+Creating room ticket
+1 is thinking
+Creating chopstick 2
+Creating philosopher 2
+Creating room ticket
+2 is thinking
+Creating chopstick 3
+Creating philosopher 3
+Creating room ticket
+3 is thinking
+Creating chopstick 4
+Creating philosopher 4
+4 is thinking
+/4 is thinking
+4 is in the room
+4 took the 4&#39;s chopstick
+4 took the 0&#39;s chopstick
+4 is eating
+/0 is thinking
+0 is in the room
+/3 is thinking
+3 is in the room
+/2 is thinking
+2 is in the room
+3 took the 3&#39;s chopstick
+2 took the 2&#39;s chopstick
+...
+&lt;/pre&gt;
+
+&lt;h1 id=&#34;conclusion-and-future-work&#34;&gt;Conclusion and future work&lt;/h1&gt;
+
+&lt;p&gt;This implementation is a start. The code needs a lot of tweaking though. The linda implementation is still far to be complete.&lt;/p&gt;
+
+&lt;p&gt;But by now I won&amp;rsquo;t pass much time in implementing some more feature because I have enough to play with my philosophers.
+What I would like to do next is to distribute my philosophers and use the real power of etcd.&lt;/p&gt;
+
+&lt;p&gt;I would like to start the REPL on 5 different hosts all linked by etcd.
+Then I will inject my lisp code in the tuple space and wait for the philosophers to think and eat.&lt;/p&gt;
+
+&lt;p&gt;If you are curious, the code is on &lt;a href=&#34;https://github.com/ditrit/go-linda&#34;&gt;the github of the ditrit project&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Meanwhile, have let&amp;rsquo;s have a drink and relax with a good sound:&lt;/p&gt;
+
+&lt;iframe src=&#34;https://embed.spotify.com/?uri=spotify:track:4QwzVlAJSkcLeCNQ6Ug30P&amp;theme=white&#34; width=&#34;280&#34; height=&#34;80&#34; frameborder=&#34;0&#34; allowtransparency=&#34;true&#34;&gt;&lt;/iframe&gt;
+</description>
+    </item>
     
     <item>
       <title>Linda, 31yo, with 5 starving philosophers...</title>
@@ -3262,271 +3453,6 @@ new capabilities without totally rethinking their infrastructure.&lt;/p&gt;
 
 &lt;p&gt;Some of the stuff that still need to be implemented are, for example,  the notion of interface and commitment of the node, and the notion of
 machine learning for every node to teach them how to react to different events in an efficient way.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Orchestrate a digraph with goroutine, a concurrent orchestrator</title>
-      <link>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html</link>
-      <pubDate>Wed, 02 Dec 2015 14:24:21 +0000</pubDate>
-      
-      <guid>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html</guid>
-      <description>
-
-&lt;p&gt;I&amp;rsquo;ve read a lot about graph theory recently.
-They have changed the world a lot. From the simple representation to Bayesian network via Markov chains, the applications are numerous.&lt;/p&gt;
-
-&lt;p&gt;Today I would like to imagine a graph as a workflow of execution. Every node would be considered as runnable. And every  edge would be a dependency.&lt;/p&gt;
-
-&lt;p&gt;It is an important framework that may be used to as an orchestrator for any model, and of course I am a lot thinkingabout &lt;strong&gt;TOSCA&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;the-use-case&#34;&gt;The use case&lt;/h1&gt;
-
-&lt;p&gt;If we consider this very simple graph (example taken from the french wikipedia page)&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;its corresponding adjacency matrix is:&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/matrix1.png&#34; alt=&#34;Adjacency matrix&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;its dimension is 8x8&lt;/p&gt;
-
-&lt;p&gt;For the lab, I will consider that each node has to do a simple task which is to wait for a random number of millisecond (such as Rob Pike&amp;rsquo;s &lt;em&gt;boring&lt;/em&gt; function, see references)&lt;/p&gt;
-
-&lt;h1 id=&#34;let-s-go&#34;&gt;Let&amp;rsquo;s GO&lt;/h1&gt;
-
-&lt;h2 id=&#34;how-will-it-work&#34;&gt;How will it work&lt;/h2&gt;
-
-&lt;p&gt;Every node will be run in a &lt;code&gt;goroutine&lt;/code&gt;. That is a point. But how do I deal with concurrency ?&lt;/p&gt;
-
-&lt;p&gt;Every single goroutine will be initially launched and then wait for an information.&lt;/p&gt;
-
-&lt;p&gt;It will have an input communication channel, and a &lt;em&gt;conductor&lt;/em&gt; will feed this channel with enough information for the goroutine to decides whether it should run or not.
-This information is simply the adjacency matrix up-to-date. That means that is a node is done, its value is set to zero.&lt;/p&gt;
-
-&lt;p&gt;Every goroutine will then check in the adjacency matrix, whether it has predecessor (that means if the corresponding vector is null, or every digit in column N is 0) and therefore will execute the step or not.&lt;/p&gt;
-
-&lt;p&gt;Once the execution of task is over, the goroutine will then feed another channel to tell the conductor that its job is done. and then the conductor will broadcast the information.&lt;/p&gt;
-
-&lt;h3 id=&#34;example&#34;&gt;Example&lt;/h3&gt;
-
-&lt;p&gt;In our example, nodes &lt;em&gt;3&lt;/em&gt;, &lt;em&gt;5&lt;/em&gt;, and &lt;em&gt;7&lt;/em&gt; do not have any predecessor, so they will be able to run first.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;(1)&lt;/strong&gt; The conductors feed the nodes with the matrix&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;(2)&lt;/strong&gt; Every node get the data and analyse the matrix&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step2.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;(3)&lt;/strong&gt; Nodes 3, 5 and 7 have no predecessor (their column in the matrix sums to zero): they can run&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step3.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;(4)&lt;/strong&gt; Nodes 3 and 5 are done, they informs the conductor&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step4.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;(5)&lt;/strong&gt; conductor update the matrix. It fills the rows 3 and 5 with zeros (actually rows 4 and 6, because our first node is 0)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step5.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;(6)&lt;/strong&gt; The conductor feeds the nodes with the matrix&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step6.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;(7)&lt;/strong&gt; The nodes analyse the matrix&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step7.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;(8)&lt;/strong&gt; Node 2 can run&amp;hellip;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot&#34;&gt;&lt;img class=&#34;img-responsive img-thumbnail&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph_step8.png&#34; alt=&#34;digraph example&#34;/&gt; &lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;the-representation-of-the-use-case-in-go&#34;&gt;The representation of the use case in go&lt;/h2&gt;
-
-&lt;h3 id=&#34;data-representation&#34;&gt;Data representation&lt;/h3&gt;
-
-&lt;p&gt;to keep it simple, I won&amp;rsquo;t use a &lt;code&gt;list&lt;/code&gt; or a &lt;code&gt;slice&lt;/code&gt; to represent the matrix, but instead I will rely on the &lt;a href=&#34;https://godoc.org/github.com/gonum/matrix/mat64&#34;&gt;package mat64&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;A slice may be more efficient, but by now it is not an issue.&lt;/p&gt;
-
-&lt;p&gt;On top of that, I may need later to transpose or look for eigenvalues, and this package does implement the correct method to do so.
-For clarity of the description, I didn&amp;rsquo;t use a &lt;code&gt;float64&lt;/code&gt; array to initialize the matrix.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;// Allocate a zeroed array of size 8×8
-m := mat64.NewDense(8, 8, nil)
-m.Set(0, 1, 1); m.Set(0, 4, 1) // First row
-m.Set(1, 6, 1); m.Set(1, 6, 1) // second row
-m.Set(3, 2, 1); m.Set(3, 6, 1) // fourth row
-m.Set(5, 0, 1); m.Set(5, 1, 1); m.Set(5, 2, 1) // fifth row
-m.Set(7, 6, 1) // seventh row
-fa := mat64.Formatted(m, mat64.Prefix(&amp;quot;    &amp;quot;))
-fmt.Printf(&amp;quot;\nm = %v\n\n&amp;quot;, fa)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;the-node-execution-function-run&#34;&gt;The node execution function (&lt;em&gt;run&lt;/em&gt;)&lt;/h3&gt;
-
-&lt;p&gt;The node execution is performed by a &lt;code&gt;run&lt;/code&gt; function that takes two arguments:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;The ID of the node&lt;/li&gt;
-&lt;li&gt;The duration of the sleep it performs&amp;hellip;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This function returns a channel that will be used to exchange a &lt;code&gt;Message&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;func run(id int, duration time.Duration) &amp;lt;-chan Message { }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;A &lt;code&gt;Message&lt;/code&gt; is a structure that will holds:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;the id of the node who have issued the message&lt;/li&gt;
-&lt;li&gt;a boolean which act as a flag that says whether it has already run&lt;/li&gt;
-&lt;li&gt;a wait channel which take a matrix as argument. This channel acts as the communication back mechanism from the conductor to the node&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;type Message struct {
-	id   int
-	run  bool
-	wait chan mat64.Dense
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The run function will launch a goroutine which will remain active thanks to a loop.
-It allows the run function to finish an returns the channel as soon as possible to it can be used by the conductor.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-conductor&#34;&gt;The conductor&lt;/h3&gt;
-
-&lt;p&gt;The conductor will be executed inside the main function in our example.&lt;/p&gt;
-
-&lt;p&gt;The first step is to launch as many &lt;code&gt;run&lt;/code&gt; function as needed.&lt;/p&gt;
-
-&lt;p&gt;There is no need to launch them in separate goroutines, because, as explained before,
-the run function will returns the channel immediately because the intelligence is living in a goroutine already.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;for i := 0; i &amp;lt; n; i++ { // n is the dimension of the matrix
-    cs[i] = run(i, time.Duration(rand.Intn(1e3))*time.Millisecond)
-    ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then, as we have launched our workers, and as the communication channel exists, we should launch &lt;code&gt;n&lt;/code&gt; &amp;ldquo;angel&amp;rdquo; goroutines, that will take care of
-sending back the matrix to all the workers.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;    ...
-	node := &amp;lt;-cs[i]
-	go func() {
-		for {
-			node.wait &amp;lt;- *m
-		}
-	}()
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then we shall collect all the messages sent back by the goroutines to treat them and update the matrix as soon as a goroutine has finished.
-I will use the &lt;code&gt;fanIn&lt;/code&gt; function as described by &lt;em&gt;Rob Pike&lt;/em&gt; in the IO Takl of 2012 (see references) and then go in a &lt;code&gt;for loop&lt;/code&gt; to get the results
-as soon as they arrived:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;c := fanIn(cs...)
-timeout := time.After(5 * time.Second)
-for {
-    select {
-    case node := &amp;lt;-c:
-        if node.run == true {
-            fmt.Printf(&amp;quot;%v has finished\n&amp;quot;, node.id)
-            // 0 its row in the matrix
-            for c := 0; c &amp;lt; n; c++ {
-                m.Set(node.id, c, 0)
-            }
-        }
-    case &amp;lt;-timeout:
-        fmt.Println(&amp;quot;Timeout&amp;quot;)
-        return
-    default:
-        if mat64.Sum(m) == 0 {
-            fmt.Println(&amp;quot;All done!&amp;quot;)
-            return
-        }
-    }
-}
-fmt.Println(&amp;quot;This is the end!&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; I have set up a timeout, just in case (&lt;a href=&#34;https://talks.golang.org/2012/concurrency.slide#36&#34;&gt;reference&lt;/a&gt;)&amp;hellip;
-&lt;strong&gt;Note2&lt;/strong&gt; I do not talk about the fanIn funtion which is described &lt;a href=&#34;https://talks.golang.org/2012/concurrency.slide#28&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;the-test&#34;&gt;The test&lt;/h2&gt;
-
-&lt;p&gt;Here is what I got when I launch the test:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;go run orchestrator.go 
-I am 7, and I am running
-I am 3, and I am running
-I am 5, and I am running
-3 has finished
-5 has finished
-I am 2, and I am running
-I am 0, and I am running
-0 has finished
-I am 1, and I am running
-I am 4, and I am running
-4 has finished
-7 has finished
-2 has finished
-1 has finished
-All done!
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Pretty cool&lt;/p&gt;
-
-&lt;p&gt;The complete source can be found &lt;a href=&#34;https://github.com/owulveryck/gorchestrator&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;If you want to play: download go, setup a directory and a &lt;code&gt;$GOPATH&lt;/code&gt; then simply&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;go get github.com/owulveryck/gorchestrator
-cd $GOPATH/src/github.com/owulveryck/gorchestrator
-go run orchestrator.go
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;conclusions&#34;&gt;Conclusions&lt;/h1&gt;
-
-&lt;p&gt;I&amp;rsquo;m really happy about this implementation. It is clear and concise, and no too far to be idiomatic go.&lt;/p&gt;
-
-&lt;p&gt;What I would like to do now:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Read a TOSCA file (again) and pass the adjacency matrix to the orchestrator. That would do a complete orchestrator for cheap.&lt;/li&gt;
-&lt;li&gt;Re-use an old implemenation of the &lt;a href=&#34;https://github.com/owulveryck/toscaviewer&#34;&gt;toscaviewer&lt;/a&gt;.
-The idea is to implement a web server that serves the matrix as a json stream. This json will be used to update the SVG (via jquery),
-and then we would be able to see the progession in a graphical way.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;STAY TUNED!!!&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://talks.golang.org/2012/concurrency.slide&#34;&gt;Go Concurrency Patterns (Rob Pike)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
 </description>
     </item>
     

@@ -189,6 +189,6 @@ Then I will inject my lisp code in the tuple space and wait for the philosophers
 
 If you are curious, the code is on [the github of the ditrit project](https://github.com/ditrit/go-linda)
 
-Meanwhile, have let's have a drink and relax with a good sound:
+Meanwhile, let's have a drink and relax with a good sound:
 
 <iframe src="https://embed.spotify.com/?uri=spotify:track:4QwzVlAJSkcLeCNQ6Ug30P&theme=white" width="280" height="80" frameborder="0" allowtransparency="true"></iframe>

@@ -10,6 +10,197 @@
     <atom:link href="https://blog.owulveryck.info/tags/go.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>To go and touch Linda&#39;s Lisp</title>
+      <link>https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp/index.html</link>
+      <pubDate>Tue, 28 Feb 2017 20:57:38 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp/index.html</guid>
+      <description>
+
+&lt;p&gt;The title is not a typo nor dyslexia. I will really talk about Lisp.&lt;/p&gt;
+
+&lt;p&gt;In a &lt;a href=&#34;https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers.../index.html&#34;&gt;previous post&lt;/a&gt; I explained my will to implement the dining of the philosophers with Linda in GO.&lt;/p&gt;
+
+&lt;p&gt;The ultimate goal is to use a distributed and abstract language to go straight from the design to the runtime of an application.&lt;/p&gt;
+
+&lt;h1 id=&#34;the-problem-i-ve-faced&#34;&gt;The problem I&amp;rsquo;ve faced&lt;/h1&gt;
+
+&lt;p&gt;I want to use a GO implementation for the Linda language because a go binary is a container by itself. Therefore if I build my linda language within go, I will be able to run it easily across the computes nodes without any more dependencies.
+The point is that the Linda implementation may be seen as a go package. Therefore every implementation of every algorithm must be coded in go. Therefore I will lack a lot of flexibility as I will need one agent per host &lt;strong&gt;and&lt;/strong&gt; per algorithm. For example the binary that will solve the problem of the dining of the philosophers will only be useful for this specific problem.&lt;/p&gt;
+
+&lt;p&gt;What would be nice it to use an embedded scripting language. This language would implement the Linda primitives (&lt;em&gt;in, rd, eval, out&lt;/em&gt;). And the go binary would be in charge to communicate with the tuple space.&lt;/p&gt;
+
+&lt;h2 id=&#34;tuple-space-i-want-your-sexp&#34;&gt;Tuple space: &lt;em&gt;I want your Sexp&lt;/em&gt;&lt;/h2&gt;
+
+&lt;p&gt;I have thought a lot about a way to encode my tuples for the tuple space.
+Of course go as a lot of encoding available:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;json&lt;/li&gt;
+&lt;li&gt;xml&lt;/li&gt;
+&lt;li&gt;protobuf&lt;/li&gt;
+&lt;li&gt;gob&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;None of them gave me entire satisfaction. The reason is that go is strongly typed. A tuple must be internally represented by an empty &lt;em&gt;interface{}&lt;/em&gt; to remain flexible.
+Obviously I would need to use a lot of reflexion in my code. And reflexion is not always easy. And a bad implementation leads to an unpredictable code.&lt;/p&gt;
+
+&lt;p&gt;To keep it simple (and idiomatic) I took a little refresh about the principles of the reflection. So I took my &lt;a href=&#34;https://books.google.fr/books/about/The_Go_Programming_Language.html?id=SJHvCgAAQBAJ&#34;&gt;book&lt;/a&gt; about go (I bought it when I started learning the language).&lt;/p&gt;
+
+&lt;p&gt;In this book there is a full example about encoding and decoding &lt;a href=&#34;https://en.wikipedia.org/wiki/S-expression&#34;&gt;s-expression&lt;/a&gt;. And what is an s-expression? A tuple!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Eureka&lt;/strong&gt;!&lt;/p&gt;
+
+&lt;h2 id=&#34;lisp-zygomys&#34;&gt;Lisp/zygomys&lt;/h2&gt;
+
+&lt;p&gt;I started working on s-expression&amp;hellip; I could have used the parser described in my book and that would be enough for the purpose of my test.
+I could have created a package &lt;em&gt;encoding/sexpr&lt;/em&gt; and that would do the job.&lt;/p&gt;
+
+&lt;p&gt;But the more I was reading about s-expression, the more I was digging in list processing.&lt;/p&gt;
+
+&lt;p&gt;List processing, s-expression, embedded language, functional programming&amp;hellip;. That was it: I really needed a lisp based embedded language to implement my linda solution.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://imgs.xkcd.com/comics/lisp_cycles.png&#34; alt=&#34;xkcd 297&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I found &lt;a href=&#34;https://github.com/glycerine/zygomys&#34;&gt;Zygomys&lt;/a&gt;. This project was a perfect fit for my needs because it seemed stable enough and easily extensible.
+The main drawback is that its author decided not to use the godoc format. That is a bit annoying but the documentation exists and is in a wiki. On the other hand the author has replied to all of my solicitations. So I gave it a go.&lt;/p&gt;
+
+&lt;h1 id=&#34;the-poc&#34;&gt;The POC&lt;/h1&gt;
+
+&lt;h2 id=&#34;implementing-the-linda-primitives-in-the-repl&#34;&gt;Implementing the linda primitives in the REPL&lt;/h2&gt;
+
+&lt;p&gt;The linda primitives are implemented as GO functions. I will more or less use the same structure as the one I have already used in my first attempt.
+The go functions will be exported into the repl as documented in the &lt;a href=&#34;https://github.com/glycerine/zygomys/wiki/Go-API&#34;&gt;wiki of zygomys&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;For example the Out function is implemented with this signature:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt; (l &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;Linda) Out(env &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;zygo.Glisp, name &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;, args []zygo.Sexp) (zygo.Sexp, &lt;span style=&#34;color: #B00040&#34;&gt;error&lt;/span&gt;) {
+    &lt;span style=&#34;color: #666666&#34;&gt;...&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;and it will be presented to the repl by this command:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;lda &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;linda.Linda{}
+env &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; zygo.NewGlisp()
+env.AddFunction(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;out&amp;quot;&lt;/span&gt;, lda.Out)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;I have decided to let the linda implementation in a separate package and to implement the repl ad a separate command.&lt;/p&gt;
+
+&lt;h2 id=&#34;etcd-as-a-tuple-space&#34;&gt;&lt;em&gt;etcd&lt;/em&gt; as a tuple space&lt;/h2&gt;
+
+&lt;p&gt;My trivial implementation of tuple space based on channels was inaccurate. So I need to implement something more robust.
+In the future the tuple space will be distributed at the scale of the cloud.&lt;/p&gt;
+
+&lt;p&gt;A raft-based key value store is nowadays a good choice.
+I have chosen to play with etcd by now (but I will try consul later on).&lt;/p&gt;
+
+&lt;p&gt;For the moment I will run a single instance locally.&lt;/p&gt;
+
+&lt;h3 id=&#34;linda-and-etcd&#34;&gt;Linda and etcd&lt;/h3&gt;
+
+&lt;p&gt;The &lt;em&gt;out&lt;/em&gt; and &lt;em&gt;eval&lt;/em&gt; statements will write the tuple as the value of a key prefixed by something fixed per session and suffixed by a uuid.&lt;/p&gt;
+
+&lt;p&gt;The &lt;em&gt;In&lt;/em&gt; statement is a bit trickier:&lt;/p&gt;
+
+&lt;p&gt;It will read all the tuples prefixed by the constant defined and try to match the tuple passed as argument.
+If it succeeds it will try to delete it.
+If it succeeds it will return the tuple. This is needed to avoid a race condition on a single tuple.&lt;/p&gt;
+
+&lt;p&gt;If no matching tuple is present in the tuple space, the function watch any PUT event. If the value associated to the event matches the arguments, it tries to delete the tuple from the kv store and returns it.&lt;/p&gt;
+
+&lt;h2 id=&#34;implementing-the-algorithm-in-zygomys&#34;&gt;Implementing the algorithm in &lt;em&gt;zygomys&lt;/em&gt;&lt;/h2&gt;
+
+&lt;p&gt;This tasks gave me a lot of pain.
+To be honest I started (once more) to read the book &lt;a href=&#34;https://mitpress.mit.edu/sicp/full-text/book/book.html&#34;&gt;structure and interpretation of computer program&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;There is a beautiful and functional way to implement the algorithm in lisp. I am sure about that.&lt;/p&gt;
+
+&lt;p&gt;But I will figure it out later.&lt;/p&gt;
+
+&lt;p&gt;By now, what I did was simply to transpile the algorithm in the lisp syntax thanks to the &lt;code&gt;begin&lt;/code&gt; statement of &lt;em&gt;zygo&lt;/em&gt; (see the &lt;a href=&#34;https://github.com/glycerine/zygomys/wiki/Language&#34;&gt;section Sequencing in the wiki of zygomys&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;This is how it looks like:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;(&lt;span style=&#34;color: #19177C&#34;&gt;defn&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;phil&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;[i&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;num]&lt;/span&gt; (
+  (&lt;span style=&#34;color: #19177C&#34;&gt;begin&lt;/span&gt;
+    (&lt;span style=&#34;color: #19177C&#34;&gt;think&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;mod&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;))
+    (&lt;span style=&#34;color: #19177C&#34;&gt;eat&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;mod&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;))
+    (&lt;span style=&#34;color: #19177C&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;phil&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;))))
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;execution&#34;&gt;Execution&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;etcd&lt;/em&gt; daemon needs to be launched first. And by now it needs a clean database to avoid any side effect (I still have a lot of TODO in my code).&lt;/p&gt;
+
+&lt;p&gt;Then launch the linda repl with the example:&lt;/p&gt;
+
+&lt;pre&gt;
+=&gt; localhost cmd git:(master) # ./cmd ../example/dinner/dinner.zy
+Creating chopstick 0
+Creating philosopher 0
+Creating room ticket
+0 is thinking
+Creating chopstick 1
+Creating philosopher 1
+Creating room ticket
+1 is thinking
+Creating chopstick 2
+Creating philosopher 2
+Creating room ticket
+2 is thinking
+Creating chopstick 3
+Creating philosopher 3
+Creating room ticket
+3 is thinking
+Creating chopstick 4
+Creating philosopher 4
+4 is thinking
+/4 is thinking
+4 is in the room
+4 took the 4&#39;s chopstick
+4 took the 0&#39;s chopstick
+4 is eating
+/0 is thinking
+0 is in the room
+/3 is thinking
+3 is in the room
+/2 is thinking
+2 is in the room
+3 took the 3&#39;s chopstick
+2 took the 2&#39;s chopstick
+...
+&lt;/pre&gt;
+
+&lt;h1 id=&#34;conclusion-and-future-work&#34;&gt;Conclusion and future work&lt;/h1&gt;
+
+&lt;p&gt;This implementation is a start. The code needs a lot of tweaking though. The linda implementation is still far to be complete.&lt;/p&gt;
+
+&lt;p&gt;But by now I won&amp;rsquo;t pass much time in implementing some more feature because I have enough to play with my philosophers.
+What I would like to do next is to distribute my philosophers and use the real power of etcd.&lt;/p&gt;
+
+&lt;p&gt;I would like to start the REPL on 5 different hosts all linked by etcd.
+Then I will inject my lisp code in the tuple space and wait for the philosophers to think and eat.&lt;/p&gt;
+
+&lt;p&gt;If you are curious, the code is on &lt;a href=&#34;https://github.com/ditrit/go-linda&#34;&gt;the github of the ditrit project&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Meanwhile, have let&amp;rsquo;s have a drink and relax with a good sound:&lt;/p&gt;
+
+&lt;iframe src=&#34;https://embed.spotify.com/?uri=spotify:track:4QwzVlAJSkcLeCNQ6Ug30P&amp;theme=white&#34; width=&#34;280&#34; height=&#34;80&#34; frameborder=&#34;0&#34; allowtransparency=&#34;true&#34;&gt;&lt;/iframe&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Configuration management, choreography and self-aware applications</title>
       <link>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
