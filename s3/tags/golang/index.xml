@@ -10,6 +10,229 @@
     <atom:link href="https://blog.owulveryck.info/tags/golang.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>350000 rows, 133 cols... From a huge CSV to DynamoDB (without breaking piggy-bank).</title>
+      <link>https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank./index.html</link>
+      <pubDate>Sat, 11 Mar 2017 09:15:17 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank./index.html</guid>
+      <description>
+
+&lt;p&gt;In this post I will explain how to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Parse a CSV file and extract only certain columns&lt;/li&gt;
+&lt;li&gt;Create a table in DynamoDB&lt;/li&gt;
+&lt;li&gt;Insert all the data with an adaptive algorithm in order to use the provisioned capacity&lt;/li&gt;
+&lt;li&gt;Reduce the capacity once the insertion is done.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;exploring-the-problem-aws-billing&#34;&gt;Exploring the problem: AWS Billing&lt;/h1&gt;
+
+&lt;p&gt;In a &lt;a href=&#34;https://blog.owulveryck.info/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data/&#34;&gt;previous post&lt;/a&gt; I explained how I was using dynamodb to store a lot of data about aws billing.&lt;/p&gt;
+
+&lt;p&gt;On top of the API that deals with products and offers, AWS can provide a &amp;ldquo;billing report&amp;rdquo;. Those reports are delivered to am Amazon S3 bucket in CSV format at least once a day.&lt;/p&gt;
+
+&lt;p&gt;The rows of the CSV are organized in &lt;em&gt;topics&lt;/em&gt; as described &lt;a href=&#34;http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports.html#Topics&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Each line of the CSV represents an item that is billed. But every resource is made of several billable items. For example on EC2, you pay the &amp;ldquo;compute&amp;rdquo;, the bandwidth, the volume etc&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;I would like to use and understand this file to optimize the costs. A kind of BI.&lt;/p&gt;
+
+&lt;p&gt;AWS says that you can import your file in Excel (or alike)&amp;hellip; That could be a solution but:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://imgs.xkcd.com/comics/algorithms.png&#34; alt=&#34;Excel XKCD&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;On top of that with a lot of resources the file is fat (more thant a 100000 lines several times a day for my client).
+I have decided to use dynamodb to store all the information so it will be easy to perform an extract and generate a dashboard.
+In this post, I will expose some go techniques I have used to achive that.&lt;/p&gt;
+
+&lt;h1 id=&#34;step-1-parsing-the-csv&#34;&gt;Step 1: Parsing the CSV&lt;/h1&gt;
+
+&lt;p&gt;As I explained, the CSV file is made of more than a hundreds cols. The columns are identified in the first row of the CSV.
+I will store each row in a go struct.&lt;/p&gt;
+
+&lt;p&gt;To parse it easily, I an using custom fields &lt;code&gt;csv&lt;/code&gt; in the struct. The field value corresponds to the header name for the seek value.&lt;/p&gt;
+
+&lt;p&gt;For example:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; test &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; {
+    ID   &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;myid&amp;quot;`&lt;/span&gt;
+    Name &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;prenom&amp;quot;`&lt;/span&gt;
+    Last &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;nom&amp;quot;`&lt;/span&gt;
+    Test &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;nonexitent&amp;quot;`&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then, I am reading the first row of the CSV file and then ranging the field names of the struct to fill a map with the field key as key and the col number as value. I set &amp;lsquo;-1&amp;rsquo; if the field is not found:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;var&lt;/span&gt; headers = &lt;span style=&#34;color: #008000&#34;&gt;make&lt;/span&gt;(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;, et.NumField())
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;; i &amp;lt; et.NumField(); i&lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; {
+        headers[et.Field(i).Name] = &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt;(element &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;, array []&lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;) &lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt; {
+                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; k, v &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; array {
+                        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; element {
+                                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; k
+                        }
+                }
+                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;-1&lt;/span&gt;
+        }(et.Field(i).Tag.Get(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;csv&amp;quot;&lt;/span&gt;), header)
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then I can parse the CSV file and fill a channel with one object by row&amp;hellip;
+See the full example &lt;a href=&#34;https://gist.github.com/owulveryck/0fc68c90fa4875647b54f62e2066707d&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;step-2-creating-the-table-in-dynamodb&#34;&gt;Step 2: Creating the table in DynamoDB&lt;/h1&gt;
+
+&lt;p&gt;This step is &amp;ldquo;easy&amp;rdquo;. I will create a table with one index and a sort key.
+For the example the index is a string named &lt;code&gt;Key&lt;/code&gt;. The sort key is also a string named &lt;code&gt;SortKey&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;AttributeDefinitions: []&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;dynamodb.AttributeDefinition{
+        {
+                AttributeName: aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Key&amp;quot;&lt;/span&gt;),
+                AttributeType: aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;S&amp;quot;&lt;/span&gt;),
+        },
+        {
+                AttributeName: aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;SortKey&amp;quot;&lt;/span&gt;),
+                AttributeType: aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;S&amp;quot;&lt;/span&gt;),
+        },
+},
+KeySchema: []&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;dynamodb.KeySchemaElement{
+        {
+                AttributeName: aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Key&amp;quot;&lt;/span&gt;),
+                KeyType:       aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;HASH&amp;quot;&lt;/span&gt;),
+        },
+        {
+                AttributeName: aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;SortKey&amp;quot;&lt;/span&gt;),
+                KeyType:       aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;RANGE&amp;quot;&lt;/span&gt;),
+        },
+},
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;I will set an initial provisioning of 600. This would cost a lot of money but I will reduce it later to spare. The high provisioning rate is needed otherwise it would take me hours to integrate the CSV.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;ProvisionedThroughput: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;dynamodb.ProvisionedThroughput{
+        ReadCapacityUnits:  aws.Int64(&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;),
+        WriteCapacityUnits: aws.Int64(&lt;span style=&#34;color: #666666&#34;&gt;300&lt;/span&gt;),
+},
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The code for creating the table is &lt;a href=&#34;https://gist.github.com/owulveryck/6663983b41c669617704558a030a3392#file-dynamodbcreatetable-go&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;step-3-inserting-the-data&#34;&gt;Step 3: Inserting the data&lt;/h1&gt;
+
+&lt;p&gt;The structure is read through the channel I have created previously.
+The object is encoded to a dynamodb compatible one thanks the &lt;code&gt;marshal&lt;/code&gt; function of this helper library &lt;code&gt;github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;To make the structure ID match the &lt;code&gt;Key&lt;/code&gt; attribute of the table, I am using the &lt;code&gt;dynamodbav&lt;/code&gt; fields.
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; test &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; {
+    ID   &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;myid&amp;quot; dynamodbav:&amp;quot;Key&amp;quot;`&lt;/span&gt;
+    Name &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;prenom&amp;quot; dynamodbav:&amp;quot;SortKey&amp;quot;`&lt;/span&gt;
+    Last &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;nom&amp;quot; dynamodbav:&amp;quot;Last,omitempty&amp;quot;`&lt;/span&gt;
+    Test &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;nonexitent&amp;quot;`&lt;/span&gt;
+}
+&lt;span style=&#34;color: #666666&#34;&gt;...&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; c {
+    item, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; dynamodbattribute.MarshalMap(v)
+    params &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;dynamodb.PutItemInput{
+        Item:      item,
+        TableName: aws.String(tableName),
+    }
+    svc.PutItem(params)
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;going-concurrent&#34;&gt;Going concurrent&lt;/h2&gt;
+
+&lt;p&gt;I will add a touch of concurrency. I will use a maximum of 20 goroutines simultaneously to send items to the dynamodb.
+This is an empiric decision.&lt;/p&gt;
+
+&lt;p&gt;I am using a &amp;ldquo;guard&amp;rdquo; channel. This channel has a buffer of 20. The buffed is filled with am empty struct whenever an item is received in the main communication channel.
+I am then launching a gorouting that will insert the event into dynamodb and consume one event from the guard channel when done.&lt;/p&gt;
+
+&lt;p&gt;The guard channel is blocking when it is full. Therefore I am sure that 20 goroutines will run at maximum:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;guard &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;make&lt;/span&gt;(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt;{}, &lt;span style=&#34;color: #666666&#34;&gt;20&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; c {
+    guard &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt;{}{}
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt;(v &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;test) {
+        item, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; dynamodbattribute.MarshalMap(v)
+        params &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;dynamodb.PutItemInput{
+            Item:      item,
+            TableName: aws.String(tableName),
+        }
+        svc.PutItem(params)
+        &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;-&lt;/span&gt;guard
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;using-a-backoff-algorithm&#34;&gt;Using a backoff algorithm&lt;/h2&gt;
+
+&lt;p&gt;The problem with this implementation is that it can overload the capacity.
+Therefore the rejected event must be resent. Of course I can simply check for the error &lt;code&gt;dynamodb.ErrCodeProvisionedThroughputExceededException&lt;/code&gt; an immediately resend the failed event.&lt;/p&gt;
+
+&lt;p&gt;But this may lead to dramatic performances.
+The AWS documentation point an Exponential Backoff algorithm as an advice to optimize the writing: &lt;a href=&#34;http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff&#34;&gt;Cf AWS documentation)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Wikipedia gives a good &lt;a href=&#34;https://en.wikipedia.org/wiki/Exponential_backoff&#34;&gt;explanation of the exponential backoff&lt;/a&gt; but to make it simple the idea is to decrease the ration of insertion of the DB in order to get a good performance.&lt;/p&gt;
+
+&lt;p&gt;I am using a go implenenation found on &lt;a href=&#34;http://github.com/cenkalti/backoff&#34;&gt;github&lt;/a&gt; made by &lt;a href=&#34;https://github.com/cenkalti&#34;&gt;Cenkalti&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I return the error only in case of &lt;code&gt;dynamodb.ErrCodeProvisionedThroughputExceededException&lt;/code&gt; by now:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;backoff.Retry(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt;() &lt;span style=&#34;color: #B00040&#34;&gt;error&lt;/span&gt; {
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Now put the item, discarding the result&lt;/span&gt;
+    _ , err = svcDB.PutItem(params)
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; err &lt;span style=&#34;color: #666666&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; err.(awserr.Error).Code() &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; dynamodb.ErrCodeProvisionedThroughputExceededException {
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; err
+        }
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// TODO: Special case...&lt;/span&gt;
+        log.Printf(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Error inserting %v (%v)&amp;quot;&lt;/span&gt;, v, err)
+    }
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Do the insert here&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;nil&lt;/span&gt;
+}, backoff.NewExponentialBackOff())
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1 id=&#34;step-4-updating-the-table-and-reducing-the-write-capacity&#34;&gt;Step 4: Updating the table and reducing the write capacity&lt;/h1&gt;
+
+&lt;p&gt;Once the insert is done, to avoid a huge bill, I am reducing the Provisioned capacity of the table.
+This is done with an &lt;code&gt;update&lt;/code&gt; request:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;params &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;dynamodb.UpdateTableInput{
+    TableName: aws.String(tableName), &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Required&lt;/span&gt;
+    ProvisionedThroughput: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;dynamodb.ProvisionedThroughput{
+        ReadCapacityUnits:  aws.Int64(&lt;span style=&#34;color: #666666&#34;&gt;10&lt;/span&gt;), &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Required&lt;/span&gt;
+        WriteCapacityUnits: aws.Int64(&lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;),  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Required&lt;/span&gt;
+    },
+}
+resp, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; svc.UpdateTable(params)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1 id=&#34;conclusion-it-works&#34;&gt;Conclusion: it works&lt;/h1&gt;
+
+&lt;p&gt;It took me half an hour to process and insert 350000 lines (with 133 rows each) into the dynamodb from my laptop.&lt;/p&gt;
+
+&lt;p&gt;I can see that the adaptative algorithm works on the graphs:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://blog.owulveryck.info/assets/images/dynamodb/dynamodb_write_capacity.png&#34; alt=&#34;It works&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now I can analyse the data to find a proper way to optimize the aws bill for my client.&lt;/p&gt;
+
+&lt;p&gt;The full example is on &lt;a href=&#34;https://gist.github.com/owulveryck/6663983b41c669617704558a030a3392&#34;&gt;gist&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>A foot in NoSQL and a toe in big data</title>
       <link>https://blog.owulveryck.info/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data/index.html</link>
       <pubDate>Fri, 13 Jan 2017 22:22:46 +0100</pubDate>

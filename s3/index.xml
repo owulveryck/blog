@@ -7,8 +7,231 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <lastBuildDate>Tue, 28 Feb 2017 20:57:38 +0100</lastBuildDate>
+    <lastBuildDate>Sat, 11 Mar 2017 09:15:17 +0100</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>350000 rows, 133 cols... From a huge CSV to DynamoDB (without breaking piggy-bank).</title>
+      <link>https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank./index.html</link>
+      <pubDate>Sat, 11 Mar 2017 09:15:17 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank./index.html</guid>
+      <description>
+
+&lt;p&gt;In this post I will explain how to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Parse a CSV file and extract only certain columns&lt;/li&gt;
+&lt;li&gt;Create a table in DynamoDB&lt;/li&gt;
+&lt;li&gt;Insert all the data with an adaptive algorithm in order to use the provisioned capacity&lt;/li&gt;
+&lt;li&gt;Reduce the capacity once the insertion is done.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;exploring-the-problem-aws-billing&#34;&gt;Exploring the problem: AWS Billing&lt;/h1&gt;
+
+&lt;p&gt;In a &lt;a href=&#34;https://blog.owulveryck.info/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data/&#34;&gt;previous post&lt;/a&gt; I explained how I was using dynamodb to store a lot of data about aws billing.&lt;/p&gt;
+
+&lt;p&gt;On top of the API that deals with products and offers, AWS can provide a &amp;ldquo;billing report&amp;rdquo;. Those reports are delivered to am Amazon S3 bucket in CSV format at least once a day.&lt;/p&gt;
+
+&lt;p&gt;The rows of the CSV are organized in &lt;em&gt;topics&lt;/em&gt; as described &lt;a href=&#34;http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports.html#Topics&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Each line of the CSV represents an item that is billed. But every resource is made of several billable items. For example on EC2, you pay the &amp;ldquo;compute&amp;rdquo;, the bandwidth, the volume etc&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;I would like to use and understand this file to optimize the costs. A kind of BI.&lt;/p&gt;
+
+&lt;p&gt;AWS says that you can import your file in Excel (or alike)&amp;hellip; That could be a solution but:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://imgs.xkcd.com/comics/algorithms.png&#34; alt=&#34;Excel XKCD&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;On top of that with a lot of resources the file is fat (more thant a 100000 lines several times a day for my client).
+I have decided to use dynamodb to store all the information so it will be easy to perform an extract and generate a dashboard.
+In this post, I will expose some go techniques I have used to achive that.&lt;/p&gt;
+
+&lt;h1 id=&#34;step-1-parsing-the-csv&#34;&gt;Step 1: Parsing the CSV&lt;/h1&gt;
+
+&lt;p&gt;As I explained, the CSV file is made of more than a hundreds cols. The columns are identified in the first row of the CSV.
+I will store each row in a go struct.&lt;/p&gt;
+
+&lt;p&gt;To parse it easily, I an using custom fields &lt;code&gt;csv&lt;/code&gt; in the struct. The field value corresponds to the header name for the seek value.&lt;/p&gt;
+
+&lt;p&gt;For example:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; test &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; {
+    ID   &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;myid&amp;quot;`&lt;/span&gt;
+    Name &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;prenom&amp;quot;`&lt;/span&gt;
+    Last &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;nom&amp;quot;`&lt;/span&gt;
+    Test &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;nonexitent&amp;quot;`&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then, I am reading the first row of the CSV file and then ranging the field names of the struct to fill a map with the field key as key and the col number as value. I set &amp;lsquo;-1&amp;rsquo; if the field is not found:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;var&lt;/span&gt; headers = &lt;span style=&#34;color: #008000&#34;&gt;make&lt;/span&gt;(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt;, et.NumField())
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt;; i &amp;lt; et.NumField(); i&lt;span style=&#34;color: #666666&#34;&gt;++&lt;/span&gt; {
+        headers[et.Field(i).Name] = &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt;(element &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;, array []&lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;) &lt;span style=&#34;color: #B00040&#34;&gt;int&lt;/span&gt; {
+                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; k, v &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; array {
+                        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; element {
+                                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; k
+                        }
+                }
+                &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;-1&lt;/span&gt;
+        }(et.Field(i).Tag.Get(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;csv&amp;quot;&lt;/span&gt;), header)
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then I can parse the CSV file and fill a channel with one object by row&amp;hellip;
+See the full example &lt;a href=&#34;https://gist.github.com/owulveryck/0fc68c90fa4875647b54f62e2066707d&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;step-2-creating-the-table-in-dynamodb&#34;&gt;Step 2: Creating the table in DynamoDB&lt;/h1&gt;
+
+&lt;p&gt;This step is &amp;ldquo;easy&amp;rdquo;. I will create a table with one index and a sort key.
+For the example the index is a string named &lt;code&gt;Key&lt;/code&gt;. The sort key is also a string named &lt;code&gt;SortKey&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;AttributeDefinitions: []&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;dynamodb.AttributeDefinition{
+        {
+                AttributeName: aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Key&amp;quot;&lt;/span&gt;),
+                AttributeType: aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;S&amp;quot;&lt;/span&gt;),
+        },
+        {
+                AttributeName: aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;SortKey&amp;quot;&lt;/span&gt;),
+                AttributeType: aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;S&amp;quot;&lt;/span&gt;),
+        },
+},
+KeySchema: []&lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;dynamodb.KeySchemaElement{
+        {
+                AttributeName: aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Key&amp;quot;&lt;/span&gt;),
+                KeyType:       aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;HASH&amp;quot;&lt;/span&gt;),
+        },
+        {
+                AttributeName: aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;SortKey&amp;quot;&lt;/span&gt;),
+                KeyType:       aws.String(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;RANGE&amp;quot;&lt;/span&gt;),
+        },
+},
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;I will set an initial provisioning of 600. This would cost a lot of money but I will reduce it later to spare. The high provisioning rate is needed otherwise it would take me hours to integrate the CSV.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;ProvisionedThroughput: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;dynamodb.ProvisionedThroughput{
+        ReadCapacityUnits:  aws.Int64(&lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;),
+        WriteCapacityUnits: aws.Int64(&lt;span style=&#34;color: #666666&#34;&gt;300&lt;/span&gt;),
+},
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The code for creating the table is &lt;a href=&#34;https://gist.github.com/owulveryck/6663983b41c669617704558a030a3392#file-dynamodbcreatetable-go&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;step-3-inserting-the-data&#34;&gt;Step 3: Inserting the data&lt;/h1&gt;
+
+&lt;p&gt;The structure is read through the channel I have created previously.
+The object is encoded to a dynamodb compatible one thanks the &lt;code&gt;marshal&lt;/code&gt; function of this helper library &lt;code&gt;github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;To make the structure ID match the &lt;code&gt;Key&lt;/code&gt; attribute of the table, I am using the &lt;code&gt;dynamodbav&lt;/code&gt; fields.
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;type&lt;/span&gt; test &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt; {
+    ID   &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;myid&amp;quot; dynamodbav:&amp;quot;Key&amp;quot;`&lt;/span&gt;
+    Name &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;prenom&amp;quot; dynamodbav:&amp;quot;SortKey&amp;quot;`&lt;/span&gt;
+    Last &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;nom&amp;quot; dynamodbav:&amp;quot;Last,omitempty&amp;quot;`&lt;/span&gt;
+    Test &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;`csv:&amp;quot;nonexitent&amp;quot;`&lt;/span&gt;
+}
+&lt;span style=&#34;color: #666666&#34;&gt;...&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; c {
+    item, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; dynamodbattribute.MarshalMap(v)
+    params &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;dynamodb.PutItemInput{
+        Item:      item,
+        TableName: aws.String(tableName),
+    }
+    svc.PutItem(params)
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;going-concurrent&#34;&gt;Going concurrent&lt;/h2&gt;
+
+&lt;p&gt;I will add a touch of concurrency. I will use a maximum of 20 goroutines simultaneously to send items to the dynamodb.
+This is an empiric decision.&lt;/p&gt;
+
+&lt;p&gt;I am using a &amp;ldquo;guard&amp;rdquo; channel. This channel has a buffer of 20. The buffed is filled with am empty struct whenever an item is received in the main communication channel.
+I am then launching a gorouting that will insert the event into dynamodb and consume one event from the guard channel when done.&lt;/p&gt;
+
+&lt;p&gt;The guard channel is blocking when it is full. Therefore I am sure that 20 goroutines will run at maximum:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;guard &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000&#34;&gt;make&lt;/span&gt;(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;chan&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt;{}, &lt;span style=&#34;color: #666666&#34;&gt;20&lt;/span&gt;)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;for&lt;/span&gt; v &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;range&lt;/span&gt; c {
+    guard &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;struct&lt;/span&gt;{}{}
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;go&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt;(v &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;test) {
+        item, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; dynamodbattribute.MarshalMap(v)
+        params &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;dynamodb.PutItemInput{
+            Item:      item,
+            TableName: aws.String(tableName),
+        }
+        svc.PutItem(params)
+        &lt;span style=&#34;color: #666666&#34;&gt;&amp;lt;-&lt;/span&gt;guard
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;using-a-backoff-algorithm&#34;&gt;Using a backoff algorithm&lt;/h2&gt;
+
+&lt;p&gt;The problem with this implementation is that it can overload the capacity.
+Therefore the rejected event must be resent. Of course I can simply check for the error &lt;code&gt;dynamodb.ErrCodeProvisionedThroughputExceededException&lt;/code&gt; an immediately resend the failed event.&lt;/p&gt;
+
+&lt;p&gt;But this may lead to dramatic performances.
+The AWS documentation point an Exponential Backoff algorithm as an advice to optimize the writing: &lt;a href=&#34;http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff&#34;&gt;Cf AWS documentation)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Wikipedia gives a good &lt;a href=&#34;https://en.wikipedia.org/wiki/Exponential_backoff&#34;&gt;explanation of the exponential backoff&lt;/a&gt; but to make it simple the idea is to decrease the ration of insertion of the DB in order to get a good performance.&lt;/p&gt;
+
+&lt;p&gt;I am using a go implenenation found on &lt;a href=&#34;http://github.com/cenkalti/backoff&#34;&gt;github&lt;/a&gt; made by &lt;a href=&#34;https://github.com/cenkalti&#34;&gt;Cenkalti&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I return the error only in case of &lt;code&gt;dynamodb.ErrCodeProvisionedThroughputExceededException&lt;/code&gt; by now:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;backoff.Retry(&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt;() &lt;span style=&#34;color: #B00040&#34;&gt;error&lt;/span&gt; {
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Now put the item, discarding the result&lt;/span&gt;
+    _ , err = svcDB.PutItem(params)
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; err &lt;span style=&#34;color: #666666&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;nil&lt;/span&gt; {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; err.(awserr.Error).Code() &lt;span style=&#34;color: #666666&#34;&gt;==&lt;/span&gt; dynamodb.ErrCodeProvisionedThroughputExceededException {
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; err
+        }
+        &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// TODO: Special case...&lt;/span&gt;
+        log.Printf(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Error inserting %v (%v)&amp;quot;&lt;/span&gt;, v, err)
+    }
+    &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Do the insert here&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;nil&lt;/span&gt;
+}, backoff.NewExponentialBackOff())
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1 id=&#34;step-4-updating-the-table-and-reducing-the-write-capacity&#34;&gt;Step 4: Updating the table and reducing the write capacity&lt;/h1&gt;
+
+&lt;p&gt;Once the insert is done, to avoid a huge bill, I am reducing the Provisioned capacity of the table.
+This is done with an &lt;code&gt;update&lt;/code&gt; request:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;params &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;dynamodb.UpdateTableInput{
+    TableName: aws.String(tableName), &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Required&lt;/span&gt;
+    ProvisionedThroughput: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;dynamodb.ProvisionedThroughput{
+        ReadCapacityUnits:  aws.Int64(&lt;span style=&#34;color: #666666&#34;&gt;10&lt;/span&gt;), &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Required&lt;/span&gt;
+        WriteCapacityUnits: aws.Int64(&lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;),  &lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;// Required&lt;/span&gt;
+    },
+}
+resp, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; svc.UpdateTable(params)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1 id=&#34;conclusion-it-works&#34;&gt;Conclusion: it works&lt;/h1&gt;
+
+&lt;p&gt;It took me half an hour to process and insert 350000 lines (with 133 rows each) into the dynamodb from my laptop.&lt;/p&gt;
+
+&lt;p&gt;I can see that the adaptative algorithm works on the graphs:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://blog.owulveryck.info/assets/images/dynamodb/dynamodb_write_capacity.png&#34; alt=&#34;It works&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now I can analyse the data to find a proper way to optimize the aws bill for my client.&lt;/p&gt;
+
+&lt;p&gt;The full example is on &lt;a href=&#34;https://gist.github.com/owulveryck/6663983b41c669617704558a030a3392&#34;&gt;gist&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>To go and touch Linda&#39;s Lisp</title>
@@ -3143,316 +3366,6 @@ So yes, there is a Markov model hidden in the choreography!&lt;/p&gt;
 &lt;p&gt;I shall continue the study and learn how the signals sent from the compenent gives &lt;em&gt;evidences&lt;/em&gt; and do influence the Markov Model of my application.&lt;/p&gt;
 
 &lt;p&gt;It&amp;rsquo;s a matter of inference, I-maps, Bayesian networks, HMM&amp;hellip;. It&amp;rsquo;s about machine learning which is fascinating !&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Configuration management, choreography and self-aware applications</title>
-      <link>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</link>
-      <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
-      
-      <guid>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</guid>
-      <description>
-
-&lt;p&gt;Thanks to the &lt;a href=&#34;https://www.linkedin.com/company/techsys?trk=company_logo&#34;&gt;company I&amp;rsquo;m working for (Techsys)&lt;/a&gt; I&amp;rsquo;ve had the opportunity to attend the &lt;a href=&#34;http://cfgmgmtcamp.eu/&#34;&gt;configuration management camp&lt;/a&gt; in Gent (&lt;em&gt;be&lt;/em&gt;) for its 2016 edition.&lt;/p&gt;
-
-&lt;p&gt;I really enjoyed those two days of talks, watching people present different ideas of a possible future for
-the infrastructure and deployment engineering.
-Beyond the technical demonstrations and the experience sharing, I&amp;rsquo;ve spotted a bunch of ideas&lt;/p&gt;
-
-&lt;p&gt;Among all, those that comes to me spontaneously are:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;You don&amp;rsquo;t need configuration management, what you need is a description of the topology of your application - &lt;em&gt;&lt;a href=&#34;http://www.markshuttleworth.com/biography&#34;&gt;Mark Shuttleworth&lt;/a&gt;&lt;/em&gt; in its keynote &lt;em&gt;The magic of modeling&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;You don&amp;rsquo;t need orchestration, what you need is choreography - Exposed by &lt;em&gt;&lt;a href=&#34;https://www.linkedin.com/in/julian&#34;&gt;Julian Dunn&lt;/a&gt;&lt;/em&gt;
-(you can find a transcription &lt;a href=&#34;https://www.youtube.com/watch?v=kfF9IATUask&#34;&gt;here on youtube&lt;/a&gt;)&lt;/p&gt;
-
-&lt;p&gt;What we need is a new way to do configuration management - &lt;em&gt;&lt;a href=&#34;https://www.linkedin.com/in/james-shubin-74a89a44&#34;&gt;James Shubin&lt;/a&gt;&lt;/em&gt;, see &lt;a href=&#34;https://ttboj.wordpress.com/2016/01/18/next-generation-configuration-mgmt/&#34;&gt;his blog post&lt;/a&gt; which ispired my project &lt;a href=&#34;http://github.com/owulveryck/khoreia&#34;&gt;khoreia&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;I came back home very excited about this.
-This post tries to expose my reflection and how I&amp;rsquo;ve implemented an idea (see it as a POC)
-I&amp;rsquo;ve passed some time to learn about TOSCA, and the to code an orchestrator.&lt;/p&gt;
-
-&lt;p&gt;In a first part I will expose why, according to me, the topological description of the application may be what
-company needs.&lt;/p&gt;
-
-&lt;p&gt;Therefore, I will notice the need for orchestration tools.&lt;/p&gt;
-
-&lt;p&gt;Even if the concepts remains actuals, the future may be an evolution of this mechanism of central command and control.
-In the last part of this post, I will expose what I&amp;rsquo;ve understood of the concept of choreography so far.&lt;/p&gt;
-
-&lt;p&gt;Finally I will demonstrate the idea with a POC based on a development on &lt;a href=&#34;https://github.com/coreos/etcd&#34;&gt;the etcd product&lt;/a&gt; from CoreOS.
-(and a youtube demo for those who don&amp;rsquo;t want to &lt;code&gt;git clone...&lt;/code&gt;)&lt;/p&gt;
-
-&lt;h2 id=&#34;configuration-management-and-orchestration&#34;&gt;Configuration management and orchestration&lt;/h2&gt;
-
-&lt;p&gt;Configuration management has been for a long time, a goal for IT automation.
-Years ago, it allowed system engineers to control a huge park of machines while maintaining a TCO at a relatively decent level.&lt;/p&gt;
-
-&lt;p&gt;Over the last decade, 4 major tools have emerged and are now part of most CTO common vocabulary.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s take a look at the trends from 4 major tools categorized as &amp;ldquo;configuration management tools&amp;rdquo;:&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Tool&lt;/th&gt;
-&lt;th align=&#34;center&#34;&gt;Founded in&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Ansible&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;2012&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Puppet&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;2005&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Chef&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;2009&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Salt&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;2011&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: I do not represent CFEngine because it is doesn&amp;rsquo;t seem not so widely used in dotcom companies (even if it seems to be a great tool and on a certain extent the father of the others)&lt;/p&gt;
-
-&lt;p&gt;The &amp;ldquo;interest&amp;rdquo; for those tools as seen by Google is be represented like this:&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;script type=&#34;text/javascript&#34; src=&#34;//www.google.com/trends/embed.js?hl=en&amp;q=/m/0k0vzjb,+/m/03d3cjz,+/m/05zxlz3,+/m/0hn8c6s&amp;date=1/2014+25m&amp;cmpt=q&amp;tz=Etc/GMT-1&amp;tz=Etc/GMT-1&amp;content=1&amp;cid=TIMESERIES_GRAPH_0&amp;export=5&amp;w=700&amp;h=350&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;As we can see, Ansible seems to be the emerging technology. Indeed its acquisition by redhat in late 2015 may have boosted a bit the trends, but anyway, the companies that do not implement infrastructure as code may seem to prefer this tool.
-Cause or consequence, Gartner has nominated Ansible as a &lt;em&gt;cool vendor&lt;/em&gt; for 2015 (according to Gartner, a Cool Vendor is an emerging and innovative vendor that has original, interesting, and unique technology with real market impact)&lt;/p&gt;
-
-&lt;p&gt;Why did a newcomer such as Ansible did present such interest?&lt;/p&gt;
-
-&lt;p&gt;Beside its simplicity, Ansible is not exactly a configuration management tool, it is &lt;strong&gt;an orchestrator&lt;/strong&gt; (see &lt;a href=&#34;https://www.Ansible.com/orchestration&#34;&gt;the Ansible webpage&lt;/a&gt;)&lt;/p&gt;
-
-&lt;p&gt;According to &lt;a href=&#34;https://en.wikipedia.org/wiki/Diffusion_of_innovations&#34;&gt;Rogger&amp;rsquo;s theory&lt;/a&gt; about the diffusion of innovation, and regarding the trends, I think that it is accurate to say
-that the position of Ansible is near the &amp;ldquo;late majority&amp;rdquo;
-&lt;center&gt;
-&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Diffusionofideas.PNG/330px-Diffusionofideas.PNG&#34; alt=&#34;Diffusion of ideas&#34; /&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;What does this mean ?&lt;/p&gt;
-
-&lt;p&gt;To me,it means that people do feel the need for orchestration, or if they don&amp;rsquo;t feel it, they will thanks to Ansible.
-Via orchestration, they may feel the need for representing their product.&lt;/p&gt;
-
-&lt;p&gt;We are now talking about &lt;strong&gt;infrastructure as data&lt;/strong&gt;; soon we will talk about &lt;strong&gt;architecture as data&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;from-system-configuration-management&#34;&gt;From system configuration management&amp;hellip;&lt;/h3&gt;
-
-&lt;p&gt;I did system administration and engineering for years. Configuration management was the answer to the growing of the infrastructure.
-Config management allowed us to&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Get the systems reliable&lt;/li&gt;
-&lt;li&gt;Get the best efficiency possible from the infrastructure&lt;/li&gt;
-&lt;li&gt;Maintain a low TCO
-&amp;hellip;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;It was all &amp;ldquo;system centric&amp;rdquo;, so the application could be deposed and run in best conditions.&lt;/p&gt;
-
-&lt;h3 id=&#34;to-application-s-full-description&#34;&gt;&amp;hellip; to application&amp;rsquo;s full description&lt;/h3&gt;
-
-&lt;p&gt;A couple of years ago, maybe because of the DevOps movement, my missions were getting more and more application centric (which is good).
-Actually infrastructure has not been considered as a needed cost anymore.&lt;/p&gt;
-
-&lt;p&gt;Thanks to &lt;em&gt;Agility&lt;/em&gt;, &lt;em&gt;DevOps&lt;/em&gt;, and the emergent notion of product (as opposed to project), &lt;strong&gt;Application and infrastructure are now seen as a whole&lt;/strong&gt;.&lt;br /&gt;
-(I&amp;rsquo;m talking of the application &amp;ldquo;born in the data center&amp;rdquo;, it is different for those &amp;ldquo;born in the cloud&amp;rdquo;)&lt;/p&gt;
-
-&lt;p&gt;Therefore, the setup of the application must not rely only on programmed configuration management tools anymore, but on its complete &lt;strong&gt;representation&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;the-self-sufficient-application&#34;&gt;The self-sufficient application&lt;/h1&gt;
-
-&lt;p&gt;Some times ago, I wrote article published on &lt;a href=&#34;https://www.linkedin.com/pulse/from-integration-self-sufficient-application-olivier-wulveryck?trk=prof-post&#34;&gt;pulse&lt;/a&gt; because I wanted to lay down on paper what I thought about the future of application deployment.
-I&amp;rsquo;ve described some layers of the application.
-I kept on studying, and with a some help from my colleagues and friends, I&amp;rsquo;ve  finally been able to put a word on those ideas I had in mind.&lt;/p&gt;
-
-&lt;p&gt;This word is &lt;strong&gt;Topology&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;and-then-came-tosca&#34;&gt;and then came TOSCA&lt;/h2&gt;
-
-&lt;p&gt;To describe a whole application, I needed a &lt;em&gt;domain specific language&lt;/em&gt; (DSL).
-All of the languages I was trying to document were by far too system centric.
-Then I discovered &lt;a href=&#34;http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.0/csprd01/TOSCA-Simple-Profile-YAML-v1.0-csprd01.html&#34;&gt;TOSCA&lt;/a&gt;.
-TOSCA is &lt;strong&gt;THE DSL&lt;/strong&gt; for representing the topology of an application.&lt;/p&gt;
-
-&lt;h3 id=&#34;pros&#34;&gt;Pros&amp;hellip;&lt;/h3&gt;
-
-&lt;p&gt;What&amp;rsquo;s good about Tosca is its goal:&lt;/p&gt;
-
-&lt;p&gt;It describes a standard for representing a cloud application. It is written by the Oasis consortium and
-therefore most of the big brand in IT may be aware of its existence.
-The promise is that if you describe any application with Tosca, it could be deployed on any platform, with a decent &lt;strong&gt;orchestrator&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;and-cons&#34;&gt;&amp;hellip;and cons&lt;/h3&gt;
-
-&lt;p&gt;But&amp;hellip; Tosca is complex.
-It&amp;rsquo;s not that simple to write a Tosca representation. The standard wants to cover all the possible cases, and according &lt;a href=&#34;https://en.wikipedia.org/wiki/Vilfredo_Pareto&#34;&gt;Pareto&lt;/a&gt;&amp;rsquo;s law,
-I can say that 80% of the customers will only need 20% of the standard.&lt;/p&gt;
-
-&lt;p&gt;On top of that, Tosca is young (by now, the YAML version is still in pre-release), and I could not find any decent tool to orchestrate and deploy an application.
-Big companies claim their compliance with the standard, but actually very few of them (if any) does really implement it.&lt;/p&gt;
-
-&lt;h2 id=&#34;let-s-come-back-to-orchestration-and-real-world&#34;&gt;Let&amp;rsquo;s come back to orchestration (and real world)&lt;/h2&gt;
-
-&lt;p&gt;As seen before, a Tosca file would need a tool to transform it to a real application.
-This tool is &lt;strong&gt;an orchestrator&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;The tool should be called &lt;strong&gt;conductor&lt;/strong&gt;, because what is does actually is to conduct the symphony, and yet in our context the symphony is not
-represented by the topology, but by its &amp;lsquo;score&amp;rsquo;: its execution plan, and the purpose of the &amp;lsquo;orchestrator&amp;rsquo; is to make every node to play its part
-so the application symphony could be rendered in best condition of reliability and efficiency&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;Wait, that was the promise of the configuration management tools, isn&amp;rsquo;t it?&lt;/p&gt;
-
-&lt;h3 id=&#34;the-execution-plan&#34;&gt;The execution plan&lt;/h3&gt;
-
-&lt;p&gt;So what is the execution plan.
-An execution plan is a program. It describes exactly what needs to be done by systems.
-The execution plan is deterministic.&lt;/p&gt;
-
-&lt;p&gt;With the description of the application, the execution plan, and the orchestration, the ultimate goal of automation seems fulfilled, indeed!
-We have a complete suite of tools that allows to describe the application and architecture base on its functions and it is possible to
-generate and executes all the commands a computer &lt;strong&gt;must&lt;/strong&gt; do to get things done.&lt;/p&gt;
-
-&lt;p&gt;Why do we need more?
-Because now systems are so complex that we could not rely anymore on IT infrastructure to do exactly what we told it to.
-Mark Burgess, considered by a lot of people as a visionary, wrote a book entitled:
-&lt;a href=&#34;http://www.amazon.com/In-Search-Certainty-information-infrastructure/dp/1492389161&#34;&gt;In Search of Certainty: The science of our information infrastructure&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Julian Dunn told about it in its speech, and I&amp;rsquo;ve started reading IT.&lt;/p&gt;
-
-&lt;p&gt;The conclusion is roughly:&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;We may not rely on command and control anymore, we should make the system work on its own to reach a level of stability&lt;/em&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;dancing-choreography-jazz&#34;&gt;Dancing, Choreography, Jazz ?&lt;/h1&gt;
-
-&lt;p&gt;A solution to the orchestration SPOF and  a workaround for dealing with the uncertainty of the infrastructure may be to implement a choreography.
-Or to replace the symphony with a piece of jazz.
-You give every attendee (dancer, jazzman or TOSCA node) the structure of the piece to play.
-And given the chords and the structure, they all react and do what they have committed to do.&lt;/p&gt;
-
-&lt;p&gt;This should produce similar to the same mechanism controlled by an orchestrator, but more fault tolerant.
-Actually, the brain will not have to take care of unpredicted event; each node will do so.
-The application has become self-aware.&lt;/p&gt;
-
-&lt;h2 id=&#34;implementation-a-distributed-system&#34;&gt;Implementation: a distributed system&lt;/h2&gt;
-
-&lt;p&gt;This concept, described in so many sci-fi books, may become applicable because science formalized consensus algorithm such as
-paxo or raft.
-And even better, it is easy to find very good implementation of those concepts (for free)&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;etcd&lt;/code&gt; from CoreOS is one of those tools.
-It is a service oriented key/value store, distributed on a cluster of machine.&lt;/p&gt;
-
-&lt;p&gt;It can be used as a communication based for a cluster of nodes composing a choreography.&lt;/p&gt;
-
-&lt;p&gt;Even more, etcd clients have the ability to monitor an event allowing us to implement the self awareness of the application.&lt;/p&gt;
-
-&lt;h2 id=&#34;proof-of-concept-khoreia&#34;&gt;Proof of concept: khoreia&lt;/h2&gt;
-
-&lt;p&gt;khoreia is a little program I made in &lt;code&gt;go&lt;/code&gt; that relies on the &lt;a href=&#34;http://github.com/coreos/eetcd&#34;&gt;etcd&lt;/a&gt; distributed system.
-Etcd itself is an implementation of the raft consensus algorithm. I do heavily advice that you take a look at &lt;a href=&#34;http://thesecretlivesofdata.com/raft/&#34;&gt;this page&lt;/a&gt;
-for a complete and clear explanation.&lt;/p&gt;
-
-&lt;p&gt;The khoreia single binary takes a topology description in yaml
-(by now very simple, but sooner or later I may implement the TOSCA DSL, as I already
-have a &lt;a href=&#34;http://github.com/owulveryck/toscalib&#34;&gt;Tosca library&lt;/a&gt;).&lt;/p&gt;
-
-&lt;p&gt;Then it triggers the nodes and every node reacts on events.
-Regarding the events, it implements the expected life cycle for the node.&lt;/p&gt;
-
-&lt;p&gt;Without actually coding it, the complement life cycle of the application is then applied.
-Even better, the application is fault tolerant (if a check fails, the do method is called again) and the execution
-is completely stateless because of the event based mechanism.&lt;/p&gt;
-
-&lt;h3 id=&#34;screencast-a-little-demo-on-distributed-systems-based-on-event-on-filesystems&#34;&gt;Screencast: a little demo on distributed systems based on event on filesystems&lt;/h3&gt;
-
-&lt;p&gt;Here is a little screencast I made as a POC.
-Two machines are used (linked by a VPN):&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;my chromebook, linux-based at home in France;&lt;/li&gt;
-&lt;li&gt;a FreeBSD server located in Canada.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Both machines are part of an etcd cluster.
-The topology is composed of 8 nodes with dependencies which can be represented like this (same example as the one I used in a previous post):
-&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/digraph1.png&#34; alt=&#34;digraph example&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;Nodes 0-3 are targeted on the chromebook while nodes 5-7 are targeted on the BSD machine.&lt;/p&gt;
-
-&lt;p&gt;The topology is described as a simple yaml file &lt;a href=&#34;https://github.com/owulveryck/khoreia/blob/e32af3d77d0b57bf36b68a2460e5a47132f29118/samples/topology.yaml&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Each node is fulfilling two methods:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Create&lt;/li&gt;
-&lt;li&gt;Configure&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;And each method is implementing an interface composed of:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;Check()&lt;/code&gt; which check whether the action has been release and the &amp;ldquo;role&amp;rdquo; is ok&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Do()&lt;/code&gt; which actually implements the action&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: The signature of the method is actually a bit different, and the go implementation involve channels, but I does not change the principle,
-so I&amp;rsquo;ve decided to omit that for clarity.&lt;/p&gt;
-
-&lt;h4 id=&#34;example&#34;&gt;Example&lt;/h4&gt;
-
-&lt;p&gt;Each node will:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Wait for an event&lt;/strong&gt; and call Create.Check() and Configure.Check().&lt;/li&gt;
-&lt;li&gt;watch for events from their dependencies&lt;/li&gt;
-&lt;li&gt;if an event is detected, call the appropriate Do() method&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&#34;engine&#34;&gt;Engine&lt;/h4&gt;
-
-&lt;p&gt;The interfaces &lt;code&gt;Check()&lt;/code&gt; and &lt;code&gt;Do()&lt;/code&gt; may be implemented on different engines.&lt;/p&gt;
-
-&lt;p&gt;For my demo, as suggested by James I&amp;rsquo;m using a &amp;ldquo;file engine&amp;rdquo; base on iNotify (linux) and kQueue (freebsd).&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;Check()&lt;/code&gt; method is watching the presence of a file. It sends the event &amp;ldquo;true&amp;rdquo; if the file is created of &amp;ldquo;false&amp;rdquo; if its deleted.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;Do()&lt;/code&gt; method actually create an empty file.&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/l96uFQUrcp8&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;khoreia-on-github&#34;&gt;Khoreia on github:&lt;/h4&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://github.com/owulveryck/khoreia&#34;&gt;github.com/owulveryck/khoreia&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;Self-awareness, self-healing, elasticity, modularity, &amp;hellip; with a choreography based configuration and deployment tools, standard application may get
-new capabilities without totally rethinking their infrastructure.&lt;/p&gt;
-
-&lt;p&gt;Some of the stuff that still need to be implemented are, for example,  the notion of interface and commitment of the node, and the notion of
-machine learning for every node to teach them how to react to different events in an efficient way.&lt;/p&gt;
 </description>
     </item>
     

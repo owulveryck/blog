@@ -3,7 +3,7 @@ categories:
 - dev
 date: 2017-03-11T09:15:17+01:00
 description: "Using an exponential backoff algorithm to fill a dynamodb from a CSV file"
-draft: true
+draft: false
 images:
 - /2016/10/image.jpg
 tags:
@@ -222,3 +222,5 @@ I can see that the adaptative algorithm works on the graphs:
 ![It works](/assets/images/dynamodb/dynamodb_write_capacity.png)
 
 Now I can analyse the data to find a proper way to optimize the aws bill for my client.
+
+The full example is on [gist](https://gist.github.com/owulveryck/6663983b41c669617704558a030a3392)

@@ -13,7 +13,9 @@
 <meta property="og:url" content="https://blog.owulveryck.info/post.html" />
 
 
-<meta property="og:updated_time" content="2017-02-28T20:57:38&#43;01:00"/>
+
+<meta property="og:updated_time" content="2017-03-11T09:15:17&#43;01:00"/>
+
 
 
 
@@ -36,7 +38,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.18.1" />
+<meta name="generator" content="Hugo 0.19" />
 
 
     <link rel="canonical" href="https://blog.owulveryck.info/post.html">
@@ -94,6 +96,25 @@ ga('send', 'pageview');
 
           
 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank./index.html">350000 rows, 133 cols&hellip; From a huge CSV to DynamoDB (without breaking piggy-bank).</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-03-11T09:15:17&#43;01:00">Sat Mar 11, 2017</time> by Olivier Wulveryck in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="/categories/dev" rel="category tag">dev</a>
+
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/golang" rel="tag">golang</a>, <a href="/tags/reflection" rel="tag">reflection</a>, <a href="/tags/dynamodb" rel="tag">dynamodb</a>, <a href="/tags/exponentialbackoff" rel="tag">exponentialBackoff</a>
+
+</p>
+  </header>
+  In this post I will explain how to:
+ Parse a CSV file and extract only certain columns Create a table in DynamoDB Insert all the data with an adaptive algorithm in order to use the provisioned capacity Reduce the capacity once the insertion is done.  Exploring the problem: AWS Billing In a previous post I explained how I was using dynamodb to store a lot of data about aws billing.
+  <a href='https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank./index.html'>Read more →</a>
+</article> 
 
 
 
@@ -179,24 +200,6 @@ The part of the result I will focus on is the emotion.
 
 
 
-<article class="blog-post">
-  <header>
-    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs/index.html">SPA with Gopherjs</a></h2>
-    <p class="blog-post-meta"><time datetime="2016-10-19T07:24:51&#43;02:00">Wed Oct 19, 2016</time> by Olivier Wulveryck in 
-
-<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/javascript" rel="tag">javascript</a>, <a href="/tags/jquery" rel="tag">jQuery</a>, <a href="/tags/gopherjs" rel="tag">Gopherjs</a>, <a href="/tags/spa" rel="tag">SPA</a>, <a href="/tags/webui" rel="tag">WebUI</a>, <a href="/tags/cordova" rel="tag">Cordova</a>
-
-</p>
-  </header>
-  Introduction Single page application (SPA) are a standard when dealing with mobile apps. Unfortunately, by now, JavaScript is the only programming language supported by a browser.
-Therefore, to code web UI it remains a must.
-Life of an ex sysadmin who wants to code a web app: getting depressed To make the development easier, your friend, who is &ldquo;web developer&rdquo; will recommend you to use a marvelous framework. Depending on the orientation of the wind, the moon or its reading, he will encourage you to use reactjs, angular, ember or whatever exotic tool.
-  <a href='https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs/index.html'>Read more →</a>
-</article> 
-
-
-
-
 <nav class="blog-pagination">
   
   
@@ -225,6 +228,8 @@ Life of an ex sysadmin who wants to code a web app: getting depressed To make th
     <h4>Recent Posts</h4>
     <ol class="list-unstyled">
       
+      <li><a href="/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank./index.html">350000 rows, 133 cols&hellip; From a huge CSV to DynamoDB (without breaking piggy-bank).</a></li>
+      
       <li><a href="/2017/02/28/to-go-and-touch-lindas-lisp/index.html">To go and touch Linda&rsquo;s Lisp</a></li>
       
       <li><a href="/2017/02/03/linda-31yo-with-5-starving-philosophers.../index.html">Linda, 31yo, with 5 starving philosophers&hellip;</a></li>
@@ -232,8 +237,6 @@ Life of an ex sysadmin who wants to code a web app: getting depressed To make th
       <li><a href="/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data/index.html">A foot in NoSQL and a toe in big data</a></li>
       
       <li><a href="/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html">Image reKognition with a webcam, go and AWS.</a></li>
-      
-      <li><a href="/2016/10/19/spa-with-gopherjs/index.html">SPA with Gopherjs</a></li>
       
     </ol>
   </section>
