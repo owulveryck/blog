@@ -37,10 +37,13 @@ The basic primitives of the language do not allow remote execution.
 What I need is a sort of _eval_ function that would trigger the execution of the evaluation on another host instead of another goroutine.
 
 I do not care about catching the result of the execution as it will be posted to the tuple space.
-If I need more coordination between the actors of this RPC, I can encode them using the in/out mechanism of  linda.
+Indeed, if more coordination between the actors of this RPC is needed, it can be encoded using the in/out mechanism of linda.
+
+The actual linda design does not allow this. That's why I have decided to introduce a new primitive called _evalc_ (for eval compute... Yeah I know, I have imagination)
 
 # Implementing _evalc_
 
+## First attempt
 
 # Runtime
 
