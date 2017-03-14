@@ -46,40 +46,106 @@ Therefore, I have decided to introduce a new primitive called _evalc_ (for eval 
 # Implementing _evalc_
 
 The evalc will not trigger a function on a new host.
-Instead, each participating host will run a sort of agent (actually a clone of thw zygo interpreter) that will watch a certain type of event (tainted with the evalc) and will then execute a function.
+Instead, each participating host will run a sort of agent (actually a clone of the zygo interpreter) that will watch a certain type of event (tainted with the evalc) and will then execute a function.
 
-The tuple space acts like a communication channel and this implementation may be apparented to a kind of [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes)
+The tuple space acts like a communication channel and this implementation is like a kind of [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) which I like a lot.
 
 The _evalc_ will work exactly as its equivalent _eval_. Therefore the function declaration in go will look like this:
 
 {{< highlight go >}}
 func (l *Linda) EvalC(env *zygo.Glisp, name string, args []zygo.Sexp) (zygo.Sexp, error) {
+    ...
     return zygo.SexpNull, nil
 }
 {{< /highlight >}}
 
 ## First attempt
 
+At first I thought I could simply gob/encode the `args` which contains the `SexpFunction`, post it in the tuple space under a prefixed key. Then the worker would read an execute it in a newly created `glisp` env.
+
+That didn't work mainly because the `SexpFunction` does not have any exported fields, therefore I cannot easily encode/decode it.
+
+I though then that I could encode the `datastack` and post it in the tuple space. I could then decode it in the worker.
+
+I asked for some advice to the author of zygomys [Jason E. Aten](https://www.linkedin.com/in/jason-e-aten-ph-d-45a31318) (aka [glycerine](https://github.com/glycerine))
+
+Here is what he told me (thank you Jason btw):
+
+_Evaluating an arbitrary expression remotely will be challenging because an expression can refer to any variable in the environment, and so would theoretically require a copying of the whole environment--the heap as well as the datastack._ 
+
+And of course he is right!
+So I will keep the idea of encoding the whole environment and send it to the workers for a later implementation.
+It would need to change the zygomys implementation a lot so export and import both stack. That is too much for now.
+
+## Second attempt
+
+What I did as a temporary solution is a lot simpler and not elegant at all: I have posted the function and the variables in the tuple space and then I am evaluating it in a newly created env.
+
+The main problem is that I cannot access to variables and user function defined outside of the scope of the function. But that will do the trick for now.
+
+Regarding the problem of the philosopher, I had to change the definition of `phil` within my lisp code so it do not call `(eat)` and `(think)` functions anymore.
+
+Here is what is posted in the tuple space when the evalc function is called:
+{{< highlight lisp >}}
+(defn phil [i num] ((begin (begin (printf "%v is thinking\n" i) (sleep 10000) (printf "/%v is thinking\n" i)) (in "room ticket") (printf "%v is in the room\n" i) (in "chopstick" i) (printf "%v took the %v's chopstick\n" i i) (in "chopstick" (mod (+ i 1) num)) (printf "%v took the %v's chopstick\n" i (mod (+ i 1) num)) (begin (printf "%v is eating\n" i) (sleep 10000) (printf "/%v is eating\n" i)) (printf "%v released the %v's chopstick\n" i i) (out "chopstick" i) (printf "%v released the %v's chopstick\n" i (mod (+ i 1) num)) (out "chopstick" (mod (+ i 1) num)) (printf "%v left the room\n" i) (out "room ticket") (phil i num)))) 0 5
+{{< /highlight >}}
+
+In the worker process, I am creating a new environment, load the function (the defn part), and construct an expression to run. The environment in the end runs:
+
+{{< highlight lisp >}}
+(defn phil [i num] (
+   (begin
+    (begin
+     (printf "%v is thinking\n" i)
+     (sleep 10000)
+     (printf "/%v is thinking\n" i))
+    (in "room ticket")
+    (printf "%v is in the room\n" i)
+    (in "chopstick" i)
+    (printf "%v took the %v's chopstick\n" i i)
+    (in "chopstick" (mod (+ i 1) num))
+    (printf "%v took the %v's chopstick\n" i (mod (+ i 1) num))
+    (begin
+     (printf "%v is eating\n" i)
+     (sleep 10000)
+     (printf "/%v is eating\n" i))
+    (printf "%v released the %v's chopstick\n" i i)
+    (out "chopstick" i)
+    (printf "%v released the %v's chopstick\n" i (mod (+ i 1) num))
+    (out "chopstick" (mod (+ i 1) num))
+    (printf "%v left the room\n" i)
+    (out "room ticket")
+    (phil i num))))
+(phil 0 5)
+{{< /highlight >}}
+
 # Runtime
 
+## Running it locally: one etcd and several workers
+
+To run it locally I need: 
+
+* a local instance of `etcd` 
+* 5 workers. 
+
+Each worker will watch for a new event in the tuple space.
+Then I can trigger the execution of the logic with a sixth worker that will read the lisp code, and execute it.
+
+Here is a screenshot of the execution
 ![Runtime screenshot](https://raw.githubusercontent.com/ditrit/go-linda/master/doc/v0.3.png)
+
+## Running it in a cluster of `CoreOS` nodes
 
 # Conclusion
 
+Jason E. Aten also told me about _sigils_ as a way to discriminate the local variables from the variables present in the tuple space.
+I haven't worked on it yet, but I think that I will use those _sigils_ to enhance my linda implementation to match templates and formals.
 
+I have something that is able to run a basic theorical coordination problem.
+
+Now I think that I will go back to the application management task and see how I can encode the TOSCA workflow so it can be used by this mechanism.
 
 ----
 Credit:
 
 The illustration has been found [here](https://www.flickr.com/photos/joebehr/23704122254)
-
-
-Conversation with [Jason E. Aten](https://www.linkedin.com/in/jason-e-aten-ph-d-45a31318) aka [glycerine](https://github.com/glycerine):
-
-> Evaluating an arbitrary expression remotely will be challenging because an expression can refer to any variable in the environment, and so would theoretically require a copying of the whole environment--the heap as well as the datastack. The set of referenced variables can be hard to predict in advance. 
-> 
-> So more than likely, when you talk to a remote box, you will need to restrict the variables which you reference. This is typically done by establishing an RPC or remote procedure call convention where is only the parameters to the method call are conveyed to the remote host.  
-> 
-> However, another way you could approach this would be by adding a convention to the variables to establish that they are either remote or from the tuple space. 
-> 
-> For example, you could establish a convention for using a sigil on variables in those sexp that meant a variable was stored in the tuple space/etcd. The sigil system in zygomys was designed to support this kind of annotation (if you've seen Perl, then the `$` in from of varialbes is an example of a sigil). See the examples in tests/sigils.zy where the prefix `$`, `#`, and `?` create special symbols.
