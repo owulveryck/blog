@@ -16,7 +16,7 @@ title: Linda's evalc, a (tuple)space oddity
 
 For a change, I will start with a good soundtrack
 
-<iframe src="https://embed.spotify.com/?uri=spotify:track:72Z17vmmeQKAg8bptWvpVG&theme=white" width="280" height="80" frameborder="0" allowtransparency="true"></iframe>
+<iframe src="https://embed.spotify.com/?uri=spotify:track:72Z17vmmeQKAg8bptWvpVG&theme=white" width="220" height="80" frameborder="0" allowtransparency="true"></iframe>
 
 ([youtube version](https://www.youtube.com/watch?v=iYYRH4apXDo) for those who are spotify-less)
 
@@ -90,7 +90,8 @@ Here is what is posted in the tuple space when the evalc function is called:
 (defn phil [i num] ((begin (begin (printf "%v is thinking\n" i) (sleep 10000) (printf "/%v is thinking\n" i)) (in "room ticket") (printf "%v is in the room\n" i) (in "chopstick" i) (printf "%v took the %v's chopstick\n" i i) (in "chopstick" (mod (+ i 1) num)) (printf "%v took the %v's chopstick\n" i (mod (+ i 1) num)) (begin (printf "%v is eating\n" i) (sleep 10000) (printf "/%v is eating\n" i)) (printf "%v released the %v's chopstick\n" i i) (out "chopstick" i) (printf "%v released the %v's chopstick\n" i (mod (+ i 1) num)) (out "chopstick" (mod (+ i 1) num)) (printf "%v left the room\n" i) (out "room ticket") (phil i num)))) 0 5
 {{< /highlight >}}
 
-In the worker process, I am creating a new environment, load the function (the defn part), and construct an expression to run. The environment in the end runs:
+In the worker process, I am creating a new environment, loading the function (the `defn` part), and constructing an expression to be evaluated by the env. 
+This is what the environment evalutates:
 
 {{< highlight lisp >}}
 (defn phil [i num] (
