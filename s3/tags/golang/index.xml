@@ -10,6 +10,157 @@
     <atom:link href="https://blog.owulveryck.info/tags/golang.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Linda&#39;s evalc, a (tuple)space oddity</title>
+      <link>https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity/index.html</link>
+      <pubDate>Mon, 13 Mar 2017 20:54:27 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity/index.html</guid>
+      <description>
+
+&lt;p&gt;For a change, I will start with a good soundtrack&lt;/p&gt;
+
+&lt;iframe src=&#34;https://embed.spotify.com/?uri=spotify:track:72Z17vmmeQKAg8bptWvpVG&amp;theme=white&#34; width=&#34;220&#34; height=&#34;80&#34; frameborder=&#34;0&#34; allowtransparency=&#34;true&#34;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;(&lt;a href=&#34;https://www.youtube.com/watch?v=iYYRH4apXDo&#34;&gt;youtube version&lt;/a&gt; for those who are spotify-less)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;This is my third article about the distributed coordination language Linda.&lt;/p&gt;
+
+&lt;p&gt;The final target of the work is to use this coordination mechanism to deploy and maintain applications based on the description of their topology (using, for example, TOSCA as a DSL).&lt;/p&gt;
+
+&lt;p&gt;Last time, I introduced a lisp based language (zygomys) as an embedded programing mechanism to describe the business logic.&lt;/p&gt;
+
+&lt;p&gt;Today I will explain how I have implemented a new &lt;em&gt;action&lt;/em&gt; in the linda language to achieve a new step: to distribute the work among different nodes.&lt;/p&gt;
+
+&lt;p&gt;My test scenario remains the &amp;ldquo;dining of the philosophers&amp;rdquo;.&lt;/p&gt;
+
+&lt;h1 id=&#34;introducing-evalc&#34;&gt;Introducing &lt;em&gt;evalc&lt;/em&gt;&lt;/h1&gt;
+
+&lt;p&gt;Linda is a coordination language, but the language which is more than 30 years old, has not been designed with the idea of running on multiple hosts.
+The basic primitives of the language do not allow remote execution.&lt;/p&gt;
+
+&lt;p&gt;What I need is a sort of &lt;em&gt;eval&lt;/em&gt; function that would trigger the execution of the evaluation on another host instead of another goroutine.&lt;/p&gt;
+
+&lt;p&gt;I do not care about catching the result of the execution as it will be posted to the tuple space.
+Indeed, if more coordination between the actors of this RPC is needed, it can be encoded using the in/out mechanism of linda.&lt;/p&gt;
+
+&lt;p&gt;Therefore, I have decided to introduce a new primitive called &lt;em&gt;evalc&lt;/em&gt; (for eval compute&amp;hellip; Yeah I know, I have imagination)&lt;/p&gt;
+
+&lt;h1 id=&#34;implementing-evalc&#34;&gt;Implementing &lt;em&gt;evalc&lt;/em&gt;&lt;/h1&gt;
+
+&lt;p&gt;The evalc will not trigger a function on a new host.
+Instead, each participating host will run a sort of agent (actually a clone of the zygo interpreter) that will watch a certain type of event (tainted with the evalc) and will then execute a function.&lt;/p&gt;
+
+&lt;p&gt;The tuple space acts like a communication channel and this implementation is like a kind of &lt;a href=&#34;https://en.wikipedia.org/wiki/Communicating_sequential_processes&#34;&gt;CSP&lt;/a&gt; which I like a lot.&lt;/p&gt;
+
+&lt;p&gt;The &lt;em&gt;evalc&lt;/em&gt; will work exactly as its equivalent &lt;em&gt;eval&lt;/em&gt;. Therefore the function declaration in go will look like this:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt; (l &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;Linda) EvalC(env &lt;span style=&#34;color: #666666&#34;&gt;*&lt;/span&gt;zygo.Glisp, name &lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;, args []zygo.Sexp) (zygo.Sexp, &lt;span style=&#34;color: #B00040&#34;&gt;error&lt;/span&gt;) {
+    &lt;span style=&#34;color: #666666&#34;&gt;...&lt;/span&gt;
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;return&lt;/span&gt; zygo.SexpNull, &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;nil&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;first-attempt&#34;&gt;First attempt&lt;/h2&gt;
+
+&lt;p&gt;At first I thought I could simply gob/encode the &lt;code&gt;args&lt;/code&gt; which contains the &lt;code&gt;SexpFunction&lt;/code&gt;, post it in the tuple space under a prefixed key. Then the worker would read an execute it in a newly created &lt;code&gt;glisp&lt;/code&gt; env.&lt;/p&gt;
+
+&lt;p&gt;That didn&amp;rsquo;t work mainly because the &lt;code&gt;SexpFunction&lt;/code&gt; does not have any exported fields, therefore I cannot easily encode/decode it.&lt;/p&gt;
+
+&lt;p&gt;I though then that I could encode the &lt;code&gt;datastack&lt;/code&gt; and post it in the tuple space. I could then decode it in the worker.&lt;/p&gt;
+
+&lt;p&gt;I asked for some advice to the author of zygomys &lt;a href=&#34;https://www.linkedin.com/in/jason-e-aten-ph-d-45a31318&#34;&gt;Jason E. Aten&lt;/a&gt; (aka &lt;a href=&#34;https://github.com/glycerine&#34;&gt;glycerine&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;Here is what he told me (thank you Jason btw):&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Evaluating an arbitrary expression remotely will be challenging because an expression can refer to any variable in the environment, and so would theoretically require a copying of the whole environment&amp;ndash;the heap as well as the datastack.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;And of course he is right!
+So I will keep the idea of encoding the whole environment and send it to the workers for a later implementation.
+It would need to change the zygomys implementation a lot so export and import both stack. That is too much for now.&lt;/p&gt;
+
+&lt;h2 id=&#34;second-attempt&#34;&gt;Second attempt&lt;/h2&gt;
+
+&lt;p&gt;What I did as a temporary solution is a lot simpler and not elegant at all: I have posted the function and the variables in the tuple space and then I am evaluating it in a newly created env.&lt;/p&gt;
+
+&lt;p&gt;The main problem is that I cannot access to variables and user function defined outside of the scope of the function. But that will do the trick for now.&lt;/p&gt;
+
+&lt;p&gt;Regarding the problem of the philosopher, I had to change the definition of &lt;code&gt;phil&lt;/code&gt; within my lisp code so it do not call &lt;code&gt;(eat)&lt;/code&gt; and &lt;code&gt;(think)&lt;/code&gt; functions anymore.&lt;/p&gt;
+
+&lt;p&gt;Here is what is posted in the tuple space when the evalc function is called:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;(&lt;span style=&#34;color: #19177C&#34;&gt;defn&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;phil&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;[i&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;num]&lt;/span&gt; ((&lt;span style=&#34;color: #19177C&#34;&gt;begin&lt;/span&gt; (&lt;span style=&#34;color: #19177C&#34;&gt;begin&lt;/span&gt; (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v is thinking\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;) (&lt;span style=&#34;color: #008000&#34;&gt;sleep&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;10000&lt;/span&gt;) (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;/%v is thinking\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)) (&lt;span style=&#34;color: #19177C&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v is in the room\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;) (&lt;span style=&#34;color: #19177C&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;) (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v took the %v&amp;#39;s chopstick\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;) (&lt;span style=&#34;color: #19177C&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;mod&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;)) (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v took the %v&amp;#39;s chopstick\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;mod&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;)) (&lt;span style=&#34;color: #19177C&#34;&gt;begin&lt;/span&gt; (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v is eating\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;) (&lt;span style=&#34;color: #008000&#34;&gt;sleep&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;10000&lt;/span&gt;) (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;/%v is eating\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)) (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v released the %v&amp;#39;s chopstick\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;) (&lt;span style=&#34;color: #19177C&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;) (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v released the %v&amp;#39;s chopstick\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;mod&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;)) (&lt;span style=&#34;color: #19177C&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;mod&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;)) (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v left the room\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;) (&lt;span style=&#34;color: #19177C&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;) (&lt;span style=&#34;color: #19177C&#34;&gt;phil&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;)))) &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;In the worker process, I am creating a new environment, loading the function (the &lt;code&gt;defn&lt;/code&gt; part), and constructing an expression to be evaluated by the env.
+This is what the environment evalutates:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;(&lt;span style=&#34;color: #19177C&#34;&gt;defn&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;phil&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;[i&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;num]&lt;/span&gt; (
+   (&lt;span style=&#34;color: #19177C&#34;&gt;begin&lt;/span&gt;
+    (&lt;span style=&#34;color: #19177C&#34;&gt;begin&lt;/span&gt;
+     (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v is thinking\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+     (&lt;span style=&#34;color: #008000&#34;&gt;sleep&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;10000&lt;/span&gt;)
+     (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;/%v is thinking\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;))
+    (&lt;span style=&#34;color: #19177C&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v is in the room\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v took the %v&amp;#39;s chopstick\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;mod&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;))
+    (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v took the %v&amp;#39;s chopstick\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;mod&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;))
+    (&lt;span style=&#34;color: #19177C&#34;&gt;begin&lt;/span&gt;
+     (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v is eating\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+     (&lt;span style=&#34;color: #008000&#34;&gt;sleep&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;10000&lt;/span&gt;)
+     (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;/%v is eating\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;))
+    (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v released the %v&amp;#39;s chopstick\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v released the %v&amp;#39;s chopstick\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;mod&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;))
+    (&lt;span style=&#34;color: #19177C&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;chopstick&amp;quot;&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;mod&lt;/span&gt; (&lt;span style=&#34;color: #008000&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;))
+    (&lt;span style=&#34;color: #19177C&#34;&gt;printf&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;%v left the room\n&amp;quot;&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;room ticket&amp;quot;&lt;/span&gt;)
+    (&lt;span style=&#34;color: #19177C&#34;&gt;phil&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color: #19177C&#34;&gt;num&lt;/span&gt;))))
+(&lt;span style=&#34;color: #19177C&#34;&gt;phil&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color: #666666&#34;&gt;5&lt;/span&gt;)
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h1 id=&#34;runtime&#34;&gt;Runtime&lt;/h1&gt;
+
+&lt;h2 id=&#34;running-it-locally-one-etcd-and-several-workers&#34;&gt;Running it locally: one etcd and several workers&lt;/h2&gt;
+
+&lt;p&gt;To run it locally I need:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a local instance of &lt;code&gt;etcd&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;5 workers.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Each worker will watch for a new event in the tuple space.
+Then I can trigger the execution of the logic with a sixth worker that will read the lisp code, and execute it.&lt;/p&gt;
+
+&lt;p&gt;Here is a screenshot of the execution
+&lt;img src=&#34;https://raw.githubusercontent.com/ditrit/go-linda/master/doc/v0.3.png&#34; alt=&#34;Runtime screenshot&#34; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;Jason E. Aten also told me about &lt;em&gt;sigils&lt;/em&gt; as a way to discriminate the local variables from the variables present in the tuple space.
+I haven&amp;rsquo;t worked on it yet, but I think that I will use those &lt;em&gt;sigils&lt;/em&gt; to enhance my linda implementation. It can be usefull for the matching of templates and formals.&lt;/p&gt;
+
+&lt;p&gt;By now, I have something that is able to run a basic theorical coordination problem.&lt;/p&gt;
+
+&lt;p&gt;Now I think that I will go back to the application management task and see how I can encode the TOSCA workflow so it can be used by this mechanism.&lt;/p&gt;
+
+&lt;p&gt;Meanwhile, I will try to test this setup on a worldwide cluster (maybe based on CoreOS).&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Credit:&lt;/p&gt;
+
+&lt;p&gt;The illustration has been found &lt;a href=&#34;https://www.flickr.com/photos/joebehr/23704122254&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>350000 rows, 133 cols... From a huge CSV to DynamoDB (without breaking piggy-bank).</title>
       <link>https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank./index.html</link>
       <pubDate>Sat, 11 Mar 2017 09:15:17 +0100</pubDate>

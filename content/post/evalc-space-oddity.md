@@ -3,7 +3,7 @@ categories:
 - coordination language
 date: 2017-03-13T20:54:27+01:00
 description: "Third article about writing a distributed linda interpreter"
-draft: true
+draft: false
 images:
 - /assets/images/the_stars_look_different.jpg
 tags:
@@ -135,16 +135,16 @@ Then I can trigger the execution of the logic with a sixth worker that will read
 Here is a screenshot of the execution
 ![Runtime screenshot](https://raw.githubusercontent.com/ditrit/go-linda/master/doc/v0.3.png)
 
-## Running it in a cluster of `CoreOS` nodes
-
 # Conclusion
 
 Jason E. Aten also told me about _sigils_ as a way to discriminate the local variables from the variables present in the tuple space.
-I haven't worked on it yet, but I think that I will use those _sigils_ to enhance my linda implementation to match templates and formals.
+I haven't worked on it yet, but I think that I will use those _sigils_ to enhance my linda implementation. It can be usefull for the matching of templates and formals.
 
-I have something that is able to run a basic theorical coordination problem.
+By now, I have something that is able to run a basic theorical coordination problem.
 
 Now I think that I will go back to the application management task and see how I can encode the TOSCA workflow so it can be used by this mechanism.
+
+Meanwhile, I will try to test this setup on a worldwide cluster (maybe based on CoreOS).
 
 ----
 Credit:
