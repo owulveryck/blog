@@ -215,7 +215,7 @@ resp, err := svc.UpdateTable(params)
 
 # Conclusion: it works
 
-It took me half an hour to process and insert 350000 lines (with 133 rows each) into the dynamodb from my laptop.
+It took me half an hour to process and insert 350000 lines (with 133 cols each) into the dynamodb from my laptop.
 
 I can see that the adaptative algorithm works on the graphs:
 
