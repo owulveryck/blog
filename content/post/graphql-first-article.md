@@ -14,6 +14,26 @@ title: graphql first article
 
 To understand correctly the structure of a query, please refer to this excellent blog post: [The Anatomy of a GraphQL Query](https://dev-blog.apollodata.com/the-anatomy-of-a-graphql-query-6dffa9e9e747#.jbklz6h17).
 
+
+{{< highlight graphql >}}
+# User type implements Entity interface
+type User implements Entity {
+  id: ID!
+  name: String
+  age: Int
+  balance: Float
+  is_active: Boolean
+  friends: [User]!
+  homepage: Url
+}
+
+
+# root Query type
+type Query {
+  me: User
+  friends(limit: Int = 10): [User]!
+}
+{{< /highlight >}}
 {{< highlight js >}}
 {
   products(location="EU (London)",type="r3.8xlarge") {
