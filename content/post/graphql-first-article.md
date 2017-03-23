@@ -161,6 +161,7 @@ To use it:
 import "github.com/graphql-go/graphql"
 {{< /highlight >}}
 
+To keep it simple, I will load all the products and offers in memory. In the real life, we should implement an access to whatever database. But that is a strength of the GraphQL model: The flexibility. The backend can be changed later without breaking the model or the API.
 
 ## Defining the schema and the query in go
 
