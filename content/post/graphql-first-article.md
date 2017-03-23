@@ -7,8 +7,9 @@ draft: true
 images:
 - http://graphql.org/img/logo.svg
 tags:
-- tag1
-- tag2
+- golang
+- aws
+- graphql
 title: Trying GraphQL as an API enhancement for AWS products and billing
 ---
 
@@ -59,27 +60,42 @@ As an example, here is a tree representation of the same graph:
 # Defining the GraphQL schema
 
 {{< highlight graphql >}}
-# Define the item inteface
-interface Item {
-    SKU: String!
+type Product {
+  offers: [Offer]!
+  location: String
+  type: String
+  SKU: String!
+  operatingSystem: String
 }
 
-# User type O
-implements Entity interface
-type Element implements Entity {
-  id: ID!
-  name: String
-  age: Int
-  balance: Float
-  is_active: Boolean
-  friends: [User]!
-  homepage: Url
+type Offer {
+  type: OFFER_TYPE!
+  code: String!
+  LeaseContractLength: String!
+  PurchaseOption: String!
+  OfferingClass: String
+  prices: [Price]!
+}
+
+enum OFFER_TYPE {
+  OnDemand
+  Reserved
+}
+
+type Price {
+  description: String
+  unit: String
+  currency: String
+  price: Float
+}
+
+type ProductFamily {
+  products: [Product]!
 }
 
 # root Query type
 type Query {
-  me: User
-  friends(limit: Int = 10): [User]!
+  productFamily: User
 }
 {{< /highlight >}}
 
