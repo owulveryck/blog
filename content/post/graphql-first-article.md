@@ -3,7 +3,7 @@ categories:
 - category
 date: 2017-03-22T09:15:35+01:00
 description: "My first experiencewith GraphQL. I will try to see how it fits the pricing model of AWS as described in an earlier post."
-draft: true
+draft: false
 images:
 - http://graphql.org/img/logo.svg
 tags:
