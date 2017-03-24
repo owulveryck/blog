@@ -69,7 +69,7 @@ We are dealing with products families, products, offers and prices.&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;An offer has at least one price dimension&lt;/li&gt;
-&lt;li&gt;A price dimension is caracterized by its currency, its unit of measure, its price per unit, its desription and eventually per a range of application (start and end)&lt;/li&gt;
+&lt;li&gt;A price dimension is characterized by its currency, its unit of measure, its price per unit, its description and eventually per a range of application (start and end)&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -78,7 +78,7 @@ We are dealing with products families, products, offers and prices.&lt;/p&gt;
 &lt;p&gt;Here is the graphical representation generated thanks to &lt;a href=&#34;http://www.graphviz.org/&#34;&gt;graphviz&amp;rsquo; fdp&lt;/a&gt;
 &lt;img src=&#34;https://blog.owulveryck.info/assets/graphql/graph.svg&#34; alt=&#34;Graph Representation&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;The goal of GraphQL is to extract a substree of this graph to get part or all information.
+&lt;p&gt;The goal of GraphQL is to extract a subtree of this graph to get part or all information.
 As an example, here is a tree representation of the same graph:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://blog.owulveryck.info/assets/graphql/graph_tree.svg&#34; alt=&#34;Graph Representation&#34; /&gt;&lt;/p&gt;
@@ -92,7 +92,7 @@ As an example, here is a tree representation of the same graph:&lt;/p&gt;
 &lt;p&gt;I will not go into deep details in here. I will simple refer to this excellent document which is a &lt;em&gt;résumé&lt;/em&gt; of the language:
 &lt;a href=&#34;https://github.com/sogko/graphql-schema-language-cheat-sheet/raw/master/graphql-shorthand-notation-cheat-sheet.png&#34;&gt;Graphql shorthand notation cheat sheet&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;We can define a product that must contains a list of offers thsi way and a product family like this:&lt;/p&gt;
+&lt;p&gt;We can define a product that must contains a list of offers this way and a product family like this:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Product definition&lt;/span&gt;
 &lt;span style=&#34;color: #B00040&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Product&lt;/span&gt; {
@@ -142,7 +142,7 @@ Let&amp;rsquo;s define this:
 Let&amp;rsquo;s start by defining a single query. To make it simple for the purpose of the post, Let&amp;rsquo;s assume that we will try to get a whole &lt;em&gt;product family&lt;/em&gt;.
 If we query the entire product family, we will be able to display all informations of all product in the family. But let&amp;rsquo;s also consider that we want to limit the family and extract only a certain product identified by its SKU.&lt;/p&gt;
 
-&lt;p&gt;The Query definition is therfore:
+&lt;p&gt;The Query definition is therefore:
 &lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# root Query type&lt;/span&gt;
 &lt;span style=&#34;color: #B00040&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Query&lt;/span&gt; {
     &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;products&lt;/span&gt;(sku: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;): [&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Product&lt;/span&gt;]
@@ -286,8 +286,8 @@ This is done like this:&lt;/p&gt;
 
 &lt;h3 id=&#34;querying&#34;&gt;Querying&lt;/h3&gt;
 
-&lt;p&gt;I will not implement a webservice to query my shema by now. This can easily be done with some handlers that are part of the project.
-I will use the same technic as found on internet: I will put the query as argument to my cli.&lt;/p&gt;
+&lt;p&gt;I will not implement a webservice to query my schema by now. This can easily be done with some handlers that are part of the project.
+I will use the same technique as found on internet: I will put the query as argument to my cli.&lt;/p&gt;
 
 &lt;p&gt;Assuming that &lt;code&gt;query&lt;/code&gt; actually holds my my graphql request, I can query my schema by doing:&lt;/p&gt;
 
@@ -462,8 +462,8 @@ r &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; graphql.Do(params)
 
 &lt;p&gt;I didn&amp;rsquo;t document the prices, but it can be done following the same principles.&lt;/p&gt;
 
-&lt;p&gt;Graphql seems reqlly powerfull. Now that I have this little utility, I may try (once more) to develop a little react frontend or a &lt;em&gt;GraphiQL&lt;/em&gt; UI.
-What I like most is that it has forced me to think in graph instead of the traditionnal relational model.&lt;/p&gt;
+&lt;p&gt;Graphql seems really powerful. Now that I have this little utility, I may try (once more) to develop a little react frontend or a &lt;em&gt;GraphiQL&lt;/em&gt; UI.
+What I like most is that it has forced me to think in graph instead of the traditional relational model.&lt;/p&gt;
 
 &lt;p&gt;The piece of code is on &lt;a href=&#34;https://github.com/owulveryck/graphql-test&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
 </description>

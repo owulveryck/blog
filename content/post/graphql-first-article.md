@@ -5,7 +5,7 @@ date: 2017-03-22T09:15:35+01:00
 description: "My first experiencewith GraphQL. I will try to see how it fits the pricing model of AWS as described in an earlier post."
 draft: false
 images:
-- /assets/images/graphqllogo.svg
+- /content/assets/images/graphqllogo.png
 tags:
 - golang
 - aws
@@ -439,3 +439,6 @@ What I like most is that it has forced me to think in graph instead of the tradi
 
 The piece of code is on [github](https://github.com/owulveryck/graphql-test)
 
+**edit**: I have included a graphiql interpreter for testing. It works great. Everything is on github:
+
+![GraphiQL](/assets/images/graphiql.png)
