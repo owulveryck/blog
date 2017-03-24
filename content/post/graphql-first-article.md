@@ -5,7 +5,7 @@ date: 2017-03-22T09:15:35+01:00
 description: "My first experiencewith GraphQL. I will try to see how it fits the pricing model of AWS as described in an earlier post."
 draft: false
 images:
-- http://graphql.org/img/logo.svg
+- /assets/images/graphqllogo.svg
 tags:
 - golang
 - aws
@@ -53,7 +53,7 @@ In (a relative) proper english, let's write down a description of the relationsh
   * A term has attributes
 * Prices
   * An offer has at least one price dimension
-  * A price dimension is caracterized by its currency, its unit of measure, its price per unit, its desription and eventually per a range of application (start and end)
+  * A price dimension is characterized by its currency, its unit of measure, its price per unit, its description and eventually per a range of application (start and end)
 
 Regarding those elements, I have extracted and represented a "t2.micro/linux in virginia" with 3 of its offers and all the prices associated.
 
@@ -61,7 +61,7 @@ Here is the graphical representation generated thanks to [graphviz' fdp](http://
 ![Graph Representation](/assets/graphql/graph.svg)
 
 
-The goal of GraphQL is to extract a substree of this graph to get part or all information.
+The goal of GraphQL is to extract a subtree of this graph to get part or all information.
 As an example, here is a tree representation of the same graph:
 
 ![Graph Representation](/assets/graphql/graph_tree.svg)
@@ -75,7 +75,7 @@ The first thing that needs to be done is to write the [schema](http://graphql.or
 I will not go into deep details in here. I will simple refer to this excellent document which is a _résumé_ of the language:
 [Graphql shorthand notation cheat sheet](https://github.com/sogko/graphql-schema-language-cheat-sheet/raw/master/graphql-shorthand-notation-cheat-sheet.png)
 
-We can define a product that must contains a list of offers thsi way and a product family like this:
+We can define a product that must contains a list of offers this way and a product family like this:
 
 {{< highlight graphql >}}
 # Product definition
@@ -125,7 +125,7 @@ At the very end we define the _queries_
 Let's start by defining a single query. To make it simple for the purpose of the post, Let's assume that we will try to get a whole _product family_.
 If we query the entire product family, we will be able to display all informations of all product in the family. But let's also consider that we want to limit the family and extract only a certain product identified by its SKU.
 
-The Query definition is therfore:
+The Query definition is therefore:
 {{< highlight graphql >}}
 # root Query type
 type Query {
@@ -268,8 +268,8 @@ A productType is a graphql object composed of the 4 fields. Those fields will be
 
 ### Querying
 
-I will not implement a webservice to query my shema by now. This can easily be done with some handlers that are part of the project.
-I will use the same technic as found on internet: I will put the query as argument to my cli.
+I will not implement a webservice to query my schema by now. This can easily be done with some handlers that are part of the project.
+I will use the same technique as found on internet: I will put the query as argument to my cli.
 
 Assuming that `query` actually holds my my graphql request, I can query my schema by doing:
 
@@ -434,8 +434,8 @@ This is it!
 
 I didn't document the prices, but it can be done following the same principles.
 
-Graphql seems reqlly powerfull. Now that I have this little utility, I may try (once more) to develop a little react frontend or a _GraphiQL_ UI.
-What I like most is that it has forced me to think in graph instead of the traditionnal relational model.
+Graphql seems really powerful. Now that I have this little utility, I may try (once more) to develop a little react frontend or a _GraphiQL_ UI.
+What I like most is that it has forced me to think in graph instead of the traditional relational model.
 
 The piece of code is on [github](https://github.com/owulveryck/graphql-test)
 

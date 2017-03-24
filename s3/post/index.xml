@@ -7,8 +7,467 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <lastBuildDate>Mon, 13 Mar 2017 20:54:27 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 22 Mar 2017 09:15:35 +0100</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/post.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Playing with Facebook&#39;s GraphQL (for AWS products and offers management)</title>
+      <link>https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-for-aws-products-and-offers-management/index.html</link>
+      <pubDate>Wed, 22 Mar 2017 09:15:35 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-for-aws-products-and-offers-management/index.html</guid>
+      <description>
+
+&lt;h1 id=&#34;about-graphql&#34;&gt;About GraphQL&lt;/h1&gt;
+
+&lt;p&gt;GraphQL has been invented by Facebook for the purpose of refactoring their mobile application. Facebook had reached the limits of the standard REST API mainly because:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Getting that much information was requiring a huge amount of API endpoints&lt;/li&gt;
+&lt;li&gt;The versioning of the API was counter-productive regarding Facebook&amp;rsquo;s frequents deployements.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But graphql is not only a query language related to Facebook. GraphQL is not only applicable to social data.&lt;/p&gt;
+
+&lt;p&gt;Of course it is about graphs and graphs represents relationships. But you can represent relationships in all of your business objects.&lt;/p&gt;
+
+&lt;p&gt;Actually, GraphQL is all about your application data.&lt;/p&gt;
+
+&lt;p&gt;In this post I will try to take a concrete use case. I will first describe the business objects as a graph, then I will try to implement a schema with GraphQL. At the very end I will develop a small GraphQL endpoint to test the use case.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Caution&lt;/strong&gt; &lt;em&gt;I am discovering GraphQL on my own. This post reflects my own work and some stuff may be inaccurate or not idiomatic.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;the-use-case-aws-billing&#34;&gt;The use case: AWS billing&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a concrete example of a graph representation. Let&amp;rsquo;s imagine that we are selling products related to Infrastructre as a Service (&lt;em&gt;IaaS&lt;/em&gt;).&lt;/p&gt;
+
+&lt;p&gt;For the purpose of this post, I will use the AWS data model because it is publicly available and I have already blogged about it.
+We are dealing with products families, products, offers and prices.&lt;/p&gt;
+
+&lt;p&gt;In (a relative) proper english, let&amp;rsquo;s write down a description of the relationships:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Products
+
+&lt;ul&gt;
+&lt;li&gt;A product family is composed of several products&lt;/li&gt;
+&lt;li&gt;A product belongs to a product family&lt;/li&gt;
+&lt;li&gt;A product owns a set of attributes (for example its location, its operating system type, its type&amp;hellip;)&lt;/li&gt;
+&lt;li&gt;A product and all its attributes are identified by a stock keeping unit (SKU)&lt;/li&gt;
+&lt;li&gt;A SKU has a set of offers&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Offers
+
+&lt;ul&gt;
+&lt;li&gt;An offer represents a selling contract&lt;/li&gt;
+&lt;li&gt;An offer is specific to a SKU&lt;/li&gt;
+&lt;li&gt;An offer is characterized by the term of the offer&lt;/li&gt;
+&lt;li&gt;A term is typed as either &amp;ldquo;Reserved&amp;rdquo; or &amp;ldquo;OnDemand&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;A term has attributes&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Prices
+
+&lt;ul&gt;
+&lt;li&gt;An offer has at least one price dimension&lt;/li&gt;
+&lt;li&gt;A price dimension is caracterized by its currency, its unit of measure, its price per unit, its desription and eventually per a range of application (start and end)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Regarding those elements, I have extracted and represented a &amp;ldquo;t2.micro/linux in virginia&amp;rdquo; with 3 of its offers and all the prices associated.&lt;/p&gt;
+
+&lt;p&gt;Here is the graphical representation generated thanks to &lt;a href=&#34;http://www.graphviz.org/&#34;&gt;graphviz&amp;rsquo; fdp&lt;/a&gt;
+&lt;img src=&#34;https://blog.owulveryck.info/assets/graphql/graph.svg&#34; alt=&#34;Graph Representation&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The goal of GraphQL is to extract a substree of this graph to get part or all information.
+As an example, here is a tree representation of the same graph:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://blog.owulveryck.info/assets/graphql/graph_tree.svg&#34; alt=&#34;Graph Representation&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: I wrote a very quick&amp;rsquo;n&amp;rsquo;dirty parser to get the information which can be found &lt;a href=&#34;https://gist.github.com/owulveryck/bac700e2f5e5b1af0fffda4e7adb9eed&#34;&gt;here&lt;/a&gt;. I wrote an idiomatic one but it is the property of the company I made it for.&lt;/p&gt;
+
+&lt;h1 id=&#34;defining-the-graphql-schema&#34;&gt;Defining the GraphQL schema&lt;/h1&gt;
+
+&lt;p&gt;The first thing that needs to be done is to write the &lt;a href=&#34;http://graphql.org/learn/schema/&#34;&gt;schema&lt;/a&gt; that will define the &lt;em&gt;query&lt;/em&gt; type.&lt;/p&gt;
+
+&lt;p&gt;I will not go into deep details in here. I will simple refer to this excellent document which is a &lt;em&gt;résumé&lt;/em&gt; of the language:
+&lt;a href=&#34;https://github.com/sogko/graphql-schema-language-cheat-sheet/raw/master/graphql-shorthand-notation-cheat-sheet.png&#34;&gt;Graphql shorthand notation cheat sheet&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;We can define a product that must contains a list of offers thsi way and a product family like this:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Product definition&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Product&lt;/span&gt; {
+  offers: [&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Offer&lt;/span&gt;]!
+  location: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;
+  instanceType: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;
+  sku: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;!
+  operatingSystem: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;
+}
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Definition of the product family&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;ProductFamily&lt;/span&gt; {
+  products: [&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Product&lt;/span&gt;]!
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;One offer is composed of a mandatory price list. An offer must be of a pre-defined type: &lt;em&gt;OnDemand&lt;/em&gt; or &lt;em&gt;Reserved&lt;/em&gt;.
+Let&amp;rsquo;s define this:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Definition of an offer&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Offer&lt;/span&gt; {
+  type: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;OFFER_TYPE&lt;/span&gt;!
+  code: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;!
+  LeaseContractLength: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;
+  PurchaseOption: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;
+  OfferingClass: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;
+  prices: [&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Price&lt;/span&gt;]!
+}
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# All possible offer types&lt;/span&gt;
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;enum&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;OFFER_TYPE&lt;/span&gt; {
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;OnDemand&lt;/span&gt;
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Reserved&lt;/span&gt;
+}
+
+&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# Definition of a price&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Price&lt;/span&gt; {
+  description: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;
+  unit: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;
+  currency: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;
+  price: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Float&lt;/span&gt;
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;At the very end we define the &lt;em&gt;queries&lt;/em&gt;
+Let&amp;rsquo;s start by defining a single query. To make it simple for the purpose of the post, Let&amp;rsquo;s assume that we will try to get a whole &lt;em&gt;product family&lt;/em&gt;.
+If we query the entire product family, we will be able to display all informations of all product in the family. But let&amp;rsquo;s also consider that we want to limit the family and extract only a certain product identified by its SKU.&lt;/p&gt;
+
+&lt;p&gt;The Query definition is therfore:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #408080; font-style: italic&#34;&gt;# root Query type&lt;/span&gt;
+&lt;span style=&#34;color: #B00040&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Query&lt;/span&gt; {
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;products&lt;/span&gt;(sku: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;String&lt;/span&gt;): [&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;Product&lt;/span&gt;]
+}
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;p&gt;We will query products (&lt;code&gt;{products}&lt;/code&gt;) and it will return a ProductFamily.&lt;/p&gt;
+
+&lt;h2 id=&#34;query&#34;&gt;Query&lt;/h2&gt;
+
+&lt;p&gt;Let&amp;rsquo;s see now how a typical query would look like. To understand the structure of a query, I advise you to read this excellent blog post: &lt;a href=&#34;https://dev-blog.apollodata.com/the-anatomy-of-a-graphql-query-6dffa9e9e747#.jbklz6h17&#34;&gt;The Anatomy of a GraphQL Query&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;{
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;ProductFamily&lt;/span&gt; {
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;products&lt;/span&gt; {
+      &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;location&lt;/span&gt;
+      &lt;span style=&#34;color: #B00040&#34;&gt;type&lt;/span&gt;
+    }
+  }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This query should normally return all the products of the family and display their location and their type.
+Let&amp;rsquo;s try to implement this&lt;/p&gt;
+
+&lt;h1 id=&#34;geek-time-let-s-go&#34;&gt;Geek time: let&amp;rsquo;s go!&lt;/h1&gt;
+
+&lt;p&gt;I will use the &lt;code&gt;go&lt;/code&gt; implementation of GraphQL which is a &amp;ldquo;simple&amp;rdquo; translation in go of the &lt;a href=&#34;https://github.com/graphql/graphql-js&#34;&gt;javascript&amp;rsquo;s reference implementation&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To use it:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;github.com/graphql-go/graphql&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To keep it simple, I will load all the products and offers in memory. In the real life, we should implement an access to whatever database. But that is a strength of the GraphQL model: The flexibility. The backend can be changed later without breaking the model or the API.&lt;/p&gt;
+
+&lt;h2 id=&#34;first-pass-only-the-products&#34;&gt;First pass: Only the products&lt;/h2&gt;
+
+&lt;h3 id=&#34;defining-the-schema-and-the-query-in-go&#34;&gt;Defining the schema and the query in go&lt;/h3&gt;
+
+&lt;p&gt;Most of the work has already been done and documented in a series of blog posts &lt;a href=&#34;http://mycodesmells.com/post/building-graphql-api-in-go&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;First we must define a couple of things:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A &lt;em&gt;Schema&lt;/em&gt; as returned by the function &lt;code&gt;graphql.NewSchema&lt;/code&gt; that takes as argument a &lt;code&gt;graphql.SchemaConfig&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;graphql.SchemaConfig&lt;/code&gt; is a structure composed of a &lt;code&gt;Query&lt;/code&gt;, a &lt;code&gt;Mutation&lt;/code&gt; and other alike fields which are pointers to &lt;code&gt;graphql.Object&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;The rootQuery is created by the structure &lt;code&gt;graphql.ObjectConfig&lt;/code&gt; in which we pass an object of type &lt;code&gt;graphql.Fields&lt;/code&gt; (which is a &lt;code&gt;map[string]*Field&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The code to create the schema is the following:
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;fields &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; graphql.Fields{}
+rootQuery &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; graphql.ObjectConfig{Name: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;RootQuery&amp;quot;&lt;/span&gt;, Fields: fields}
+schemaConfig &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; graphql.SchemaConfig{
+       Query: graphql.NewObject(rootQuery),
+}
+schema, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; graphql.NewSchema(schemaConfig)
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;defining-the-fields&#34;&gt;Defining the fields&lt;/h3&gt;
+
+&lt;p&gt;Our shema is created but nearly empty because we did not filled the &amp;ldquo;fields&amp;rdquo; variable.
+the fields variable will contain what the user can request.&lt;/p&gt;
+
+&lt;p&gt;As seen before, fields is a map of &lt;code&gt;*Field&lt;/code&gt;. The key of the map is the root query. In our definition of the Query, we declared that the query would be &amp;ldquo;products&amp;rdquo;. So &amp;ldquo;products&amp;rdquo; is the key of the map.
+The graphql.Field that is returned is a list type composed of productTypes.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;fields &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; graphql.Fields{
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;products&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+             Type: graphql.NewList(productType),
+        &lt;span style=&#34;color: #666666&#34;&gt;...&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We will see in a minute how to define the &lt;em&gt;productType&lt;/em&gt;. Before, we must provide a way to seek for the product in the database.
+This is done by implementing the &lt;code&gt;Resolve&lt;/code&gt; function:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;fields &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; graphql.Fields{
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;products&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+             Type: graphql.NewList(productType),
+             Resolve: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt;(p graphql.ResolveParams) (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{}, &lt;span style=&#34;color: #B00040&#34;&gt;error&lt;/span&gt;) {
+        &lt;span style=&#34;color: #666666&#34;&gt;...&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The resolv function will return all the products in our database.&lt;/p&gt;
+
+&lt;p&gt;But wait&amp;hellip; In the Query definition, we said that we wanted to be able to limit the product by setting a sku in the query.&lt;/p&gt;
+
+&lt;p&gt;To inform our schema that it can handle a we add the &lt;code&gt;Args&lt;/code&gt; field to the &lt;code&gt;graphql.Field&lt;/code&gt; structure:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;fields &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; graphql.Fields{
+        &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;products&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+              Type: graphql.NewList(productType),
+              Args: graphql.FieldConfigArgument{
+                      &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sku&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.ArgumentConfig{
+                                Type: graphql.String,
+                      },
+              },
+              Resolve: &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;func&lt;/span&gt;(p graphql.ResolveParams) (&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;interface&lt;/span&gt;{}, &lt;span style=&#34;color: #B00040&#34;&gt;error&lt;/span&gt;) {
+        &lt;span style=&#34;color: #666666&#34;&gt;...&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;as the argument is not mandatory, we will use an if statement in the Resolve function to check whether we have a sku or not:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; sku, skuok &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; p.Args[&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sku&amp;quot;&lt;/span&gt;].(&lt;span style=&#34;color: #B00040&#34;&gt;string&lt;/span&gt;); skuok {
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;defining-the-producttype&#34;&gt;Defining the &lt;em&gt;productType&lt;/em&gt;&lt;/h3&gt;
+
+&lt;p&gt;To be able to query display the information of the product (and query the fields), we must define the productType as a graphql object.
+This is done like this:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;var&lt;/span&gt; productType = graphql.NewObject(graphql.ObjectConfig{
+        Name: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Product&amp;quot;&lt;/span&gt;,
+        Fields: graphql.Fields{
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sku&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;operatingSystem&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;instanceType&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+        },
+})
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;A productType is a graphql object composed of the 4 fields. Those fields will be returned as string in the graphql.&lt;/p&gt;
+
+&lt;h3 id=&#34;querying&#34;&gt;Querying&lt;/h3&gt;
+
+&lt;p&gt;I will not implement a webservice to query my shema by now. This can easily be done with some handlers that are part of the project.
+I will use the same technic as found on internet: I will put the query as argument to my cli.&lt;/p&gt;
+
+&lt;p&gt;Assuming that &lt;code&gt;query&lt;/code&gt; actually holds my my graphql request, I can query my schema by doing:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;params &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; graphql.Params{Schema: schema, RequestString: query}
+r &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; graphql.Do(params)
+&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;if&lt;/span&gt; r.HasErrors() {
+    log.Fatalf(&lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Failed due to errors: %v\n&amp;quot;&lt;/span&gt;, r.Errors)
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h3 id=&#34;a-couple-of-tests&#34;&gt;A couple of tests&amp;hellip;&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;./pricing -db bla -query &amp;quot;{products(sku:\&amp;quot;HZC9FAP4F9Y8JW67\&amp;quot;){location}}&amp;quot; | jq &amp;quot;.&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;{
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;data&amp;quot;&lt;/span&gt;: {
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;products&amp;quot;&lt;/span&gt;: [
+      {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;US East (N. Virginia)&amp;quot;&lt;/span&gt;
+      }
+    ]
+  }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;pre&gt;&lt;code&gt;./pricing -db bla -query &amp;quot;{products(sku:\&amp;quot;HZC9FAP4F9Y8JW67\&amp;quot;){location,instanceType}}&amp;quot; | jq &amp;quot;.&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;{
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;data&amp;quot;&lt;/span&gt;: {
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;products&amp;quot;&lt;/span&gt;: [
+      {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;US East (N. Virginia)&amp;quot;&lt;/span&gt;,
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;instanceType&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;t2.micro&amp;quot;&lt;/span&gt;
+      }
+    ]
+  }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;pre&gt;&lt;code&gt;./pricing -db bla -query &amp;quot;{products{location}}&amp;quot; | jq &amp;quot;.&amp;quot; | head -15
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;{
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;data&amp;quot;&lt;/span&gt;: {
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;products&amp;quot;&lt;/span&gt;: [
+      {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;US East (Ohio)&amp;quot;&lt;/span&gt;
+      },
+      {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;EU (Frankfurt)&amp;quot;&lt;/span&gt;
+      },
+      {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;EU (Frankfurt)&amp;quot;&lt;/span&gt;
+      },
+      {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Asia Pacific (Sydney)&amp;quot;&lt;/span&gt;
+      },
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;pre&gt;&lt;code&gt;./pricing -db bla -query &amp;quot;{products{location,operatingSystem}}&amp;quot; | jq &amp;quot;.&amp;quot; | head -20
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;{
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;data&amp;quot;&lt;/span&gt;: {
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;products&amp;quot;&lt;/span&gt;: [
+      {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;operatingSystem&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Windows&amp;quot;&lt;/span&gt;,
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Asia Pacific (Sydney)&amp;quot;&lt;/span&gt;
+      },
+      {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;operatingSystem&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Windows&amp;quot;&lt;/span&gt;,
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;AWS GovCloud (US)&amp;quot;&lt;/span&gt;
+      },
+      {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;operatingSystem&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Windows&amp;quot;&lt;/span&gt;,
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Asia Pacific (Mumbai)&amp;quot;&lt;/span&gt;
+      },
+      {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;operatingSystem&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;SUSE&amp;quot;&lt;/span&gt;,
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;US East (N. Virginia)&amp;quot;&lt;/span&gt;
+      },
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2 id=&#34;adding-the-offers&#34;&gt;Adding the Offers&lt;/h2&gt;
+
+&lt;p&gt;To add the offer, we should first define a new offerType&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;var&lt;/span&gt; offerType = graphql.NewObject(graphql.ObjectConfig{
+        Name: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Offer&amp;quot;&lt;/span&gt;,
+        Fields: graphql.Fields{
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;type&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;code&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;LeaseContractLenght&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;PurchaseOption&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;OfferingClass&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+        },
+})
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;And then make the productType aware of this new type:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;&lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;var&lt;/span&gt; productType = graphql.NewObject(graphql.ObjectConfig{
+        Name: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;Product&amp;quot;&lt;/span&gt;,
+        Fields: graphql.Fields{
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;sku&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;operatingSystem&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;instanceType&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.String,
+                },
+                &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;offers&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #666666&#34;&gt;&amp;amp;&lt;/span&gt;graphql.Field{
+                        Type: graphql.NewList(offerType),
+                },
+        },
+})
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then, make sure that the resolv function is able to fill the structure of the product with the correct offer.&lt;/p&gt;
+
+&lt;h3 id=&#34;testing&#34;&gt;Testing:&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;./pricing -db bla -query &amp;quot;{products(sku:\&amp;quot;HZC9FAP4F9Y8JW67\&amp;quot;){location,instanceType,offers{type,code}}}&amp;quot; | jq &amp;quot;.&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&#34;highlight&#34; style=&#34;background: #f8f8f8&#34;&gt;&lt;pre style=&#34;line-height: 125%&#34;&gt;&lt;span&gt;&lt;/span&gt;{
+  &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;data&amp;quot;&lt;/span&gt;: {
+    &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;products&amp;quot;&lt;/span&gt;: [
+      {
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;offers&amp;quot;&lt;/span&gt;: [
+          {
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;type&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;OnDemand&amp;quot;&lt;/span&gt;,
+            &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;code&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;JRTCKXETXF&amp;quot;&lt;/span&gt;
+          }
+        ],
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;location&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;US East (N. Virginia)&amp;quot;&lt;/span&gt;,
+        &lt;span style=&#34;color: #008000; font-weight: bold&#34;&gt;&amp;quot;instanceType&amp;quot;&lt;/span&gt;: &lt;span style=&#34;color: #BA2121&#34;&gt;&amp;quot;t2.micro&amp;quot;&lt;/span&gt;
+      }
+    ]
+  }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This is it!&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;I didn&amp;rsquo;t document the prices, but it can be done following the same principles.&lt;/p&gt;
+
+&lt;p&gt;Graphql seems reqlly powerfull. Now that I have this little utility, I may try (once more) to develop a little react frontend or a &lt;em&gt;GraphiQL&lt;/em&gt; UI.
+What I like most is that it has forced me to think in graph instead of the traditionnal relational model.&lt;/p&gt;
+
+&lt;p&gt;The piece of code is on &lt;a href=&#34;https://github.com/owulveryck/graphql-test&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Linda&#39;s evalc, a (tuple)space oddity</title>
@@ -372,7 +831,7 @@ resp, err &lt;span style=&#34;color: #666666&#34;&gt;:=&lt;/span&gt; svc.UpdateT
 
 &lt;h1 id=&#34;conclusion-it-works&#34;&gt;Conclusion: it works&lt;/h1&gt;
 
-&lt;p&gt;It took me half an hour to process and insert 350000 lines (with 133 rows each) into the dynamodb from my laptop.&lt;/p&gt;
+&lt;p&gt;It took me half an hour to process and insert 350000 lines (with 133 cols each) into the dynamodb from my laptop.&lt;/p&gt;
 
 &lt;p&gt;I can see that the adaptative algorithm works on the graphs:&lt;/p&gt;
 
@@ -3109,212 +3568,6 @@ Too bad I couldn&amp;rsquo;t end with a fully running example because of my Chro
 
 &lt;p&gt;I can say that I&amp;rsquo;ve reach my goals anyway. I will try to finish the implementation on a true Linux box locally, or on my
 Macbook if I have time to do so.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>RVM from a USB stick on a Chromebook</title>
-      <link>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</link>
-      <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
-      
-      <guid>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</guid>
-      <description>
-
-&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
-
-&lt;h4 id=&#34;opening-remarks&#34;&gt;Opening remarks&lt;/h4&gt;
-
-&lt;p&gt;I&amp;rsquo;m not a Ruby developer, and I&amp;rsquo;m heavily discovering the ecosystem by now.
-This are my notes, and if anything seems wrong to you, do not hesitate to send me remarks.&lt;/p&gt;
-
-&lt;h4 id=&#34;the-scenario&#34;&gt;The scenario&lt;/h4&gt;
-
-&lt;p&gt;For testing purpose, I wanted to play with vagrant-aws and more generally with ruby on my Chromebook.&lt;/p&gt;
-
-&lt;p&gt;Vagrant does not support &lt;em&gt;rubygems&lt;/em&gt; as installation method anymore (&lt;a href=&#34;http://mitchellh.com/abandoning-rubygems&#34;&gt;see Mitchell Hashimoto&amp;rsquo;s post&lt;/a&gt;)
-and of course, there is no binary distribution available for the Chromebook.&lt;/p&gt;
-
-&lt;p&gt;So I have to install it from the sources.&lt;/p&gt;
-
-&lt;p&gt;The &lt;a href=&#34;https://github.com/mitchellh/vagrant/wiki/Installing-Vagrant-from-Source&#34;&gt;documentation&lt;/a&gt; says:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Do &lt;strong&gt;NOT&lt;/strong&gt; use the system Ruby - use a Ruby version manager like rvm, chruby, etc&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Alright, anyway I don&amp;rsquo;t want to mess with my system and break Homebrew, so using RVM seems to be a good idea.&lt;/p&gt;
-
-&lt;h2 id=&#34;installing-rvm&#34;&gt;Installing RVM&lt;/h2&gt;
-
-&lt;p&gt;The RVM installation is relatively easy; simply running &lt;code&gt;curl -sSL https://get.rvm.io | bash&lt;/code&gt; does the trick.
-And then those commands make ruby 2.3.0 available via rvm:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ source ~/.rvm/scripts/rvm  
-$ rvm install 2.3.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The stupid trick here is that everything is installed in my $HOME directory, and as my Chromebook is short on disk space: FS full !&lt;/p&gt;
-
-&lt;p&gt;Too bad.&lt;/p&gt;
-
-&lt;h2 id=&#34;using-a-usb-stick&#34;&gt;Using a USB stick&lt;/h2&gt;
-
-&lt;p&gt;So my idea is to install the RVM suite onto a USB stick (because with me I don&amp;rsquo;t have any SDHC card available).&lt;/p&gt;
-
-&lt;h3 id=&#34;preparing-the-stick&#34;&gt;Preparing the stick&lt;/h3&gt;
-
-&lt;p&gt;At first, the USB stick must be formatted in extendX (ext4) in order to be able to use symlinks, correct ownership etc.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sudo mkfs.ext4 -L Lexar /dev/sda1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: I&amp;rsquo;ve found that avoiding spaces in the volume name was good for rvm.&lt;/p&gt;
-
-&lt;p&gt;Once connected on the Chromebook, it&amp;rsquo;s automatically mounted on &lt;code&gt;/media/removable/Lexar&lt;/code&gt;.
-The problem are the options:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;/dev/sda1 on /media/removable/Lexar type ext4 (rw,nosuid,nodev,noexec,relatime,dirsync,data=ordered)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;the most problematic is &lt;code&gt;noexec&lt;/code&gt; because I want to install executables in it.&lt;/p&gt;
-
-&lt;p&gt;So what I did was simply:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;sudo mount -o remount /dev/sda1 /media/removable/Lexar&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;and that did the trick.&lt;/p&gt;
-
-&lt;h2 id=&#34;installing-rvm-on-the-usb&#34;&gt;Installing RVM on the USB&lt;/h2&gt;
-
-&lt;p&gt;I will install rvm into &lt;code&gt;/media/removable/Lexar/rvm&lt;/code&gt;. In order to avoid any ownership and permission problem I did:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;mkdir /media/removable/Lexar/rvm
-chown chronos:chronos /media/removable/Lexar/rvm
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And then I created a simple &lt;code&gt;~/.rvmrc&lt;/code&gt; file as indicated in the documentation with this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cat ~/.rvmrc                                          
-$ export rvm_path=/media/removable/Lexar/rvm
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I also included this in my &lt;code&gt;~/.zshrc&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;if [ -s &amp;quot;$HOME/.rvmrc&amp;quot;   ]; then
-    source &amp;quot;$HOME/.rvmrc&amp;quot;
-fi # to have $rvm_path defined if set
-if [ -s &amp;quot;${rvm_path-$HOME/.rvm}/scripts/rvm&amp;quot;   ]; then
-    source &amp;quot;${rvm_path-$HOME/.rvm}/scripts/rvm&amp;quot;
-fi
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;installing-rvm-1&#34;&gt;Installing rvm&lt;/h2&gt;
-
-&lt;p&gt;the command I executed were then:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ curl -sSL https://get.rvm.io | bash
-$ source /media/removable/Lexar/rvm/scripts/rvm
-$ rvm autolibs enable
-$ rvm get stable
-$ rvm install 2.3.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And that did the trick&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ rvm list
-
-rvm rubies
-
-=* ruby-2.3.0 [ x84_64 ]
-
-# =&amp;gt; - current
-# =* - current &amp;amp;&amp;amp; default
-#  * - default
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;testing-with-vagrant&#34;&gt;Testing with vagrant&lt;/h2&gt;
-
-&lt;h3 id=&#34;cloning-the-vagrant-sources&#34;&gt;Cloning the vagrant sources&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ sudo mkdir /media/removable/Lexar/tools
-$ sudo chown chronos:chronos /media/removable/Lexar/tools
-$ cd /media/removable/Lexar/tools
-$ git clone https://github.com/mitchellh/vagrant.git
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;preparing-the-rvm-file-for-vagrant&#34;&gt;Preparing the rvm file for vagrant&lt;/h3&gt;
-
-&lt;p&gt;To use the ruby 2.3.0 (that I&amp;rsquo;ve installed before) with vagrant, I need to create a .rvmrc in the vagrant directory:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ cd /media/removable/Lexar/tools/vagrant
-$ rvm --rvmrc --create 2.3.0@vagrant
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;installing-bundler&#34;&gt;Installing bundler&lt;/h3&gt;
-
-&lt;p&gt;The bundler version that is supported by vagrant must be &amp;lt;= 1.5.2 as written in the &lt;code&gt;Gemfile&lt;/code&gt;. So I&amp;rsquo;m installing version
-1.5.2&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cd /media/removable/Lexar/tools/vagrant
-$ source .rcmrv
-$ gem install bundler -v 1.5.2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;compiling-vagrant&#34;&gt;Compiling vagrant&lt;/h3&gt;
-
-&lt;p&gt;Back to the vagrant documentation, what I must do is now to &amp;ldquo;compile it&amp;rdquo;. To do so, the advice is to run:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ bundle _1.5.2_ install  
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;(just in case several bundler are present )&lt;/p&gt;
-
-&lt;p&gt;I faced this error:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;NoMethodError: undefined method `spec&#39; for nil:NilClass
-Did you mean?  inspect
-An error occurred while installing vagrant (1.8.2.dev), and Bundler cannot continue.
-Make sure that `gem install vagrant -v &#39;1.8.2.dev&#39;` succeeds before bundling.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;According to google, this may be an issue with the version of bundler I&amp;rsquo;m using.
-As I cannot upgrade the bundler because of vagrant, I&amp;rsquo;ve decided to take a chance and use
-a lower version of Ruby&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ rvm install 2.2.0
-$ rvm --rvmrc --create 2.2.0@vagrant
-$ source .rvmrc
-# and reinstalling bundler
-$ gem install bundler -v 1.5.2            
-$ bundle _1.5.2_ install
-...
-Your bundle is complete!
-Use `bundle show [gemname]` to see where a bundled gem is installed.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;voilà&#34;&gt;Voilà!&lt;/h1&gt;
-
-&lt;p&gt;I can now use vagrant installed fully on the USB stick with&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ bundle _1.5.2_ exec vagrant
-Vagrant appears to be running in a Bundler environment. Your 
-existing Gemfile will be used. Vagrant will not auto-load any plugins
-installed with `vagrant plugin`. Vagrant will autoload any plugins in
-the &#39;plugins&#39; group in your Gemfile. You can force Vagrant to take over
-with VAGRANT_FORCE_BUNDLER.
-
-You appear to be running Vagrant outside of the official installers.
-Note that the installers are what ensure that Vagrant has all required
-dependencies, and Vagrant assumes that these dependencies exist. By
-running outside of the installer environment, Vagrant may not function
-properly. To remove this warning, install Vagrant using one of the
-official packages from vagrantup.com.
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;That&amp;rsquo;s it for this post; next I will try to install vagrant-aws and play a little bit with it.&lt;/p&gt;
-
-&lt;p&gt;stay tuned.&lt;/p&gt;
 </description>
     </item>
     
