@@ -3,7 +3,7 @@ categories:
 - category
 date: 2017-03-28T21:03:52+02:00
 description: ""
-draft: true
+draft: false
 images:
 - /assets/images/graphql-react-logos.png
 tags:
@@ -243,7 +243,7 @@ function ProductList({ loading, products }) {
 } 
 {{< /highlight >}}
 
-Then we change the render function to use the ProductList instead of the defaut view:
+Then we change the render function to use the ProductList instead of the default view:
 
 {{< highlight js >}}
 ...
