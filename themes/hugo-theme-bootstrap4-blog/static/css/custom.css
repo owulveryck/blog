@@ -6,5 +6,88 @@
   font-family: 'Cormorant Garamond', serif;
 }
 .blog-post {
-font-family: 'Open Sans', sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
+.thumb {
+  left: -1000%;
+  right: -1000%;
+  top: -1000%;
+  bottom: -1000%;
+  margin: auto;
+  min-height: 100%;
+  min-width: 100%;
+}
+.thumb-wrapper {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  margin: 10px;
+  position: relative;
+}
+#wrapper {
+  margin-right: 100px;
+}
+#content {
+  float: left;
+  width: 100px;
+}
+#sidebar {
+  float: right;
+  width: 100%;
+  margin-right: -120px;
+  display: table;
+}
+#cleared {
+  clear: both;
+}
+#centered {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+@import "compass/css3";
+
+.frame-square {
+  background: #fff;
+  border: 2px solid #000;
+  display: inline-block;
+  vertical-align: top;
+  padding: 10px;
+  width: 100px;
+  height: 100px;
+  margin-right: .5em;
+  margin-bottom: .3em;
+}
+
+.frame-round {
+  @extend .frame-square;
+  border-radius: 50%;
+  overflow: hidden;
+
+  .crop {border-radius: 50%;}
+}
+
+.crop {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+
+  img {
+    display: block;
+    min-width: 100%;
+    min-height: 100%;
+    margin: auto;
+    position: absolute;
+    top: -100%;
+    right: -100%;
+    bottom: -100%;
+    left: -100%;
+  }
+}
+
+// testing:
+.retina .crop img {
+  transform: scale(.5, .5);
+}
+
+

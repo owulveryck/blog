@@ -4,7 +4,7 @@ date: 2017-01-06T21:59:25+01:00
 description: "In this post I will explain how to setup a lambda function written in go that will be triggered when an object is dropped on a bucket on s3. The function will read the object and copy it into another bucket iin another location. It will use AWS' golang sdk."
 draft: true
 images:
-- /2016/10/image.jpg
+- /assets/images/default-post.png
 tags:
 - aws
 - lambda

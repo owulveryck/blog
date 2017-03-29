@@ -5,7 +5,7 @@ date: 2017-03-11T09:15:17+01:00
 description: "Using an exponential backoff algorithm to fill a dynamodb from a CSV file"
 draft: false
 images:
-- /2016/10/image.jpg
+- /assets/images/default-post.png
 tags:
 - golang
 - reflection

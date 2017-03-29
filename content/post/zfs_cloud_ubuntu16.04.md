@@ -5,7 +5,7 @@ date: 2017-02-14T10:17:15+01:00
 description: ""
 draft: true
 images:
-- /2016/10/image.jpg
+- /assets/images/default-post.png
 tags:
 - tag1
 - tag2

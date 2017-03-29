@@ -5,7 +5,7 @@ date: 2017-02-21T15:26:22+01:00
 description: "My review of the configuration managenent camp of February 2017"
 draft: true
 images:
-- /2016/10/image.jpg
+- /assets/images/default-post.png
 tags:
 - cfgmgmtcamp
 title: Configuration management is a solved problem!
