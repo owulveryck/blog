@@ -47,6 +47,8 @@
 
     <!-- combined, minified CSS -->
     <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
 
     
     <!-- RSS 2.0 feed -->
@@ -115,6 +117,7 @@ ga('send', 'pageview');
 
 </p>
   </header>
+  <h5>How UDT (UDP-based Data Transfer Protocol) can be used with HTTP to tranfer files between two AWS instances hosted in different regions.</h5>
   Introduction Transferring files between server is no big deal with nowadays network equipments. You use rsync, scp or even http to get a file from A to B.
 Of course, you rely on the TCP stack so you have a decent reliability in the transport.
 But TCP has its drawback, especially when it needs to go through a lot of equipments. Typically in the cloud, or over a VPN.

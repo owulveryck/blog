@@ -47,6 +47,8 @@
 
     <!-- combined, minified CSS -->
     <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
 
     
     <!-- RSS 2.0 feed -->
@@ -115,6 +117,7 @@ ga('send', 'pageview');
 
 </p>
   </header>
+  <h5>How UDT (UDP-based Data Transfer Protocol) can be used with HTTP to tranfer files between two AWS instances hosted in different regions.</h5>
   Introduction Transferring files between server is no big deal with nowadays network equipments. You use rsync, scp or even http to get a file from A to B.
 Of course, you rely on the TCP stack so you have a decent reliability in the transport.
 But TCP has its drawback, especially when it needs to go through a lot of equipments. Typically in the cloud, or over a VPN.
@@ -133,6 +136,7 @@ But TCP has its drawback, especially when it needs to go through a lot of equipm
 
 </p>
   </header>
+  <h5>A first geek interaction between my  raspberry pi 3 and my weather station</h5>
   Introduction A bunch of friends/colleagues offered me a raspberry pi 3. It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe the center of an alarm&hellip;. Maybe a spotify player&hellip;
 Anyway, I have installed raspbian and I&rsquo;m now playing with it.
 Yesterday evening, as I was about to go to bed, I&rsquo;ve had a very bad idea&hellip; I&rsquo;ve linked together my rpi and my Oregon Weather Station.
@@ -151,6 +155,7 @@ Yesterday evening, as I was about to go to bed, I&rsquo;ve had a very bad idea&h
 
 </p>
   </header>
+  <h5>Playing with websocket for a dynamic presentation.</h5>
   the goal As all my peers, I have the opportunity to talk about different technological aspects. As all my peers, I&rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).
 In this post I won&rsquo;t dig into what&rsquo;s good or not to put in a presentation, and if that&rsquo;s what interest you, I recommend you to take a look at Garr Reynold&rsquo;s tips and tricks.
 Steve Jobs said:
@@ -169,6 +174,10 @@ Steve Jobs said:
 
 </p>
   </header>
+  <h5>A directed graph may be represented by its adjacency matrix.
+Considering each vertice as a runable element and any edge as a dependency,
+I will describe a method to &#34;run&#34; the graph in a concurrent way using goalang&#39;s goroutine
+</h5>
   I&rsquo;ve read a lot about graph theory recently. They have changed the world a lot. From the simple representation to Bayesian network via Markov chains, the applications are numerous.
 Today I would like to imagine a graph as a workflow of execution. Every node would be considered as runnable. And every edge would be a dependency.
 It is an important framework that may be used to as an orchestrator for any model, and of course I am a lot thinkingabout TOSCA
@@ -187,6 +196,7 @@ It is an important framework that may be used to as an orchestrator for any mode
 
 </p>
   </header>
+  <h5>A tosca lifecycle represented as a digraph</h5>
   About TOSCA The TOSCA acronym stands for Topology and Orchestration Specification for Cloud Applications. It&rsquo;s an OASIS standard.
 The purpose of the TOSCA project is to represent an application by its topology and formalize it using the TOSCA grammar.
 The [TOSCA-Simple-Profile-YAML-v1.0] current specification in YAML introduces the following concepts.
