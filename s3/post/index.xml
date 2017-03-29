@@ -142,7 +142,7 @@ We suggest that you begin by typing:
 
 &lt;p&gt;So if do what&amp;rsquo;s suggested, you can open you browser and point to &lt;code&gt;localhost:3000&lt;/code&gt; and get sonething that looks like that:&lt;/p&gt;
 
-&lt;iframe src=&#34;https://blog.owulveryck.info/assets/react/hello/index.html_&#34; width=&#34;100%&#34; height=&#34;300&#34;&gt;
+&lt;iframe src=&#34;https://blog.owulveryck.info/assets/react/hello/index.html&#34; width=&#34;100%&#34; height=&#34;300&#34;&gt;
   &lt;p&gt;Your browser does not support iframes.&lt;/p&gt;
 &lt;/iframe&gt;
 
@@ -268,7 +268,7 @@ render() {
 
 &lt;p&gt;If you did everything correctly, you shoud see this:&lt;/p&gt;
 
-&lt;iframe src=&#34;https://blog.owulveryck.info/assets/react/table1/index.html_&#34; width=&#34;100%&#34; height=&#34;300&#34;&gt;
+&lt;iframe src=&#34;https://blog.owulveryck.info/assets/react/table1/index.html&#34; width=&#34;100%&#34; height=&#34;300&#34;&gt;
   &lt;p&gt;Your browser does not support iframes.&lt;/p&gt;
 &lt;/iframe&gt;
 

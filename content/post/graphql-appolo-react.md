@@ -134,7 +134,7 @@ We suggest that you begin by typing:
 
 So if do what's suggested, you can open you browser and point to `localhost:3000` and get sonething that looks like that:
 
-<iframe src="/assets/react/hello/index.html_" width="100%" height="300">
+<iframe src="/assets/react/hello/index.html" width="100%" height="300">
   <p>Your browser does not support iframes.</p>
 </iframe>
 
@@ -260,7 +260,7 @@ render() {
 
 If you did everything correctly, you shoud see this:
 
-<iframe src="/assets/react/table1/index.html_" width="100%" height="300">
+<iframe src="/assets/react/table1/index.html" width="100%" height="300">
   <p>Your browser does not support iframes.</p>
 </iframe>
 
