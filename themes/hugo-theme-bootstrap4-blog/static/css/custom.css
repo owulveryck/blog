@@ -91,3 +91,72 @@
 }
 
 
+.blog-masthead {
+  background-color: #000000;
+  border-color: #c0392b;
+}
+.blog-masthead .navbar-brand {
+  color: #ecf0f1;
+}
+.blog-masthead .navbar-brand:hover,
+.blog-masthead .navbar-brand:focus {
+  color: #ffbbbc;
+}
+.blog-masthead .navbar-text {
+  color: #ecf0f1;
+}
+.blog-masthead .navbar-nav > li > a {
+  color: #ecf0f1;
+}
+.blog-masthead .navbar-nav > li > a:hover,
+.blog-masthead .navbar-nav > li > a:focus {
+  color: #ffbbbc;
+}
+.blog-masthead .navbar-nav > .active > a,
+.blog-masthead .navbar-nav > .active > a:hover,
+.blog-masthead .navbar-nav > .active > a:focus {
+  color: #ffbbbc;
+  background-color: #c0392b;
+}
+.blog-masthead .navbar-nav > .open > a,
+.blog-masthead .navbar-nav > .open > a:hover,
+.blog-masthead .navbar-nav > .open > a:focus {
+  color: #ffbbbc;
+  background-color: #c0392b;
+}
+.blog-masthead .navbar-toggle {
+  border-color: #c0392b;
+}
+.blog-masthead .navbar-toggle:hover,
+.blog-masthead .navbar-toggle:focus {
+  background-color: #c0392b;
+}
+.blog-masthead .navbar-toggle .icon-bar {
+  background-color: #ecf0f1;
+}
+.blog-masthead .navbar-collapse,
+.blog-masthead .navbar-form {
+  border-color: #ecf0f1;
+}
+.blog-masthead .navbar-link {
+  color: #ecf0f1;
+}
+.blog-masthead .navbar-link:hover {
+  color: #ffbbbc;
+}
+
+@media (max-width: 767px) {
+  .blog-masthead .navbar-nav .open .dropdown-menu > li > a {
+    color: #ecf0f1;
+  }
+  .blog-masthead .navbar-nav .open .dropdown-menu > li > a:hover,
+  .blog-masthead .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #ffbbbc;
+  }
+  .blog-masthead .navbar-nav .open .dropdown-menu > .active > a,
+  .blog-masthead .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .blog-masthead .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #ffbbbc;
+    background-color: #c0392b;
+  }
+ }
