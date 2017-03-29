@@ -2,7 +2,7 @@
 categories:
 - category
 date: 2017-03-28T21:03:52+02:00
-description: ""
+description: "Now that I have played with GraphQL, Let's see how to render the data thanks to its perfect companion: React"
 draft: false
 images:
 - /assets/images/graphql-react-logos.png
@@ -250,7 +250,7 @@ Then we change the render function to use the ProductList instead of the default
 render() {
   return (
     <div className="App">
-      <ApolloProvider client={this.client}>                                                                                                                                                                   
+      <ApolloProvider client={this.client}>
         <ProductList />
       </ApolloProvider>
     </div>
@@ -269,7 +269,7 @@ If you did everything correctly, you shoud see this:
 To use the Graphql components of Apollo, we need to import them:
 
 {{< highlight js >}}
-import { gql, graphql } from 'react-apollo';  
+import { gql, graphql } from 'react-apollo';
 {{< /highlight >}}
 
 Then, let's create the query as a constant in the exact same manner as when we did it with GraphiQL (cf last post):
@@ -310,7 +310,7 @@ And use it within the Apollo provider instead of the ProductList Component
 render() {
   return (
     <div className="App">
-      <ApolloProvider client={this.client}>                                                                                                                                                                   
+      <ApolloProvider client={this.client}>
         <ProductListWithData />
       </ApolloProvider>
     </div>
@@ -323,7 +323,7 @@ render() {
 Et Voilà... If you:
 
 * start the graphql-test server from the last post
-* start the dev environment with `npm start` withing the blog-test folder
+* start the dev environment with `npm start` inside the blog-test folder
 * go to http://localhost:3000
 
 
