@@ -2,11 +2,27 @@
   font-family: 'Pacifico', cursive;
   font-size: 65px;
 }
-.h1 .h2 .h3 .h4 .h5 {
+.blog-post-title {
   font-family: 'Cormorant Garamond', serif;
+  font-size: 40px;
 }
 .blog-post {
   font-family: 'Open Sans', sans-serif;
+}
+h5 {
+  font-family: 'Cormorant Garamond', serif;
+}
+h4 {
+  font-family: 'Cormorant Garamond', serif;
+}
+h3 {
+  font-family: 'Cormorant Garamond', serif;
+}
+h2 {
+  font-family: 'Cormorant Garamond', serif;
+}
+h1 {
+  font-family: 'Cormorant Garamond', serif;
 }
 .thumb {
   left: -1000%;
