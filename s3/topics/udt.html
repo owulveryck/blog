@@ -44,6 +44,10 @@
     <link rel="canonical" href="https://blog.owulveryck.info/topics/udt.html">
 
     <title>Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
 
     <!-- combined, minified CSS -->
     <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
@@ -80,12 +84,6 @@ ga('send', 'pageview');
           
           <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
           
-          <a class="nav-link" href="https://blog.owulveryck.info/assets/philosophers/d3.html"></a>
-          
-          <a class="nav-link" href="https://blog.owulveryck.info/assets/react/hello.html"></a>
-          
-          <a class="nav-link" href="https://blog.owulveryck.info/assets/react/table1.html"></a>
-          
           
         </nav>
       </div>
@@ -117,10 +115,24 @@ ga('send', 'pageview');
 
 </p>
   </header>
-  <h5>How UDT (UDP-based Data Transfer Protocol) can be used with HTTP to tranfer files between two AWS instances hosted in different regions.</h5>
-  Introduction Transferring files between server is no big deal with nowadays network equipments. You use rsync, scp or even http to get a file from A to B.
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer/index.html'>
+      
+    </a>
+    </div>
+    <div class="col-sm-10">
+      <h5>
+        How UDT (UDP-based Data Transfer Protocol) can be used with HTTP to tranfer files between two AWS instances hosted in different regions.
+      </h5>
+    </div>
+    </div>
+  </div>
+      Introduction Transferring files between server is no big deal with nowadays network equipments. You use rsync, scp or even http to get a file from A to B.
 Of course, you rely on the TCP stack so you have a decent reliability in the transport.
 But TCP has its drawback, especially when it needs to go through a lot of equipments. Typically in the cloud, or over a VPN.
+
   <a href='https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer/index.html'>Read more →</a>
 </article> 
 
