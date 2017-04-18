@@ -25,6 +25,10 @@ Of course, in 2003, no french company I was working for was talking about agilit
 
 One of those morning where we were trying to find the motivation to do another step in the unknown, a colleague told us about a "new concept" he read about: Extreme Programming.
 
+But _Good ideas don't always win_ !
+
+![https://xkcd.com/1327/](https://imgs.xkcd.com/comics/mobile_marketing.png)
+
 ## 2017
 
 
