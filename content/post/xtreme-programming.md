@@ -16,7 +16,7 @@ title: I have tried Extreme Programming within a sprint and I think it is an exc
 
 ## 2003
 
-I have discovered the notion of extreme programming more than 15 years ago. My job integrate *and* to develop pieces of code in Java for the IBM Websphere Business Integration server.
+I have discovered the notion of extreme programming more than 15 years ago. My job was integrate *and* to develop pieces of code in Java for the IBM Websphere Business Integration server.
 We were a small team with light programming skills part of our job was to operate the software, the other part was to develop. It was in 2003.
 
 We were trying hard to stick to the framework we developped specially. 
