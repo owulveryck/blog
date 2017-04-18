@@ -35,7 +35,7 @@ But _Good ideas don't always win_ !
 When it comes to agility, people nowadays refer to "scrum" or sometimes "kanban".
 
 
-<script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/981_RC01/embed_loader.js"></script> <script type="text/javascript"> trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"/m/02t2n","geo":"","time":"today 5-y"},{"keyword":"/m/02zhbn","geo":"","time":"today 5-y"},{"keyword":"/m/0ck_p8","geo":"","time":"today 5-y"},{"keyword":"/m/01mwhw","geo":"","time":"today 5-y"}],"category":0,"property":""}, {"exploreQuery":"q=%2Fm%2F02t2n,%2Fm%2F02zhbn,%2Fm%2F0ck_p8,%2Fm%2F01mwhw","guestPath":"https://trends.google.com:443/trends/embed/"}); </script> 
+<script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/981_RC01/embed_loader.js"></script> <script type="text/javascript"> trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"/m/02t2n","geo":"","time":"2012-03-18 2017-03-18"},{"keyword":"/m/02zhbn","geo":"","time":"2012-03-18 2017-03-18"},{"keyword":"/m/0ck_p8","geo":"","time":"2012-03-18 2017-03-18"},{"keyword":"/m/01mwhw","geo":"","time":"2012-03-18 2017-03-18"}],"category":0,"property":""}, {"exploreQuery":"date=2012-03-18%202017-03-18&q=%2Fm%2F02t2n,%2Fm%2F02zhbn,%2Fm%2F0ck_p8,%2Fm%2F01mwhw","guestPath":"https://trends.google.com:443/trends/embed/"}); </script> 
 
 with my colleague [Alexandre](https://www.linkedin.com/in/alexandre-hisette-aa1076a/) from Techsys
 
