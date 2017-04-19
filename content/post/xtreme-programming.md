@@ -29,7 +29,9 @@ He explained that we should work in pairs. He told us that we should test every 
 
 (By the time, as I grew up, I learned that _Good ideas don't always win!)_ 
 
-![https://xkcd.com/1327/](https://imgs.xkcd.com/comics/mobile_marketing.png)
+{{< figure src="https://imgs.xkcd.com/comics/mobile_marketing.png" link="https://xkcd.com/1327/" caption="" >}}
+
+<small>_Note:_ I intentionnally put this XKCD as a reminder that a "good idea" is an abstract concept. Therefore, I insist on the fact the this blog reflects my own opinion. Maybe it was not such a good idea after all :)</small>
 
 At the end of the project, when the [Deming wheel](https://en.wikipedia.org/wiki/PDCA) turned, I noticed that we were missing of agility.
 
@@ -50,7 +52,7 @@ On the other hand, people do not oppose agility and [lean](https://en.wikipedia.
 But still, IT crew usually refer to those concepts as _Tools for the devs_. But Ops should not be opposed to Devs in the strict sense. Actually **Ops are also developing their business**.
 In the era of "services everywhere" (_XaaS_), pure Ops teams must define contracts of services. Therefore they must develop the services to fulfill the contracts. 
 
-More and more Ops will need development skills, but even more, they will need methods. Scrum is a good way to start. 
+More and more Ops will need development skills, but even more, they will need methods. Scrum is a good way to start for a lot of teams because of its implicit team spirit. 
 
 
 # Part II: Using extreme programming in an "Ops" team
