@@ -50,7 +50,7 @@ On the other hand, people do not oppose agility and [lean](https://en.wikipedia.
 But still, IT crew usually refer to those concepts as _Tools for the devs_. But Ops should not be opposed to Devs in the strict sense. Actually **Ops are also developing their business**.
 In the era of "services everywhere" (_XaaS_), pure Ops teams must define contracts of services. Therefore they must develop the services to fulfill the contracts. 
 
-More and more Ops will need development skills, but they even will more need methods. Scrum is a good way to start. 
+More and more Ops will need development skills, but even more, they will need methods. Scrum is a good way to start. 
 
 
 # Part II: Using extreme programming in an "Ops" team
