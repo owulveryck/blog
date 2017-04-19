@@ -75,7 +75,7 @@ with my colleague [Alexandre](https://www.linkedin.com/in/alexandre-hisette-aa10
 
 I the sprint review meeting, of course my own goals were not reached. I have passed too many times to work with my colleague to make my complete my own tasks.
 
-My "product" was enhanced of 2% instead of 5%, but the other product, the one developed in pair, increased of 10%. On the average, the quality of the service of the team made a grater gap.
+My "product" was enhanced of 2% instead of 5%, but the other product, the one developed in pair, increased by 10%. On the average, the quality of the whole service provided by the team made a grater gap.
 Moreover we were both proud of what we accomplished. The code was clean, documented and tested.
 
 * Learing was amplified
