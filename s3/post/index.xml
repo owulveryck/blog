@@ -7,8 +7,195 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <lastBuildDate>Tue, 28 Mar 2017 21:03:52 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 14 Apr 2017 23:00:59 +0200</lastBuildDate>
     <atom:link href="https://blog.owulveryck.info/post.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>I have tried Extreme Programming within a sprint and I think it is an excellent agile method for the Ops!</title>
+      <link>https://blog.owulveryck.info/2017/04/14/i-have-tried-extreme-programming-within-a-sprint-and-i-think-it-is-an-excellent-agile-method-for-the-ops/index.html</link>
+      <pubDate>Fri, 14 Apr 2017 23:00:59 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/04/14/i-have-tried-extreme-programming-within-a-sprint-and-i-think-it-is-an-excellent-agile-method-for-the-ops/index.html</guid>
+      <description>
+
+&lt;h1 id=&#34;part-i-agility&#34;&gt;Part I: Agility&lt;/h1&gt;
+
+&lt;h2 id=&#34;2003&#34;&gt;2003&lt;/h2&gt;
+
+&lt;p&gt;I have discovered the notion of extreme programming more than 15 years ago. My job was to integrate &lt;em&gt;and&lt;/em&gt; to develop pieces of code in Java for the IBM Websphere Business Integration server.
+We were a small team with light programming skills. A part of our job was to operate the software, the other part was to develop. It was in 2003.&lt;/p&gt;
+
+&lt;p&gt;We were trying hard to stick to the specific framework we developed.&lt;/p&gt;
+
+&lt;p&gt;Of course, in 2003, no French company I have been working for was talking about agility, The minimum viable product was not an option. The client wanted the full viable product delivered on time.&lt;/p&gt;
+
+&lt;p&gt;One of those morning where we were trying to find the motivation to do another step in the unknown, a colleague told us about a &amp;ldquo;new concept&amp;rdquo; he read about: Extreme Programming.&lt;/p&gt;
+
+&lt;p&gt;He explained that we should work in pairs. He told us that we should test every single feature even before actually implementing it, and so many other things&amp;hellip; The ideas were good, but the milestones of the project were short. Obviously we were &lt;em&gt;too busy to innovate&lt;/em&gt; .&lt;/p&gt;
+
+&lt;p&gt;(By the time, as I grew up, I learned that &lt;em&gt;Good ideas don&amp;rsquo;t always win!)&lt;/em&gt;&lt;/p&gt;
+
+
+&lt;figure &gt;
+    &lt;a href=&#34;https://xkcd.com/1327/&#34;&gt;
+        &lt;img src=&#34;https://imgs.xkcd.com/comics/mobile_marketing.png&#34; /&gt;
+    &lt;/a&gt;
+    
+&lt;/figure&gt;
+
+
+&lt;p&gt;&lt;small&gt;&lt;em&gt;Note:&lt;/em&gt; I intentionally put this XKCD as a reminder that a &amp;ldquo;good idea&amp;rdquo; is an abstract concept. Therefore, I insist on the fact the this blog reflects my own opinion. Even if I remain sure that it was a good idea, maybe it was not :)&lt;/small&gt;&lt;/p&gt;
+
+&lt;p&gt;At the end of the project, when the &lt;a href=&#34;https://en.wikipedia.org/wiki/PDCA&#34;&gt;Deming wheel&lt;/a&gt; turned, I noticed that we were missing of agility.&lt;/p&gt;
+
+&lt;h2 id=&#34;2017&#34;&gt;2017&lt;/h2&gt;
+
+&lt;p&gt;It is now 2017. Every IT crew thinks that agility is the way to work.
+Some of them have enough support from their management to actually implement an agile method.
+Others may not be mature enough, but are pushed by the neverending decrease of the time to market to try new methods of work and delivery.&lt;/p&gt;
+
+&lt;p&gt;Agile and DevOps are, according the trends, the methods to use; it is seen as the holy grail.
+But when it comes to agility, people are usually restricting it to an implementation of &lt;a href=&#34;https://en.wikipedia.org/wiki/Scrum_(software_development)&#34;&gt;scrum&lt;/a&gt; or &lt;a href=&#34;https://en.wikipedia.org/wiki/Kanban_(development)&#34;&gt;kanban&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Others methods such as Extreme Programming remains rare. See for example this Google trends chart about agility in IT:&lt;/p&gt;
+
+&lt;script type=&#34;text/javascript&#34; src=&#34;https://ssl.gstatic.com/trends_nrtr/981_RC01/embed_loader.js&#34;&gt;&lt;/script&gt; &lt;script type=&#34;text/javascript&#34;&gt; trends.embed.renderExploreWidget(&#34;TIMESERIES&#34;, {&#34;comparisonItem&#34;:[{&#34;keyword&#34;:&#34;/m/02t2n&#34;,&#34;geo&#34;:&#34;&#34;,&#34;time&#34;:&#34;2012-03-18 2017-03-18&#34;},{&#34;keyword&#34;:&#34;/m/02zhbn&#34;,&#34;geo&#34;:&#34;&#34;,&#34;time&#34;:&#34;2012-03-18 2017-03-18&#34;},{&#34;keyword&#34;:&#34;/m/0ck_p8&#34;,&#34;geo&#34;:&#34;&#34;,&#34;time&#34;:&#34;2012-03-18 2017-03-18&#34;},{&#34;keyword&#34;:&#34;/m/01mwhw&#34;,&#34;geo&#34;:&#34;&#34;,&#34;time&#34;:&#34;2012-03-18 2017-03-18&#34;}],&#34;category&#34;:0,&#34;property&#34;:&#34;&#34;}, {&#34;exploreQuery&#34;:&#34;date=2012-03-18%202017-03-18&amp;q=%2Fm%2F02t2n,%2Fm%2F02zhbn,%2Fm%2F0ck_p8,%2Fm%2F01mwhw&#34;,&#34;guestPath&#34;:&#34;https://trends.google.com:443/trends/embed/&#34;}); &lt;/script&gt; 
+
+&lt;p&gt;On the other hand, &lt;a href=&#34;https://en.wikipedia.org/wiki/Lean_software_development&#34;&gt;lean&lt;/a&gt; concepts are usually referenced in every single agile documentation. But the echo of the lean principles is not strong enough. And still, IT crew usually refers to those methods as &lt;em&gt;only good for pure dev teams&lt;/em&gt; and &lt;em&gt;we are not devs&lt;/em&gt; (and trust me: if I had had a cent every time I faced this sentence, I would be rich).&lt;/p&gt;
+
+&lt;p&gt;Ops should not be opposed to Devs. That is a fact, but why?&lt;/p&gt;
+
+&lt;p&gt;Because Ops are also developers. Actually Ops are developing their business.
+In the era of &amp;ldquo;services everywhere&amp;rdquo; (XaaS), operational teams (as opposed to business team) must define contracts of services. Therefore they must develop the services to fulfill the contracts.
+They are a business team; even if their business is not related to the core business of the company they are working for.&lt;/p&gt;
+
+&lt;p&gt;Take a look at Amazon. AWS&amp;rsquo; core business is computer centric, but at the beginning it was only the &amp;ldquo;ops department&amp;rdquo; of a retailer.&lt;/p&gt;
+
+&lt;h1 id=&#34;part-ii-using-extreme-programming-in-an-ops-team&#34;&gt;Part II: Using extreme programming in an &amp;ldquo;Ops&amp;rdquo; team&lt;/h1&gt;
+
+&lt;p&gt;At the present time, I am sub-contractor for a retail company. My job is to give hints and hands to the operational teams. Their goal is to serve the business in a way efficient enough in order to follow the growth of the core business (and it is growing fast).&lt;/p&gt;
+
+&lt;h2 id=&#34;context&#34;&gt;Context&lt;/h2&gt;
+
+&lt;p&gt;Let me define the context of my job.
+I am working in a team whose goal is to expose IaaS based on public cloud offers. Among other services, we want to provide to our customers a service of file transfer.
+The transfer engine is an existing product. What we have deviced to do is to add a RESTful API in front of the engine (this is a shortcut for clarity).&lt;/p&gt;
+
+&lt;p&gt;The team is composed of 4 people (mainly ops). But only one of them really knows the transfer engine. Therefore he has been designed as the legitimate implementer of the web service.&lt;/p&gt;
+
+&lt;p&gt;This person is my colleague &lt;a href=&#34;https://www.linkedin.com/in/alexandre-hisette-aa1076a/&#34;&gt;Alexandre&lt;/a&gt; from &lt;a href=&#34;https://www.linkedin.com/company-beta/719121/&#34;&gt;Techsys&lt;/a&gt;. He is a certified system engineer. And best of all he is did not tell me &lt;em&gt;I am not a dev&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Regarding my job, I was assigned to another project that was also involving API management.&lt;/p&gt;
+
+&lt;p&gt;One last thing to know: the Team is also experimenting a Scrum method. We are &amp;ldquo;sprinting&amp;rdquo; for the releasing our products.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-did-it-get-extreme&#34;&gt;How did it get extreme&lt;/h2&gt;
+
+&lt;p&gt;Alex started to implement its API gateway. I managed to convince the team to use the go language (telling how is not the point of this article). We were exchanging about the implementation, the design, and the language.
+At a certain point, for the past sprint, we started to work together by really sharing a screen.&lt;/p&gt;
+
+&lt;p&gt;When we were not sure about the design, we were instantly brainstorming around a coffee.&lt;/p&gt;
+
+&lt;p&gt;We decided to write the tests with a goal of 100% of code covered.
+When he was busy with something else, I wrote some tests for him, and his job, when I was by myself busy on something else, was to actually implement the code that was giving 100% of success.&lt;/p&gt;
+
+&lt;p&gt;Is that extreme programming? Let&amp;rsquo;s recap.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-is-extreme-programming&#34;&gt;&lt;strong&gt;What is Extreme Programming&lt;/strong&gt;&lt;/h2&gt;
+
+&lt;p&gt;Even if this section is a vague copy/paste from &lt;a href=&#34;https://en.wikipedia.org/wiki/Extreme_programming&#34;&gt;wikipedia&lt;/a&gt; it is time to define some concepts of XP.
+(I strongly encourage you to read the wikipedia article though)&lt;/p&gt;
+
+&lt;p&gt;Extreme programming is a software development methodology.&lt;/p&gt;
+
+&lt;p&gt;The activities of XP are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Coding&lt;/li&gt;
+&lt;li&gt;Testing&lt;/li&gt;
+&lt;li&gt;Listening&lt;/li&gt;
+&lt;li&gt;Designing&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Why is that extreme? Because all of the activities are taken to their extreme level. For example: regarding the tests, not only the business logic is tested. but every single component of the software is fully tested. (remember our goal of 100% code coverage? Yes we are extreme!)&lt;/p&gt;
+
+&lt;p&gt;Regarding the practices of extreme programming: there is 12 practices grouped in 4 areas (again &lt;a href=&#34;https://en.wikipedia.org/wiki/Extreme_programming_practices&#34;&gt;wikipedia&lt;/a&gt; is the place to go after this blog post).&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Fine-scale feedback
+
+&lt;ul&gt;
+&lt;li&gt;Pair programming&lt;/li&gt;
+&lt;li&gt;Planning game&lt;/li&gt;
+&lt;li&gt;Test-driven development&lt;/li&gt;
+&lt;li&gt;Whole team&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Continuous process
+
+&lt;ul&gt;
+&lt;li&gt;Continuous integration&lt;/li&gt;
+&lt;li&gt;Refactoring or design improvement&lt;/li&gt;
+&lt;li&gt;Small releases&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Shared understanding
+
+&lt;ul&gt;
+&lt;li&gt;Coding standards&lt;/li&gt;
+&lt;li&gt;Collective code ownership&lt;/li&gt;
+&lt;li&gt;Simple design&lt;/li&gt;
+&lt;li&gt;System metaphor&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Programmer welfare
+
+&lt;ul&gt;
+&lt;li&gt;Sustainable pace&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;so-are-we-extreme&#34;&gt;So are we extreme?&lt;/h2&gt;
+
+&lt;p&gt;Yes!&lt;/p&gt;
+
+&lt;p&gt;Because we are doing pair-programming.&lt;/p&gt;
+
+&lt;p&gt;Because by using scrum, we did use the planing poker.&lt;/p&gt;
+
+&lt;p&gt;Because we are extremely testing our app.&lt;/p&gt;
+
+&lt;p&gt;Because of the sprint releases, we are doing small releases&lt;/p&gt;
+
+&lt;p&gt;Because go impose the coding standards&lt;/p&gt;
+
+&lt;p&gt;Because we were proud of what we did, and this provided welfare&lt;/p&gt;
+
+&lt;p&gt;And probably many other things I cannot list in a single blog post.&lt;/p&gt;
+
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;I the sprint review meeting, of course my own goals were not reached (The goals of my own project). I have passed too many times to work with my colleague to make my complete my own tasks.&lt;/p&gt;
+
+&lt;p&gt;My &amp;ldquo;product&amp;rdquo; was enhanced of 2% instead of 5%, but the other product, the one developed in pair, has increased by 30%. On the average, the quality of the whole service provided by the team made a grater gap.
+Moreover we were both &lt;em&gt;proud&lt;/em&gt; of what we accomplished. The code was clean, documented and tested. The product owner was very pleased of that.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Learning was amplified&lt;/li&gt;
+&lt;li&gt;team was empowered&lt;/li&gt;
+&lt;li&gt;the service was more consistent as a whole (two heads are better than one)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Is that important that my product was not as advanced as it should have been? For the team, definitely not. My product is viable anyway, and the delay induced by the time &amp;ldquo;lost&amp;rdquo; is at maximum two weeks. And this delay will be filled if, by the next sprint, we decide to work together with my colleague on my project.&lt;/p&gt;
+
+&lt;p&gt;But that is a decision to take by the team and the product owners for the next sprint.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Credits:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Image by DonWells (&lt;a href=&#34;https://en.wikipedia.org/wiki/File:XP-feedback.gif&#34;&gt;https://en.wikipedia.org/wiki/File:XP-feedback.gif&lt;/a&gt;) [CC BY-SA 3.0 (&lt;a href=&#34;http://creativecommons.org/licenses/by-sa/3.0)&#34;&gt;http://creativecommons.org/licenses/by-sa/3.0)&lt;/a&gt;], via Wikimedia Commons&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>From GraphQL to a table view with React and Apollo</title>
@@ -3140,337 +3327,6 @@ repository where the presentation is hosted.&lt;/p&gt;
 
 &lt;p&gt;By now I have a good animated slideshow, and the ability to join the slides with a mobile phone.
 I can also draw a topology of the attendees via D3 and interact with them.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Which solution should I choose? Don&#39;t think too much and ask a bot!</title>
-      <link>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/index.html</link>
-      <pubDate>Fri, 20 May 2016 12:50:59 +0200</pubDate>
-      
-      <guid>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/index.html</guid>
-      <description>
-
-&lt;h1 id=&#34;let-me-tell-you-a-story-the-why&#34;&gt;Let me tell you a story: the why!&lt;/h1&gt;
-
-&lt;p&gt;A year ago, one of those Sunday morning where spring starts to warm up the souls, I went, as usual to my favorite bakery.
-The family tradition is to come back with a bunch of &amp;ldquo;Pains au Chocolat&amp;rdquo; (which, are, you can trust me, simply excellent).&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;hello sir, I&amp;rsquo;d like 4 of your excellent &amp;ldquo;pains au chocolat&amp;rdquo; please&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;I&amp;rsquo;m sorry, I don&amp;rsquo;t have any &amp;ldquo;pains au chocolat&amp;rdquo; nor any &amp;ldquo;croissant&amp;rdquo; anymore&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;what? How is it possible ?&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;everything has been sold.&lt;/em&gt;&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;too bad&amp;hellip;&lt;/em&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I think to myself: &lt;em&gt;why didn&amp;rsquo;t you made more?&lt;/em&gt;. He may have read my thought and told me&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;I wish I could have foreseen&lt;/em&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;When I left his shop, his words were echoing&amp;hellip; I wish I could have foreseen&amp;hellip; We have self-driving cars, we have the Internet,
-we are a civilization that is technology advanced.
-Facebook recognize your face among billions as soon as you post a photo&amp;hellip; It must be possible to foresee&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;This is how I started to gain interest in machine learning&lt;/p&gt;
-
-&lt;p&gt;At first I started to read some papers, then I learn (a very little bit) about graph theory, Bayesian networks, Markov chains.
-But I was not accurate and I felt I was missing some basic theory.&lt;/p&gt;
-
-&lt;p&gt;That&amp;rsquo;s the main reason why, 8 weeks ago, I signed in a course about &lt;a href=&#34;https://www.coursera.org/learn/machine-learning&#34;&gt;&amp;ldquo;Machine learning&amp;rdquo; on Coursera&lt;/a&gt;.
-This course is given by &lt;a href=&#34;http://www.andrewng.org/&#34;&gt;Andrew Ng&lt;/a&gt; from &lt;a href=&#34;https://www.stanford.edu/&#34;&gt;Stanford University&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;It is an excellent introduction that gives me all the tools I need to go deeper in this science. The course is based on real examples
-and uses powerful mathematics without going too deeply in the proofs.&lt;/p&gt;
-
-&lt;h1 id=&#34;so-what&#34;&gt;So what?&lt;/h1&gt;
-
-&lt;p&gt;The course is not finished yet, but after about 8 weeks, I&amp;rsquo;ve learned a lot about what we call &amp;ldquo;machine learning&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;The main idea of the machine learning is:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;to feed some code with a bunch of data (who said big data was useless)&lt;/li&gt;
-&lt;li&gt;to code or encode some mathematical formulas that could represent the data&lt;/li&gt;
-&lt;li&gt;to implement any algorithm that optimize the formulas by minimizing the error made by the machine on the evolving data sets.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;To make it simple: machine learning is feeding a &amp;ldquo;robot&amp;rdquo; with data and teach him how to analyse the errors so it can make decisions on its own.&lt;/p&gt;
-
-&lt;p&gt;Scary isn&amp;rsquo;t it? But so exciting&amp;hellip; As usual I won&amp;rsquo;t go into ethical debate on this blog, and I will stick to science and on the benefit
-of the science.&lt;/p&gt;
-
-&lt;p&gt;But indeed, always remind François Rabelais:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Science sans conscience n&amp;rsquo;est que ruine de l&amp;rsquo;&amp;acirc;me (&lt;em&gt;Science without conscience is but the ruin of the soul&lt;/em&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&#34;a-use-case&#34;&gt;A use case&lt;/h2&gt;
-
-&lt;h3 id=&#34;defining-the-problem&#34;&gt;Defining the problem&lt;/h3&gt;
-
-&lt;p&gt;I have 4 technical solutions providing a similar goal: deliver cloud services.
-Actually, none of them is fulfilling all the requirements of my business.
-As usual, one is good in a certain area, while another one is weak, etc.&lt;/p&gt;
-
-&lt;p&gt;A team of people has evaluated more than 100 criteria, and gave two quotations per criteria and per product:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;the first quotation is in the range 0/3 and indicated whether the product is fulfilling the current feature&lt;/li&gt;
-&lt;li&gt;the second quotation may be {0,1,3,9} and points the effort needed to reach a 3 for the feature&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Therefore, for each solution, I have a table looking like this :&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;feature  name&lt;/th&gt;
-&lt;th&gt;feature evaluation&lt;/th&gt;
-&lt;th&gt;effort&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;feature 1&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;9&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;feature 2&lt;/td&gt;
-&lt;td&gt;3&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;feature 3&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;feature 4&lt;/td&gt;
-&lt;td&gt;0&lt;/td&gt;
-&lt;td&gt;3&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&amp;hellip;&amp;hellip;.&lt;/td&gt;
-&lt;td&gt;&amp;hellip;&lt;/td&gt;
-&lt;td&gt;&amp;hellip;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;feature 100&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;3&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;I&amp;rsquo;ve been asked to evaluate the product and to produce a comparison.&lt;/p&gt;
-
-&lt;p&gt;To do an analytic, I must look for an element of comparison. So I&amp;rsquo;ve turned the problem into this :&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;I would like to know which product is the cheapest to fulfill my requirement.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;(I&amp;rsquo;ve uploaded my samples here):&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/ml/solution1.csv&#34;&gt;solution 1&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/ml/solution2.csv&#34;&gt;solution 2&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/ml/solution3.csv&#34;&gt;solution 3&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/assets/ml/solution4.csv&#34;&gt;solution 4&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;finding-a-solution&#34;&gt;Finding a solution&lt;/h3&gt;
-
-&lt;p&gt;In the machine learning, we notice two different fields of application:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;regression&lt;/li&gt;
-&lt;li&gt;classification&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The classification mechanism would be used to answer a yes/no question; for example: &lt;em&gt;should I keep solution 1&lt;/em&gt; ?
-The regression mechanism helps us for &amp;ldquo;predicting&amp;rdquo;. Actually, the goal is to &lt;em&gt;automatically&lt;/em&gt; find a mathematical formulae that turns
-a set of feature into a result.&lt;/p&gt;
-
-&lt;p&gt;what is a feature, and what&amp;rsquo;s the result?
-Let&amp;rsquo;s go back to my &lt;em&gt;petits pains&lt;/em&gt; example.&lt;/p&gt;
-
-&lt;p&gt;Consider that the baker has made statistics on its production for sunday, and it has taken some events into consideration:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;sunday the 1st: it was raining, I sold only 100 petits Pains&lt;/li&gt;
-&lt;li&gt;sunday the 8th: it was sunny, I sold 250 petits Pains&lt;/li&gt;
-&lt;li&gt;sunday the 16th: it was sunny, and it was a special day (eg: mother&amp;rsquo;s day): 300 petits Pains&lt;/li&gt;
-&lt;li&gt;sunday the 24th: it was cloudy: 150 petits Pains&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Here, the baker thinks that its production must be a function of the weather and the calendar; therefore those are the two features.
-What ML propose is to tell the baker how many &amp;ldquo;petits pains&amp;rdquo; he should make &lt;strong&gt;knowing&lt;/strong&gt; that it is a special day (father&amp;rsquo;s day) and that it
-is partially sunny&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;Back in the context of this post, the goal of the regression would be to find a mathematical function that will tell me the effort needed
-for any value, and doing this on the simple basis of the training set I have.&lt;/p&gt;
-
-&lt;h4 id=&#34;the-actual-score-of-all-the-solutions&#34;&gt;The actual score of all the solutions&lt;/h4&gt;
-
-&lt;p&gt;The first thing to find it the total score of all the 4 solutions.
-If I consider $m$ features, the total score of the solution is defined by:&lt;/p&gt;
-
-&lt;p&gt;$ score = \frac{1}{m} . \sum_{k=1}^{m} feature_k $&lt;/p&gt;
-
-&lt;p&gt;What I need now, is to evaluate the effort needed to reach a score of 3 for each solution.
-Let&amp;rsquo;s do that.&lt;/p&gt;
-
-&lt;h4 id=&#34;representing-the-training-set&#34;&gt;Representing the training set&lt;/h4&gt;
-
-&lt;p&gt;First, let&amp;rsquo;s plot the training set.
-&lt;center&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/ml/trainingset.jpg&#34; alt=&#34;Training set&#34;/&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;note&lt;/strong&gt; the representation is not accurate because there may be several bunk points&lt;/p&gt;
-
-&lt;p&gt;I will use in this post what&amp;rsquo;s called &amp;ldquo;supervised learning&amp;rdquo;. That means that I will express a skeleton of function and let the machine
-adjust it. (actually this is a very basic and week implementation; a lot more complex examples may be implemented but that&amp;rsquo;s not the purpose of this post)&lt;/p&gt;
-
-&lt;p&gt;When I look at the training set representation, I can imagine a line passing by the middle of the plots.
-This line may look like this:&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/ml/x-1_5.jpg&#34; alt=&#34;x^(-1/5)&#34;/&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;This is actually a representation of the function $ x^{\frac{1}{5}} $&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s assume that this function may basically fit my example, my goal will be to adapt the function.
-assume this equation with two parameters $\theta_0$ and $\theta_1$ that will influence the curve:&lt;/p&gt;
-
-&lt;p&gt;$ f(x) = \theta_0 + \theta_1 . x^{\frac{1}{5}} $&lt;/p&gt;
-
-&lt;p&gt;Therefore, my goal will be to code something so that the machine will figure out what $\theta_0$ and $\theta_1$  are.&lt;/p&gt;
-
-&lt;p&gt;I will use an implementation of an algorithm called &lt;a href=&#34;https://en.wikipedia.org/wiki/Gradient_descent&#34;&gt;gradient descent&lt;/a&gt; for linear regression.
-I won&amp;rsquo;t go into the details of this algorithm, as it takes a complete course to be explained.&lt;/p&gt;
-
-&lt;p&gt;The implementation is made with &lt;a href=&#34;https://www.gnu.org/software/octave/&#34;&gt;GNU octave&lt;/a&gt; and the code is available on my &lt;a href=&#34;https://github.com/owulveryck/linear-regression-example&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;the-computation-and-the-result&#34;&gt;The computation and the result&lt;/h2&gt;
-
-&lt;p&gt;Here is a figure representing the function for one particular solution:
-&lt;center&gt;
-&lt;img class=&#34;img-responsive&#34; src=&#34;https://blog.owulveryck.info/assets/images/ml/trainingset_plot.jpg&#34; alt=&#34;Training set with the function&#34;/&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;We can see that the curve is &amp;ldquo;under fitting&amp;rdquo; the data.
-Anyway, let&amp;rsquo;s continue and get the result I want (I will explain later how to perform better):&lt;/p&gt;
-
-&lt;p&gt;Here are the computational results:
-&lt;pre&gt;
-octave:10&amp;gt; compute
-Analysing solution1.csv:0.&lt;sup&gt;67&lt;/sup&gt;&amp;frasl;&lt;sub&gt;3&lt;/sub&gt;
-Running gradient descent&amp;hellip;
-Theta found by gradient descent: 5.397050 -4.315835
-Prediction for x=0.669291 ; 1.414256
-Prediction for x=3 ; 0.020681
-Effort (scaled to 10): 2.582105&lt;/p&gt;
-
-&lt;p&gt;Analysing solution2.csv:0.&lt;sup&gt;96&lt;/sup&gt;&amp;frasl;&lt;sub&gt;3&lt;/sub&gt;
-Running gradient descent&amp;hellip;
-Theta found by gradient descent: 3.178478 -2.451611
-Prediction for x=0.960630 ; 0.746482
-Prediction for x=3 ; 0.124430
-Effort (scaled to 10): 1.957075&lt;/p&gt;
-
-&lt;p&gt;Analysing solution3.csv:0.&lt;sup&gt;67&lt;/sup&gt;&amp;frasl;&lt;sub&gt;3&lt;/sub&gt;
-Running gradient descent&amp;hellip;
-Theta found by gradient descent: 2.557847 -2.015334
-Prediction for x=0.669291 ; 0.698031
-Prediction for x=3 ; 0.047283
-Effort (scaled to 10): 2.544122&lt;/p&gt;
-
-&lt;p&gt;Analysing solution4.csv:0.&lt;sup&gt;86&lt;/sup&gt;&amp;frasl;&lt;sub&gt;3&lt;/sub&gt;
-Running gradient descent&amp;hellip;
-Theta found by gradient descent: 3.104868 -2.422627
-Prediction for x=0.858268 ; 0.755175
-Prediction for x=3 ; 0.086926
-Effort (scaled to 10): 2.152261
-&lt;/pre&gt;&lt;/p&gt;
-
-&lt;p&gt;For each solution, I have:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;the score (the first line /3)&lt;/li&gt;
-&lt;li&gt;the parameters $\theta$&lt;/li&gt;
-&lt;li&gt;a prediction for the actual score, and for a score of 3&lt;/li&gt;
-&lt;li&gt;the effort (scale on 10) needed to pass from the actual score to 3&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&#34;final-result&#34;&gt;Final result&lt;/h4&gt;
-
-&lt;p&gt;Here is the final classification of my four solutions:&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Solution&lt;/th&gt;
-&lt;th&gt;score&lt;/th&gt;
-&lt;th&gt;effort&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Solution 2&lt;/td&gt;
-&lt;td&gt;0.96&lt;/td&gt;
-&lt;td&gt;1.95&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Solution 4&lt;/td&gt;
-&lt;td&gt;0.86&lt;/td&gt;
-&lt;td&gt;2.15&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Solution 3&lt;/td&gt;
-&lt;td&gt;0.67&lt;/td&gt;
-&lt;td&gt;2.54&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Solution 1&lt;/td&gt;
-&lt;td&gt;0.67&lt;/td&gt;
-&lt;td&gt;2.58&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Solution 2 is the cheapest. It&amp;rsquo;s possible to go into further analysis to determine why it&amp;rsquo;s the cheapest, and how the other ones
-may catch up and go back in the race, but again, that is not the purpose of my post.&lt;/p&gt;
-
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;This is a simple approach.
-Some axis of optimization could be to use a more complex polynomial (eg: $\theta_0+\theta_1.x^\frac{1}{3}+\theta_2.x^\frac{1}{5}$)
-or to use a &lt;a href=&#34;https://en.wikipedia.org/wiki/Support_vector_machine&#34;&gt;support vector machine&lt;/a&gt; with a gaussian kernel for example.&lt;/p&gt;
-
-&lt;p&gt;One other optimization would be to add some more features, such as, for example, a score on the importance of a feature (a functional feature).&lt;/p&gt;
-
-&lt;p&gt;Machine learning is a wide mathematical and IT area. It is now in everyone&amp;rsquo;s life.
-Nowadays we are talking about plateform fully automated, self-healing applications, smart deployements, smart monitoring.
-There are already some good implementations of algorithms on the market, but there is a huge place for integration of those tools into
-the life of the IT specialist.&lt;/p&gt;
-
-&lt;p&gt;Automation has already helped and took the boring job of the IT specialist. Smart automation will go a step further.&lt;/p&gt;
 </description>
     </item>
     

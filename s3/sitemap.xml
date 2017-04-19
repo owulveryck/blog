@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.owulveryck.info/2017/04/14/i-have-tried-extreme-programming-within-a-sprint-and-i-think-it-is-an-excellent-agile-method-for-the-ops/index.html</loc>
+    <lastmod>2017-04-14T23:00:59+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://blog.owulveryck.info/2017/03/28/from-graphql-to-a-table-view-with-react-and-apollo/index.html</loc>
     <lastmod>2017-03-28T21:03:52+02:00</lastmod>
   </url>
@@ -152,6 +157,12 @@
   </url>
   
   <url>
+    <loc>https://blog.owulveryck.info/tags/agile.html</loc>
+    <lastmod>2017-04-14T23:00:59+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.owulveryck.info/tags/api.html</loc>
     <lastmod>2015-11-11T14:24:43+01:00</lastmod>
     <priority>0</priority>
@@ -182,13 +193,13 @@
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/topics/bdd.html</loc>
+    <loc>https://blog.owulveryck.info/tags/bdd.html</loc>
     <lastmod>2016-03-31T23:39:35+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/tags/bdd.html</loc>
+    <loc>https://blog.owulveryck.info/topics/bdd.html</loc>
     <lastmod>2016-03-31T23:39:35+01:00</lastmod>
     <priority>0</priority>
   </url>
@@ -250,6 +261,12 @@
   <url>
     <loc>https://blog.owulveryck.info/tags/d3js.html</loc>
     <lastmod>2016-06-23T15:32:54+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.owulveryck.info/tags/dev.html</loc>
+    <lastmod>2017-04-14T23:00:59+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -458,6 +475,12 @@
   </url>
   
   <url>
+    <loc>https://blog.owulveryck.info/tags/ops.html</loc>
+    <lastmod>2017-04-14T23:00:59+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.owulveryck.info/tags/orchestration.html</loc>
     <lastmod>2016-02-10T17:19:47+01:00</lastmod>
     <priority>0</priority>
@@ -471,7 +494,7 @@
   
   <url>
     <loc>https://blog.owulveryck.info/post.html</loc>
-    <lastmod>2017-03-28T21:03:52+02:00</lastmod>
+    <lastmod>2017-04-14T23:00:59+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -582,14 +605,14 @@
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/topics/tosca.html</loc>
-    <lastmod>2015-11-20T10:09:30+00:00</lastmod>
+    <loc>https://blog.owulveryck.info/tags/tosca.html</loc>
+    <lastmod>2016-02-10T17:19:47+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/tags/tosca.html</loc>
-    <lastmod>2016-02-10T17:19:47+01:00</lastmod>
+    <loc>https://blog.owulveryck.info/topics/tosca.html</loc>
+    <lastmod>2015-11-20T10:09:30+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -606,20 +629,20 @@
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/topics/udt.html</loc>
-    <lastmod>2016-10-17T20:50:18+02:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.owulveryck.info/tags/udt.html</loc>
     <lastmod>2016-10-17T20:50:18+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>https://blog.owulveryck.info/topics/udt.html</loc>
+    <lastmod>2016-10-17T20:50:18+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.owulveryck.info/</loc>
-    <lastmod>2017-03-28T21:03:52+02:00</lastmod>
+    <lastmod>2017-04-14T23:00:59+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -656,6 +679,12 @@
   <url>
     <loc>https://blog.owulveryck.info/topics/wed-ui.html</loc>
     <lastmod>2016-10-19T07:24:51+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.owulveryck.info/tags/xtreme-programming.html</loc>
+    <lastmod>2017-04-14T23:00:59+02:00</lastmod>
     <priority>0</priority>
   </url>
   

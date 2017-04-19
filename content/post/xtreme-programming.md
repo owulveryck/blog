@@ -1,7 +1,7 @@
 ---
 date: 2017-04-14T23:00:59+02:00
 description: "In this post I will describe my experience with extreme programming. I have tested it in conjunction with scrum, and I have been impressed by the results. I will try to explain why it is, according to me, a very good leverage of digital transformation for Ops team."
-draft: true
+draft: false
 images:
 - /assets/images/Extreme_Programming.png
 tags:
