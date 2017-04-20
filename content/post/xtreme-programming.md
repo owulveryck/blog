@@ -31,7 +31,7 @@ He explained that we should work in pairs. He told us that we should test every 
 
 {{< figure src="https://imgs.xkcd.com/comics/mobile_marketing.png" link="https://xkcd.com/1327/" caption="" >}}
 
-<small>_Note:_ I intentionally put this XKCD as a reminder that a "good idea" is an abstract concept. Therefore, I insist on the fact the this blog reflects my own opinion. Even if I remain sure that it was a good idea, maybe it was not :)</small>
+<small>_Note:_ I intentionally put this XKCD as a reminder that a "good idea" is an abstract concept. Therefore, I insist on the fact that this blog reflects my own opinion. Even if I remain sure that it was a good idea, maybe it was not :)</small>
 
 At the end of the project, when the [Deming wheel](https://en.wikipedia.org/wiki/PDCA) turned, I noticed that we were missing of agility.
 
@@ -70,7 +70,7 @@ The transfer engine is an existing product. What we have deviced to do is to add
 
 The team is composed of 4 people (mainly ops). But only one of them really knows the transfer engine. Therefore he has been designed as the legitimate implementer of the web service.
 
-This person is my colleague [Alexandre](https://www.linkedin.com/in/alexandre-hisette-aa1076a/) from [Techsys](https://www.linkedin.com/company-beta/719121/). He is a certified system engineer. And best of all he is did not tell me _I am not a dev_.
+This person is my colleague [Alexandre](https://www.linkedin.com/in/alexandre-hisette-aa1076a/) from [Techsys](https://www.linkedin.com/company-beta/719121/). He is a certified system engineer. And best of all he did not tell me _I am not a dev_.
 
 Regarding my job, I was assigned to another project that was also involving API management.
 
