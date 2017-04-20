@@ -53,7 +53,7 @@ On the other hand, [lean](https://en.wikipedia.org/wiki/Lean_software_developmen
 Ops should not be opposed to Devs. That is a fact, but why? 
 
 Because Ops are also developers. Actually Ops are developing their business. 
-In the era of "services everywhere" (XaaS), operational teams (as opposed to business team) must define contracts of services. Therefore they must develop the services to fulfill the contracts.
+In the era of "services everywhere" (XaaS), operational teams (as opposed to business team) must define contracts of services. Therefore, they must develop the services to fulfill the contracts.
 They are a business team; even if their business is not related to the core business of the company they are working for.
 
 Take a look at Amazon. AWS' core business is computer centric, but at the beginning it was only the "ops department" of a retailer.
@@ -66,7 +66,7 @@ At the present time, I am sub-contractor for a retail company. My job is to give
 
 Let me define the context of my job.
 I am working in a team whose goal is to expose IaaS based on public cloud offers. Among other services, we want to provide to our customers a service of file transfer.
-The transfer engine is an existing product. What we have deviced to do is to add a RESTful API in front of the engine (this is a shortcut for clarity).
+The transfer engine is an existing product. What we have decided to do is to add a RESTful API in front of the engine (this is a shortcut for clarity).
 
 The team is composed of 4 people (mainly ops). But only one of them really knows the transfer engine. Therefore he has been designed as the legitimate implementer of the web service.
 
