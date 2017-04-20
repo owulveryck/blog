@@ -2,219 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Wed Ui on Unladen swallow</title>
-    <link>https://blog.owulveryck.info/topics/wed-ui.xml</link>
+    <link>https://blog.owulveryck.info/topics/wed-ui.html</link>
     <description>Recent content in Wed Ui on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <atom:link href="https://blog.owulveryck.info/topics/wed-ui.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 19 Oct 2016 07:24:51 +0200</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/topics/wed-ui/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>SPA with Gopherjs</title>
-      <link>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs/index.html</link>
+      <link>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs/index.html.html</link>
       <pubDate>Wed, 19 Oct 2016 07:24:51 +0200</pubDate>
       
-      <guid>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs/index.html</guid>
-      <description>
-
-&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
-
-&lt;p&gt;Single page application (SPA) are a standard when dealing with mobile apps.
-Unfortunately, by now, JavaScript is the only programming language supported by a browser.&lt;/p&gt;
-
-&lt;p&gt;Therefore, to code web UI it remains a must.&lt;/p&gt;
-
-&lt;h2 id=&#34;life-of-an-ex-sysadmin-who-wants-to-code-a-web-app-getting-depressed&#34;&gt;Life of an ex sysadmin who wants to code a web app: getting depressed&lt;/h2&gt;
-
-&lt;p&gt;To make the development easier, your friend, who is &amp;ldquo;web developer&amp;rdquo; will recommend you to use a marvelous framework.
-Depending on the orientation of the wind, the moon or its reading, he will encourage you to use &lt;code&gt;reactjs&lt;/code&gt;, &lt;code&gt;angular&lt;/code&gt;, &lt;code&gt;ember&lt;/code&gt; or whatever exotic
-tool.&lt;/p&gt;
-
-&lt;p&gt;With some recommendation from my real friends and from Google, I&amp;rsquo;ve started an app based on &lt;a href=&#34;http://ionicframework.com/&#34;&gt;ionic&lt;/a&gt; which is based on &lt;a href=&#34;https://angularjs.org/&#34;&gt;angular&lt;/a&gt;.
-As I did not know anything about angular, I&amp;rsquo;ve watched a (very good) &lt;a href=&#34;https://www.youtube.com/watch?v=i9MHigUZKEM&#34;&gt;introduction&lt;/a&gt; and followed the ionic tutorial.&lt;/p&gt;
-
-&lt;p&gt;So far so good&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;Then I implemented a SSO with Facebook. I wrote a backend in &lt;code&gt;go&lt;/code&gt; to handle the token generation and the used database connection.
-I started to code it by hand, until a friend tells me about the angular module &lt;a href=&#34;https://github.com/sahat/satellizer&#34;&gt;Satellizer&lt;/a&gt; that was suppose to handle the logic for me.
-And it did&amp;hellip;. It was suddenly automagic:&lt;/p&gt;
-
-&lt;p&gt;Everything was working on my browser. I was happy, So I decided to deploy my app on my iPhone and enjoy the power of Cordova.&lt;/p&gt;
-
-&lt;p&gt;That&amp;rsquo;s when the headache started: There was something wrong on the mobile phone version. A bug!&lt;/p&gt;
-
-&lt;p&gt;I tried to debug it, with Xcode, with Safari&amp;hellip; The more I was searching, the more I had to dive into the framework. Too many magic in it for
-something that was, in fine, not a bug &lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a rel=&#34;footnote&#34; href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
-
-&lt;p&gt;I asked some help from a friend and his first reply was: &amp;ldquo;which version of angular? Because in version 2 they have changed a lot of concepts&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;That was too much.
-I considered that this world made of JavaScript, frameworks, grunt, bower, gulp, npm or whatever fancy tool was definitely not for me.
-Too many work to learn something already outdated.&lt;/p&gt;
-
-&lt;p&gt;On top of that, I&amp;rsquo;ve never been a callback man, I hate them since my X11/Motif programming course. I do like CSP!&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://blog.owulveryck.info/assets/images/not_my_type.png&#34; alt=&#34;Matt Holt&#39;s Tweet&#34; /&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;out-of-the-depression&#34;&gt;Out of the depression!&lt;/h2&gt;
-
-&lt;p&gt;Ok, I abandoned those tools. But I still want to code my app, and I&amp;rsquo;m not the kind of guy that easily give up.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s resume my needs:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;I need a MVC, because it&amp;rsquo;s the most natural way to code web ui today&lt;/li&gt;
-&lt;li&gt;MVC is not framework dependent&lt;/li&gt;
-&lt;li&gt;A SPA is the good choice for a mobile app and Cordova makes things easy&lt;/li&gt;
-&lt;li&gt;Javascript is mandatory&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I&amp;rsquo;ve digge a little bit and I&amp;rsquo;ve found this blog post: &lt;a href=&#34;https://mmikowski.github.io/no-frameworks/&#34;&gt;Do you really want an SPA framework?&lt;/a&gt; which leads me to &amp;ldquo;the solution&amp;rdquo;:&lt;/p&gt;
-
-&lt;p&gt;I will code my model/view/controller from scratch.
-But as I want to preserve my health and stay away from Javacript, I will code it with something fun: go.&lt;/p&gt;
-
-&lt;p&gt;At the last doGo.eu &lt;a href=&#34;https://twitter.com/shurcool&#34;&gt;Dmitri Shuralyov&lt;/a&gt; gave a very good introduction about &lt;a href=&#34;https://github.com/gopherjs/gopherjs&#34;&gt;gopherjs&lt;/a&gt;. Gopherjs is a &lt;a href=&#34;https://en.wikipedia.org/wiki/Source-to-source_compiler&#34;&gt;transpiler&lt;/a&gt; that converts go code into javascript.&lt;/p&gt;
-
-&lt;p&gt;You can code all your logic in go and transpile it in javascript, or you can use is to access you DOM or other javascript libraries.&lt;/p&gt;
-
-&lt;p&gt;A bunch of bindings to famous javascript libraries such as jQuery already exists on gihtub,&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s see an example and implement a very basic routing mechanism relying on a pure js library.&lt;/p&gt;
-
-&lt;h1 id=&#34;examples&#34;&gt;Examples&lt;/h1&gt;
-
-&lt;p&gt;I will code a little page based on bootstrap.&lt;/p&gt;
-
-&lt;h2 id=&#34;a-basic-go-code&#34;&gt;A basic go code&lt;/h2&gt;
-
-&lt;p&gt;The dynamic part will be coded in pure GO in a file called &lt;code&gt;main.go&lt;/code&gt; and transpiled into javscript code with the help of the &lt;code&gt;gopherjs&lt;/code&gt; command:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;gopherjs build main.go -o js/app.js -m
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To make things easier, I can add some directives in my go code in the form of a comment:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-//go:generate gopherjs build main.go -o js/app.js -m
-// +build ignore
-
-import (
-  &amp;quot;log&amp;quot;
-)
-
-func main() {
-    log.Println(&amp;quot;Hello World&amp;quot;)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Therefore I will be able to generate my code directly with a simple call to &lt;code&gt;go generate&lt;/code&gt; and it will produce the &lt;code&gt;js/app.js&lt;/code&gt; file for me.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-page&#34;&gt;The page&lt;/h2&gt;
-
-&lt;p&gt;The structure of the main page is taken from bootstrap&amp;rsquo;s &lt;a href=&#34;http://getbootstrap.com/examples/starter-template/#&#34;&gt;starter template&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;I simply add my javascript file generated with gopherjs :&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;script src=&amp;quot;js/app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;If I launch my page, I will have a &amp;ldquo;hello world&amp;rdquo; written in the javascript browser of my console.&lt;/p&gt;
-
-&lt;h1 id=&#34;the-spa&#34;&gt;the SPA&lt;/h1&gt;
-
-&lt;p&gt;Now, I will implement a very basic SPA.
-It will display three tabs accessible by their names (for demo purpose):&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/#&#34;&gt;/#&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/#about&#34;&gt;/#about&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.owulveryck.info/#contact&#34;&gt;/#contact&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I want to trigger a javascript code that could change the content of the body by clicking on the links.&lt;/p&gt;
-
-&lt;h2 id=&#34;routing&#34;&gt;Routing&lt;/h2&gt;
-
-&lt;p&gt;A good SPA needs a good routing system to deal with anchor refs.&lt;/p&gt;
-
-&lt;p&gt;There are several implementation of gopherjs based routing mechanism.&lt;/p&gt;
-
-&lt;p&gt;But, for the purpose of this blog post, I will use a pure Javascript routing library: &lt;a href=&#34;https://github.com/flatiron/director#routing-table&#34;&gt;Director.js&lt;/a&gt;. It&amp;rsquo;s the router used in the todoMVC example and it will allow me to show how to interact with global javascript objects.&lt;/p&gt;
-
-&lt;p&gt;The first thing to do is to include the js file at the end of the &lt;code&gt;index.html&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;script src=&amp;quot;js/director.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;script src=&amp;quot;js/app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then I will create a GO type &lt;em&gt;Router&lt;/em&gt; that will correspond to the Router objet in javascript.
-To do so, the Router type must be a &lt;a href=&#34;https://godoc.org/github.com/gopherjs/gopherjs/js#Object&#34;&gt;*js.Object&lt;/a&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;import &amp;quot;github.com/gopherjs/gopherjs/js&amp;quot;
-
-type Router struct {
-    *js.Object
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then I define a constructor, that simply get the router object from the global scope of the javascript engine:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func NewRouter() *Router {
-    return &amp;amp;Router{js.Global.Get(&amp;quot;Router&amp;quot;).New()}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then, to actually implement my &lt;a href=&#34;https://github.com/flatiron/director#adhoc-routing&#34;&gt;adhoc-routing&lt;/a&gt; as described in the doc of director.js,
-I must implement the &lt;code&gt;on&lt;/code&gt; and the &lt;code&gt;init&lt;/code&gt; bindings.&lt;/p&gt;
-
-&lt;p&gt;Once done, I add the routes in my &lt;code&gt;main&lt;/code&gt; func:&lt;/p&gt;
-
-&lt;script src=&#34;//gist.github.com/owulveryck/3256d582ad2241eeeaf118d5bf9c1cd0.js?file=router.go&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;If I launch the page, I can now click on the links and it will diplay hello in my console.&lt;/p&gt;
-
-&lt;p&gt;You can check the full code on &lt;a href=&#34;https://gist.github.com/owulveryck/3256d582ad2241eeeaf118d5bf9c1cd0&#34;&gt;this gist&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;You see that I&amp;rsquo;ve let the function as &lt;code&gt;notImplementedYet&lt;/code&gt;, but replacing it with a jQuery call is trivial:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;import &amp;quot;github.com/gopherjs/jquery&amp;quot;
-
-//convenience:
-var jQuery = jquery.NewJQuery
-
-func content() {
-    jQuery(&amp;quot;#main&amp;quot;).SetText(&amp;quot;Welcome to GopherJS&amp;quot;)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;Gopherjs is not trivial, but it has the ability to make the web development more structured.
-I&amp;rsquo;ve started a web ui from scratch and reach the same goal as the one I reached in javacript in only 2 days (compared to 3 weeks).&lt;/p&gt;
-
-&lt;p&gt;Of course, a javascript-master-of-the-world would argue that he would implement it in 2 hours, but that&amp;rsquo;s not the point here.
-The point is that I can use all the &amp;ldquo;benefits&amp;rdquo; of the go principles easily to write a web ui.&lt;/p&gt;
-
-&lt;p&gt;You can check the development of the &lt;a href=&#34;https://github.com/nhite/frontend&#34;&gt;Nhite fronted&lt;/a&gt; to watch the progress I will make (or not) with this technology.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;1 - Actually, I figured out what the &amp;ldquo;bug&amp;rdquo; was later, when I finished the implementation in go and there was no magic anymore in the code.
-The oauth2 flow I use is &amp;ldquo;&lt;a href=&#34;https://tools.ietf.org/html/rfc6749#section-1.3.1&#34;&gt;Authorization code&lt;/a&gt;&amp;rdquo;. In this flow, you query the authorization server (here facebook) and send it the client identifier and &lt;em&gt;a redirection URI&lt;/em&gt;.
-In my dev environment this redirection URI is set to &amp;ldquo;&lt;a href=&#34;http://localhost&amp;quot;&#34;&gt;http://localhost&amp;quot;&lt;/a&gt;. Once the user is logged in (on the Facebook page), the navigation window redirects him in the application at localhost.
-When running on iOS with &lt;em&gt;cordova&lt;/em&gt; the files are served locally (file://,,,) and there is no way to specify a redirect URI that point to file://, therefore the redirect URI must point somewhere else&amp;hellip; but in this case, getting the code from the application becomes tricky because of the security policies. I could do a complete blog post about this.&lt;/p&gt;
-&lt;div class=&#34;footnotes&#34;&gt;
-
-&lt;hr /&gt;
-
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt; &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:1&#34;&gt;&lt;sup&gt;[return]&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</description>
+      <guid>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs/index.html.html</guid>
+      <description>Introduction Single page application (SPA) are a standard when dealing with mobile apps. Unfortunately, by now, JavaScript is the only programming language supported by a browser.
+Therefore, to code web UI it remains a must.
+Life of an ex sysadmin who wants to code a web app: getting depressed To make the development easier, your friend, who is &amp;ldquo;web developer&amp;rdquo; will recommend you to use a marvelous framework. Depending on the orientation of the wind, the moon or its reading, he will encourage you to use reactjs, angular, ember or whatever exotic tool.</description>
     </item>
     
   </channel>

@@ -2,165 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Udt on Unladen swallow</title>
-    <link>https://blog.owulveryck.info/topics/udt.xml</link>
+    <link>https://blog.owulveryck.info/topics/udt.html</link>
     <description>Recent content in Udt on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <atom:link href="https://blog.owulveryck.info/topics/udt.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 17 Oct 2016 20:50:18 +0200</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/topics/udt/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>HTTP over UDT for inter-region file transfer</title>
-      <link>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer/index.html</link>
+      <link>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer/index.html.html</link>
       <pubDate>Mon, 17 Oct 2016 20:50:18 +0200</pubDate>
       
-      <guid>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer/index.html</guid>
-      <description>
-
-&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
-
-&lt;p&gt;Transferring files between server is no big deal with nowadays network equipments.
-You use &lt;code&gt;rsync&lt;/code&gt;, &lt;code&gt;scp&lt;/code&gt; or even &lt;code&gt;http&lt;/code&gt; to get a file from A to B.&lt;/p&gt;
-
-&lt;p&gt;Of course, you rely on the TCP stack so you have a decent reliability in the transport.&lt;/p&gt;
-
-&lt;p&gt;But TCP has its drawback, especially when it needs to go through a lot of equipments. Typically in the cloud, or over a VPN.&lt;/p&gt;
-
-&lt;p&gt;To prevent the drawbacks of the TCP protocol, there are several solutions:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Use UDP, but UDP by itself is not &amp;ldquo;reliable&amp;rdquo;&lt;/li&gt;
-&lt;li&gt;Develop another layer 4 protocol, but it cannot be done in a pure user space. You need to develop a system driver. It cannot be easily done on a large scale.&lt;/li&gt;
-&lt;li&gt;Use UDP and another framework on top of UDP.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;layer-4-udp&#34;&gt;Layer 4: UDP?&lt;/h2&gt;
-
-&lt;p&gt;Yes, UDP, but with an &amp;ldquo;extra&amp;rdquo; layer. I&amp;rsquo;ve had the opportunity to try three of them.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Quic by Google&lt;/li&gt;
-&lt;li&gt;FASP by ASPERA&lt;/li&gt;
-&lt;li&gt;UDT by Dr GU.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;quic&#34;&gt;Quic&lt;/h3&gt;
-
-&lt;p&gt;First Google, along with its &lt;a href=&#34;https://en.wikipedia.org/wiki/QUIC&#34;&gt;quic&lt;/a&gt; protocol, tries to enhance the user experience. Actually, a quic implementation is already present in chrome and within google web servers. I&amp;rsquo;ve heard about quic at the &lt;a href=&#34;https://dotgo.eu&#34;&gt;dotGo&lt;/a&gt;; &lt;a href=&#34;https://github.com/lucas-clemente&#34;&gt;Lucas Clemente&lt;/a&gt; has presented its work in progress of a quic implementation in GO.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve tried it, but it lacks a client part by now, and the &lt;a href=&#34;https://www.chromium.org/quic/playing-with-quic&#34;&gt;quic tools&lt;/a&gt; from chromium are far from being usable in a production environment.&lt;/p&gt;
-
-&lt;h3 id=&#34;aspera-s-fasp&#34;&gt;Aspera&amp;rsquo;s FASP&lt;/h3&gt;
-
-&lt;p&gt;Aspera has its own protocol. It is based on UDP. I&amp;rsquo;ve seen it running, and yes, it simply works!
-The problem is that it is not open source and a bit expensive.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-udt-protocol&#34;&gt;The UDT protocol&lt;/h3&gt;
-
-&lt;p&gt;The UDT protocol is described by ASPERA as its main competitor &lt;a href=&#34;http://asperasoft.com/fileadmin/media/Asperasoft.com/Resources/White_Papers/fasp_Critical_Technology_Comparison_AsperaWP.pdf&#34;&gt;here&lt;/a&gt;.
-It&amp;rsquo;s open source and worth the try.
-It&amp;rsquo;s the one I will use for my tests.
-The code is distributed as a C++ library, but it exists GO bindings.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-layer-7-http&#34;&gt;The Layer 7: HTTP&lt;/h2&gt;
-
-&lt;p&gt;To actually transfer a file, I can use the &lt;code&gt;udtcat&lt;/code&gt; tool provided in the github of go-udtwrapper.
-It is ok for a test, but I won&amp;rsquo;t be able to serve multiple files, to resume a transfer etc&amp;hellip; So I need a layer 7 protocol.
-HTTP is, according to me, a good choice.&lt;/p&gt;
-
-&lt;h1 id=&#34;the-implementation-in-go&#34;&gt;The implementation in GO&lt;/h1&gt;
-
-&lt;p&gt;Implementing a simple client/server http-over-udt in go is relatively easy. The HTTP is interfaced in a way that the transport can be easily changed.
-Therefore, no need to reimplement a complete HTTP stack; GO has all I need in its standard library.&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://blog.owulveryck.info/assets/images/save-princess-go.jpg&#34; alt=&#34;/assets/images/save-princess-go.jpg&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://toggl.com/programming-princess&#34;&gt;https://toggl.com/programming-princess&lt;/a&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;I will use this fork of &lt;a href=&#34;github.com/Lupus/go-udtwrapper&#34;&gt;go-udtwrapper&lt;/a&gt; which seems to be the most up-to-date.&lt;/p&gt;
-
-&lt;h2 id=&#34;the-server&#34;&gt;The server&lt;/h2&gt;
-
-&lt;p&gt;Implementing a basic http server over UDT is very easy.&lt;/p&gt;
-
-&lt;p&gt;The &lt;a href=&#34;https://golang.org/pkg/net/http/#Serve&#34;&gt;Serve function&lt;/a&gt; from the http package takes a &lt;code&gt;net.Listener&lt;/code&gt; as argument.
-The &lt;code&gt;udt.Listen&lt;/code&gt; function implements the &lt;a href=&#34;https://golang.org/pkg/net/#Listener&#34;&gt;net.Listener&lt;/a&gt; interface.&lt;/p&gt;
-
-&lt;p&gt;Therefore we can simply use this code to serve HTTP content via the DefaultMuxer over udt:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;ln, _ := udt.Listen(&amp;quot;udt&amp;quot;, config.Addr)
-http.Serve(ln, nil)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;A full implementation that serves local file is simply done by:&lt;/p&gt;
-
-&lt;script src=&#34;//gist.github.com/owulveryck/6a44885c2b3527159f496c21071ab8df.js?file=server.go&#34;&gt;&lt;/script&gt;
-
-&lt;h2 id=&#34;the-client&#34;&gt;The client&lt;/h2&gt;
-
-&lt;p&gt;The &lt;code&gt;http.Client&lt;/code&gt;&amp;rsquo;s DefautTransport relies on TCP.
-Therefore we must completely rewrite a Transport to use UDT.&lt;/p&gt;
-
-&lt;p&gt;The Transport entry of the Client implements the RoundTripper interface.&lt;/p&gt;
-
-&lt;p&gt;The key point is to write a client transport for UDT that implements the RoundTripper interface.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-http-roundtripper-interface&#34;&gt;The http.RoundTripper interface&lt;/h3&gt;
-
-&lt;p&gt;Here is an example of an implementation:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// UdtClient implements the http.RoundTripper interface
-type udtClient struct{}
-
-func (c udtClient) RoundTrip(r *http.Request) (*http.Response, error) {
-      d := udt.Dialer{}
-      conn, err := d.Dial(&amp;quot;udt&amp;quot;, r.URL.Host)
-      if err != nil {
-          return nil, err
-      }
-      err = r.Write(conn)
-      if err != nil {
-          return nil, err
-      }
-      return http.ReadResponse(bufio.NewReader(conn), r)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;the-full-client-code&#34;&gt;The full client code&lt;/h3&gt;
-
-&lt;p&gt;A simple client that will perform a GET operation on our server would be:&lt;/p&gt;
-
-&lt;script src=&#34;//gist.github.com/owulveryck/6a44885c2b3527159f496c21071ab8df.js?file=client.go&#34;&gt;&lt;/script&gt;
-
-&lt;h3 id=&#34;building-the-tools&#34;&gt;Building the tools&lt;/h3&gt;
-
-&lt;p&gt;As we rely on CGO, to do a static compilation, we must use the extra flags: &lt;code&gt;go build --ldflags &#39;-extldflags &amp;quot;-static&amp;quot;&#39;&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;This is a very basic implementation of http over UDT.
-I have developed a more complete tool for my client, but it cannot be published in open source.&lt;/p&gt;
-
-&lt;p&gt;Among the things that I have done there are:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Gzip compression&lt;/li&gt;
-&lt;li&gt;Partial content for resuming a broken download (with http.ServeContent)&lt;/li&gt;
-&lt;li&gt;SHA256 checking at the end of the transport&lt;/li&gt;
-&lt;li&gt;an HTTP middleware (Rest API) to query the transfer states, rates and efficiency via the PerfMon interface&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;What&amp;rsquo;s not done yet:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;TLS and mutual authentication&lt;/li&gt;
-&lt;li&gt;good benchmarks to actually measure the performances of UDT.&lt;/li&gt;
-&lt;li&gt;Downloading chunks to optimize the speed of transfer and the bandwith usage&lt;/li&gt;
-&lt;li&gt;maybe a POST method to upload a file in multipart&lt;/li&gt;
-&lt;/ul&gt;
-</description>
+      <guid>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer/index.html.html</guid>
+      <description>Introduction Transferring files between server is no big deal with nowadays network equipments. You use rsync, scp or even http to get a file from A to B.
+Of course, you rely on the TCP stack so you have a decent reliability in the transport.
+But TCP has its drawback, especially when it needs to go through a lot of equipments. Typically in the cloud, or over a VPN.</description>
     </item>
     
   </channel>

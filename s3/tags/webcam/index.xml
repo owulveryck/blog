@@ -2,169 +2,28 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Webcam on Unladen swallow</title>
-    <link>https://blog.owulveryck.info/tags/webcam.xml</link>
+    <link>https://blog.owulveryck.info/tags/webcam.html</link>
     <description>Recent content in Webcam on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <atom:link href="https://blog.owulveryck.info/tags/webcam.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 16 Dec 2016 14:51:18 +0100</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/webcam/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Image reKognition with a webcam, go and AWS.</title>
-      <link>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html</link>
+      <link>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html.html</link>
       <pubDate>Fri, 16 Dec 2016 14:51:18 +0100</pubDate>
       
-      <guid>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html</guid>
-      <description>
-
-&lt;p&gt;It&amp;rsquo;s been a while since I last posted something. I will fill the gap with a quick post about &lt;em&gt;rekognition&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://aws.amazon.com/rekognition/?nc1=h_ls&#34;&gt;rekognition&lt;/a&gt; is a service from AWS that is described as:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Deep learning-based image recognition&lt;/p&gt;
-
-&lt;p&gt;Search, verify, and organize millions of images&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;In this light post, I will present a simple method to grab a picture from my webcam, send it to rekognition and display the result.&lt;/p&gt;
-
-&lt;p&gt;The part of the result I will focus on is the emotion. In other word, I will ask amazon: &amp;ldquo;An I happy?&amp;rdquo;.&lt;/p&gt;
-
-&lt;h1 id=&#34;getting-the-picture-from-the-webcam&#34;&gt;Getting the picture from the webcam&lt;/h1&gt;
-
-&lt;p&gt;I am using the package &lt;a href=&#34;github.com/blackjack/webcam&#34;&gt;github.com/blackjack/webcam&lt;/a&gt; to grab the picture.&lt;/p&gt;
-
-&lt;h2 id=&#34;capabilities-of-the-webcam-and-image-format&#34;&gt;Capabilities of the webcam and image format&lt;/h2&gt;
-
-&lt;p&gt;My webcam is handling the MJPEG format.
-Therefore, after the creation of a &lt;em&gt;cam&lt;/em&gt; object and set the correct settings to grab mjpeg, I can read a frame in JPEG:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// ...
-cam, err := webcam.Open(&amp;quot;/dev/video0&amp;quot;) // Open webcam
-// ...
-// Setting the format:
-_,_,_, err := cam.SetImageFormat(format, uint32(size.MaxWidth), uint32(size.MaxHeight))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;format&lt;/code&gt; is of type &lt;code&gt;uint32&lt;/code&gt; and computable thanks to the informations present in &lt;a href=&#34;http://lxr.free-electrons.com/source/include/uapi/linux/videodev2.h&#34;&gt;/usr/include/linux/videodev2.h&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;MJPEG is: 1196444237&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: To be honest, I did not evaluate the FOURCC method; I have requested the supported format of my webcam with their descriptions :)&lt;/p&gt;
-
-&lt;h2 id=&#34;grabbing-the-picture&#34;&gt;Grabbing the picture&lt;/h2&gt;
-
-&lt;p&gt;In a endless &lt;code&gt;for&lt;/code&gt; loop, a frame is read with a call to &lt;code&gt;ReadFrame&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;for {
-    timeout := uint32(5) //5 seconds
-    err = cam.WaitForFrame(timeout)
-    frame, err := cam.ReadFrame()
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;aws&#34;&gt;AWS&lt;/h1&gt;
-
-&lt;p&gt;The API to import to use the service is &lt;code&gt;github.com/aws/aws-sdk-go/service/rekognition&lt;/code&gt; and is documented here: &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/&#34;&gt;http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The operation that I am using to detect the emotion is &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/#Rekognition.DetectFaces&#34;&gt;DetectFaces&lt;/a&gt; that takes an pointer to &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/#DetectFacesInput&#34;&gt;DetectFacesInput&lt;/a&gt; with is composed of a pointer to an &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/#Image&#34;&gt;Image&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;creating-the-input&#34;&gt;Creating the input&lt;/h2&gt;
-
-&lt;p&gt;The first thing that needs to be created is the &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/#Image&#34;&gt;Image&lt;/a&gt; object from our &lt;code&gt;frame&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;if len(frame) != 0 {
-    image := &amp;amp;rekognition.Image{ // Required
-        Bytes: frame,
-    }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then we create the DetectFacesInput:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;params := &amp;amp;rekognition.DetectFacesInput{
-        Image: image,
-        Attributes: []*string{
-                aws.String(&amp;quot;ALL&amp;quot;), 
-        },
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &lt;code&gt;ALL&lt;/code&gt; attributes is present, otherwise AWS does not return the complete description of what it has found.&lt;/p&gt;
-
-&lt;h2 id=&#34;sending-the-query&#34;&gt;Sending the query&lt;/h2&gt;
-
-&lt;h3 id=&#34;pricing-notice-and-warning&#34;&gt;Pricing notice and &lt;strong&gt;warning&lt;/strong&gt;&lt;/h3&gt;
-
-&lt;p&gt;The price of the service as of today is 1 dollar per 1000 request. That sounds cheap, but at 25 FPS, this may cost a lot.
-Therefore, I have set up a read request that only process a picture if we press &lt;em&gt;enter&lt;/em&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;bufio.NewReader(os.Stdin).ReadBytes(&#39;\n&#39;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;session&#34;&gt;Session&lt;/h3&gt;
-
-&lt;p&gt;As usual, to query AWS we need to create a session:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;var err error
-sess, err = session.NewSession(&amp;amp;aws.Config{Region: aws.String(&amp;quot;us-east-1&amp;quot;)})
-if err != nil {
-    fmt.Println(&amp;quot;failed to create session,&amp;quot;, err)
-    return
-}
-svc = rekognition.New(sess)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;em&gt;Note&lt;/em&gt;: The &lt;code&gt;session&lt;/code&gt; library will take care of connections informations such as environment variables like:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;AWS_ACCESS_KEY_ID&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;AWS_SECRET_ ACCESS_KEY_ID&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;query-and-result&#34;&gt;Query and result&lt;/h3&gt;
-
-&lt;p&gt;Simply send the query&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;esp, err := svc.DetectFaces(params)
-
-if err != nil {
-        fmt.Println(err.Error())
-        return
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The result is of type &lt;a href=&#34;http://docs.aws.amazon.com/sdk-for-go/api/service/rekognition/#DetectFacesOutput&#34;&gt;DetectFacesOutput&lt;/a&gt;.
-This type is composed of a array of FaceDetails because obviously there can me more than one person per image.
-So we will loop and display the emotion for each face detected:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;for i, fd := range resp.FaceDetails {
-        fmt.Printf(&amp;quot;The person %v is &amp;quot;, i)
-        for _, e := range fd.Emotions {
-                fmt.Printf(&amp;quot;%v, &amp;quot;, *e.Type)
-        }
-        fmt.Printf(&amp;quot;\n&amp;quot;)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;run&#34;&gt;Run:&lt;/h1&gt;
-
-&lt;pre&gt;
-Resulting image format: MJPEG (320x240)
-Press enter to process 
-The person 0 is HAPPY, CONFUSED, CALM, 
-&lt;/pre&gt;
-
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
-
-&lt;p&gt;That&amp;rsquo;s all folks. The full code can be found &lt;a href=&#34;https://gist.github.com/owulveryck/33753125afa6284cd5dbbb1bd4d1eb54&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;In the test I made, I was always happy. I&amp;rsquo;ve tried to be angry or sad, without success&amp;hellip; Maybe I have a happy face.
-I should try with someone else maybe.&lt;/p&gt;
-
-&lt;p&gt;The service is nice and opens the door to a lot of applications:
-For example to monitor my home and sends an alert if someone is in my place and &lt;strong&gt;not from my family&lt;/strong&gt; (or not the cat :).&lt;/p&gt;
-</description>
+      <guid>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html.html</guid>
+      <description>It&amp;rsquo;s been a while since I last posted something. I will fill the gap with a quick post about rekognition.
+rekognition is a service from AWS that is described as:
+ Deep learning-based image recognition
+Search, verify, and organize millions of images
+ In this light post, I will present a simple method to grab a picture from my webcam, send it to rekognition and display the result.
+The part of the result I will focus on is the emotion.</description>
     </item>
     
   </channel>

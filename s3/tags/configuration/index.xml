@@ -2,130 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Configuration on Unladen swallow</title>
-    <link>https://blog.owulveryck.info/tags/configuration.xml</link>
+    <link>https://blog.owulveryck.info/tags/configuration.html</link>
     <description>Recent content in Configuration on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <atom:link href="https://blog.owulveryck.info/tags/configuration.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 26 Oct 2015 10:41:57 +0000</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/configuration/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Developping &#34;Google Apps&#34; on my Chromebook</title>
-      <link>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</link>
+      <link>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html.html</link>
       <pubDate>Mon, 26 Oct 2015 10:41:57 +0000</pubDate>
       
-      <guid>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</guid>
-      <description>
-
-&lt;p&gt;It is a week now that I&amp;rsquo;m playing with my chromebook.
-I really enjoy this little internet Terminal.&lt;/p&gt;
-
-&lt;p&gt;I &amp;ldquo;geeked&amp;rdquo; it a little bit and I installed my favorites dev tools eg:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://gist.github.com/johnbender/5018685&#34;&gt;The solarized theme for the terminal&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;zsh&lt;/code&gt; with &lt;a href=&#34;https://github.com/robbyrussell/oh-my-zsh&#34;&gt;Oh-my-zsh&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;tmux&lt;/code&gt; (stared with &lt;code&gt;tmux -2&lt;/code&gt; to get 256 colors)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;git&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;vim&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;a &lt;code&gt;Go&lt;/code&gt; compiler&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&#34;http://gohugo.io/overview/quickstart/&#34;&gt;&lt;code&gt;HUGO&lt;/code&gt;&lt;/a&gt; tool to write this blog.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;All of it has been installed thanks to the &amp;ldquo;brew&amp;rdquo; package manager and following &lt;a href=&#34;https://github.com/Homebrew/linuxbrew/wiki/Chromebook-Install-Instructions&#34;&gt;those instructions&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;google-development-environment&#34;&gt;Google Development Environment&lt;/h2&gt;
-
-&lt;p&gt;I&amp;rsquo;ve installed the Google Development Environement as described &lt;a href=&#34;https://cloud.google.com/appengine/docs/go/gettingstarted/devenvironment&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Python 2.7 is a requirements so I &lt;code&gt;brewed it&lt;/code&gt; without any noticeable issue.&lt;/p&gt;
-
-&lt;p&gt;When I wanted to serve locally my very first Google App developement, I ran into the following error:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~ go app serve $GOPATH/src/myapp
-...
-ImportError: No module named _sqlite3
-error while running dev_appserver.py: exit status 1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Too bad. I&amp;rsquo;ve read that this module should be built with python, but a even a &lt;code&gt;find /&lt;/code&gt; (I know it&amp;rsquo;s evil) didn&amp;rsquo;t return me any occurence.&lt;/p&gt;
-
-&lt;p&gt;So, I have:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Googled&lt;/li&gt;
-&lt;li&gt;reinstalled sqlite with &lt;code&gt;brew reinstall sqlite&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;reinstalled python with &lt;code&gt;brew reinstall python&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;played with brew link, unlink and so&lt;/li&gt;
-&lt;li&gt;&amp;hellip;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Still no luck!&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve also tried the compilation with a &lt;code&gt;verbose&lt;/code&gt; option, and I the log file, there is an explicit message:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Python build finished, but the necessary bits to build these modules were not found:
-_bsddb  _sqlite3_tkinter
-...
-To find the necessary bits, look in setup.py in detect_modules() for the modules name.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;That&amp;rsquo;s where I am now, stuck with a stupid python error. I&amp;rsquo;d like the folks at google to provide a pure go developement enrironement that would avoid the bootstraping problems.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ll post an update as soon as I have solved this issue !&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;EDIT&lt;/em&gt;:&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve had a look in the &lt;code&gt;setup.py&lt;/code&gt; file. To compile the sqlite extension, it looks into the following paths:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;...
-sqlite_incdir = sqlite_libdir = None
-sqlite_inc_paths = [ &#39;/usr/include&#39;,
-                     &#39;/usr/include/sqlite&#39;,
-                     &#39;/usr/include/sqlite3&#39;,
-                     &#39;/usr/local/include&#39;,
-                     &#39;/usr/local/include/sqlite&#39;,
-                     &#39;/usr/local/include/sqlite3&#39;,
-                   ]
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;But in my configuration, the libraries are present in &lt;code&gt;/usr/local/linuxbrew/*&lt;/code&gt;. Hence, simply linking the include and libs did the trick&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;m now facing another error when I try to run the &lt;code&gt;goapp serve&lt;/code&gt; command:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;...
-AttributeError: &#39;module&#39; object has no attribute &#39;poll&#39;
-error while running dev_appserver.py: exit status 1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Google told me, that on OSX the poll system call is broken and has been disabled.
-As brew is mainly developped on MacOS, that may be the reason&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve recompiled the python with the &lt;code&gt;--with-poll&lt;/code&gt; option and that did the trick.&lt;/p&gt;
-
-&lt;h2 id=&#34;finally&#34;&gt;Finally&lt;/h2&gt;
-
-&lt;p&gt;Here are my options for compiling python:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~ brew reinstall python --with-brewed-openssl --with-brewed-sqlite --with-poll 
-...
-Warning: The given option --with-poll enables a somewhat broken poll() on OS X (https://bugs.python.org/issue5154)  Formula git:(master)).
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And the &lt;code&gt;goapp serve&lt;/code&gt; is finally working on my Chromebook:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~ goapp serve /home/chronos/user/GOPROJECTS/src/github.com/owulveryck/google-app-example/
-INFO     2015-10-26 15:48:04,840 devappserver2.py:763] Skipping SDK update check.
-INFO     2015-10-26 15:48:04,935 api_server.py:205] Starting API server at: http://localhost:54116
-INFO     2015-10-26 15:48:06,092 dispatcher.py:197] Starting module &amp;quot;default&amp;quot; running at: http://localhost:8080
-INFO     2015-10-26 15:48:06,096 admin_server.py:116] Starting admin server at: http://localhost:8000
-INFO     2015-10-26 15:48:16,700 shutdown.py:45] Shutting down.
-INFO     2015-10-26 15:48:16,701 api_server.py:648] Applying all pending transactions and saving the datastore
-INFO     2015-10-26 15:48:16,701 api_server.py:651] Saving search indexes
-&lt;/code&gt;&lt;/pre&gt;
-</description>
+      <guid>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html.html</guid>
+      <description>It is a week now that I&amp;rsquo;m playing with my chromebook. I really enjoy this little internet Terminal.
+I &amp;ldquo;geeked&amp;rdquo; it a little bit and I installed my favorites dev tools eg:
+ The solarized theme for the terminal zsh with Oh-my-zsh tmux (stared with tmux -2 to get 256 colors) git vim a Go compiler The HUGO tool to write this blog.  All of it has been installed thanks to the &amp;ldquo;brew&amp;rdquo; package manager and following those instructions.</description>
     </item>
     
   </channel>
