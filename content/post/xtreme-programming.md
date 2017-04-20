@@ -142,9 +142,9 @@ Because we were proud of what we did, and this provided welfare
 And probably many other things I cannot list in a single blog post.
 # Conclusion
 
-I the sprint review meeting, of course my own goals were not reached (The goals of my own project). I have passed too many times to work with my colleague to make my complete my own tasks.
+In the sprint review meeting, of course my own goals were not reached (The goals of my own project). I have passed too many times to work with my colleague to complete my own tasks.
 
-My "product" was enhanced of 2% instead of 5%, but the other product, the one developed in pair, has increased by 30%. On the average, the quality of the whole service provided by the team made a grater gap.
+My "product" was enhanced of 2% instead of 5%, but the other product, the one developed in pair, has increased by 30%. On the average, the quality of the whole service provided by the team made a greater gap.
 Moreover we were both *proud* of what we accomplished. The code was clean, documented and tested. The product owner was very pleased of that.
 
 * Learning was amplified
