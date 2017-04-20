@@ -129,7 +129,7 @@ Yes!
 
 Because we are doing pair-programming. 
 
-Because by using scrum, we did use the planing poker. 
+Because by using scrum, we used the planning poker. 
 
 Because we are extremely testing our app.  
 
