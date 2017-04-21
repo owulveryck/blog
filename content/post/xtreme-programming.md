@@ -31,7 +31,7 @@ He explained that we should work in pairs. He told us that we should test every 
 
 {{< figure src="https://imgs.xkcd.com/comics/mobile_marketing.png" link="https://xkcd.com/1327/" caption="" >}}
 
-<small>_Note:_ I intentionally put this XKCD as a reminder that a "good idea" is an abstract concept. Therefore, I insist on the fact the this blog reflects my own opinion. Even if I remain sure that it was a good idea, maybe it was not :)</small>
+<small>_Note:_ I intentionally put this XKCD as a reminder that a "good idea" is an abstract concept. Therefore, I insist on the fact that this blog reflects my own opinion. Even if I remain sure that it was a good idea, maybe it was not :)</small>
 
 At the end of the project, when the [Deming wheel](https://en.wikipedia.org/wiki/PDCA) turned, I noticed that we were missing of agility.
 
@@ -53,7 +53,7 @@ On the other hand, [lean](https://en.wikipedia.org/wiki/Lean_software_developmen
 Ops should not be opposed to Devs. That is a fact, but why? 
 
 Because Ops are also developers. Actually Ops are developing their business. 
-In the era of "services everywhere" (XaaS), operational teams (as opposed to business team) must define contracts of services. Therefore they must develop the services to fulfill the contracts.
+In the era of "services everywhere" (XaaS), operational teams (as opposed to business team) must define contracts of services. Therefore, they must develop the services to fulfill the contracts.
 They are a business team; even if their business is not related to the core business of the company they are working for.
 
 Take a look at Amazon. AWS' core business is computer centric, but at the beginning it was only the "ops department" of a retailer.
@@ -66,11 +66,11 @@ At the present time, I am sub-contractor for a retail company. My job is to give
 
 Let me define the context of my job.
 I am working in a team whose goal is to expose IaaS based on public cloud offers. Among other services, we want to provide to our customers a service of file transfer.
-The transfer engine is an existing product. What we have deviced to do is to add a RESTful API in front of the engine (this is a shortcut for clarity).
+The transfer engine is an existing product. What we have decided to do is to add a RESTful API in front of the engine (this is a shortcut for clarity).
 
 The team is composed of 4 people (mainly ops). But only one of them really knows the transfer engine. Therefore he has been designed as the legitimate implementer of the web service.
 
-This person is my colleague [Alexandre](https://www.linkedin.com/in/alexandre-hisette-aa1076a/) from [Techsys](https://www.linkedin.com/company-beta/719121/). He is a certified system engineer. And best of all he is did not tell me _I am not a dev_.
+This person is my colleague [Alexandre](https://www.linkedin.com/in/alexandre-hisette-aa1076a/) from [Techsys](https://www.linkedin.com/company-beta/719121/). He is a certified system engineer. And best of all he did not tell me _I am not a dev_.
 
 Regarding my job, I was assigned to another project that was also involving API management.
 
@@ -129,7 +129,7 @@ Yes!
 
 Because we are doing pair-programming. 
 
-Because by using scrum, we did use the planing poker. 
+Because by using scrum, we used the planning poker. 
 
 Because we are extremely testing our app.  
 
@@ -142,9 +142,9 @@ Because we were proud of what we did, and this provided welfare
 And probably many other things I cannot list in a single blog post.
 # Conclusion
 
-I the sprint review meeting, of course my own goals were not reached (The goals of my own project). I have passed too many times to work with my colleague to make my complete my own tasks.
+In the sprint review meeting, of course my own goals were not reached (The goals of my own project). I have passed too many times to work with my colleague to complete my own tasks.
 
-My "product" was enhanced of 2% instead of 5%, but the other product, the one developed in pair, has increased by 30%. On the average, the quality of the whole service provided by the team made a grater gap.
+My "product" was enhanced of 2% instead of 5%, but the other product, the one developed in pair, has increased by 30%. On the average, the quality of the whole service provided by the team made a greater gap.
 Moreover we were both *proud* of what we accomplished. The code was clean, documented and tested. The product owner was very pleased of that.
 
 * Learning was amplified

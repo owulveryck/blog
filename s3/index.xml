@@ -44,7 +44,7 @@ We were a small team with light programming skills. A part of our job was to ope
 &lt;/figure&gt;
 
 
-&lt;p&gt;&lt;small&gt;&lt;em&gt;Note:&lt;/em&gt; I intentionally put this XKCD as a reminder that a &amp;ldquo;good idea&amp;rdquo; is an abstract concept. Therefore, I insist on the fact the this blog reflects my own opinion. Even if I remain sure that it was a good idea, maybe it was not :)&lt;/small&gt;&lt;/p&gt;
+&lt;p&gt;&lt;small&gt;&lt;em&gt;Note:&lt;/em&gt; I intentionally put this XKCD as a reminder that a &amp;ldquo;good idea&amp;rdquo; is an abstract concept. Therefore, I insist on the fact that this blog reflects my own opinion. Even if I remain sure that it was a good idea, maybe it was not :)&lt;/small&gt;&lt;/p&gt;
 
 &lt;p&gt;At the end of the project, when the &lt;a href=&#34;https://en.wikipedia.org/wiki/PDCA&#34;&gt;Deming wheel&lt;/a&gt; turned, I noticed that we were missing of agility.&lt;/p&gt;
 
@@ -66,7 +66,7 @@ But when it comes to agility, people are usually restricting it to an implementa
 &lt;p&gt;Ops should not be opposed to Devs. That is a fact, but why?&lt;/p&gt;
 
 &lt;p&gt;Because Ops are also developers. Actually Ops are developing their business.
-In the era of &amp;ldquo;services everywhere&amp;rdquo; (XaaS), operational teams (as opposed to business team) must define contracts of services. Therefore they must develop the services to fulfill the contracts.
+In the era of &amp;ldquo;services everywhere&amp;rdquo; (XaaS), operational teams (as opposed to business team) must define contracts of services. Therefore, they must develop the services to fulfill the contracts.
 They are a business team; even if their business is not related to the core business of the company they are working for.&lt;/p&gt;
 
 &lt;p&gt;Take a look at Amazon. AWS&amp;rsquo; core business is computer centric, but at the beginning it was only the &amp;ldquo;ops department&amp;rdquo; of a retailer.&lt;/p&gt;
@@ -79,11 +79,11 @@ They are a business team; even if their business is not related to the core busi
 
 &lt;p&gt;Let me define the context of my job.
 I am working in a team whose goal is to expose IaaS based on public cloud offers. Among other services, we want to provide to our customers a service of file transfer.
-The transfer engine is an existing product. What we have deviced to do is to add a RESTful API in front of the engine (this is a shortcut for clarity).&lt;/p&gt;
+The transfer engine is an existing product. What we have decided to do is to add a RESTful API in front of the engine (this is a shortcut for clarity).&lt;/p&gt;
 
 &lt;p&gt;The team is composed of 4 people (mainly ops). But only one of them really knows the transfer engine. Therefore he has been designed as the legitimate implementer of the web service.&lt;/p&gt;
 
-&lt;p&gt;This person is my colleague &lt;a href=&#34;https://www.linkedin.com/in/alexandre-hisette-aa1076a/&#34;&gt;Alexandre&lt;/a&gt; from &lt;a href=&#34;https://www.linkedin.com/company-beta/719121/&#34;&gt;Techsys&lt;/a&gt;. He is a certified system engineer. And best of all he is did not tell me &lt;em&gt;I am not a dev&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;This person is my colleague &lt;a href=&#34;https://www.linkedin.com/in/alexandre-hisette-aa1076a/&#34;&gt;Alexandre&lt;/a&gt; from &lt;a href=&#34;https://www.linkedin.com/company-beta/719121/&#34;&gt;Techsys&lt;/a&gt;. He is a certified system engineer. And best of all he did not tell me &lt;em&gt;I am not a dev&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;Regarding my job, I was assigned to another project that was also involving API management.&lt;/p&gt;
 
@@ -158,7 +158,7 @@ When he was busy with something else, I wrote some tests for him, and his job, w
 
 &lt;p&gt;Because we are doing pair-programming.&lt;/p&gt;
 
-&lt;p&gt;Because by using scrum, we did use the planing poker.&lt;/p&gt;
+&lt;p&gt;Because by using scrum, we used the planning poker.&lt;/p&gt;
 
 &lt;p&gt;Because we are extremely testing our app.&lt;/p&gt;
 
@@ -172,9 +172,9 @@ When he was busy with something else, I wrote some tests for him, and his job, w
 
 &lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
 
-&lt;p&gt;I the sprint review meeting, of course my own goals were not reached (The goals of my own project). I have passed too many times to work with my colleague to make my complete my own tasks.&lt;/p&gt;
+&lt;p&gt;In the sprint review meeting, of course my own goals were not reached (The goals of my own project). I have passed too many times to work with my colleague to complete my own tasks.&lt;/p&gt;
 
-&lt;p&gt;My &amp;ldquo;product&amp;rdquo; was enhanced of 2% instead of 5%, but the other product, the one developed in pair, has increased by 30%. On the average, the quality of the whole service provided by the team made a grater gap.
+&lt;p&gt;My &amp;ldquo;product&amp;rdquo; was enhanced of 2% instead of 5%, but the other product, the one developed in pair, has increased by 30%. On the average, the quality of the whole service provided by the team made a greater gap.
 Moreover we were both &lt;em&gt;proud&lt;/em&gt; of what we accomplished. The code was clean, documented and tested. The product owner was very pleased of that.&lt;/p&gt;
 
 &lt;ul&gt;
