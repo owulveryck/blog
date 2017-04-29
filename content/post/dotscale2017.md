@@ -51,7 +51,9 @@ Puis elle présente son produit [confluent](https://www.confluent.io/) qui est u
 
 Le produit semble intéressant, mais l'idée l'est plus encore: traiter un flux de données à tous les niveaux, de l'applicatif aux logs.
 
-En attendant la video de la conférence qui devrait se trouver sur [www.dotconferences.io/talks](www.dotconferences.com/talks), vous pouvez retrouver les slides [ici](https://speakerdeck.com/nehanarkhede/the-rise-of-real-time)
+En attendant la video de la conférence qui devrait se trouver sur [www.dotconferences.io/talks](www.dotconferences.com/talks).
+
+<script async class="speakerdeck-embed" data-id="b962268ed0724e7eb64d2d79c0c9fac2" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
 
 ## Adrian Cole - _Observability 3 ways / Logging, Metrics, Tracing_
 
@@ -68,5 +70,58 @@ Adrian présente ici 3 techniques différentes de collectes qui permettent aux i
 
 On retrouvera des détails de ces principes sur le [blog de Peter Bourgon](https://peter.bourgon.org/blog/2017/02/21/metrics-tracing-and-logging.html)
 
-Dans sa présentation, Adrian expliquera comment mettre en place ces principes et avec quels outils. Les slides de sa présentation sont disponibles [ici](https://speakerdeck.com/adriancole/observability-3-ways-logging-metrics-and-tracing)
+Dans sa présentation, Adrian expliquera comment mettre en place ces principes et avec quels outils. 
+
+<script async class="speakerdeck-embed" data-id="a3d9e5a710634bca8b4180e26ca50f73" data-ratio="1.34031413612565" src="//speakerdeck.com/assets/embed.js"></script>
+
+## Mitchell Hashimoto - _Scaling security / Grow without compromising security_
+
+Mitchell Hashimoto est le fondateur de la société Hashicorp. Hashicorp est l'éditeur d'un très grand nombre d'outils reconnus pour leur utilité dans le cloud et le monde devops.
+On pourra citer par exemple:
+
+* Vagrant
+* Terraform
+* Consul
+* ...
+
+Le sujet exposé aujourd'hui concerne la sécurité. Mitchell commence par replacer la scalabilité dans un contexte DevOps. C'est le _Pourquoi_.
+Ainsi il explique que le modèle traditionnel fait passer le travail du développeur à l'ops, et de l'ops à la production.
+Le DevOps a permis une paralellisation des tâches. Ainsi Dev et Ops travaillent de consors pour livrer en production.
+
+Mais quid de la sécurité. Selon Mitchell Hashimoto, trop souvent la sécurité se place en "poseur de veto" entre les "DevOps" et la mise en production.
+
+<script async class="speakerdeck-embed" data-id="0decb31f9c374c21a5c0899fa89e39d1" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+
+## Ulf Adams - _Build and test performance at scale_
+
+Ulf Adams expose comment le système Bazel permet de contruire et tester l'écosystème logiciel sans cesse grandissant de Google.
+
+## Marco Slot - _Scaling out (Postgre)SQL_
+
+Marco Slot pose le constat suivant:
+
+Quand il s'agit de base de données et de scalabilité, on ne dissocie jamais les deux termes suivant: No et SQL.
+En effet les bases de données NoSQL sont nées pour répondre au besoin de scalabilité des entreprises.
+
+Cependant, il est tout à fait possible de rendre pleinement scalable une architecture SQL classique. Ainsi, en expliquant l'architecture modulaire de PostGres et en la faisant converger avec un modèle arithmétique, Marco explique comment il est possible de mettre en place une architecture "SQL" résiliente et scalable.
+
+La demonstration est réussie
+
+<script async class="speakerdeck-embed" data-id="80cc7e9225914845921786440affee1d" data-ratio="1.77777777777778" src="//speakerdeck.com/assets/embed.js"></script>
+
+## James Cammarata - _Keep calm and automate all the things_
+
+
+## Andrew Shafer - _DevOps_
+
+Andrew Shafer est un "Jedi" du DevOps. C'est également un présentateur excellent.
+
+## Clay Smith - _ _ 
+
+## David Mazieres - _ _
+
+## Benjamin Hindman - _ _ 
+
+# Conclusion
+
 
