@@ -48,8 +48,6 @@ Puis elle présente son produit [confluent](https://www.confluent.io/) qui est u
 
 Le produit semble intéressant, mais l'idée l'est plus encore: traiter un flux de données à tous les niveaux, de l'applicatif aux logs.
 
-En attendant la video de la conférence qui devrait se trouver sur [www.dotconferences.io/talks](www.dotconferences.com/talks).
-
 {{< speakerdeck b962268ed0724e7eb64d2d79c0c9fac2 >}}
 
 ## Adrian Cole - _Observability 3 ways / Logging, Metrics, Tracing_
@@ -141,6 +139,8 @@ Autre info : le produit Tower est planifié pour être rendu opensource par la s
 
 Andrew Shafer est un "Jedi" du DevOps. C'est également un présentateur excellent.
 
+{{< tweet 856530875563036672 >}}
+
 ## Clay Smith - _Searching for the server in serverless_ 
 
 Clay Smith pose la question de la latence dans les architecture "serveur-less".
@@ -173,3 +173,6 @@ Pas besoin d'être une startup pour profiter de ces conseils, et les problémati
 
 Les vidéos des conférences seront mises en ligne ici: [https://www.dotconferences.com/talks](https://www.dotconferences.com/talks).
 
+<center>
+{{< figure src="/assets/images/dotScale2017_50.jpeg">}} 
+</center>
