@@ -146,12 +146,15 @@ Andrew Shafer est un "Jedi" du DevOps. C'est également un présentateur excelle
 Clay Smith pose la question de la latence dans les architecture "serveur-less".
 Il expose ainsi les recherches qu'il a faites autour de [Lambda (aws)](https://aws.amazon.com/fr/lambda/details/). Il montre de prime abord comment il a réussi à obtenir des informations sur l'environnement d'exécution du code (accès via SSH depuis le lambda vers une autre machine avec tunneling). 
 
-
 Clay expose un ensemble de graphiques qui permettent affiche clairement un signal. Ce signal lui permet d'émettre certaines hypothèses quant-à l'algorithme possible d'attribution des environnements lambda sur AWS.
 
 Bien qu'elle semble peut utile de prime abord, la démonstration mets en exergue certaines problématiques du "serverless" à savoir le temps de démarrage des applications qui est non constant.
 
-## David Mazieres - _ _
+## David Mazieres - _The Stellar Consensus Protocol_
+
+Il va être difficile de résumer le "talk" de David Mazieres.
+
+David a survolé les détails des algorithmes de concensus jusqu'à arriver au produit stellar.
 
 
 
@@ -159,9 +162,14 @@ Bien qu'elle semble peut utile de prime abord, la démonstration mets en exergue
 
 # Conclusion
 
-Ces conférences reflètent le savoir-faire et les bonnes pratiques actuelles de grandes sociétés ou de produits "à la mode".
-Beaucoup de concepts font écho avec les concepts énoncés dans l'ouvrage [Site Reliability Engineering - How Google Runs Production Systems](https://landing.google.com/sre/).
+Le pari de faire des conférences techniques plus "inspirantes" que "geek" est difficile. Chaque conférence dot est selon moi un bel exemple en la matière.
+
+Concenant particulièrement cette édition, je noterai que tous les "talks" reflètent le savoir-faire et les bonnes pratiques actuelles de grandes sociétés ou de produits "à la mode".
+Beaucoup de concepts font écho avec les concepts énoncés dans l'ouvrage [Site Reliability Engineering - How Google Runs Production Systems](https://landing.google.com/sre/) d'ailleurs souvent cité dans te tels évènements.
 
 Il y a donc beaucoup de choses intéressantes à tirer de ces conférence, bien au-delà des aspects techniques. Tout comme les conférences TED, elles permettent une ouverture d'esprit ainsi qu'un regard critique sur notre activité au quotidien, que l'on soit, Ops, Dev ou Consultant.
 
 Pas besoin d'être une startup pour profiter de ces conseils, et les problématiques que rencontrent les conférenciers sont en grande partie les mêmes que celles que rencontrent nos clients.
+
+Les vidéos des conférences seront mises en ligne ici: [https://www.dotconferences.com/talks](https://www.dotconferences.com/talks).
+
