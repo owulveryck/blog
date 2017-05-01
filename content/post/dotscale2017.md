@@ -127,7 +127,9 @@ Il fait ici l'apologie de l'automatisation (mais est-il encore besoin de le fair
 
 En bref:
 
+<center>
 ![Keep calm and automate all the things](/assets/images/keep-calm-and-automate-all-the-things-small.jpg)
+</center>
 
 Autre info annoncées: le produit Tower est planifié pour être rendu opensource par la société RedHat qui possède le projet Ansible.
 
