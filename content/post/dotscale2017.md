@@ -139,7 +139,7 @@ Autre info : le produit Tower est planifié pour être rendu opensource par la s
 
 Andrew Shafer est un "Jedi" du DevOps. C'est également un présentateur excellent.
 
-{{< tweet 856530875563036672 >}}
+{< tweet 856530875563036672 >}
 
 ## Clay Smith - _Searching for the server in serverless_ 
 
