@@ -2,336 +2,36 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Chromebook on Unladen swallow</title>
-    <link>https://blog.owulveryck.info/tags/chromebook.xml</link>
+    <link>https://blog.owulveryck.info/tags/chromebook.html</link>
     <description>Recent content in Chromebook on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <atom:link href="https://blog.owulveryck.info/tags/chromebook.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 31 Mar 2016 10:23:02 +0200</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/chromebook/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>RVM from a USB stick on a Chromebook</title>
-      <link>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</link>
+      <link>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook.html</link>
       <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
       
-      <guid>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</guid>
-      <description>
-
-&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
-
-&lt;h4 id=&#34;opening-remarks&#34;&gt;Opening remarks&lt;/h4&gt;
-
-&lt;p&gt;I&amp;rsquo;m not a Ruby developer, and I&amp;rsquo;m heavily discovering the ecosystem by now.
-This are my notes, and if anything seems wrong to you, do not hesitate to send me remarks.&lt;/p&gt;
-
-&lt;h4 id=&#34;the-scenario&#34;&gt;The scenario&lt;/h4&gt;
-
-&lt;p&gt;For testing purpose, I wanted to play with vagrant-aws and more generally with ruby on my Chromebook.&lt;/p&gt;
-
-&lt;p&gt;Vagrant does not support &lt;em&gt;rubygems&lt;/em&gt; as installation method anymore (&lt;a href=&#34;http://mitchellh.com/abandoning-rubygems&#34;&gt;see Mitchell Hashimoto&amp;rsquo;s post&lt;/a&gt;)
-and of course, there is no binary distribution available for the Chromebook.&lt;/p&gt;
-
-&lt;p&gt;So I have to install it from the sources.&lt;/p&gt;
-
-&lt;p&gt;The &lt;a href=&#34;https://github.com/mitchellh/vagrant/wiki/Installing-Vagrant-from-Source&#34;&gt;documentation&lt;/a&gt; says:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Do &lt;strong&gt;NOT&lt;/strong&gt; use the system Ruby - use a Ruby version manager like rvm, chruby, etc&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Alright, anyway I don&amp;rsquo;t want to mess with my system and break Homebrew, so using RVM seems to be a good idea.&lt;/p&gt;
-
-&lt;h2 id=&#34;installing-rvm&#34;&gt;Installing RVM&lt;/h2&gt;
-
-&lt;p&gt;The RVM installation is relatively easy; simply running &lt;code&gt;curl -sSL https://get.rvm.io | bash&lt;/code&gt; does the trick.
-And then those commands make ruby 2.3.0 available via rvm:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ source ~/.rvm/scripts/rvm  
-$ rvm install 2.3.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The stupid trick here is that everything is installed in my $HOME directory, and as my Chromebook is short on disk space: FS full !&lt;/p&gt;
-
-&lt;p&gt;Too bad.&lt;/p&gt;
-
-&lt;h2 id=&#34;using-a-usb-stick&#34;&gt;Using a USB stick&lt;/h2&gt;
-
-&lt;p&gt;So my idea is to install the RVM suite onto a USB stick (because with me I don&amp;rsquo;t have any SDHC card available).&lt;/p&gt;
-
-&lt;h3 id=&#34;preparing-the-stick&#34;&gt;Preparing the stick&lt;/h3&gt;
-
-&lt;p&gt;At first, the USB stick must be formatted in extendX (ext4) in order to be able to use symlinks, correct ownership etc.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sudo mkfs.ext4 -L Lexar /dev/sda1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: I&amp;rsquo;ve found that avoiding spaces in the volume name was good for rvm.&lt;/p&gt;
-
-&lt;p&gt;Once connected on the Chromebook, it&amp;rsquo;s automatically mounted on &lt;code&gt;/media/removable/Lexar&lt;/code&gt;.
-The problem are the options:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;/dev/sda1 on /media/removable/Lexar type ext4 (rw,nosuid,nodev,noexec,relatime,dirsync,data=ordered)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;the most problematic is &lt;code&gt;noexec&lt;/code&gt; because I want to install executables in it.&lt;/p&gt;
-
-&lt;p&gt;So what I did was simply:&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;sudo mount -o remount /dev/sda1 /media/removable/Lexar&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;and that did the trick.&lt;/p&gt;
-
-&lt;h2 id=&#34;installing-rvm-on-the-usb&#34;&gt;Installing RVM on the USB&lt;/h2&gt;
-
-&lt;p&gt;I will install rvm into &lt;code&gt;/media/removable/Lexar/rvm&lt;/code&gt;. In order to avoid any ownership and permission problem I did:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;mkdir /media/removable/Lexar/rvm
-chown chronos:chronos /media/removable/Lexar/rvm
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And then I created a simple &lt;code&gt;~/.rvmrc&lt;/code&gt; file as indicated in the documentation with this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cat ~/.rvmrc                                          
-$ export rvm_path=/media/removable/Lexar/rvm
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I also included this in my &lt;code&gt;~/.zshrc&lt;/code&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;if [ -s &amp;quot;$HOME/.rvmrc&amp;quot;   ]; then
-    source &amp;quot;$HOME/.rvmrc&amp;quot;
-fi # to have $rvm_path defined if set
-if [ -s &amp;quot;${rvm_path-$HOME/.rvm}/scripts/rvm&amp;quot;   ]; then
-    source &amp;quot;${rvm_path-$HOME/.rvm}/scripts/rvm&amp;quot;
-fi
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;installing-rvm-1&#34;&gt;Installing rvm&lt;/h2&gt;
-
-&lt;p&gt;the command I executed were then:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ curl -sSL https://get.rvm.io | bash
-$ source /media/removable/Lexar/rvm/scripts/rvm
-$ rvm autolibs enable
-$ rvm get stable
-$ rvm install 2.3.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And that did the trick&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ rvm list
-
-rvm rubies
-
-=* ruby-2.3.0 [ x84_64 ]
-
-# =&amp;gt; - current
-# =* - current &amp;amp;&amp;amp; default
-#  * - default
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;testing-with-vagrant&#34;&gt;Testing with vagrant&lt;/h2&gt;
-
-&lt;h3 id=&#34;cloning-the-vagrant-sources&#34;&gt;Cloning the vagrant sources&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ sudo mkdir /media/removable/Lexar/tools
-$ sudo chown chronos:chronos /media/removable/Lexar/tools
-$ cd /media/removable/Lexar/tools
-$ git clone https://github.com/mitchellh/vagrant.git
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;preparing-the-rvm-file-for-vagrant&#34;&gt;Preparing the rvm file for vagrant&lt;/h3&gt;
-
-&lt;p&gt;To use the ruby 2.3.0 (that I&amp;rsquo;ve installed before) with vagrant, I need to create a .rvmrc in the vagrant directory:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ cd /media/removable/Lexar/tools/vagrant
-$ rvm --rvmrc --create 2.3.0@vagrant
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;installing-bundler&#34;&gt;Installing bundler&lt;/h3&gt;
-
-&lt;p&gt;The bundler version that is supported by vagrant must be &amp;lt;= 1.5.2 as written in the &lt;code&gt;Gemfile&lt;/code&gt;. So I&amp;rsquo;m installing version
-1.5.2&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cd /media/removable/Lexar/tools/vagrant
-$ source .rcmrv
-$ gem install bundler -v 1.5.2
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;compiling-vagrant&#34;&gt;Compiling vagrant&lt;/h3&gt;
-
-&lt;p&gt;Back to the vagrant documentation, what I must do is now to &amp;ldquo;compile it&amp;rdquo;. To do so, the advice is to run:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ bundle _1.5.2_ install  
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;(just in case several bundler are present )&lt;/p&gt;
-
-&lt;p&gt;I faced this error:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;NoMethodError: undefined method `spec&#39; for nil:NilClass
-Did you mean?  inspect
-An error occurred while installing vagrant (1.8.2.dev), and Bundler cannot continue.
-Make sure that `gem install vagrant -v &#39;1.8.2.dev&#39;` succeeds before bundling.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;According to google, this may be an issue with the version of bundler I&amp;rsquo;m using.
-As I cannot upgrade the bundler because of vagrant, I&amp;rsquo;ve decided to take a chance and use
-a lower version of Ruby&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ rvm install 2.2.0
-$ rvm --rvmrc --create 2.2.0@vagrant
-$ source .rvmrc
-# and reinstalling bundler
-$ gem install bundler -v 1.5.2            
-$ bundle _1.5.2_ install
-...
-Your bundle is complete!
-Use `bundle show [gemname]` to see where a bundled gem is installed.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;voilà&#34;&gt;Voilà!&lt;/h1&gt;
-
-&lt;p&gt;I can now use vagrant installed fully on the USB stick with&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ bundle _1.5.2_ exec vagrant
-Vagrant appears to be running in a Bundler environment. Your 
-existing Gemfile will be used. Vagrant will not auto-load any plugins
-installed with `vagrant plugin`. Vagrant will autoload any plugins in
-the &#39;plugins&#39; group in your Gemfile. You can force Vagrant to take over
-with VAGRANT_FORCE_BUNDLER.
-
-You appear to be running Vagrant outside of the official installers.
-Note that the installers are what ensure that Vagrant has all required
-dependencies, and Vagrant assumes that these dependencies exist. By
-running outside of the installer environment, Vagrant may not function
-properly. To remove this warning, install Vagrant using one of the
-official packages from vagrantup.com.
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;That&amp;rsquo;s it for this post; next I will try to install vagrant-aws and play a little bit with it.&lt;/p&gt;
-
-&lt;p&gt;stay tuned.&lt;/p&gt;
-</description>
+      <guid>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook.html</guid>
+      <description>Introduction Opening remarks I&amp;rsquo;m not a Ruby developer, and I&amp;rsquo;m heavily discovering the ecosystem by now. This are my notes, and if anything seems wrong to you, do not hesitate to send me remarks.
+The scenario For testing purpose, I wanted to play with vagrant-aws and more generally with ruby on my Chromebook.
+Vagrant does not support rubygems as installation method anymore (see Mitchell Hashimoto&amp;rsquo;s post) and of course, there is no binary distribution available for the Chromebook.</description>
     </item>
     
     <item>
       <title>Developping &#34;Google Apps&#34; on my Chromebook</title>
-      <link>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</link>
+      <link>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook.html</link>
       <pubDate>Mon, 26 Oct 2015 10:41:57 +0000</pubDate>
       
-      <guid>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</guid>
-      <description>
-
-&lt;p&gt;It is a week now that I&amp;rsquo;m playing with my chromebook.
-I really enjoy this little internet Terminal.&lt;/p&gt;
-
-&lt;p&gt;I &amp;ldquo;geeked&amp;rdquo; it a little bit and I installed my favorites dev tools eg:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://gist.github.com/johnbender/5018685&#34;&gt;The solarized theme for the terminal&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;zsh&lt;/code&gt; with &lt;a href=&#34;https://github.com/robbyrussell/oh-my-zsh&#34;&gt;Oh-my-zsh&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;tmux&lt;/code&gt; (stared with &lt;code&gt;tmux -2&lt;/code&gt; to get 256 colors)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;git&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;vim&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;a &lt;code&gt;Go&lt;/code&gt; compiler&lt;/li&gt;
-&lt;li&gt;The &lt;a href=&#34;http://gohugo.io/overview/quickstart/&#34;&gt;&lt;code&gt;HUGO&lt;/code&gt;&lt;/a&gt; tool to write this blog.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;All of it has been installed thanks to the &amp;ldquo;brew&amp;rdquo; package manager and following &lt;a href=&#34;https://github.com/Homebrew/linuxbrew/wiki/Chromebook-Install-Instructions&#34;&gt;those instructions&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;google-development-environment&#34;&gt;Google Development Environment&lt;/h2&gt;
-
-&lt;p&gt;I&amp;rsquo;ve installed the Google Development Environement as described &lt;a href=&#34;https://cloud.google.com/appengine/docs/go/gettingstarted/devenvironment&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Python 2.7 is a requirements so I &lt;code&gt;brewed it&lt;/code&gt; without any noticeable issue.&lt;/p&gt;
-
-&lt;p&gt;When I wanted to serve locally my very first Google App developement, I ran into the following error:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~ go app serve $GOPATH/src/myapp
-...
-ImportError: No module named _sqlite3
-error while running dev_appserver.py: exit status 1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Too bad. I&amp;rsquo;ve read that this module should be built with python, but a even a &lt;code&gt;find /&lt;/code&gt; (I know it&amp;rsquo;s evil) didn&amp;rsquo;t return me any occurence.&lt;/p&gt;
-
-&lt;p&gt;So, I have:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Googled&lt;/li&gt;
-&lt;li&gt;reinstalled sqlite with &lt;code&gt;brew reinstall sqlite&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;reinstalled python with &lt;code&gt;brew reinstall python&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;played with brew link, unlink and so&lt;/li&gt;
-&lt;li&gt;&amp;hellip;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Still no luck!&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve also tried the compilation with a &lt;code&gt;verbose&lt;/code&gt; option, and I the log file, there is an explicit message:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Python build finished, but the necessary bits to build these modules were not found:
-_bsddb  _sqlite3_tkinter
-...
-To find the necessary bits, look in setup.py in detect_modules() for the modules name.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;That&amp;rsquo;s where I am now, stuck with a stupid python error. I&amp;rsquo;d like the folks at google to provide a pure go developement enrironement that would avoid the bootstraping problems.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ll post an update as soon as I have solved this issue !&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;EDIT&lt;/em&gt;:&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve had a look in the &lt;code&gt;setup.py&lt;/code&gt; file. To compile the sqlite extension, it looks into the following paths:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;...
-sqlite_incdir = sqlite_libdir = None
-sqlite_inc_paths = [ &#39;/usr/include&#39;,
-                     &#39;/usr/include/sqlite&#39;,
-                     &#39;/usr/include/sqlite3&#39;,
-                     &#39;/usr/local/include&#39;,
-                     &#39;/usr/local/include/sqlite&#39;,
-                     &#39;/usr/local/include/sqlite3&#39;,
-                   ]
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;But in my configuration, the libraries are present in &lt;code&gt;/usr/local/linuxbrew/*&lt;/code&gt;. Hence, simply linking the include and libs did the trick&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;m now facing another error when I try to run the &lt;code&gt;goapp serve&lt;/code&gt; command:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;...
-AttributeError: &#39;module&#39; object has no attribute &#39;poll&#39;
-error while running dev_appserver.py: exit status 1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Google told me, that on OSX the poll system call is broken and has been disabled.
-As brew is mainly developped on MacOS, that may be the reason&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve recompiled the python with the &lt;code&gt;--with-poll&lt;/code&gt; option and that did the trick.&lt;/p&gt;
-
-&lt;h2 id=&#34;finally&#34;&gt;Finally&lt;/h2&gt;
-
-&lt;p&gt;Here are my options for compiling python:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~ brew reinstall python --with-brewed-openssl --with-brewed-sqlite --with-poll 
-...
-Warning: The given option --with-poll enables a somewhat broken poll() on OS X (https://bugs.python.org/issue5154)  Formula git:(master)).
-...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And the &lt;code&gt;goapp serve&lt;/code&gt; is finally working on my Chromebook:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~ goapp serve /home/chronos/user/GOPROJECTS/src/github.com/owulveryck/google-app-example/
-INFO     2015-10-26 15:48:04,840 devappserver2.py:763] Skipping SDK update check.
-INFO     2015-10-26 15:48:04,935 api_server.py:205] Starting API server at: http://localhost:54116
-INFO     2015-10-26 15:48:06,092 dispatcher.py:197] Starting module &amp;quot;default&amp;quot; running at: http://localhost:8080
-INFO     2015-10-26 15:48:06,096 admin_server.py:116] Starting admin server at: http://localhost:8000
-INFO     2015-10-26 15:48:16,700 shutdown.py:45] Shutting down.
-INFO     2015-10-26 15:48:16,701 api_server.py:648] Applying all pending transactions and saving the datastore
-INFO     2015-10-26 15:48:16,701 api_server.py:651] Saving search indexes
-&lt;/code&gt;&lt;/pre&gt;
-</description>
+      <guid>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook.html</guid>
+      <description>It is a week now that I&amp;rsquo;m playing with my chromebook. I really enjoy this little internet Terminal.
+I &amp;ldquo;geeked&amp;rdquo; it a little bit and I installed my favorites dev tools eg:
+ The solarized theme for the terminal zsh with Oh-my-zsh tmux (stared with tmux -2 to get 256 colors) git vim a Go compiler The HUGO tool to write this blog.  All of it has been installed thanks to the &amp;ldquo;brew&amp;rdquo; package manager and following those instructions.</description>
     </item>
     
   </channel>

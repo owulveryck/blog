@@ -2,292 +2,37 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Revealjs on Unladen swallow</title>
-    <link>https://blog.owulveryck.info/tags/revealjs.xml</link>
+    <link>https://blog.owulveryck.info/tags/revealjs.html</link>
     <description>Recent content in Revealjs on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <atom:link href="https://blog.owulveryck.info/tags/revealjs.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 09 Sep 2016 13:39:50 +0200</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/revealjs/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Being a better public speaker with a little help of Speech Recognition, Javascript and Chrome</title>
-      <link>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome/index.html</link>
+      <link>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</link>
       <pubDate>Fri, 09 Sep 2016 13:39:50 +0200</pubDate>
       
-      <guid>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome/index.html</guid>
-      <description>
-
-&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
-
-&lt;p&gt;I usually don&amp;rsquo;t like slidewares.&lt;/p&gt;
-
-&lt;p&gt;Actually as IT engineer working, by now, exclusively in France, I&amp;rsquo;m facing the PowerPoint problem:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Too many boring slides,&lt;/li&gt;
-&lt;li&gt;too much information per slide,&lt;/li&gt;
-&lt;li&gt;a presenter dedicated to read their content.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Therefore, the audience is watching its watch while waiting for a coffee break.&lt;/p&gt;
-
-&lt;p&gt;I won&amp;rsquo;t redo the introduction I already did in a &lt;a href=&#34;https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html&#34;&gt;previous post&lt;/a&gt; but indeed slides can,
-from time to time, be a value-add to a presentation.&lt;/p&gt;
-
-&lt;p&gt;Is the previous post, I introduced reveal.js, this excellent javascript framework. And I already did an interactive presentation.&lt;/p&gt;
-
-&lt;p&gt;In this post, I will go a little bit further with the integration of Speech Recognition.&lt;/p&gt;
-
-&lt;h1 id=&#34;speech-recognition-by-google&#34;&gt;Speech Recognition by Google&lt;/h1&gt;
-
-&lt;h2 id=&#34;the-google-cloud-speech-api&#34;&gt;The Google Cloud Speech API&lt;/h2&gt;
-
-&lt;p&gt;It ain&amp;rsquo;t no secret now, I&amp;rsquo;m a big fan of machine learning.
-Machines learn faster than people, and they can now assist us in a lot of boring tasks.&lt;/p&gt;
-
-&lt;p&gt;On the base of a neuron network, Google provides an &lt;a href=&#34;https://cloud.google.com/speech/&#34;&gt;API for speech recognition&lt;/a&gt;.
-It is fairly complete and multi lingual.&lt;/p&gt;
-
-&lt;h2 id=&#34;chrome-speech-recognition&#34;&gt;Chrome speech recognition&lt;/h2&gt;
-
-&lt;p&gt;They &amp;ldquo;&lt;em&gt;eat their own dog food&lt;/em&gt;&amp;rdquo; and use their engine for android and&amp;hellip; Chrome.
-Best of all, they provide a userland access via a Javascript API to this functionality in Chrome.&lt;/p&gt;
-
-&lt;p&gt;This means that you can develop a web page that will access you microphone, sends what you say to the Google cloud, get the result back and process it in your page.&lt;/p&gt;
-
-&lt;p&gt;You can see an introduction &lt;a href=&#34;https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&#34;what-can-i-use-that-for-a-case-study&#34;&gt;What can I use that for: A case study?&lt;/h1&gt;
-
-&lt;p&gt;I had to do a presentation recently.
-This presentation was about &lt;em&gt;Agility&lt;/em&gt; and &lt;em&gt;Devops&lt;/em&gt;. The main idea was to give my client a feedback about experiences I had regarding those principles in digital transformation.&lt;/p&gt;
-
-&lt;p&gt;I didn&amp;rsquo;t want to loose my audience with slides. But I wanted to keep the key concepts alive and visible.&lt;/p&gt;
-
-&lt;p&gt;So what I did was a one slide presentation only with the keywords I wanted to talk about.&lt;/p&gt;
-
-&lt;p&gt;The day before, I though:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;How nice it would be if as far as I speak, the key concepts would appear on screen&amp;hellip;&amp;rdquo;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;You may think: &lt;em&gt;&amp;ldquo;that&amp;rsquo;s easy, learn your script and click on the right moment&amp;rdquo;&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Ok, but there are drawbacks:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;You have to learn the script&lt;/li&gt;
-&lt;li&gt;You cannot be spontaneous anymore&lt;/li&gt;
-&lt;li&gt;It&amp;rsquo;s a one shot, one displayed, you cannot interact with the points anymore.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;What I need is &amp;ldquo;an assistant&amp;rdquo; that will &lt;em&gt;listen to me&lt;/em&gt; and &lt;em&gt;act as soon as he/she/it hear a buzz word&lt;/em&gt;.
-It&amp;rsquo;s 2016, this assistant is a machine, and I can teach it to act correctly.&lt;/p&gt;
-
-&lt;p&gt;Here is a little demo of the end product (don&amp;rsquo;t pay to much attention to the content, I said nonsense for the demo)&lt;/p&gt;
-
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/MOmmBufEwPo&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;And another one in French.&lt;/p&gt;
-
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/3Uyr0G0add4&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;h1 id=&#34;the-implementation&#34;&gt;The implementation&lt;/h1&gt;
-
-&lt;h2 id=&#34;annyang&#34;&gt;Annyang&lt;/h2&gt;
-
-&lt;p&gt;I have used the &lt;a href=&#34;https://github.com/TalAter/annyang&#34;&gt;annyang&lt;/a&gt; which is a javascript wrapper for the Chrome speech recognition functionnality.&lt;/p&gt;
-
-&lt;p&gt;Instead of matching a sentence as explained in the example of annyang, I made it listen to my whole speech in a loop.
-Then I passed every sentence detected by the framework to a javascript function that was applying regexp to look for keywords.&lt;/p&gt;
-
-&lt;h3 id=&#34;displaying-words&#34;&gt;Displaying words&lt;/h3&gt;
-
-&lt;p&gt;For every keyword I did a match to an object of my DOM and simply changed its &lt;code&gt;visibility&lt;/code&gt; style from &lt;code&gt;hidden&lt;/code&gt; to &lt;code&gt;visible&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Here is the javascript code:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;if (annyang) {
-  annyang.debug(true);
-  annyang.setLanguage(&#39;fr-FR&#39;);
-  annyang.addCallback(&#39;result&#39;, function(phrases) {
-  for (s of phrases) {
-     str = s.toLowerCase();
-     switch (str) {
-        case (str.match(/communication/) || {}).input:nnyang.start();                                                                                              
-        document.getElementById(&#39;communication&#39;).style.visibility = &#39;visible&#39;;
-        ...
-    // Start listening. You can call this here, or attach this call to an event, button, etc.
-    annyang.start();       
-    ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And the corresponding html section for the communication keyword:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;div class=&amp;quot;reveal&amp;quot;&amp;gt;
-  &amp;lt;div class=&amp;quot;slides&amp;quot;&amp;gt;
-    &amp;lt;section&amp;gt;
-      &amp;lt;h3 style=&amp;quot;visibility: visible&amp;quot; id=&amp;quot;agile&amp;quot;&amp;gt;Agile&amp;lt;/h3&amp;gt;
-      &amp;lt;p&amp;gt; &amp;lt;span style=&amp;quot;visibility: hidden;&amp;quot; id=&amp;quot;communication&amp;quot;&amp;gt;communication&amp;lt;/span&amp;gt; &amp;lt;/p&amp;gt;            
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The speech recognition engine detects the sentence and gives a confidence note about its recognition.
-All the potential results are stored in an array (here &lt;code&gt;phrases&lt;/code&gt;). I&amp;rsquo;ve used them all so I was more confident not to miss a word.&lt;/p&gt;
-
-&lt;h3 id=&#34;making-them-blink&#34;&gt;Making them blink&lt;/h3&gt;
-
-&lt;p&gt;As I was not fully confident in the solution (it was late in the night and the show was the next morning), Therefore I made a fall-back solution.
-All the words were displayed, and I used a little CSS tweak to make them blink when they were pronounced.
-This was done by adding and removing a css class to the concerned node.
-The logic remains the same.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;/* Chrome &amp;amp; Safari */
-@-webkit-keyframes blink {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-.blink {
-  -webkit-animation: blink 750ms 2;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-Javascript&#34;&gt;case (str.match(/communication/) || {}).input:                                                                                       
-   document.getElementById(&amp;quot;b_communication&amp;quot;).classList.toggle(&#39;blink&#39;);
-   setTimeout(function () {
-     document.getElementById(&amp;quot;b_communication&amp;quot;).classList.remove(&#39;blink&#39;);
-   }, 1500);
-   break;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h1 id=&#34;conclusion-and-todo&#34;&gt;Conclusion and TODO&lt;/h1&gt;
-
-&lt;p&gt;The speech recognition engine is efficient and usable.
-What I need to do is to code a tiny javascript library in order to get a JSON associative array between the list of spoken words that would trigger an action for an element for example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
-  &amp;quot;tag&amp;quot;: &amp;quot;communication&amp;quot;,
-  &amp;quot;words&amp;quot;: [&amp;quot;communication&amp;quot;, &amp;quot;communicate&amp;quot;],
-  &amp;quot;fuction&amp;quot;: &amp;quot;blink&amp;quot;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Anyway, as a quick and dirty solution, the goal is achieved.&lt;/p&gt;
-
-&lt;p&gt;Another Idea would be to plug this with a NLP engine to perform stemming or lemmatization to do a better decoding and be even more machine learning compliant. This could be done with the help of &lt;a href=&#34;https://github.com/mit-nlp/MITIE&#34;&gt;MITIE&lt;/a&gt;&lt;/p&gt;
-</description>
+      <guid>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</guid>
+      <description>Introduction I usually don&amp;rsquo;t like slidewares.
+Actually as IT engineer working, by now, exclusively in France, I&amp;rsquo;m facing the PowerPoint problem:
+ Too many boring slides, too much information per slide, a presenter dedicated to read their content.  Therefore, the audience is watching its watch while waiting for a coffee break.
+I won&amp;rsquo;t redo the introduction I already did in a previous post but indeed slides can, from time to time, be a value-add to a presentation.</description>
     </item>
     
     <item>
       <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote</title>
-      <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</link>
+      <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</link>
       <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
       
-      <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</guid>
-      <description>
-
-&lt;h1 id=&#34;the-goal&#34;&gt;the goal&lt;/h1&gt;
-
-&lt;p&gt;As all my peers, I have the opportunity to talk about different technological aspects.
-As all my peers, I&amp;rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).&lt;/p&gt;
-
-&lt;p&gt;In this post I won&amp;rsquo;t dig into what&amp;rsquo;s good or not to put in a presentation, and if that&amp;rsquo;s what interest you, I
-recommend you to take a look at &lt;a href=&#34;http://www.presentationzen.com/&#34;&gt;Garr Reynold&amp;rsquo;s tips and tricks&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Steve Jobs&lt;/em&gt; said:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;People who knows what they&amp;rsquo;re talking about don&amp;rsquo;t need PowerPoint&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;(actually it has been quoted in Walter Isaacson&amp;rsquo;s biography see &lt;a href=&#34;http://blog.jgc.org/2011/11/people-who-know-what-theyre-talking.html&#34;&gt;this reference&lt;/a&gt;).&lt;/p&gt;
-
-&lt;p&gt;As an attendee I tend to agree; usually PowerPoints are boring and they hardly give any interest besides for the writer to say &amp;ldquo;hey look, I&amp;rsquo;ve worked for this presentation&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;Indeed, they are a must. So for my next presentation I thought:&lt;/p&gt;
-
-&lt;p&gt;wouldn&amp;rsquo;t it be nice to use this wide display area to make the presentation more interactive.
-One of the key point in communication is to federate people. So what if people could get represented for real in the presentation.&lt;/p&gt;
-
-&lt;h2 id=&#34;how-to-the-architecture&#34;&gt;how to: the architecture&lt;/h2&gt;
-
-&lt;p&gt;Obviously I cannot use conventional tools, such as PowerPoint, Keynote, Impress, google slides and so.
-I need something that I can program; something that can interact with a server, and something that is not a console so I can get
-fancy and eye-candy animations.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-basic&#34;&gt;The basic&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://lab.hakim.se/reveal-js/&#34;&gt;reveal.js&lt;/a&gt; is an almost perfect candidate:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;it is a framework written in JavaScript therefore, I can easily ass code&lt;/li&gt;
-&lt;li&gt;it&amp;rsquo;s well designed&lt;/li&gt;
-&lt;li&gt;it can be used alongside with any other JavaScript framework&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;graphs-animations-etc&#34;&gt;Graphs, animations, etc&amp;hellip;&lt;/h3&gt;
-
-&lt;p&gt;A good presentation has animations, graphs, diagrams, and stuffs that cannot be expressed simply with words.
-I will interact with the audience. I will explain how later, but anyway they will send me some data.
-I could process them in whatever server-side application (php, go-template base, python) but I have the feeling that&amp;rsquo;s not
-the idiomatic way of doing modern web content. Actually, I would need anyway to deal with device (mobile, desktop), screen size,
-browser&amp;hellip; So what&amp;rsquo;s best, I think, is to get the data on the client side and process it via Javascript.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://d3js.org/&#34;&gt;Data Driver Documents&lt;/a&gt; is the framework I will use to process and display the data I will get from the client.&lt;/p&gt;
-
-&lt;p&gt;It actually uses SVG to represent the graphs; I would have liked to use a full HTML5 to be more&amp;hellip; 2016, but the D3 is actually very very good
-framework I wanted to use for a while.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-attendees&#34;&gt;The attendees&lt;/h3&gt;
-
-&lt;p&gt;If I want the attendees to participate they need a device, to act as a client.
-About all people I will talk to have a smartphone; that is what I will use.&lt;/p&gt;
-
-&lt;p&gt;It has two advantages:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;it is their own device, I looks more realistic and unexpected: therefore I would get a better reception of the message I&amp;rsquo;m trying to pass.&lt;/li&gt;
-&lt;li&gt;it usually has a Webkit based web browser with a decent Javascript engine.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I won&amp;rsquo;t develop a native app, instead I will a webpage mobile compliant based on the &lt;a href=&#34;http://getbootstrap.com/&#34;&gt;bootstrap&lt;/a&gt; framework.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-hub&#34;&gt;The HUB&lt;/h3&gt;
-
-&lt;p&gt;The point now, is how to make my clients and my presentation to exchange data.
-As I said before, I would not be an easy task to setup a pure browser based peer-to-peer communication, so I will fall
-back to the traditional web server based hub.&lt;/p&gt;
-
-&lt;p&gt;the first idea is to use a RESTfull mechanism, but this has the major disadvantage of not being real-timed.
-What I would like is a communication HUB that would broadcast events as soon as they are reveived.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve implemented a server in go to do so. The clients will talk to the server over websockets which are now natively present in every
-modern browsers.&lt;/p&gt;
-
-&lt;h4 id=&#34;the-server&#34;&gt;the server&lt;/h4&gt;
-
-&lt;p&gt;I&amp;rsquo;ve used the &lt;a href=&#34;https://github.com/gorilla/websocket&#34;&gt;Implementation from gorilla&lt;/a&gt; because it seemed to be the best as of today.
-It implements all the RFC and the development is up-to-date.&lt;/p&gt;
-
-&lt;p&gt;The code heavily relies on channels to broadcast the messages between the different peers.
- I&amp;rsquo;ve taken the chat example present in the gorilla&amp;rsquo;s package.&lt;/p&gt;
-
-&lt;p&gt;At first I did code all the mechanism is a simple go package. After a bunch of code, I&amp;rsquo;ve decided to split the code into two different
-projects: The main presentation and the &lt;a href=&#34;http://github.com/owulveryck/gowmb&#34;&gt;gowmb&lt;/a&gt;. The gowmb package is usable in others projects.&lt;/p&gt;
-
-&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion.&lt;/h1&gt;
-
-&lt;p&gt;I don&amp;rsquo;t go into the implementation details in this post, instead I will refer to the &lt;a href=&#34;https://github.com/owulveryck/topology-presentation&#34;&gt;github&lt;/a&gt;
-repository where the presentation is hosted.&lt;/p&gt;
-
-&lt;p&gt;By now I have a good animated slideshow, and the ability to join the slides with a mobile phone.
-I can also draw a topology of the attendees via D3 and interact with them.&lt;/p&gt;
-</description>
+      <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</guid>
+      <description>the goal As all my peers, I have the opportunity to talk about different technological aspects. As all my peers, I&amp;rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).
+In this post I won&amp;rsquo;t dig into what&amp;rsquo;s good or not to put in a presentation, and if that&amp;rsquo;s what interest you, I recommend you to take a look at Garr Reynold&amp;rsquo;s tips and tricks.
+Steve Jobs said:</description>
     </item>
     
   </channel>

@@ -2,152 +2,157 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://blog.owulveryck.info/2017/04/14/i-have-tried-extreme-programming-within-a-sprint-and-i-think-it-is-an-excellent-agile-method-for-the-ops/index.html</loc>
+    <loc>https://blog.owulveryck.info/2017/04/24/retour-sur-les-conf%C3%A9rences-dotscale-%C3%A9dition-2017..html</loc>
+    <lastmod>2017-04-24T20:51:22+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.owulveryck.info/2017/04/14/i-have-tried-extreme-programming-within-a-sprint-and-i-think-it-is-an-excellent-agile-method-for-the-ops.html</loc>
     <lastmod>2017-04-14T23:00:59+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2017/03/28/from-graphql-to-a-table-view-with-react-and-apollo/index.html</loc>
+    <loc>https://blog.owulveryck.info/2017/03/28/from-graphql-to-a-table-view-with-react-and-apollo.html</loc>
     <lastmod>2017-03-28T21:03:52+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management/index.html</loc>
+    <loc>https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html</loc>
     <lastmod>2017-03-22T09:15:35+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity/index.html</loc>
+    <loc>https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity.html</loc>
     <lastmod>2017-03-13T20:54:27+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank./index.html</loc>
+    <loc>https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html</loc>
     <lastmod>2017-03-11T09:15:17+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp/index.html</loc>
+    <loc>https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp.html</loc>
     <lastmod>2017-02-28T20:57:38+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers.../index.html</loc>
+    <loc>https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers....html</loc>
     <lastmod>2017-02-03T20:57:30+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data/index.html</loc>
+    <loc>https://blog.owulveryck.info/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data.html</loc>
     <lastmod>2017-01-13T22:22:46+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws./index.html</loc>
+    <loc>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html</loc>
     <lastmod>2016-12-16T14:51:18+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs/index.html</loc>
+    <loc>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs.html</loc>
     <lastmod>2016-10-19T07:24:51+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer/index.html</loc>
+    <loc>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer.html</loc>
     <lastmod>2016-10-17T20:50:18+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl/index.html</loc>
+    <loc>https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl.html</loc>
     <lastmod>2016-09-11T20:27:49+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome/index.html</loc>
+    <loc>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</loc>
     <lastmod>2016-09-09T13:39:50+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry/index.html</loc>
+    <loc>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</loc>
     <lastmod>2016-08-29T21:58:17+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote/index.html</loc>
+    <loc>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</loc>
     <lastmod>2016-06-23T15:32:54+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot/index.html</loc>
+    <loc>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html</loc>
     <lastmod>2016-05-20T12:50:59+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction/index.html</loc>
+    <loc>https://blog.owulveryck.info/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction.html</loc>
     <lastmod>2016-03-31T23:39:35+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook/index.html</loc>
+    <loc>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook.html</loc>
     <lastmod>2016-03-31T10:23:02+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography/index.html</loc>
+    <loc>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography.html</loc>
     <lastmod>2016-02-29T20:55:01+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications/index.html</loc>
+    <loc>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications.html</loc>
     <lastmod>2016-02-10T17:19:47+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator/index.html</loc>
+    <loc>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html</loc>
     <lastmod>2015-12-02T14:24:21+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting/index.html</loc>
+    <loc>https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting.html</loc>
     <lastmod>2015-11-30T13:17:41+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph/index.html</loc>
+    <loc>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html</loc>
     <lastmod>2015-11-20T10:09:30+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone/index.html</loc>
+    <loc>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone.html</loc>
     <lastmod>2015-11-17T10:05:42+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger/index.html</loc>
+    <loc>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html</loc>
     <lastmod>2015-11-11T14:24:43+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices/index.html</loc>
+    <loc>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</loc>
     <lastmod>2015-11-10T08:56:36+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook/index.html</loc>
+    <loc>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook.html</loc>
     <lastmod>2015-10-26T10:41:57+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1/index.html</loc>
+    <loc>https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1.html</loc>
     <lastmod>2015-10-23T09:54:27+01:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go/index.html</loc>
+    <loc>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html</loc>
     <lastmod>2015-10-22T20:40:36+02:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/2015/10/22/welcome/index.html</loc>
+    <loc>https://blog.owulveryck.info/2015/10/22/welcome.html</loc>
     <lastmod>2015-10-22T15:59:07+01:00</lastmod>
   </url>
   
@@ -193,13 +198,13 @@
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/tags/bdd.html</loc>
+    <loc>https://blog.owulveryck.info/topics/bdd.html</loc>
     <lastmod>2016-03-31T23:39:35+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/topics/bdd.html</loc>
+    <loc>https://blog.owulveryck.info/tags/bdd.html</loc>
     <lastmod>2016-03-31T23:39:35+01:00</lastmod>
     <priority>0</priority>
   </url>
@@ -494,7 +499,7 @@
   
   <url>
     <loc>https://blog.owulveryck.info/post.html</loc>
-    <lastmod>2017-04-14T23:00:59+02:00</lastmod>
+    <lastmod>2017-04-24T20:51:22+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -584,6 +589,7 @@
   
   <url>
     <loc>https://blog.owulveryck.info/tags.html</loc>
+    <lastmod>2017-04-14T23:00:59+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -595,6 +601,7 @@
   
   <url>
     <loc>https://blog.owulveryck.info/topics.html</loc>
+    <lastmod>2016-02-10T17:19:47+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -605,14 +612,14 @@
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/tags/tosca.html</loc>
-    <lastmod>2016-02-10T17:19:47+01:00</lastmod>
+    <loc>https://blog.owulveryck.info/topics/tosca.html</loc>
+    <lastmod>2015-11-20T10:09:30+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/topics/tosca.html</loc>
-    <lastmod>2015-11-20T10:09:30+00:00</lastmod>
+    <loc>https://blog.owulveryck.info/tags/tosca.html</loc>
+    <lastmod>2016-02-10T17:19:47+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -629,20 +636,20 @@
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/tags/udt.html</loc>
-    <lastmod>2016-10-17T20:50:18+02:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.owulveryck.info/topics/udt.html</loc>
     <lastmod>2016-10-17T20:50:18+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>https://blog.owulveryck.info/tags/udt.html</loc>
+    <lastmod>2016-10-17T20:50:18+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.owulveryck.info/</loc>
-    <lastmod>2017-04-14T23:00:59+02:00</lastmod>
+    <lastmod>2017-04-24T20:51:22+02:00</lastmod>
     <priority>0</priority>
   </url>
   

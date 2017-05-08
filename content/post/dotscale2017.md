@@ -1,16 +1,17 @@
 ---
 categories:
-- category
+- conference
 date: 2017-04-24T20:51:22+02:00
-description: ""
-draft: true
+description: "Mon retour sur les conférences de la dotScale édition 2017 [In French]"
+draft: false
 images:
 - https://pbs.twimg.com/profile_images/659732730784129025/TlfVUxEl.png
-tags:
-- tag1
-- tag2
-title: Retour sur les conférences dotScale, edition 2017.
+title: Retour sur les conférences dotScale, édition 2017.
 ---
+
+# Note
+
+This post is written in french, as it was, at first, targeted for another support. I apologize for the people who do not speak the language.
 
 # A propos de la dotScale
 
@@ -19,9 +20,9 @@ Cette conférence se veut être le "[TED](https://www.ted.com/)" des informatici
 Elle se déroule dans le prestigieux théâtre de Paris. 
 Les orateurs se succèdent pour des présentations d'une vingtaine de minutes maximum. Les conditions sont donc réunies pour mener les geeks et autres professionnels au plus profond des sujets évoqués. 
 D'ailleurs, les ordinateurs sont bannis (c'est une conférence _wireless-less_).
-Le rythme est cadré et maîtrisé par les organisateur. Bref, on se laisse guider.
+Le rythme est cadré et maîtrisé par les organisateurs. Bref, on se laisse guider.
 
-Cette année encore les orateurs étaient prestigieux. L'avantage de cette conférence, c'est que les orateurs ne sont pas des vendeurs. Ils viennent simplement pour partager leur vision et leur expérience de la scalabilité.
+Cette année encore les orateurs étaient prestigieux.
 
 ## La "tradition"
 
@@ -46,7 +47,7 @@ L'idée est désormais de traiter le flux de données et non les données elles-
 Neha Narkhede est co-créatrice du projet [Apache Kafka](http://kafka.apache.org/) qui est un système de messaging realtime. C'est le système utilisé par linkedin et il est capable de traiter 1,4 milliard de message par jour. Elle explique dans les minutes qui lui restent, comment kafka permet d'urbaniser les services en faisant transiter des messages qui transportent de l'information.
 Puis elle présente son produit [confluent](https://www.confluent.io/) qui est une plateforme de streaming de données qui se base sur kafka. 
 
-Le produit semble intéressant, mais l'idée l'est plus encore: traiter un flux de données à tous les niveaux, de l'applicatif aux logs.
+Le produit semble intéressant, mais l'idée l'est plus encore: traiter un flux de données à tous les niveaux, de l'applicatif aux logs (tel que c'est décrit dans les _12factors_ d'ailleurs).
 
 {{< speakerdeck b962268ed0724e7eb64d2d79c0c9fac2 >}}
 
@@ -55,7 +56,7 @@ Le produit semble intéressant, mais l'idée l'est plus encore: traiter un flux 
 On reste dans le flux de données et le realtime avec la présentation d'Adrian Cole (Lead Developer du projet Zipkin).
 Il est 11h, c'est la seconde conférence, et on constate déjà que les problèmes de scalabilité de "2017" tournent autour de la quantité de données qui peuvent transiter entre les éléments d'une application distribuée.
 
-[Zipkin](http://zipkin.io/) est un système de tracing distribué. Son rôle est de collecter des données horodatées pour analyser les problèmes de architecture microservices.
+[Zipkin](http://zipkin.io/) est un système de tracing distribué. Son rôle est de collecter des données horodatées pour analyser les problèmes des architectures microservices.
 
 Adrian présente ici 3 techniques différentes de collectes qui permettent aux ingénieurs d'avoir la vision totale de l'activité d'une plateforme de production: 
 
@@ -81,9 +82,11 @@ On pourra citer par exemple:
 
 Le sujet exposé aujourd'hui concerne la sécurité. Mitchell commence par replacer la scalabilité dans un contexte DevOps. C'est le _Pourquoi_.
 Ainsi il explique que le modèle traditionnel fait passer le travail du développeur à l'ops, et de l'ops à la production.
-Le DevOps a permis une paralellisation des tâches. Ainsi Dev et Ops travaillent de consors pour livrer en production.
+Le DevOps a permis une paralellisation des tâches. Ainsi Dev et Ops travaillent de consort pour livrer en production.
 
 Mais quid de la sécurité. Selon Mitchell Hashimoto, trop souvent la sécurité se place en "poseur de veto" entre les "DevOps" et la mise en production.
+
+Il propose une organisation SecDevOps. Le produit Vault est un outil qui pourrait aider à mettre en place une telle organisation.
 
 {{< speakerdeck 0decb31f9c374c21a5c0899fa89e39d1 >}}
 
@@ -110,7 +113,7 @@ En effet les bases de données NoSQL sont nées pour répondre au besoin de scal
 
 Cependant, il est tout à fait possible de rendre pleinement scalable une architecture SQL classique. Ainsi, en expliquant l'architecture modulaire de PostGres et en la faisant converger avec un modèle arithmétique, Marco explique comment il est possible de mettre en place une architecture "SQL" résiliente et scalable.
 
-La demonstration est réussie
+La démonstration est réussie
 
 {{< speakerdeck 80cc7e9225914845921786440affee1d >}}
 
@@ -133,13 +136,26 @@ Autre info : le produit Tower est planifié pour être rendu opensource par la s
 
 ## Aish Raj Dahal - _Chaos management during a major incident_
 
+Une partie sur la gestion d'incident. L'idée est de présenter comment PagerDuty gère les incidents.
+Cette présentation s'adresse plutôt aux développeurs, car les "Ops" savent normalement gérer ce genre de situation.
+On note quand même le principe du _blameless_  dont on entend de plus en plus souvent parler.
+
+Leur système de gestion s'inspire de [FEMA](https://www.fema.gov/national-incident-management-system).
+
 {{< speakerdeck a01da34216124ae9bbd9f589ea9bb480 >}}
 
 ## Andrew Shafer - _DevOps_
 
 Andrew Shafer est un "Jedi" du DevOps. C'est également un présentateur excellent.
 
-{< tweet 856530875563036672 >}
+Bien évidemment son exposé par du devops et de l'automatisation. Je retiens particulièrement :
+
+* L'automatisation ce n'est pas un humain qui utilise des outils (tels que Puppet ou Ansible par exemple). L'automatisation c'est un Robot qui fait le travail.
+* Il faut lire le livre de Google sur le SRE (le lien est plus bas dans ce post). Le SRE est l'ingénieur qui développe les automates. Il n'est pas l'automate.
+
+En tout état de cause, dès que les vidéos seront publiées, je vous recommande d'aller voir celle-ci.
+
+{{< tweet 856530875563036672 >}}
 
 ## Clay Smith - _Searching for the server in serverless_ 
 
@@ -154,17 +170,17 @@ Bien qu'elle semble peut utile de prime abord, la démonstration mets en exergue
 
 Il va être difficile de résumer le "talk" de David Mazieres.
 
-David a survolé les détails des algorithmes de concensus jusqu'à arriver au produit stellar.
+David a survolé les détails des algorithmes de consensus jusqu'à arriver au produit stellar.
+Il va m'être difficile de résumer ici son talk car je n'ai pas tout saisi.
+Le sujet mérite une revue de la conférence et une introduction approfondie du sujet.
 
-
-
-## Benjamin Hindman - _ _ 
+Si vous voulez pousser l'étude, la description complète du protocole se trouve [ici](https://www.stellar.org/papers/stellar-consensus-protocol.pdf).
 
 # Conclusion
 
 Le pari de faire des conférences techniques plus "inspirantes" que "geek" est difficile. Chaque conférence dot est selon moi un bel exemple en la matière.
 
-Concenant particulièrement cette édition, je noterai que tous les "talks" reflètent le savoir-faire et les bonnes pratiques actuelles de grandes sociétés ou de produits "à la mode".
+Concernant cette édition particulièrement, je noterai que tous les "talks" reflètent le savoir-faire et les bonnes pratiques actuelles de grandes sociétés ou de produits "à la mode".
 Beaucoup de concepts font écho avec les concepts énoncés dans l'ouvrage [Site Reliability Engineering - How Google Runs Production Systems](https://landing.google.com/sre/) d'ailleurs souvent cité dans te tels évènements.
 
 Il y a donc beaucoup de choses intéressantes à tirer de ces conférence, bien au-delà des aspects techniques. Tout comme les conférences TED, elles permettent une ouverture d'esprit ainsi qu'un regard critique sur notre activité au quotidien, que l'on soit, Ops, Dev ou Consultant.

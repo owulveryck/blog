@@ -29,8 +29,10 @@ disqusShortname = "owulveryck"
 uglyURLs = true
 
 [permalinks]
-    post = "/:year/:month/:day/:slug/index.html"
-    code = "/:slug/index.html"
+    #post = "/:year/:month/:day/:slug/index.html"
+    post = "/:year/:month/:day/:slug"
+    #code = "/:slug/index.html"
+    code = "/:slug"
 
 [taxonomies]
     tag = "tags"
