@@ -13,3 +13,21 @@ title: chrome eye of the cloud
 ---
 
 During the month of may, I have had the chance to attend to the Google Next event in London.
+
+# Chrome as the eye of the computer
+
+## WebRTC
+
+## getUserMedia
+
+## Websockets
+
+# The microservice of analyse
+
+## Locally with tensorflow
+
+## In the cloud with GCP
+
+# Going deeper
+
+
