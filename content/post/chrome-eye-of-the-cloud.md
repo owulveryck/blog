@@ -113,11 +113,16 @@ if (navigator.mediaDevices) {
 
 ### Getting info from the websocket and displaying it
 
-# The microservice of analyse
+## Other senses: hear and voice
 
-## Locally with tensorflow
+# The _brain_: **Cortical**
 
-## In the cloud with GCP
+## Sample cortex
+### Locally with tensorflow
+
+### In the cloud with GCP
+
+### In the cloud with AWS
 
 # Going deeper
 

@@ -15,7 +15,7 @@ This post is written in french, as it was, at first, targeted for another suppor
 
 # A propos de la dotScale
 
-Lundi 24 avril se tenait la cinquième édition de la conférence dotScale qui se décrit elle-même comme étant la _tech conférence Européenne sur la "scalabilité"_
+Lundi 24 avril se tenait la cinquième édition de la conférence dotScale qui se décrit elle-même comme étant la _tech conférence Européenne sur la "scalabilité"._
 Cette conférence se veut être le "[TED](https://www.ted.com/)" des informaticiens.
 Elle se déroule dans le prestigieux théâtre de Paris. 
 Les orateurs se succèdent pour des présentations d'une vingtaine de minutes maximum. Les conditions sont donc réunies pour mener les geeks et autres professionnels au plus profond des sujets évoqués. 
@@ -36,7 +36,7 @@ La première conférence fût donnée par Neha Narkhede.
 
 L'introduction part d'un constat.
 
-Les données gérées par les entreprises ont souvent été regroupées en bloques de travail pour qu'ils puissent être traités au mieux (en comptabilité, on parle par exemple "d'arrêter les comptes"). 
+Les données gérées par les entreprises ont souvent été regroupées en blocs de travail pour qu'ils puissent être traités au mieux (en comptabilité, on parle par exemple "d'arrêter les comptes"). 
 Ce mode de fonctionnement, copié par l'informatique a donné lieu aux traitements "batchs"
 Le problème est que ce mode de traitement n'est, de nos jours, plus du tout adapté au flux de données de plus en plus important.
 
@@ -108,7 +108,7 @@ Pour ma part, je ne connaissais pas Bazel. Ainsi donc la conférence a été une
 
 Marco Slot pose le constat suivant:
 
-Quand il s'agit de base de données et de scalabilité, on ne dissocie jamais les deux termes suivant: No et SQL.
+Quand il s'agit de bases de données et de scalabilité, on ne dissocie jamais les deux termes suivants: No et SQL.
 En effet les bases de données NoSQL sont nées pour répondre au besoin de scalabilité des entreprises.
 
 Cependant, il est tout à fait possible de rendre pleinement scalable une architecture SQL classique. Ainsi, en expliquant l'architecture modulaire de PostGres et en la faisant converger avec un modèle arithmétique, Marco explique comment il est possible de mettre en place une architecture "SQL" résiliente et scalable.
@@ -123,7 +123,7 @@ James Cammarata est le "lead maintener" du projet Ansible.
 Il fait ici l'apologie de l'automatisation (mais est-il encore besoin de le faire). Là où James insiste, c'est qu'il faut s'astreindre à respecter les règles de l'art en matière d'automatisation:
 
 * Tout automatiser (tout!)
-* Utiliser les fonction natives des outils lorsque c'est possible, et c'est souvent possible (éviter les appels à `sudo rm` dans les playbooks par exemple)
+* Utiliser les fonctions natives des outils lorsque c'est possible, et c'est souvent possible (éviter les appels à `sudo rm` dans les playbooks par exemple)
 * Préfixer les variables pour éviter le désastre du `sudo rm -rf ${foo}/${bar}`
 
 En bref:
@@ -136,7 +136,7 @@ Autre info : le produit Tower est planifié pour être rendu opensource par la s
 
 ## Aish Raj Dahal - _Chaos management during a major incident_
 
-Une partie sur la gestion d'incident. L'idée est de présenter comment PagerDuty gère les incidents.
+Une partie sur la gestion d'incidents. L'idée est de présenter comment PagerDuty gère les incidents.
 Cette présentation s'adresse plutôt aux développeurs, car les "Ops" savent normalement gérer ce genre de situation.
 On note quand même le principe du _blameless_  dont on entend de plus en plus souvent parler.
 
@@ -159,12 +159,12 @@ En tout état de cause, dès que les vidéos seront publiées, je vous recommand
 
 ## Clay Smith - _Searching for the server in serverless_ 
 
-Clay Smith pose la question de la latence dans les architecture "serveur-less".
+Clay Smith pose la question de la latence dans les architectures "serveur-less".
 Il expose ainsi les recherches qu'il a faites autour de [Lambda (aws)](https://aws.amazon.com/fr/lambda/details/). Il montre de prime abord comment il a réussi à obtenir des informations sur l'environnement d'exécution du code (accès via SSH depuis le lambda vers une autre machine avec tunneling). 
 
-Clay expose un ensemble de graphiques qui permettent affiche clairement un signal. Ce signal lui permet d'émettre certaines hypothèses quant-à l'algorithme possible d'attribution des environnements lambda sur AWS.
+Clay expose un ensemble de graphiques qui affiche clairement un signal. Ce signal lui permet d'émettre certaines hypothèses quant-à l'algorithme possible d'attribution des environnements lambda sur AWS.
 
-Bien qu'elle semble peut utile de prime abord, la démonstration mets en exergue certaines problématiques du "serverless" à savoir le temps de démarrage des applications qui est non constant.
+Bien qu'elle semble peu utile de prime abord, la démonstration met en exergue certaines problématiques du "serverless" à savoir le temps de démarrage des applications qui est non constant.
 
 ## David Mazieres - _The Stellar Consensus Protocol_
 
@@ -181,7 +181,7 @@ Si vous voulez pousser l'étude, la description complète du protocole se trouve
 Le pari de faire des conférences techniques plus "inspirantes" que "geek" est difficile. Chaque conférence dot est selon moi un bel exemple en la matière.
 
 Concernant cette édition particulièrement, je noterai que tous les "talks" reflètent le savoir-faire et les bonnes pratiques actuelles de grandes sociétés ou de produits "à la mode".
-Beaucoup de concepts font écho avec les concepts énoncés dans l'ouvrage [Site Reliability Engineering - How Google Runs Production Systems](https://landing.google.com/sre/) d'ailleurs souvent cité dans te tels évènements.
+Beaucoup de concepts font écho avec les concepts énoncés dans l'ouvrage [Site Reliability Engineering - How Google Runs Production Systems](https://landing.google.com/sre/) d'ailleurs souvent cité dans de tels évènements.
 
 Il y a donc beaucoup de choses intéressantes à tirer de ces conférence, bien au-delà des aspects techniques. Tout comme les conférences TED, elles permettent une ouverture d'esprit ainsi qu'un regard critique sur notre activité au quotidien, que l'on soit, Ops, Dev ou Consultant.
 
