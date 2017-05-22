@@ -12,6 +12,8 @@ tags:
 title: Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM
 ---
 
+**TL;DR:** Thank you for passing by. This article is, as usual, geek oriented. But if you are not a geek, and/or you are in hurry, you can jump to the conclusion: _[Any real application?](any-real-application)_
+
 During the month of may, I have had the chance to attend to the Google Next event in London and the dotAI in Paris. In both conferences I learned a lot about machine learning. 
 
 What those great speakers have taught me is that you shall not reinvent the wheel in AI. Actually a lot of research is done and there are very good implementation of the latest efficient algorithm.
@@ -242,6 +244,8 @@ Now, let me explain what is, according to me, the **most interresting part** of 
 ### In the cloud with AWS
 
 # Going deeper
+
+# Any real application?
 
 As usual the code can be found on [github under the tag v0.1](https://github.com/owulveryck/socketcam/releases/tag/v0.1)
 
