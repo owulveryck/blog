@@ -66,15 +66,17 @@ The backend would do the ML and reply with whatever information via the websocke
 
 # Chrome as the eye of the computer
 
-The idea is to activate a video stream and process pictures from this stream to active a neuron network.
+The idea is to get a video stream and grab pictures from this stream in order to activate a neural network.
 
-I will present different objects in from of my webcam, and their name will be displayed on the screen.
+I will present different objects in front of my webcam, and their name will be displayed on the screen.
 
 The architecture is client server: The Chrome is the eye of my bot, it communicate with the brain (a webservice in go that is running a pre-trained tensorflow neural network) via a websocket.
 
+**The rest of this paragraph is geek/javascript, if you're not interested you can jump to the next paragraph about the brain implementation called _[Cortical](#the-brain-cortical)_**
+
 ## getUserMedia
 
-The Web API [MediaDevices.getUserMedia()](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia) is used to open a webcam stream.
+I am using the Web API [MediaDevices.getUserMedia()](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia) to open the webcam and get the stream.
 
 This API is compatible with chrome on desktop *and* mobile on Android phone (but not on iOS). This means that I will be able to use a mobile phone as an "eye" of my bot.
 
@@ -109,15 +111,130 @@ if (navigator.mediaDevices) {
 
 ## Websockets
 
-### Sending pictures to the websocket
+According to Wikipedia's definition, Websocket is _a computer communications protocol, providing full-duplex communication channels over a single TCP connection_.
+The full duplex mode is important in my architecture. 
 
-### Getting info from the websocket and displaying it
+Let me explain why with a simple use case:
 
-## Other senses: hear and voice
+Imagine that your eye captures a scene and sends it to the brain for analysis. In a classic RESTfull architecture, the browser (the eye) would perform a POST request.
+The brain would reply with a process ID, and the eye would poll the endpoint every x seconds to get the processing status.
+
+This can be tedious in case of mutiple stimuli.
+
+Thanks to the websocket, the server can send the query, and the server will send an event back once the processing is done.
+Of course this is stateless in a sort, as the query is lost once the browser is closed.
+
+Another use case would be to get a stimulus from another "sense". For example, imagine that you want to "warn" the end user that he has been mentioned in a tweet. The brain can be in charge of polling
+twitter, and it would send a message through the websocket in case of event.
+
+### Connecting to the websocket
+
+A websocket URI is prefixed by `ws` or `wss` if the communication is encrypted (aka https).
+This code allows a connection through ws(s).
+
+{{< highlight js >}}
+var ws
+// Connecting the websocket
+var loc = window.location, new_uri;
+if (loc.protocol === "https:") {
+  new_uri = "wss:";
+} else {
+  new_uri = "ws:";
+}
+new_uri += "//" + loc.host + "/ws";
+ws = new WebSocket(new_uri);
+{{</ highlight >}}
+
+### Messages
+
+Web socket communication is message oriented. A message can be sent simply by calling the function `ws.send(message)`. Websockets are supporting texts and binary messages.
+But for this test only text messages will be used (images will be encoded in base64).
+
+The browser implementation of a websocket in javascript is event based. 
+When the server sends a message, an interruption is fired and the `ws.onmessage` call is triggered.
+
+This code will display the message received on the console:
+
+{{< highlight js >}}
+ws.onmessage = function(event) {
+  console.log("Received:" + event.data);
+};
+{{</ highlight >}}
+
+### Sending pictures to the websocket: actually seeing
+
+I didn't find a way to send the video stream to the brain via the websocket. Therefore I will do what everybody does: create a canvas and "take" a picture from the video:
+
+The method [toDataURL()](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL) will take care of encoding the picture in a well known format (png or jpeg).
+
+{{< highlight js >}}
+function takeSnapshot() {
+  var context;
+  var width = video.offsetWidth
+  , height = video.offsetHeight;
+
+  canvas = canvas || document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+
+  context = canvas.getContext('2d');
+  context.drawImage(video, 0, 0, width, height);
+
+  var dataURI = canvas.toDataURL('image/jpeg')
+  //...
+};
+{{</ highlight >}}
+
+To make the processing easier in the brain, I will serialize the video into a json object and sending it via the websocket:
+
+{{< highlight js >}}
+var message = {"dataURI":{}};
+message.dataURI.content = dataURI.split(',')[1];
+message.dataURI.contentType = dataURI.split(',')[0].split(':')[1].split(';')[0]
+var json = JSON.stringify(message);
+ws.send(json);
+{{</ highlight >}}
+
+## Bonus: ear and voice
+
+It is relativly easy to make chome speak out loud the message received. This snippet will speak out loud the message Received:
+
+{{< highlight js >}}
+function talk(message) {
+  var utterance = new SpeechSynthesisUtterance(message);
+  window.speechSynthesis.speak(utterance);
+}
+{{</ highlight >}}
+
+Therefore, simply addind a call to this function in the "onmessage" event of the websocket will trigger the voice of Chrome. 
+
+Listening to what is said is just a little bit trickier. It is done by a call to the `webkitSpeechRecognition();` method. 
+This [blog post](https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API) explains in details how this works.
+
+The call is also event based. What's important is that, in chrome, by default, it will use an API call to the Google's engine. Therefore the recognition won't work offline.
+
+When the language processing is done by chrome, 5 potential sentences are stored in a json array.
+The following snippet will take the most relevant one and send it to the brain via the websocket:
+
+
+{{< highlight js >}}
+recognition.onresult = function(event) { 
+  for (var i = event.resultIndex; i < event.results.length; ++i) {
+    if (event.results[i].isFinal) {
+      final_transcript += event.results[i][0].transcript;
+      ws.send(final_transcript);
+    }
+  }
+};
+{{</ highlight >}}
+
+_Now that we have setup the senses, let's make a "brain"_
 
 # The _brain_: **Cortical**
 
+Now, let me explain what is, according to me, the **most interresting part** of this post.
 ## Sample cortex
+
 ### Locally with tensorflow
 
 ### In the cloud with GCP
