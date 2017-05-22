@@ -235,6 +235,11 @@ _Now that we have setup the senses, let's make a "brain"_
 # The _brain_: **Cortical**
 
 Now, let me explain what is, according to me, the **most interresting part** of this post.
+
+## Concurrency
+
+[Rob Pike - 'Concurrency Is Not Parallelism'](https://www.youtube.com/watch?v=cN_DpYBzKso) this is a *must see!*
+
 ## Sample cortex
 
 ### Locally with tensorflow
