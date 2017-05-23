@@ -296,26 +296,12 @@ The tensorflow go package is a binding to the `libtensorflow.so`. It has a very 
 This example is using a pre-trained inception model ([http://arxiv.org/abs/1512.00567](http://arxiv.org/abs/1512.00567)).
 The program starts by downloading the pre-trained model, creates a graph, and try to guess labels on a given image.
 
-I will simply add the the expected interface to transform this example into a Cortex :
+I will simply add the the expected interface to transform this example into a Cortex compatible with my previous declaration (_some error check and some code has been omited for clarity_):
 
+{{< highlight go >}}
+type sampleTensorflowCortex struct{}
 
-
-
-
-### In the cloud with GCP
-
-### In the cloud with AWS
-
-# Going deeper
-
-# Any real application?
-
-
-// Tensorflow is filling the cortical.Cortex interface
-type Tensorflow struct{}
-
-// NewCortex is filling the  ...
-func (t *Tensorflow) NewCortex(ctx context.Context) (cortical.GetInfoFromCortexFunc, cortical.SendInfoToCortex) {
+func (t *sampleTensorflowCortex) NewCortex(ctx context.Context) (cortical.GetInfoFromCortexFunc, cortical.SendInfoToCortex) {
         c := make(chan []byte)
         class := &classifier{
                 c: c,
@@ -327,39 +313,63 @@ type classifier struct {
         c chan []byte
 }
 
-// Receive is the receiver of event
 func (t *classifier) Receive(ctx context.Context, b *[]byte) {
         var m message
-        err := json.Unmarshal(*b, &m)
-        if err != nil {
-                return
-        }
-        if m.DataURI.ContentType == "image/jpeg" {
-                data := m.DataURI.Content
-                // Run inference on *imageFile.
-                // For multiple images, session.Run() can be called in a loop (and
-                // concurrently). Alternatively, images can be batched since the model
-                // accepts batches of image data as input.
-                tensor, err := makeTensorFromImage(data)
-                if err != nil {
-                        log.Fatal(err)
-                }
-                output, err := session.Run(
-                        map[tf.Output]*tf.Tensor{
-                                graph.Operation("input").Output(0): tensor,
-                        },
-                        []tf.Output{
-                                graph.Operation("output").Output(0),
-                        },
-                        nil)
-                if err != nil {
-                        log.Fatal(err)
-                }
-                // output[0].Value() is a vector containing probabilities of
-                // labels for each image in the "batch". The batch size was 1.
-                // Find the most probably label index.
-                probabilities := output[0].Value().([][]float32)[0]
-                label := printBestLabel(probabilities, labelsfile)
-                t.c <- []byte(fmt.Sprintf("%v (%2.0f%%)", label.Label, label.Probability*100.0))
-        }
+        // omited for brievety 
+        tensor, err := makeTensorFromImage(m.DataURI.Content)
+        output, err := session.Run(
+                map[tf.Output]*tf.Tensor{
+                        graph.Operation("input").Output(0): tensor,
+                },
+                []tf.Output{ graph.Operation("output").Output(0),
+                }, nil)
+        probabilities := output[0].Value().([][]float32)[0]
+        label := printBestLabel(probabilities, labelsfile)
+        t.c <- []byte(fmt.Sprintf("%v (%2.0f%%)", label.Label, label.Probability*100.0))
 }
+
+func (t *classifier) Send(ctx context.Context) chan []byte {
+      return t.c
+}
+{{</ highlight >}}
+
+#### Demo
+
+This demo has been made with my Chromebook that has only 2 Gb or RAM. The tensorflow library is compiled without any optimization.
+It works!
+
+{{< youtube psb9r_YhwiY >}}
+
+The code is [here](https://github.com/owulveryck/socketcam).
+
+### In the cloud with AWS
+
+Now that I have seen that it works on my Chromebook, I can maybe use the cloud API to recognize some faces for example.
+Let's try with AWS' rekognition service.
+
+I will use the face compare API to check whether the person in front of the webcam is me.
+I will provide a sample picture of me to the cortex.
+
+I took the sample picture at work, to make the task a little bit trickier for the engine, because the environment will not match at all what it will see.
+
+I won't dig into the code that can be found [here](https://github.com/owulveryck/socketcam/blob/master/processors/rekognition/main.go).
+
+And does it work?
+
+{{< youtube KbvRr7XXoyE >}}
+
+Cool!
+
+# Any real application?
+
+This is really fun and exciting.
+Now I will be able to code a memory cortex to fetch a training set and play with tensorflow.
+
+But on top of that, we can imagine a lot of application. Atually, this service is working out-of-the box on Android (and it will on iOS as soon as Apple will support the getUSerMedia interface).
+I can imagine a simple web app (no need for an APK), that would warn you when it sees someone he knows.
+
+You can imagine a web gallery, and the webcam would wtch your reaction in front of different items and then tells you which one has been your favorite.
+
+You can turn your laptop into a CCTV system so it can warn you when an unknown person in in the room. We would do a preprocessing to detect humans before actually sending the info to the cloud. That would be cheaper and a lot more efficient than the crappy CV implemented in the webcam.
+
+And last but not least, combined with react.js, this can be used to do magic keynotes... But I will keep that for another story.
