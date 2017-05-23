@@ -199,7 +199,7 @@ ws.send(json);
 
 ## Bonus: ear and voice
 
-It is relativly easy to make chome speak out loud the message received. This snippet will speak out loud the message Received:
+It is relatively easy to make chrome speak out loud the message received. This snippet will speak out loud the message Received:
 
 {{< highlight js >}}
 function talk(message) {
@@ -208,7 +208,7 @@ function talk(message) {
 }
 {{</ highlight >}}
 
-Therefore, simply addind a call to this function in the "onmessage" event of the websocket will trigger the voice of Chrome. 
+Therefore, simply adding a call to this function in the "onmessage" event of the websocket will trigger the voice of Chrome. 
 
 Listening to what is said is just a little bit trickier. It is done by a call to the `webkitSpeechRecognition();` method. 
 This [blog post](https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API) explains in details how this works.
@@ -233,16 +233,74 @@ recognition.onresult = function(event) {
 _Now that we have setup the senses, let's make a "brain"_
 
 # The _brain_: **Cortical**
+![Picture](https://github.com/owulveryck/cortical/raw/master/doc/cortical.png)
+
 
 Now, let me explain what is, according to me, the **most interresting part** of this post.
+By now, all that I have done is a little bit of javascript to grab a picture. This is no big deal, nor it can be called machine learning.
 
-## Concurrency
+What I need now is to actually process the messages so the computer can tell what it sees.
 
-[Rob Pike - 'Concurrency Is Not Parallelism'](https://www.youtube.com/watch?v=cN_DpYBzKso) this is a *must see!*
+For this purpose I have developed a message dispatcher. This dispatcher, called _Cortical_  is available on [github](https://github.com/owulveryck/cortical)
 
-## Sample cortex
+Here is an extract from the README of the project:
 
-### Locally with tensorflow
+----
+
+**What is Cortical?**
+
+Cortical is a go ~~framework~~ ~~middleware~~ piece of code that acts as a message dispatcher. The messages are transmitted in full duplex over a websocket.
+Cortical is therefore a very convenient way to distribute messages to "processing units" (other go functions) and to get the responses back in a **concurrent** and **asynchronous** way.
+
+The "processing units" are called _Cortexes_ and do not need to be aware of any web mechanism.
+
+----
+
+So far, so good, I can simply create a handler to receive the messages sent by the chrome browser in go:
+
+{{< highlight go >}}
+brain := &cortical.Cortical{
+    Upgrader: websocket.Upgrader{},
+    Cortexes:  []cortical.Cortex{
+                    &sampleTensorflowCortex{}, // cortex?
+               }, 
+}
+http.HandleFunc("/ws", brain.ServeWS)
+log.Fatal(http.ListenAndServe(":8080", nil))
+{{</ highlight >}}
+
+_Note_: **Concurrency** and **asynchronicity** are really built in _Cortical_, this is what makes this code so helpful actually.
+
+## _Cortexes_
+
+Cortexes are processing units. That is the place where messages are analyzed and where the ML magic happens.
+
+From the readme, I quote:
+
+----
+
+A cortex is any go code that provides two functions:
+
+* A "send" function that returns a channel of `[]byte`. The content of the channel is sent to the websocket once available (cf [`GetInfoFromCortexFunc`](https://godoc.org/github.com/owulveryck/cortical#GetInfoFromCortexFunc))
+* A "receive" method that take a pointer of `[]byte`. This function is called each time a message is received (cf [`SendInfoToCortex`](https://godoc.org/github.com/owulveryck/cortical#SendInfoToCortex))
+
+A cortex object must therefore be compatible with the `cortical.Cortex` interface:
+
+----
+
+Ok, let's build Cortexes!
+
+### A tensorflow cortex runnig locally
+
+The tensorflow go package is a binding to the `libtensorflow.so`. It has a very nice example described in the [godoc here](https://godoc.org/github.com/tensorflow/tensorflow/tensorflow/go#ex-package).
+This example is using a pre-trained inception model ([http://arxiv.org/abs/1512.00567](http://arxiv.org/abs/1512.00567)).
+The program starts by downloading the pre-trained model, creates a graph, and try to guess labels on a given image.
+
+I will simply add the the expected interface to transform this example into a Cortex :
+
+
+
+
 
 ### In the cloud with GCP
 
@@ -252,5 +310,56 @@ Now, let me explain what is, according to me, the **most interresting part** of 
 
 # Any real application?
 
-As usual the code can be found on [github under the tag v0.1](https://github.com/owulveryck/socketcam/releases/tag/v0.1)
 
+// Tensorflow is filling the cortical.Cortex interface
+type Tensorflow struct{}
+
+// NewCortex is filling the  ...
+func (t *Tensorflow) NewCortex(ctx context.Context) (cortical.GetInfoFromCortexFunc, cortical.SendInfoToCortex) {
+        c := make(chan []byte)
+        class := &classifier{
+                c: c,
+        }
+        return class.Send, class.Receive
+}
+
+type classifier struct {
+        c chan []byte
+}
+
+// Receive is the receiver of event
+func (t *classifier) Receive(ctx context.Context, b *[]byte) {
+        var m message
+        err := json.Unmarshal(*b, &m)
+        if err != nil {
+                return
+        }
+        if m.DataURI.ContentType == "image/jpeg" {
+                data := m.DataURI.Content
+                // Run inference on *imageFile.
+                // For multiple images, session.Run() can be called in a loop (and
+                // concurrently). Alternatively, images can be batched since the model
+                // accepts batches of image data as input.
+                tensor, err := makeTensorFromImage(data)
+                if err != nil {
+                        log.Fatal(err)
+                }
+                output, err := session.Run(
+                        map[tf.Output]*tf.Tensor{
+                                graph.Operation("input").Output(0): tensor,
+                        },
+                        []tf.Output{
+                                graph.Operation("output").Output(0),
+                        },
+                        nil)
+                if err != nil {
+                        log.Fatal(err)
+                }
+                // output[0].Value() is a vector containing probabilities of
+                // labels for each image in the "batch". The batch size was 1.
+                // Find the most probably label index.
+                probabilities := output[0].Value().([][]float32)[0]
+                label := printBestLabel(probabilities, labelsfile)
+                t.c <- []byte(fmt.Sprintf("%v (%2.0f%%)", label.Label, label.Probability*100.0))
+        }
+}
