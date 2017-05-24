@@ -355,7 +355,7 @@ Cool!
 
 # Any real application?
 
-This is really fun and exciting.Now I will be able to code a memory cortex to fetch a training set. Then I will play with tensorflow. And do not think that everything has already been done, this area is full of surprises to come ([This is the Moravec's paradoc](https://en.wikipedia.org/wiki/Moravec%27s_paradox)).
+This is really fun and exciting.Now I will be able to code a memory cortex to fetch a training set. Then I will play with tensorflow. And do not think that everything has already been done, this area is full of surprises to come ([This is the Moravec's paradox](https://en.wikipedia.org/wiki/Moravec%27s_paradox)).
 
 However, on top of that, we can imagine a lot of application. Actually, this service is working out-of-the box on Android (and it will on iOS as soon as Apple supports the getUSerMedia interface).
 I imagine a simple web app (no need for an APK), that would warn you when it sees someone he knows.
