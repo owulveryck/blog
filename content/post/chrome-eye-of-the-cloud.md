@@ -2,7 +2,7 @@
 categories:
 - category
 date: 2017-05-16T21:43:46+02:00
-description: ""
+description: "This post is about Machine Learning... Well not really"
 draft: true
 images:
 - https://lh3.googleusercontent.com/nYhPnY2I-e9rpqnid9u9aAODz4C04OycEGxqHG5vxFnA35OGmLMrrUmhM9eaHKJ7liB-=w300
@@ -363,7 +363,7 @@ Cool!
 # Any real application?
 
 This is really fun and exciting.
-Now I will be able to code a memory cortex to fetch a training set and play with tensorflow.
+Now I will be able to code a memory cortex to fetch a training set and play with tensorflow. And do not think that everything has already been done, this area is full of surprises to come ([This is the Moravec's paradoc](https://en.wikipedia.org/wiki/Moravec%27s_paradox)).
 
 But on top of that, we can imagine a lot of application. Atually, this service is working out-of-the box on Android (and it will on iOS as soon as Apple will support the getUSerMedia interface).
 I can imagine a simple web app (no need for an APK), that would warn you when it sees someone he knows.
@@ -373,3 +373,7 @@ You can imagine a web gallery, and the webcam would wtch your reaction in front 
 You can turn your laptop into a CCTV system so it can warn you when an unknown person in in the room. We would do a preprocessing to detect humans before actually sending the info to the cloud. That would be cheaper and a lot more efficient than the crappy CV implemented in the webcam.
 
 And last but not least, combined with react.js, this can be used to do magic keynotes... But I will keep that for another story.
+
+As a conclusion, I will put this XKCD of septembre 2014... only 3 years ago, and yet, so many things have already changed:
+
+![XKCD](https://imgs.xkcd.com/comics/tasks.png)
