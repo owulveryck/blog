@@ -1,18 +1,17 @@
 ---
 categories:
-- category
 date: 2017-05-16T21:43:46+02:00
-description: "Is this post about Machine Learning? Well, not really. In this post I will explain how to use a web browser to get information about the environment (pictures and sound). Then, I will present a simple way to process and interact with this information. Why do I do that? At first, simply because I am (trying) to play with tensorflow, chatbots etc, and I need a simple way to grab information to create a training set... But with the evolution of my code, I am now using it alongside with the cloud API of AWS. Welcome to my world."
-draft: true
+description: "Is this post about Machine Learning? Well, not really, but it is highly related. In this post I will explain how to use a web browser to get information about the environment (pictures and sound). Then, I will present a simple way to process and interact with this information. Why do I do that? At first, simply because I am (trying) to play with tensorflow, chatbots etc, and I need a simple way to grab information to create a training set... But with the evolution of my code, I am now using it alongside with the cloud API of AWS. Welcome to my world."
+draft: false
 images:
 - https://lh3.googleusercontent.com/nYhPnY2I-e9rpqnid9u9aAODz4C04OycEGxqHG5vxFnA35OGmLMrrUmhM9eaHKJ7liB-=w300
 tags:
-- tag1
-- tag2
+- ML
+- Chrome
 title: Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM
 ---
 
-**TL;DR:** Thank you for passing by. This article is, as usual, geek oriented. However if you are not a geek, and/or you are in a hurry, you can jump to the conclusion: _[Any real application?](any-real-application)_
+**TL;DR:** Thank you for passing by. This article is, as usual, geek oriented. However if you are not a geek, and/or you are in a hurry, you can jump to the conclusion: _[Any real application?](#any-real-application)_
 
 During the month of may, I have had the chance to attend to the Google Next event in London and the dotAI in Paris. In both conferences I learned a lot about machine learning. 
 

@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html</loc>
+    <lastmod>2017-05-16T21:43:46+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://blog.owulveryck.info/2017/04/24/retour-sur-les-conf%C3%A9rences-dotscale-%C3%A9dition-2017..html</loc>
     <lastmod>2017-04-24T20:51:22+02:00</lastmod>
   </url>
@@ -198,13 +203,13 @@
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/topics/bdd.html</loc>
+    <loc>https://blog.owulveryck.info/tags/bdd.html</loc>
     <lastmod>2016-03-31T23:39:35+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/tags/bdd.html</loc>
+    <loc>https://blog.owulveryck.info/topics/bdd.html</loc>
     <lastmod>2016-03-31T23:39:35+01:00</lastmod>
     <priority>0</priority>
   </url>
@@ -229,7 +234,7 @@
   
   <url>
     <loc>https://blog.owulveryck.info/tags/chrome.html</loc>
-    <lastmod>2016-09-09T13:39:50+02:00</lastmod>
+    <lastmod>2017-05-16T21:43:46+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -462,6 +467,12 @@
   </url>
   
   <url>
+    <loc>https://blog.owulveryck.info/tags/ml.html</loc>
+    <lastmod>2017-05-16T21:43:46+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.owulveryck.info/tags/msgpack.html</loc>
     <lastmod>2015-11-10T08:56:36+01:00</lastmod>
     <priority>0</priority>
@@ -499,7 +510,7 @@
   
   <url>
     <loc>https://blog.owulveryck.info/post.html</loc>
-    <lastmod>2017-04-24T20:51:22+02:00</lastmod>
+    <lastmod>2017-05-16T21:43:46+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -612,14 +623,14 @@
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/topics/tosca.html</loc>
-    <lastmod>2015-11-20T10:09:30+00:00</lastmod>
+    <loc>https://blog.owulveryck.info/tags/tosca.html</loc>
+    <lastmod>2016-02-10T17:19:47+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/tags/tosca.html</loc>
-    <lastmod>2016-02-10T17:19:47+01:00</lastmod>
+    <loc>https://blog.owulveryck.info/topics/tosca.html</loc>
+    <lastmod>2015-11-20T10:09:30+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -636,20 +647,20 @@
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/topics/udt.html</loc>
-    <lastmod>2016-10-17T20:50:18+02:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.owulveryck.info/tags/udt.html</loc>
     <lastmod>2016-10-17T20:50:18+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>https://blog.owulveryck.info/topics/udt.html</loc>
+    <lastmod>2016-10-17T20:50:18+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.owulveryck.info/</loc>
-    <lastmod>2017-04-24T20:51:22+02:00</lastmod>
+    <lastmod>2017-05-16T21:43:46+02:00</lastmod>
     <priority>0</priority>
   </url>
   
