@@ -2,7 +2,7 @@
 categories:
 - category
 date: 2017-05-16T21:43:46+02:00
-description: "This post is about Machine Learning... Well not really"
+description: "Is this post about Machine Learning? Well, not really. In this post I will explain how to use a web browser to get information about the environment (pictures and sound). Then, I will present a simple way to process and interact with this information. Why do I do that? At first, simply because I am (trying) to play with tensorflow, chatbots etc, and I need a simple way to grab information to create a training set... But with the evolution of my code, I am now using it alongside with the cloud API of AWS. Welcome to my world."
 draft: true
 images:
 - https://lh3.googleusercontent.com/nYhPnY2I-e9rpqnid9u9aAODz4C04OycEGxqHG5vxFnA35OGmLMrrUmhM9eaHKJ7liB-=w300
@@ -12,11 +12,11 @@ tags:
 title: Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM
 ---
 
-**TL;DR:** Thank you for passing by. This article is, as usual, geek oriented. But if you are not a geek, and/or you are in hurry, you can jump to the conclusion: _[Any real application?](any-real-application)_
+**TL;DR:** Thank you for passing by. This article is, as usual, geek oriented. However if you are not a geek, and/or you are in a hurry, you can jump to the conclusion: _[Any real application?](any-real-application)_
 
 During the month of may, I have had the chance to attend to the Google Next event in London and the dotAI in Paris. In both conferences I learned a lot about machine learning. 
 
-What those great speakers have taught me is that you shall not reinvent the wheel in AI. Actually a lot of research is done and there are very good implementation of the latest efficient algorithm.
+What those great speakers have taught me is that you should not reinvent the wheel in AI. Actually a lot of research is done and there are very good implementation of the latest efficient algorithm.
 
 *The tool* that every engineer that wants to try AI must know is [tensorflow](https://www.tensorflow.org/). Tensorflow is a generic framework that has been developed by Google's Machine Intelligence research organization. The tool has been open-sourced last year and has reached the v1.0 earlier this year.
 
@@ -30,7 +30,7 @@ First of all, it has bindings so it can be used within various programming langu
 * java
 * go
 
-But to be honest, mainly python and c++ are described in the documentation. And to be even more honest I think that python is the language that you should use to prototype applications.
+However to be honest, mainly python and c++ are described in the documentation. And to be even more honest I think that python is the language that you should use to prototype applications.
 
 ### ML and neuron network examples
 
@@ -46,25 +46,23 @@ Tensorflow's model has a built-in way to perform distributed computation. It is 
 Tensorflow is the engine used by Google for their service called ML engine.
 That means that you can write your function locally and run them serverless on the cloud.
 You only pay for what you have effectively consumed.
-That means for example that you can train a neuron network on GCP (so you don't need GPU. TPU, or whatever computing power) and transfer your model locally,
+That means for example that you can train a neuron network on GCP (so you don't need GPU. TPU, or whatever computing power) and transfer your model locally.
 
 For example, this is how the mobile app "google translate" works. A pre-trained model is downloaded on your phone, and the live translation is done locally.
 
 ![Image](http://technews.wpengine.netdna-cdn.com/wp-content/uploads/2015/01/www.lanacion.com_.ar_.jpg)
 
-_Note_ The other ML services from GCP such as cloud vision, translate, or image search, are "just" API that query a neuron network with a model trained by google.
+_Note_ Other ML services from GCP such as cloud vision, translate, or image search, are "just" API that query a neuron network with a model trained by google.
 
 # So What?
 
-I want to play with image recognition.
-Actually I already did a test with AWS's rekognition service ([See this post](/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html)). But the problem were:
+I want to play with image recognition. Actually I already did a test with AWS's rekognition service ([See this post](/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html)).  However the problems were:
 
-* I relied on a low-level webcam implementation, therefore the code was not portable
-* I had no preview of what my computer was looking at 
-* I could not execute it on any mobile app for a demo 
+* I relied on a low-level webcam implementation. Therefore the code was not portable;
+* I had no preview of what my computer was looking at;
+* I could not execute it on any mobile app for a demo; 
 
-As I am using a Chromebook for a while, I found a solution: Using a Javascript API and the Chrome browser to access the camera. Then the pictures can be transfered to a backend via a websocket.
-The backend would do the ML and reply with whatever information via the websocket. I can then display the result or even use the voice api of Chrome to tell the result loud.
+As I am using a Chromebook for a while, I found a solution: Using a Javascript API and the Chrome browser to access the camera. Then, the pictures can be transfered to a backend via a websocket. The backend would do the ML and reply with whatever information via the websocket. I can then display the result or even use the voice api of Chrome to tell the result loud.
 
 # Chrome as the eye of the computer
 
@@ -121,7 +119,7 @@ Let me explain why with a simple use case:
 Imagine that your eye captures a scene and sends it to the brain for analysis. In a classic RESTfull architecture, the browser (the eye) would perform a POST request.
 The brain would reply with a process ID, and the eye would poll the endpoint every x seconds to get the processing status.
 
-This can be tedious in case of mutiple stimuli.
+This can be tedious in case of multiple stimuli.
 
 Thanks to the websocket, the server can send the query, and the server will send an event back once the processing is done.
 Of course this is stateless in a sort, as the query is lost once the browser is closed.
@@ -187,7 +185,7 @@ function takeSnapshot() {
 };
 {{</ highlight >}}
 
-To make the processing easier in the brain, I will serialize the video into a json object and sending it via the websocket:
+To make the processing in the brain easier, I will serialize the video into a json object and sending it via the websocket:
 
 {{< highlight js >}}
 var message = {"dataURI":{}};
@@ -210,14 +208,12 @@ function talk(message) {
 
 Therefore, simply adding a call to this function in the "onmessage" event of the websocket will trigger the voice of Chrome. 
 
-Listening to what is said is just a little bit trickier. It is done by a call to the `webkitSpeechRecognition();` method. 
-This [blog post](https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API) explains in details how this works.
+Listening is a little bit trickier. It is done by a call to the `webkitSpeechRecognition();` method. This [blog post](https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API) explains in detail how this works.
 
 The call is also event based. What's important is that, in chrome, by default, it will use an API call to the Google's engine. Therefore the recognition won't work offline.
 
-When the language processing is done by chrome, 5 potential sentences are stored in a json array.
+When the language processing is done by chrome, five potential sentences are stored in a json array.
 The following snippet will take the most relevant one and send it to the brain via the websocket:
-
 
 {{< highlight js >}}
 recognition.onresult = function(event) { 
@@ -236,9 +232,7 @@ _Now that we have setup the senses, let's make a "brain"_
 ![Picture](https://github.com/owulveryck/cortical/raw/master/doc/cortical.png)
 
 
-Now, let me explain what is, according to me, the **most interresting part** of this post.
-By now, all that I have done is a little bit of javascript to grab a picture. This is no big deal, nor it can be called machine learning.
-
+Now, let me explain what is, according to me, the **most interresting part** of this post. By now, all that I have done is a little bit of javascript to grab a picture. This is not a big deal, and there is no machine learning yet (besides the speech recognition built-in in chrome).
 What I need now is to actually process the messages so the computer can tell what it sees.
 
 For this purpose I have developed a message dispatcher. This dispatcher, called _Cortical_  is available on [github](https://github.com/owulveryck/cortical)
@@ -296,7 +290,7 @@ The tensorflow go package is a binding to the `libtensorflow.so`. It has a very 
 This example is using a pre-trained inception model ([http://arxiv.org/abs/1512.00567](http://arxiv.org/abs/1512.00567)).
 The program starts by downloading the pre-trained model, creates a graph, and try to guess labels on a given image.
 
-I will simply add the the expected interface to transform this example into a Cortex compatible with my previous declaration (_some error check and some code has been omited for clarity_):
+I will simply add the expected interface to transform this example into a Cortex compatible with my previous declaration (_some error check and some code has been omited for clarity_):
 
 {{< highlight go >}}
 type sampleTensorflowCortex struct{}
@@ -350,7 +344,7 @@ Let's try with AWS' rekognition service.
 I will use the face compare API to check whether the person in front of the webcam is me.
 I will provide a sample picture of me to the cortex.
 
-I took the sample picture at work, to make the task a little bit trickier for the engine, because the environment will not match at all what it will see.
+I took the sample picture at work, to make the task a little bit trickier for the engine because the environment will not match what it will see.
 
 I won't dig into the code that can be found [here](https://github.com/owulveryck/socketcam/blob/master/processors/rekognition/main.go).
 
@@ -362,18 +356,19 @@ Cool!
 
 # Any real application?
 
-This is really fun and exciting.
-Now I will be able to code a memory cortex to fetch a training set and play with tensorflow. And do not think that everything has already been done, this area is full of surprises to come ([This is the Moravec's paradoc](https://en.wikipedia.org/wiki/Moravec%27s_paradox)).
+This is really fun and exciting.Now I will be able to code a memory cortex to fetch a training set. Then I will play with tensorflow. And do not think that everything has already been done, this area is full of surprises to come ([This is the Moravec's paradoc](https://en.wikipedia.org/wiki/Moravec%27s_paradox)).
 
-But on top of that, we can imagine a lot of application. Atually, this service is working out-of-the box on Android (and it will on iOS as soon as Apple will support the getUSerMedia interface).
-I can imagine a simple web app (no need for an APK), that would warn you when it sees someone he knows.
+However, on top of that, we can imagine a lot of application. Actually, this service is working out-of-the box on Android (and it will on iOS as soon as Apple supports the getUSerMedia interface).
+I imagine a simple web app (no need for an APK), that would warn you when it sees someone he knows.
 
-You can imagine a web gallery, and the webcam would wtch your reaction in front of different items and then tells you which one has been your favorite.
+I also imagine a web gallery, and the webcam would watch your reaction in front of different items and then tells you which one has been your favorite.
 
-You can turn your laptop into a CCTV system so it can warn you when an unknown person in in the room. We would do a preprocessing to detect humans before actually sending the info to the cloud. That would be cheaper and a lot more efficient than the crappy CV implemented in the webcam.
+Indeed, there may be a lot of great application for e-commerce.
 
-And last but not least, combined with react.js, this can be used to do magic keynotes... But I will keep that for another story.
+You can turn your laptop into a CCTV system so it can warn you when an unknown person in the room. We would do a preprocessing to detect humans before actually sending the info to the cloud. That would be cheaper and a lot more efficient than the crappy CV implemented in the webcam.
 
-As a conclusion, I will put this XKCD of septembre 2014... only 3 years ago, and yet, so many things have already changed:
+And finally, combined with react.js, this can be used to do magic keynotes... But I will keep that for another story.
+
+As a conclusion, I will put this XKCD of September 2014. It is only three years old, and yet, so many things have already changed:
 
 ![XKCD](https://imgs.xkcd.com/comics/tasks.png)
