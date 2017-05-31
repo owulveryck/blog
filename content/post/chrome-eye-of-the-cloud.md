@@ -231,7 +231,7 @@ _Now that we have setup the senses, let's make a "brain"_
 ![Picture](https://github.com/owulveryck/cortical/raw/master/doc/cortical.png)
 
 
-Now, let me explain what is, according to me, the **most interresting part** of this post. By now, all that I have done is a little bit of javascript to grab a picture. This is not a big deal, and there is no machine learning yet (besides the speech recognition built-in in chrome).
+Now, let me explain what is, according to me, the **most interesting part** of this post. By now, all that I have done is a little bit of javascript to grab a picture. This is not a big deal, and there is no machine learning yet (besides the speech recognition built-in in chrome).
 What I need now is to actually process the messages so the computer can tell what it sees.
 
 For this purpose I have developed a message dispatcher. This dispatcher, called _Cortical_  is available on [github](https://github.com/owulveryck/cortical)
@@ -364,7 +364,7 @@ I also imagine a web gallery, and the webcam would watch your reaction in front 
 
 Indeed, there may be a lot of great application for e-commerce.
 
-You can turn your laptop into a CCTV system so it can warn you when an unknown person in the room. We would do a preprocessing to detect humans before actually sending the info to the cloud. That would be cheaper and a lot more efficient than the crappy CV implemented in the webcam.
+You can turn your laptop into a CCTV system so it can warn you when an unknown person is in the room. We would do a preprocessing to detect humans before actually sending the info to the cloud. That would be cheaper and a lot more efficient than the crappy CV implemented in the webcam.
 
 And finally, combined with react.js, this can be used to do magic keynotes... But I will keep that for another story.
 
