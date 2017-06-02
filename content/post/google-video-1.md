@@ -5,21 +5,60 @@ date: 2017-06-01T22:07:56+02:00
 description: ""
 draft: true
 images:
-- /2016/10/image.jpg
+- https://cloud.google.com/images/products/video-intelligence/analysis.png
 tags:
 - tag1
 - tag2
 title: Analysing a parodic trailer with Google Cloud Video Intelligence
 ---
 
-# The sample movie 
+Google has recently announced its new service called "[Google Cloud Video Intelligence](https://cloud.google.com/video-intelligence/)".
+The purpose of this service is to provide tagging and annotations of digital videos.
 
-As an example, I will use a trailer from a french parody called _"A la recherche de l'utra-sex"_.
+I will try this service on a trailer of a french parody. This movie is composed of several scenes taken from erotic movies of the seventies.
+
+Why this parody?
+
+* because it is fun
+* because it is composed of a lot of different scenes
+* because it is short (so it won't cost me a lot)
+* because, as it is related to erotic of the seventies, I am curious of the result!
 
 _Caution_: this video **is not a porn video** but is indeed **not safe for work** (_#nsfw_)
 
+# What information can the service find?
 
-## Querying Google Cloud Video Intelligence 
+## Shot change detection
+
+This feature will detect the different scenes and display their time range. There is no futher analysis of the scene. That is to say that it won't tell, by now, that the first scene is about a sport competition. But indeed it will tell that the first scene occurs from the first microsecond until the xxx mirosecond and so on.
+
+## Label detection
+
+More interesting feature is the label detection.
+
+With this operation, the service will display tags of element found in the video, as well as the time range of the video where they can be seen.
+
+For example, it may tell you that there is a dog in the video between x and y micro-seconds as well as between w and z micro-seconds.
+
+# Preparing the video
+
+I have downloaded the video thanks to [youtube-dl](https://rg3.github.io/youtube-dl/) and I have uploaded it to [Google Cloud Storage](https://cloud.google.com/products/storage/) as the API expects the video to be here. There may be a way to post the video encoded in base64 directly, but that would have been less convenient for my tests.
+
+![screnshot](/assets/video-intelligence/gs-trailer.png)
+
+# Querying Google Cloud Video Intelligence 
+
+This test is made with the simple REST API with `curl`.
+
+## Preparing the request
+
+To actually use the API, we need to perform a POST request. 
+The payload is a simple json file where we specify:
+
+* the URI of the video file to process
+* and array of features to use amongs: Shot change detection and/or label detetection
+
+Here is my payload. I want both features for my test:
 
 {{< highlight js >}}
 {
@@ -28,15 +67,31 @@ _Caution_: this video **is not a porn video** but is indeed **not safe for work*
 }
 {{< /highlight >}}
 
+## Launching the request
+
+### Authorization
+
+To actually use the service, I need an authorization token. This token is linked to a service account.
+Then with the token we can trigger the analysis by using this `curl` command:
+
 {{< highlight shell >}}
 curl -s -k -H 'Content-Type: application/json' \
       -H 'Authorization: Bearer MYTOKEN' \
       'https://videointelligence.googleapis.com/v1beta1/videos:annotate' \
       -d @demo.json
+{{< /highlight >}}
+
+The action replies with a json containing an `operation name`. Actually the operation is long an asynchronous. This `operation name` can be use to get the processing status.
+
+{{< highlight js >}}
 {
    "name": "us-east1.16784866925473582660"
 }
 {{< /highlight >}}
+
+### Getting the status
+
+To request the status, we need to query the service to get the status of the operation:
 
 {{< highlight shell >}}
 curl -s -k -H 'Content-Type: application/json' \
@@ -44,16 +99,19 @@ curl -s -k -H 'Content-Type: application/json' \
       'https://videointelligence.googleapis.com/v1/operations/us-east1.16784866925473582660'
 {{< /highlight >}}
 
-The full result is [here](/assets/video-intelligence/video-analysis-a-la-recherche.json)
+It returns a result in `json` that in which we can find three important fields:
+
+* `done`: a boolean that tells whether the processing of the video is complete or not
+* `shotAnnotations`: an array of the shot annotations as described earlier
+* `labelAnnotations`: an array of label annotations
+
+Here is a sample output: (the full result is [here](/assets/video-intelligence/video-analysis-a-la-recherche.json))
 {{< highlight js >}}
 {
   "response": {
     "annotationResults": [
       {
         "shotAnnotations": [
-          {
-            "endTimeOffset": "1920048"
-          },
           // ...
           {
             "endTimeOffset": "109479985",
@@ -61,36 +119,6 @@ The full result is [here](/assets/video-intelligence/video-analysis-a-la-recherc
           }
         ],
         "labelAnnotations": [
-          {
-            "locations": [
-              {
-                "level": "SHOT_LEVEL",
-                "confidence": 0.40029016,
-                "segment": {
-                  "endTimeOffset": "24360033",
-                  "startTimeOffset": "21559963"
-                }
-              },
-              {
-                "level": "SHOT_LEVEL",
-                "confidence": 0.41241992,
-                "segment": {
-                  "endTimeOffset": "29039958",
-                  "startTimeOffset": "26999971"
-                }
-              },
-              {
-                "level": "SHOT_LEVEL",
-                "confidence": 0.41364595,
-                "segment": {
-                  "endTimeOffset": "30639998",
-                  "startTimeOffset": "29080023"
-                }
-              }
-            ],
-            "languageCode": "en-us",
-            "description": "Abdomen"
-          },
           // ... 
           {
             "locations": [
@@ -110,33 +138,41 @@ The full result is [here](/assets/video-intelligence/video-analysis-a-la-recherc
         "inputUri": "/video-test-blog/trailer.mp4"
       }
     ],
-    "@type": "type.googleapis.com/google.cloud.videointelligence.v1beta1.AnnotateVideoResponse"
+    //...
   },
   "done": true,
-  "metadata": {
-    "annotationProgress": [
-      {
-        "updateTime": "2017-06-01T20:53:42.679081Z",
-        "startTime": "2017-06-01T20:53:30.610811Z",
-        "progressPercent": 100,
-        "inputUri": "/video-test-blog/trailer.mp4"
-      },
-      {
-        "updateTime": "2017-06-01T20:53:45.472996Z",
-        "startTime": "2017-06-01T20:53:30.610811Z",
-        "progressPercent": 100,
-        "inputUri": "/video-test-blog/trailer.mp4"
-      }
-    ],
-    "@type": "type.googleapis.com/google.cloud.videointelligence.v1beta1.AnnotateVideoProgress"
-  },
-  "name": "us-east1.9773682320661713538"
+  //...
 }
 {{< /highlight >}}
 
-I generated a tag cloud with the help of [this website](https://www.jasondavies.com/wordcloud/):
+# Interpreting the results
+
+## Tag cloud
+
+I will only look at the label annotations.
+We have a lot of label founds described under the `description` fields and 1 to N location where such a description is found.
+
+What I can do is to manipulate the data to list all the label founds with their frequency.
+
+You can find [here](https://gist.github.com/owulveryck/70d97e1e73d664c1c927c253a862ac17) a little go code that will display labels as many times as they occurs.
+
+For example:
+
+```
+Abdomen Abdomen Abdomen Acrobatics Action figure Advertising Advertising ...
+```
+
+This allows me to generate a tag cloud with the help of [this website](https://www.jasondavies.com/wordcloud/):
+
+So here is the visual result of what the service has found in the video:
 
 ![tag cloud](/assets/video-intelligence/wordcloud.svg)
 
+## Annotated video
+
+To find out where the labels are, I made a little javascript that display the elements alongside of the youtube video.
 
 <iframe width="100%" height="400" src="/assets/video-intelligence/result.html"></iframe>
+
+# Conclusion
+
