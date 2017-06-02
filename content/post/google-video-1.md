@@ -134,4 +134,9 @@ The full result is [here](/assets/video-intelligence/video-analysis-a-la-recherc
 }
 {{< /highlight >}}
 
+I generated a tag cloud with the help of [this website](https://www.jasondavies.com/wordcloud/):
+
+![tag cloud](/assets/video-intelligence/wordcloud.svg)
+
+
 <iframe width="100%" height="400" src="/assets/video-intelligence/result.html"></iframe>
