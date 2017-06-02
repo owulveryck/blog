@@ -1,15 +1,12 @@
 ---
 categories:
-- category
 date: 2017-06-01T22:07:56+02:00
-description: ""
+description: "A very brief article about my first call to the new service of Google Cloud Plateform: Video Intelligence. Caution: The video used in this example is #NSFW"
 draft: true
 images:
 - https://cloud.google.com/images/products/video-intelligence/analysis.png
 tags:
-- tag1
-- tag2
-title: Analysing a parodic trailer with Google Cloud Video Intelligence
+title: Analysing a parodic trailer (NSFW) with Google Cloud Video Intelligence
 ---
 
 Google has recently announced its new service called "[Google Cloud Video Intelligence](https://cloud.google.com/video-intelligence/)".
