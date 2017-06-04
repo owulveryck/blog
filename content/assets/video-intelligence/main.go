@@ -8,6 +8,8 @@ import (
 	"log"
 )
 
+var player *js.Object
+
 func main() {
 
 	// var tag = document.createElement("script");
@@ -32,12 +34,32 @@ func main() {
 	//       }
 	//       });
 	// }
-	//
-	var player *js.Object
+	// Create two configuration objects that will be transpiled in json Object
+	// See https://github.com/gopherjs/gopherjs/wiki/JavaScript-Tips-and-Gotchas
+	type ytEvents struct {
+		*js.Object           // so far so good
+		OnReady       func() `js:"onReady"`
+		OnStateChange func() `js:"onStateChange"`
+	}
+	type ytConfig struct {
+		*js.Object          // so far so good
+		Height     string   `js:"height"`
+		Width      string   `js:"width"`
+		VideoID    string   `js:"videoId"`
+		Events     ytEvents `js:"events"`
+	}
+	// Create the configuration
+	config := &ytConfig{Object: js.Global.Get("Object").New()}
+	evts := &ytEvents{Object: js.Global.Get("Object").New()}
+	evts.OnReady = onPlayerReady
+	config.Height = "315"
+	config.Width = "560"
+	config.VideoID = "A0yQ0dPhkOg"
+	config.Events = *evts
 	js.Global.Get("window").Set("onYouTubeIframeAPIReady", func() {
-		player = js.Global.Get("YT").Get("Player").New("player")
-		player.Call("loadVideoById", "A0yQ0dPhkOg", 5, "large")
-		log.Println(player)
+		// Then create a new Player instance called "player", actually creating an iFrame "player" instead of the
+		// Div identified by "player"
+		player = js.Global.Get("YT").Get("Player").New("player", config)
 	})
 }
 
