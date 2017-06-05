@@ -8,8 +8,6 @@ import (
 	"log"
 )
 
-var player *js.Object
-
 func main() {
 
 	// var tag = document.createElement("script");
@@ -34,7 +32,8 @@ func main() {
 	//       }
 	//       });
 	// }
-	// Create two configuration objects that will be transpiled in json Object
+	// Create one configuration object that will be transpiled in json Object
+	// and passed to the constructor of the player
 	// See https://github.com/gopherjs/gopherjs/wiki/JavaScript-Tips-and-Gotchas
 	type ytConfig struct {
 		*js.Object        // so far so good
@@ -50,18 +49,23 @@ func main() {
 	js.Global.Get("window").Set("onYouTubeIframeAPIReady", func() {
 		// Then create a new Player instance called "player", actually creating an iFrame "player" instead of the
 		// Div identified by "player"
-		player = js.Global.Get("YT").Get("Player").New("player", config)
-		player.Call("addEventListener", "onReady", onPlayerReady)
-		player.Call("addEventListener", "onStateChange", onPlayerStateChange)
+		var player *ytPlayer
+		player = &ytPlayer{*(js.Global.Get("YT").Get("Player").New("player", config))}
+		player.Call("addEventListener", "onReady", player.onPlayerReady)
+		player.Call("addEventListener", "onStateChange", player.onPlayerStateChange)
 	})
 }
 
-func onPlayerReady(event *js.Object) {
+type ytPlayer struct {
+	js.Object
+}
+
+func (yt *ytPlayer) onPlayerReady(event *js.Object) {
 	log.Println("hello")
 }
-func onPlayerStateChange(event *js.Object) {
+func (yt *ytPlayer) onPlayerStateChange(event *js.Object) {
 	if event.Get("data").String() == "1" {
-		time := player.Call("getCurrentTime").String()
+		time := yt.Call("getCurrentTime").String()
 		log.Println(time)
 	}
 }
