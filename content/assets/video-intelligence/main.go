@@ -82,21 +82,24 @@ func (yt *ytPlayer) onPlayerReady(event *js.Object) {
 					if t >= anns[k].t && t < anns[k+1].t {
 						if !testEq(currLabels, anns[k].labels) {
 							currLabels = anns[k].labels
-							displayLabels(currLabels)
+							displayLabels(anns[k].t, currLabels)
 						}
 						break
 					}
 				}
 			}
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(10 * time.Millisecond)
 		}
 	}()
 }
-func displayLabels(labels []string) {
+func displayLabels(t time.Duration, labels []string) {
 	var s string
-	for _, st := range labels {
-		s = s + " " + st
+	s = js.Global.Get("document").Call("getElementById", "labels").Get("innerHTML").String()
+	var ss string
+	for _, l := range labels {
+		ss = ss + " | " + l
 	}
+	s = "<li>" + t.String() + ": " + ss + "</li>" + s
 	js.Global.Get("document").Call("getElementById", "labels").Set("innerHTML", s)
 
 }

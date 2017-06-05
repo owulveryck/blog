@@ -2,7 +2,7 @@
 categories:
 date: 2017-06-01T22:07:56+02:00
 description: "A very brief article about my first call to the new service of Google Cloud Plateform: Video Intelligence. Caution: The video used in this example is #NSFW"
-draft: true
+draft: false  
 images:
 - https://cloud.google.com/images/products/video-intelligence/analysis.png
 tags:
@@ -168,15 +168,23 @@ So here is the visual result of what the service has found in the video:
 ## Annotated video
 
 To find out where the labels are, I made a little javascript that display the elements alongside of the youtube video.
+Just click on the video and the tags will be displayed below.
 
 Youtube's video ID: <input id="videoId" value="A0yQ0dPhkOg"></input>
 
 <div id="player"></div>
 
-<div id="labels"></div>
+<ul id="labels"></ul>
 
 <script type="text/javascript" async src="/assets/video-intelligence/app.js"></script>
 
-
 # Conclusion
 
+There is a lot more to do than simply displaying the tags.
+For example, We could locate an interesting tag, take a snapshot of the video, and use the photo API to find websites related to this part of the video.
+
+For example, in this video, it can be possible to find the original movies were people are dancing for example.
+
+I will postpone this for another geek-time.
+
+_P.S._ The javascript has been made with _gopherjs_. It is not optimize at all (I should avoid the encoding/json package for example). If you are curious about the implementation, the code is [here](/assets/video-intelligence/main.go), [here](/assets/video-intelligence/structure.go) and [here](/assets/video-intelligence/data.go).

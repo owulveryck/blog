@@ -7,10 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <lastBuildDate>Tue, 16 May 2017 21:43:46 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 01 Jun 2017 22:07:56 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Analysing a parodic trailer (NSFW) with Google Cloud Video Intelligence</title>
+      <link>https://blog.owulveryck.info/2017/06/01/analysing-a-parodic-trailer-nsfw-with-google-cloud-video-intelligence.html</link>
+      <pubDate>Thu, 01 Jun 2017 22:07:56 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/06/01/analysing-a-parodic-trailer-nsfw-with-google-cloud-video-intelligence.html</guid>
+      <description>Google has recently announced its new service called &amp;ldquo;Google Cloud Video Intelligence&amp;rdquo;. The purpose of this service is to offer tagging and annotations of digital videos.
+I will try this service on a trailer of a French parody. This movie is made of several scenes taken from erotic movies of the seventies.
+Why this parody?
+ because it is fun because it is composed of a lot of different scenes because it is short (so it won&amp;rsquo;t cost me a lot) because, as it is related to erotic of the seventies, I am curious about the result!</description>
+    </item>
     
     <item>
       <title>Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM</title>

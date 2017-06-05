@@ -134,14 +134,15 @@ func processData() []annotation {
 		}
 		a.annotations[i].labels = a.labels
 		if a.annotations[i].t != last {
-			result = append(result, annotation{t: a.annotations[i].t, labels: a.labels})
-			log.Println(a.labels)
-			log.Println("RESULT", result[len(result)-1].labels)
+			var lbl []string
+			for _, lb := range a.labels {
+				lbl = append(lbl, lb)
+			}
+			result = append(result, annotation{t: a.annotations[i].t, labels: lbl})
 			last = a.annotations[i].t
 		}
 	}
 
 	//return a.annotations
-	log.Println(result)
 	return result
 }
