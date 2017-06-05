@@ -10,36 +10,36 @@ title: Analysing a parodic trailer (NSFW) with Google Cloud Video Intelligence
 ---
 
 Google has recently announced its new service called "[Google Cloud Video Intelligence](https://cloud.google.com/video-intelligence/)".
-The purpose of this service is to provide tagging and annotations of digital videos.
+The purpose of this service is to offer tagging and annotations of digital videos.
 
-I will try this service on a trailer of a french parody. This movie is composed of several scenes taken from erotic movies of the seventies.
+I will try this service on a trailer of a French parody. This movie is made of several scenes taken from erotic movies of the seventies.
 
 Why this parody?
 
 * because it is fun
 * because it is composed of a lot of different scenes
 * because it is short (so it won't cost me a lot)
-* because, as it is related to erotic of the seventies, I am curious of the result!
+* because, as it is related to erotic of the seventies, I am curious about the result!
 
-_Caution_: this video **is not a porn video** but is indeed **not safe for work** (_#nsfw_)
+_Caution_: this video **is not a porn video**, but is indeed **not safe for work** (_#nsfw_)
 
 # What information can the service find?
 
 ## Shot change detection
 
-This feature will detect the different scenes and display their time range. There is no futher analysis of the scene. That is to say that it won't tell, by now, that the first scene is about a sport competition. But indeed it will tell that the first scene occurs from the first microsecond until the xxx mirosecond and so on.
+This feature will detect the different scenes and display their time range. There is no further analysis of the scene. That is to say that it won't tell, by now, that the first scene is about a sports competition. But indeed it will describe that the first scene occurs from the first microsecond until the xxx microsecond and so on.
 
 ## Label detection
 
-More interesting feature is the label detection.
+The more interesting feature is the label detection.
 
-With this operation, the service will display tags of element found in the video, as well as the time range of the video where they can be seen.
+With this operation, the service will display tags of any element found in the video, as well as the time range of the video where they can be seen.
 
 For example, it may tell you that there is a dog in the video between x and y micro-seconds as well as between w and z micro-seconds.
 
 # Preparing the video
 
-I have downloaded the video thanks to [youtube-dl](https://rg3.github.io/youtube-dl/) and I have uploaded it to [Google Cloud Storage](https://cloud.google.com/products/storage/) as the API expects the video to be here. There may be a way to post the video encoded in base64 directly, but that would have been less convenient for my tests.
+I have downloaded the video, thanks to [youtube-dl](https://rg3.github.io/youtube-dl/) and I have uploaded it to [Google Cloud Storage](https://cloud.google.com/products/storage/) as the API expects the video to be here. There may be a way to post the video encoded in base64 directly, but that would have been less convenient for my tests.
 
 ![screnshot](/assets/video-intelligence/gs-trailer.png)
 
@@ -50,10 +50,10 @@ This test is made with the simple REST API with `curl`.
 ## Preparing the request
 
 To actually use the API, we need to perform a POST request. 
-The payload is a simple json file where we specify:
+The payload is a simple JSON file where we specify:
 
 * the URI of the video file to process
-* and array of features to use amongs: Shot change detection and/or label detetection
+* an array of features to use among: Shot change detection and/or label detection
 
 Here is my payload. I want both features for my test:
 
@@ -69,7 +69,7 @@ Here is my payload. I want both features for my test:
 ### Authorization
 
 To actually use the service, I need an authorization token. This token is linked to a service account.
-Then with the token we can trigger the analysis by using this `curl` command:
+Then with the token, we can trigger the analysis by using this `curl` command:
 
 {{< highlight shell >}}
 curl -s -k -H 'Content-Type: application/json' \
@@ -78,7 +78,7 @@ curl -s -k -H 'Content-Type: application/json' \
       -d @demo.json
 {{< /highlight >}}
 
-The action replies with a json containing an `operation name`. Actually the operation is long an asynchronous. This `operation name` can be use to get the processing status.
+The action replies with a JSON containing an `operation name`. Actually, the operation is long and asynchronous. This `operation name` can be used to get the processing status.
 
 {{< highlight js >}}
 {
@@ -147,11 +147,11 @@ Here is a sample output: (the full result is [here](/assets/video-intelligence/v
 ## Tag cloud
 
 I will only look at the label annotations.
-We have a lot of label founds described under the `description` fields and 1 to N location where such a description is found.
+The API has found a lot of label described under the `description` fields and 1 to N location where such a description is found.
 
-What I can do is to manipulate the data to list all the label founds with their frequency.
+What I can do is to manipulate the data to list all the label with their frequency.
 
-You can find [here](https://gist.github.com/owulveryck/70d97e1e73d664c1c927c253a862ac17) a little go code that will display labels as many times as they occurs.
+You can find [here](https://gist.github.com/owulveryck/70d97e1e73d664c1c927c253a862ac17) a little go code that will display labels as many times as they occur.
 
 For example:
 
@@ -169,7 +169,14 @@ So here is the visual result of what the service has found in the video:
 
 To find out where the labels are, I made a little javascript that display the elements alongside of the youtube video.
 
-<iframe width="100%" height="400" src="/assets/video-intelligence/result.html"></iframe>
+Youtube's video ID: <input id="videoId" value="A0yQ0dPhkOg"></input>
+
+<div id="player"></div>
+
+<div id="labels"></div>
+
+<script type="text/javascript" async src="/assets/video-intelligence/app.js"></script>
+
 
 # Conclusion
 
