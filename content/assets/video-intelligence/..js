@@ -21921,14 +21921,14 @@ $packages["log"] = (function() {
 	$pkg.$init = $init;
 	return $pkg;
 })();
-$packages["main"] = (function() {
+$packages["."] = (function() {
 	var $pkg = {}, $init, json, js, log, sort, time, ytPlayer, segment, videoIntelligence, annotation, annotations, ytConfig, seg, sliceType, sliceType$1, ptrType, ptrType$1, ptrType$2, funcType, funcType$1, sliceType$2, structType, sliceType$3, ptrType$3, structType$1, sliceType$4, structType$2, sliceType$5, structType$3, sliceType$6, structType$4, structType$5, sliceType$7, structType$6, sliceType$8, chanType, ptrType$4, data, anns, main, displayLabels, testEq, processData;
 	json = $packages["encoding/json"];
 	js = $packages["github.com/gopherjs/gopherjs/js"];
 	log = $packages["log"];
 	sort = $packages["sort"];
 	time = $packages["time"];
-	ytPlayer = $pkg.ytPlayer = $newType(0, $kindStruct, "main.ytPlayer", true, "main", false, function(Object_, state_) {
+	ytPlayer = $pkg.ytPlayer = $newType(0, $kindStruct, "main.ytPlayer", true, ".", false, function(Object_, state_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.Object = new js.Object.ptr(null);
@@ -21938,7 +21938,7 @@ $packages["main"] = (function() {
 		this.Object = Object_;
 		this.state = state_;
 	});
-	segment = $pkg.segment = $newType(0, $kindStruct, "main.segment", true, "main", false, function(EndTimeOffset_, StartTimeOffset_) {
+	segment = $pkg.segment = $newType(0, $kindStruct, "main.segment", true, ".", false, function(EndTimeOffset_, StartTimeOffset_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.EndTimeOffset = new time.Duration(0, 0);
@@ -21948,7 +21948,7 @@ $packages["main"] = (function() {
 		this.EndTimeOffset = EndTimeOffset_;
 		this.StartTimeOffset = StartTimeOffset_;
 	});
-	videoIntelligence = $pkg.videoIntelligence = $newType(0, $kindStruct, "main.videoIntelligence", true, "main", false, function(Response_, Done_, Metadata_, Name_) {
+	videoIntelligence = $pkg.videoIntelligence = $newType(0, $kindStruct, "main.videoIntelligence", true, ".", false, function(Response_, Done_, Metadata_, Name_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.Response = new structType$4.ptr(sliceType$6.nil, "");
@@ -21962,7 +21962,7 @@ $packages["main"] = (function() {
 		this.Metadata = Metadata_;
 		this.Name = Name_;
 	});
-	annotation = $pkg.annotation = $newType(0, $kindStruct, "main.annotation", true, "main", false, function(t_, add_, remove_, labels_) {
+	annotation = $pkg.annotation = $newType(0, $kindStruct, "main.annotation", true, ".", false, function(t_, add_, remove_, labels_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.t = new time.Duration(0, 0);
@@ -21976,7 +21976,7 @@ $packages["main"] = (function() {
 		this.remove = remove_;
 		this.labels = labels_;
 	});
-	annotations = $pkg.annotations = $newType(0, $kindStruct, "main.annotations", true, "main", false, function(annotations_, labels_) {
+	annotations = $pkg.annotations = $newType(0, $kindStruct, "main.annotations", true, ".", false, function(annotations_, labels_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.annotations = sliceType.nil;
@@ -21986,7 +21986,7 @@ $packages["main"] = (function() {
 		this.annotations = annotations_;
 		this.labels = labels_;
 	});
-	ytConfig = $newType(0, $kindStruct, "main.ytConfig", true, "main", false, function(Object_, Height_, Width_, VideoID_) {
+	ytConfig = $newType(0, $kindStruct, "main.ytConfig", true, ".", false, function(Object_, Height_, Width_, VideoID_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.Object = null;
@@ -22000,7 +22000,7 @@ $packages["main"] = (function() {
 		this.Width = Width_;
 		this.VideoID = VideoID_;
 	});
-	seg = $newType(0, $kindStruct, "main.seg", true, "main", false, function(EndTimeOffset_, StartTimeOffset_) {
+	seg = $newType(0, $kindStruct, "main.seg", true, ".", false, function(EndTimeOffset_, StartTimeOffset_) {
 		this.$val = this;
 		if (arguments.length === 0) {
 			this.EndTimeOffset = "";
@@ -22281,14 +22281,14 @@ $packages["main"] = (function() {
 		$s = -1; return result;
 		/* */ } return; } if ($f === undefined) { $f = { $blk: processData }; } $f.$ptr = $ptr; $f._i = _i; $f._i$1 = _i$1; $f._i$2 = _i$2; $f._i$3 = _i$3; $f._r = _r; $f._ref = _ref; $f._ref$1 = _ref$1; $f._ref$2 = _ref$2; $f._ref$3 = _ref$3; $f.a = a; $f.err = err; $f.i = i; $f.j = j; $f.l = l; $f.la = la; $f.last = last; $f.m = m; $f.result = result; $f.v = v; $f.vi = vi; $f.vv = vv; $f.x = x; $f.x$1 = x$1; $f.x$2 = x$2; $f.x$3 = x$3; $f.x$4 = x$4; $f.x$5 = x$5; $f.x$6 = x$6; $f.x$7 = x$7; $f.x$8 = x$8; $f.$s = $s; $f.$r = $r; return $f;
 	};
-	ptrType.methods = [{prop: "onPlayerReady", name: "onPlayerReady", pkg: "main", typ: $funcType([ptrType$2], [], false)}, {prop: "onPlayerStateChange", name: "onPlayerStateChange", pkg: "main", typ: $funcType([ptrType$2], [], false)}, {prop: "getCurrentTime", name: "getCurrentTime", pkg: "main", typ: $funcType([], [time.Duration, $error], false)}];
+	ptrType.methods = [{prop: "onPlayerReady", name: "onPlayerReady", pkg: ".", typ: $funcType([ptrType$2], [], false)}, {prop: "onPlayerStateChange", name: "onPlayerStateChange", pkg: ".", typ: $funcType([ptrType$2], [], false)}, {prop: "getCurrentTime", name: "getCurrentTime", pkg: ".", typ: $funcType([], [time.Duration, $error], false)}];
 	ptrType$3.methods = [{prop: "UnmarshalJSON", name: "UnmarshalJSON", pkg: "", typ: $funcType([sliceType$1], [$error], false)}];
 	ptrType$4.methods = [{prop: "Len", name: "Len", pkg: "", typ: $funcType([], [$Int], false)}, {prop: "Swap", name: "Swap", pkg: "", typ: $funcType([$Int, $Int], [], false)}, {prop: "Less", name: "Less", pkg: "", typ: $funcType([$Int, $Int], [$Bool], false)}];
-	ytPlayer.init("main", [{prop: "Object", name: "", exported: true, typ: js.Object, tag: ""}, {prop: "state", name: "state", exported: false, typ: chanType, tag: ""}]);
+	ytPlayer.init(".", [{prop: "Object", name: "", exported: true, typ: js.Object, tag: ""}, {prop: "state", name: "state", exported: false, typ: chanType, tag: ""}]);
 	segment.init("", [{prop: "EndTimeOffset", name: "EndTimeOffset", exported: true, typ: time.Duration, tag: "json:\"endTimeOffset\""}, {prop: "StartTimeOffset", name: "StartTimeOffset", exported: true, typ: time.Duration, tag: "json:\"startTimeOffset\""}]);
 	videoIntelligence.init("", [{prop: "Response", name: "Response", exported: true, typ: structType$4, tag: "json:\"response\""}, {prop: "Done", name: "Done", exported: true, typ: $Bool, tag: "json:\"done\""}, {prop: "Metadata", name: "Metadata", exported: true, typ: structType$6, tag: "json:\"metadata\""}, {prop: "Name", name: "Name", exported: true, typ: $String, tag: "json:\"name\""}]);
-	annotation.init("main", [{prop: "t", name: "t", exported: false, typ: time.Duration, tag: ""}, {prop: "add", name: "add", exported: false, typ: $String, tag: ""}, {prop: "remove", name: "remove", exported: false, typ: $String, tag: ""}, {prop: "labels", name: "labels", exported: false, typ: sliceType$2, tag: ""}]);
-	annotations.init("main", [{prop: "annotations", name: "annotations", exported: false, typ: sliceType, tag: ""}, {prop: "labels", name: "labels", exported: false, typ: sliceType$2, tag: ""}]);
+	annotation.init(".", [{prop: "t", name: "t", exported: false, typ: time.Duration, tag: ""}, {prop: "add", name: "add", exported: false, typ: $String, tag: ""}, {prop: "remove", name: "remove", exported: false, typ: $String, tag: ""}, {prop: "labels", name: "labels", exported: false, typ: sliceType$2, tag: ""}]);
+	annotations.init(".", [{prop: "annotations", name: "annotations", exported: false, typ: sliceType, tag: ""}, {prop: "labels", name: "labels", exported: false, typ: sliceType$2, tag: ""}]);
 	ytConfig.init("", [{prop: "Object", name: "", exported: true, typ: ptrType$2, tag: ""}, {prop: "Height", name: "Height", exported: true, typ: $String, tag: "js:\"height\""}, {prop: "Width", name: "Width", exported: true, typ: $String, tag: "js:\"width\""}, {prop: "VideoID", name: "VideoID", exported: true, typ: $String, tag: "js:\"videoId\""}]);
 	seg.init("", [{prop: "EndTimeOffset", name: "EndTimeOffset", exported: true, typ: $String, tag: "json:\"endTimeOffset\""}, {prop: "StartTimeOffset", name: "StartTimeOffset", exported: true, typ: $String, tag: "json:\"startTimeOffset\""}]);
 	$init = function() {
@@ -22313,10 +22313,10 @@ $packages["main"] = (function() {
 	return $pkg;
 })();
 $synthesizeMethods();
-var $mainPkg = $packages["main"];
+var $mainPkg = $packages["."];
 $packages["runtime"].$init();
 $go($mainPkg.$init, []);
 $flushConsole();
 
 }).call(this);
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=..js.map

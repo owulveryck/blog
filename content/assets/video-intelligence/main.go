@@ -5,12 +5,15 @@ package main
 
 import (
 	"github.com/gopherjs/gopherjs/js"
-	"log"
 	"time"
 )
 
+var anns []annotation
+
 func main() {
 
+	// Process the data
+	anns = processData()
 	// var tag = document.createElement("script");
 	tag := js.Global.Get("document").Call("createElement", "script")
 	// tag.src = "//www.youtube.com/iframe_api";
@@ -66,17 +69,36 @@ func (yt *ytPlayer) onPlayerReady(event *js.Object) {
 	// Trigger the goroutine that will display the current time of the video
 	go func() {
 		var state string
+		var currLabels []string
 		for {
 			select {
 			case state = <-yt.state:
 			default:
 			}
+
 			if state == "1" {
-				log.Println(yt.getCurrentTime())
+				t, _ := yt.getCurrentTime()
+				for k := 0; k < len(anns)-1; k++ {
+					if t >= anns[k].t && t < anns[k+1].t {
+						if !testEq(currLabels, anns[k].labels) {
+							currLabels = anns[k].labels
+							displayLabels(currLabels)
+						}
+						break
+					}
+				}
 			}
 			time.Sleep(100 * time.Millisecond)
 		}
 	}()
+}
+func displayLabels(labels []string) {
+	var s string
+	for _, st := range labels {
+		s = s + " " + st
+	}
+	js.Global.Get("document").Call("getElementById", "labels").Set("innerHTML", s)
+
 }
 func (yt *ytPlayer) onPlayerStateChange(event *js.Object) {
 	go func() {
@@ -85,5 +107,28 @@ func (yt *ytPlayer) onPlayerStateChange(event *js.Object) {
 }
 
 func (yt *ytPlayer) getCurrentTime() (time.Duration, error) {
-	return time.ParseDuration(yt.Call("getCurrentTime").String() + "us")
+	return time.ParseDuration(yt.Call("getCurrentTime").String() + "s")
+}
+
+func testEq(a, b []string) bool {
+
+	if a == nil && b == nil {
+		return true
+	}
+
+	if a == nil || b == nil {
+		return false
+	}
+
+	if len(a) != len(b) {
+		return false
+	}
+
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+
+	return true
 }
