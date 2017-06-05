@@ -6,6 +6,7 @@ package main
 import (
 	"github.com/gopherjs/gopherjs/js"
 	"log"
+	"time"
 )
 
 func main() {
@@ -50,7 +51,7 @@ func main() {
 		// Then create a new Player instance called "player", actually creating an iFrame "player" instead of the
 		// Div identified by "player"
 		var player *ytPlayer
-		player = &ytPlayer{*(js.Global.Get("YT").Get("Player").New("player", config))}
+		player = &ytPlayer{*(js.Global.Get("YT").Get("Player").New("player", config)), make(chan string)}
 		player.Call("addEventListener", "onReady", player.onPlayerReady)
 		player.Call("addEventListener", "onStateChange", player.onPlayerStateChange)
 	})
@@ -58,14 +59,31 @@ func main() {
 
 type ytPlayer struct {
 	js.Object
+	state chan string
 }
 
 func (yt *ytPlayer) onPlayerReady(event *js.Object) {
-	log.Println("hello")
+	// Trigger the goroutine that will display the current time of the video
+	go func() {
+		var state string
+		for {
+			select {
+			case state = <-yt.state:
+			default:
+			}
+			if state == "1" {
+				log.Println(yt.getCurrentTime())
+			}
+			time.Sleep(100 * time.Millisecond)
+		}
+	}()
 }
 func (yt *ytPlayer) onPlayerStateChange(event *js.Object) {
-	if event.Get("data").String() == "1" {
-		time := yt.Call("getCurrentTime").String()
-		log.Println(time)
-	}
+	go func() {
+		yt.state <- event.Get("data").String()
+	}()
+}
+
+func (yt *ytPlayer) getCurrentTime() (time.Duration, error) {
+	return time.ParseDuration(yt.Call("getCurrentTime").String() + "us")
 }
