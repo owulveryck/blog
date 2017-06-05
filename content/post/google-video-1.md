@@ -163,7 +163,7 @@ This allows me to generate a tag cloud with the help of [this website](https://w
 
 So here is the visual result of what the service has found in the video:
 
-![tag cloud](/assets/video-intelligence/wordcloud.svg)
+![tag cloud](/assets/video-intelligence/wordcloud.png)
 
 ## Annotated video
 
