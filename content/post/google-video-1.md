@@ -6,7 +6,7 @@ draft: false
 images:
 - https://cloud.google.com/images/products/video-intelligence/analysis.png
 tags:
-title: Analysing a parodic trailer (NSFW) with Google Cloud Video Intelligence
+title: Analyzing a parodic trailer (NSFW) with Google Cloud Video Intelligence
 ---
 
 Google has recently announced its new service called "[Google Cloud Video Intelligence](https://cloud.google.com/video-intelligence/)".
