@@ -47,8 +47,10 @@ func main() {
 	}
 	// Create the configuration
 	config := &ytConfig{Object: js.Global.Get("Object").New()}
-	config.Height = "315"
-	config.Width = "560"
+	//config.Height = "315"
+	//config.Width = "560"
+	//config.Height = "315"
+	config.Width = "100%"
 	config.VideoID = "A0yQ0dPhkOg"
 	js.Global.Get("window").Set("onYouTubeIframeAPIReady", func() {
 		// Then create a new Player instance called "player", actually creating an iFrame "player" instead of the
