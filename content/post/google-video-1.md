@@ -170,11 +170,19 @@ So here is the visual result of what the service has found in the video:
 To find out where the labels are, I made a little javascript that display the elements alongside of the youtube video.
 Just click on the video and the tags will be displayed below.
 
-Youtube's video ID: <input id="videoId" value="A0yQ0dPhkOg"></input>
+<button id="launchyt">It is safe to watch the video, please show the result!</button>
 
 <div id="player"></div>
 
 <ul id="labels"></ul>
+
+<ul>
+    <li id="result1"></li>
+    <li id="result2" style="color: #8A8A8A;"></li>
+    <li id="result3" style="color: #9E9E9E;"></li>
+    <li id="result4" style="color: #B2B2B2;"></li>
+    <li id="result5" style="color: #C6C6C6;"></li>
+</ul>
 
 <script type="text/javascript" async src="/assets/video-intelligence/app.js"></script>
 

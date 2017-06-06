@@ -53,10 +53,14 @@ func main() {
 	js.Global.Get("window").Set("onYouTubeIframeAPIReady", func() {
 		// Then create a new Player instance called "player", actually creating an iFrame "player" instead of the
 		// Div identified by "player"
-		var player *ytPlayer
-		player = &ytPlayer{*(js.Global.Get("YT").Get("Player").New("player", config)), make(chan string)}
-		player.Call("addEventListener", "onReady", player.onPlayerReady)
-		player.Call("addEventListener", "onStateChange", player.onPlayerStateChange)
+		js.Global.Get("launchyt").Call("addEventListener", "click", func() {
+			go func() {
+				var player *ytPlayer
+				player = &ytPlayer{*(js.Global.Get("YT").Get("Player").New("player", config)), make(chan string)}
+				player.Call("addEventListener", "onReady", player.onPlayerReady)
+				player.Call("addEventListener", "onStateChange", player.onPlayerStateChange)
+			}()
+		})
 	})
 }
 
@@ -93,14 +97,22 @@ func (yt *ytPlayer) onPlayerReady(event *js.Object) {
 	}()
 }
 func displayLabels(t time.Duration, labels []string) {
-	var s string
-	s = js.Global.Get("document").Call("getElementById", "labels").Get("innerHTML").String()
+	l1 := js.Global.Get("document").Call("getElementById", "result1")
+	l2 := js.Global.Get("document").Call("getElementById", "result2")
+	l3 := js.Global.Get("document").Call("getElementById", "result3")
+	l4 := js.Global.Get("document").Call("getElementById", "result4")
+	l5 := js.Global.Get("document").Call("getElementById", "result5")
+
+	l5.Set("innerHTML", l4.Get("innerHTML").String())
+	l4.Set("innerHTML", l3.Get("innerHTML").String())
+	l3.Set("innerHTML", l2.Get("innerHTML").String())
+	l2.Set("innerHTML", l1.Get("innerHTML").String())
+
 	var ss string
 	for _, l := range labels {
 		ss = ss + " | " + l
 	}
-	s = "<li>" + t.String() + ": " + ss + "</li>" + s
-	js.Global.Get("document").Call("getElementById", "labels").Set("innerHTML", s)
+	l1.Set("innerHTML", ss)
 
 }
 func (yt *ytPlayer) onPlayerStateChange(event *js.Object) {
