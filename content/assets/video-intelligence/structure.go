@@ -1,8 +1,7 @@
 package main
 
 import (
-	"encoding/json"
-	"log"
+	"github.com/cathalgarvey/fmtless/encoding/json"
 	"sort"
 	"time"
 )
@@ -100,10 +99,7 @@ func (a *annotations) Less(i, j int) bool {
 
 func processData() []annotation {
 	var vi videoIntelligence
-	err := json.Unmarshal(data, &vi)
-	if err != nil {
-		log.Println(err)
-	}
+	json.Unmarshal(data, &vi)
 	var m []annotation
 
 	for _, la := range vi.Response.AnnotationResults[0].LabelAnnotations {
