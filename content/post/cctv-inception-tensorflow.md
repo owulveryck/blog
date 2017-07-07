@@ -105,3 +105,17 @@ Converted 2 variables to const ops.
 ### Getting a training set 
 
 
+# Cross compiling on rqaspberry pi3 
+
+Download a release:
+
+`wget https://github.com/meinside/libtensorflow.so-raspberrypi/releases/download/v1.2.0/libtensorflow_v1.2.0_20170619.tgz`
+
+Install the toolchain
+
+`sudo apt install sudo apt install gcc-arm-linux-gnueabihf`
+
+Compile
+
+`export CC=arm-linux-gnueabihf-gcc`
+`CC=arm-linux-gnueabihf-gcc-5 GOOS=linux GOARCH=arm GOARM=6 CGO_ENABLED=1 go build  -o myprogram -ldflags="-extld=$CC"`
