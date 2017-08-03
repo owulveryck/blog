@@ -30,7 +30,17 @@ This solution has a couple of problems:
 I don't even talk about network latency because my CCTV would be pseudo-real-time and the ms of latency can be neglected.
 
 
+
 "[Inception](https://research.google.com/pubs/pub43022.html)" is a deep convolutional neural network architecture used to classify images originally developped by Google.
+
+Inception is exceptionnally accurate for computer vision. It can reach 78% accuracy in "Top-1" and 93.9% in "Top-5". That means that if you feed the model with a picture of sunglasses, you have 93.9% chance that the algorithm detects sunglasses amongs the top 5 results.
+
+On top of that, Inception is implementd with tensorflow, and well documented. Therefore it easy "easy" to use it, to train it and "to retrain it".
+Actually training the model is a very long process (several days on very efficient machines with GPU). 
+
+
+
+![inception model](https://raw.githubusercontent.com/tensorflow/models/master/inception/g3doc/inception_v3_architecture.png)
 
 # Geek
 
