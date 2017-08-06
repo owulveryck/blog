@@ -28,7 +28,8 @@ Cloud providers are offering services that can instantly tag and label elements 
 
 This solution presents a couple of problems:
 
-The network bandwidth: you need a reliable network and a bandwidth big enough to upload the flow of images
+* The network bandwidth: you need a reliable network and a bandwidth big enough to upload the flow of images
+
 * The cost: these services are cheap for thousand images, but consider about 1 fps to process (I don't even dream of 24fps), it is 86400 images a day and 2.6 million images a month... and considering that 1 million images are 1000 dollar...
 
 I don't even talk about network latency because my CCTV would be pseudo-real-time and the ms of latency can be neglected.
@@ -51,6 +52,8 @@ You also use a test set (same kind of pictures), that is used to check whether y
 ## Tools
 
 ### Tensorflow
+
+I have already told about tensorflow. Tensorflow is not a ML library. Tensorflow is a mathematical library. Its purpose is to simplify operations on tensors. 
 
 
 ### Inception
