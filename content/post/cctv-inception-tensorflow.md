@@ -17,19 +17,44 @@ A little bit trickier.
 
 Now imagine a CCTV that would trigger an alert when it sees someone who is not from the family...
 
+__Disclaimer__: This article will not cover everything. I may post a second article later (or not). As you may now, I am doing those experiments during the night as all of this is not part of my job. I hope that I will find time to actually conclude the experiment. If you are a geek and you want to test that with me, feel free and welcome to contact me via the comments or via twitter [@owulveryck](https://twitter.com/owulveryck).
+In this article, I will describe the method. I will also retrain a neural network to detect people. I will also use a GO static binary to run it live and evaluate the performances. By the end, I will try a static cross compilation to run it on a raspberry pi, but as my rpi is by now out-of-order, I will test it on qemu.
+
 # Machine learning and computer vision
 
 Machine learning and tooling around it has increaded and gain in efficiency in the past years. it now "easy" to code a model that can be trained to detect and classify elements from a picture. 
 
 Cloud providers are offering services that can instantly tag and label elements from an image. To achieve the goal of the CCTV, it would be really easy to use, for example, [AWS rekognition](https://aws.amazon.com/rekognition/), train the model, and post a request for each image seen.
-This solution has a couple of problems:
 
-* The network bandwidth: you need a network operational and a bandwidth big enough in upload to process the flow of images
-* The cost: these services are cheap for thousand images, but consider about 10 fps to process (I don't even dream of 24fps), it is 864000 images a day and 26 million images a month... and considering that 1 million images are 1000 dollar...
+This solution present a couple of problems:
+
+The network bandwidth: you need an reliable network and a bandwidth big enough to upload the flow of images
+* The cost: these services are cheap for thousand images, but consider about 1 fps to process (I don't even dream of 24fps), it is 86400 images a day and 2.6 million images a month... and considering that 1 million images are 1000 dollar...
 
 I don't even talk about network latency because my CCTV would be pseudo-real-time and the ms of latency can be neglected.
 
+The best solution would be to run the computer vision locally. There are several method to detect people. The most up-to-date-and-accurate one is based on machine learning and precisely on neural network.
 
+The (really simplified) principle is: 
+
+To describe a mathematical model full of parameters (a kind of giant equation). This model will take a lot of labeld pictures as input (this picture contains a person, this one not, etc..). Every time a picture is processed, it tries to find the best paramater for the equation suchs as:
+
+if this is a person, f(x) = 1 otherwise f(x) = 0.
+
+The pictures used to feed the model is called the training set. 
+You also use a test set (same kind of picutes), that is used to check whether your model generalized well and actually converge to your goal.
+
+<center>
+{{< figure src="https://imgs.xkcd.com/comics/machine_learning.png" link="https://xkcd.com/1838/" caption="" >}}
+</center>
+
+## Tools
+
+### Tensorflow
+
+Tensoflow 
+
+### Inception
 
 "[Inception](https://research.google.com/pubs/pub43022.html)" is a deep convolutional neural network architecture used to classify images originally developped by Google.
 
@@ -38,9 +63,9 @@ Inception is exceptionnally accurate for computer vision. It can reach 78% accur
 On top of that, Inception is implementd with tensorflow, and well documented. Therefore it easy "easy" to use it, to train it and "to retrain it".
 Actually training the model is a very long process (several days on very efficient machines with GPU). 
 
-
-
-![inception model](https://raw.githubusercontent.com/tensorflow/models/master/inception/g3doc/inception_v3_architecture.png)
+<center>
+{{< figure src="https://raw.githubusercontent.com/tensorflow/models/master/inception/g3doc/inception_v3_architecture.png" likn="https://github.com/tensorflow/models/tree/master/inception" caption="Inception v3 architecture" >}}
+</center>
 
 # Geek
 
