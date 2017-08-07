@@ -46,14 +46,14 @@ The pictures used to feed the model is called the training set.
 You also use a test set (same kind of pictures), that is used to check whether your model generalized well and actually converge to your goal.
 
 <center>
-{{< figure src="https://imgs.xkcd.com/comics/machine_learning.png" link="https://xkcd.com/1838/" caption="" >}}
+{{< figure src="https://imgs.xkcd.com/comics/machine_learning.png" link="https://xkcd.com/1838/" caption="XKCD 1838" >}}
 </center>
 
 ## Tools
 
 ### Tensorflow
 
-I have already told about tensorflow. Tensorflow is not a ML library. Tensorflow is a mathematical library. Its purpose is to simplify operations on tensors. 
+I have already told about tensorflow. Tensorflow is not a ML library. Tensorflow is a mathematical library. It self-describes itself as an  _open source software library for numerical computation using data flow graphs. Nodes in the graph represent mathematical operations, while the graph edges represent the multidimensional data arrays (tensors) communicated between them._
 
 
 ### Inception
@@ -76,6 +76,8 @@ I am using the excellent blog post [How to Retrain Inception's Final Layer for N
 ## Phase 1: recognizing usual people
 
 To keep it simple, I've created a "class" people with the flowers classes. It means that I simple added a directory "people" to my "flowers" for now.
+
+{{< tweet 861831985437827072 >}}
 
 ```
 [~/flower_photos]$ ls -lrt
