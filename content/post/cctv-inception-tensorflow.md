@@ -143,13 +143,11 @@ done
 
 ## Learning phase
 
-I am following the tutorial to [Use the retrained model](https://www.tensorflow.org/tutorials/image_retraining#using_the_retrained_model). Therefore I am sure that my installation is working ok.
-
-I had one "issue" because I am using python3. When I executed 
+I've had one "issue" during the learning phase. When I executed:
 
 `bazel-bin/tensorflow/examples/image_retraining/retrain --image_dir ~/flower_photos/` 
 
-it failed with a message about `ModuleNotFoundError: No module named 'backports'`. I Googled and found the solution in this [issue](https://github.com/tensorflow/serving/issues/489#issuecomment-313671459).
+it failed with a message about `ModuleNotFoundError: No module named 'backports'`. I Googled and found the solution in this [issue](https://github.com/tensorflow/serving/issues/489#issuecomment-313671459). It is because I am using python3 and the tutorial has been written for python 2. No big deal.
 
 At the end of the training (which took 12 minutes on a c4.2xlarge spot instance on AWS) I have two files that holds the previous informations.
 
@@ -172,6 +170,7 @@ And a trained graph with a label file that I can export and use elsewhere.
 -rw-rw-r-- 1 ubuntu ubuntu  47 Jul  7 19:22 /tmp/output_labels.txt
 -rw-rw-r-- 1 ubuntu ubuntu 84M Jul  7 19:22 /tmp/output_graph.pb
 ```
+I have followed the tutorial to [Use the retrained model](https://www.tensorflow.org/tutorials/image_retraining#using_the_retrained_model) to make sure that everything was ok before using it with my own code.
 
 ## Using the model with go
 
