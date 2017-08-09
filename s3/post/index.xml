@@ -7,10 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <lastBuildDate>Thu, 01 Jun 2017 22:07:56 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 07 Jul 2017 21:06:46 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>A &#34;Smart&#34; CCTV with Tensorflow, and Inception? On a rapsberry pi?</title>
+      <link>https://blog.owulveryck.info/2017/07/07/a-smart-cctv-with-tensorflow-and-inception-on-a-rapsberry-pi.html</link>
+      <pubDate>Fri, 07 Jul 2017 21:06:46 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/07/07/a-smart-cctv-with-tensorflow-and-inception-on-a-rapsberry-pi.html</guid>
+      <description>Imagine a CCTV at home that would trigger and alert when it detects a movement.
+Ok, this is easy.
+Imagine a CCTV that would trigger an alert when it detects a human (and not the cat).
+A little bit trickier.
+Now imagine a CCTV that would trigger an alert when it sees someone who is not from the family&amp;hellip;
+Disclaimer: This article will not cover everything. I may post a second article later (or not).</description>
+    </item>
     
     <item>
       <title>Analyzing a parodic trailer (NSFW) with Google Cloud Video Intelligence</title>
