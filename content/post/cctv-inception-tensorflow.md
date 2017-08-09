@@ -1,7 +1,7 @@
 ---
 date: 2017-07-07T21:06:46+02:00
 description: "Imagine a CCTV at home that would trigger and alert when it detects a movement. Ok, this is easy. Imagine a CCTV that would trigger an alert when it detects a human. A little bit trickier. Now imagine a CCTV that would trigger an alert when it sees someone who is not from the family."
-draft: true
+draft: false
 images:
 - /assets/images/tensorflowserving-4.png
 title: A "Smart" CCTV with Tensorflow, and Inception? On a rapsberry pi?
@@ -92,7 +92,7 @@ I am using the excellent blog post [How to Retrain Inception's Final Layer for N
 The purpose of the article is to retrain the network in order to give it the ability to categorize (recognize) different kind of flowers.
 I will use exactly the same principle to recognize a class "people".
 
-I will (re)train the model on a spot instance on AWS (to get it cheap), and download the model to use it locally from my go code.
+I will (re)train the model on a spot instance on AWS (to get it cheap), and download the model to use it locally from a go code.
 
 ## Phase 1: recognizing usual people
 
@@ -163,7 +163,11 @@ At the end of the training (which took 12 minutes on a c4.2xlarge spot instance 
 Final test accuracy = 92.7% (N=492)
 Converted 2 variables to const ops.
 ...
+```
 
+And a trained graph with a label file that I can export and use elsewhere.
+
+```
 (customenv) *[r1.2][~/sources/tensorflow]$ ls -lrth /tmp/output_*
 -rw-rw-r-- 1 ubuntu ubuntu  47 Jul  7 19:22 /tmp/output_labels.txt
 -rw-rw-r-- 1 ubuntu ubuntu 84M Jul  7 19:22 /tmp/output_graph.pb
@@ -172,32 +176,32 @@ Converted 2 variables to const ops.
 ## Using the model with go
 
 Tensorflow is coded in C++, but has some bindings for different languages. The most up-to-date is python, in which a lot of helper libraries are developed (see [tflearn](http://tflearn.org/getting_started/) for example.
-A binding for go exists, but it is only implementing the core library of tensorflow. Therefore it is an excellent choice for applying a model.
+A binding for go exists, but it is only implementing the core library of tensorflow. Anyway, it is an excellent choice for applying a model.
 
-The workflow is this one:
+The workflow is:
 
-- reading the exported model from the disk and creating a new graph
-- reading the label files and setting the labels in an array of string
-- grabbing jpeg pictures from the webcam in jpeg (via v4l) in a for loop
-- Normalizing the picture (see below) and create a tensor from the jpeg file.
-- Applying the inception model onto the Tensor and getting the `final_result`
-- Extracting the most important value from the output vector (the better probability) and display the corresponding label.
+- read the exported model from the disk and creating a new graph
+- read the label files and setting the labels in an array of string
+- grab jpeg pictures from the webcam in jpeg (via v4l) in a for loop
+- Normalize the picture (see below) and create a tensor from the jpeg file.
+- Apply the inception model onto the Tensor and getting the `final_result`
+- Extract the most important value from the output vector (the better probability) and display the corresponding label.
 
-I will only expose the trickiest parts (otherwise this post would be 50 pages long).
+I will only expose the trickiest parts.
 
 ### Getting the pictures
 
-I use a wrapper around `v4l` in go called [go-webcam](https://github.com/blackjack/webcam). As my webcam as MJPEG capabilities, each frame is already in JPEG format.
+I use a wrapper around `v4l` in go called [go-webcam](https://github.com/blackjack/webcam). As my webcam has MJPEG capabilities, each frame is already in JPEG format.
 
-I am applying the tensorflow model sequentially within the foor loop. The problem is that it takes some time to process. And while it is processing the driver may buffer some pictures. Therefore I am totally loosing the synchronism as my code may warn me that it has find a person too late.
-To avoid this, I am using a non blocking tick channel within the for loop. Therefore I do not process every single frame, but I process a frame every x milliseconds and I discard the rest.
+I am applying the tensorflow model sequentially within the foor loop. The problem is that it takes some time to process. And while it is processing the driver may buffer some pictures. Therefore I am totally loosing the synchronism. My code may warn me that it has find a person too late.
+To avoid this, I am using a non blocking tick in a go channel within the for loop. Therefore I do not process every single frame, but I process a frame every x milliseconds and I discard the rest.
 I could have used a pool, but that would have add complexity for the example.
 
 {{< gist owulveryck 1f3fc2366e5a35ab119633d57ad074b6 "tick.go" >}}
 
 ### Normalizing the picture
 
-The [example described in the go package](https://godoc.org/github.com/tensorflow/tensorflow/tensorflow/go) is using an old inception implementation (actually version 5h which is older than the v3). Therefore it need some adjustments. The function that produces a Tensorflow graph that will be used to normalize the picture didn't have the correct normalization values (those defined by the author of the inception v3 model) 
+The [example described in the go package](https://godoc.org/github.com/tensorflow/tensorflow/tensorflow/go) is using an old inception implementation (actually version 5h which is older than the v3). Therefore it needs some adjustments. The function that produces a Tensorflow graph that will be used to normalize the picture didn't have the correct normalization values (those defined by the author of the inception v3 model) 
 
 Here is an extract from [Image Recognition](https://www.tensorflow.org/tutorials/image_recognition):
 
@@ -215,8 +219,8 @@ Apart from that the rest of the code remains similar.
 
 The program runs as expected at the rate of 2 images per seconds without overheating on a modern laptop. I have used it to monitor my house while I was on vacation. Every success was sent on an s3 bucket, so in case of intrusion in my house I would still have the pictures. I say that it has worked because the only pictures it has recorded were:
 
-* me leaving the house
-* me entering the house 2 weeks later.
+* me, leaving the house
+* me, entering the house 2 weeks later.
 
 You can find the full code on [my github](https://github.com/owulveryck/smarcctv)
 
@@ -237,7 +241,7 @@ $ CC=arm-linux-gnueabihf-gcc-5 GOOS=linux GOARCH=arm GOARM=6 CGO_ENABLED=1 go bu
 
 #### Performances
 
-Inception is very good. But it requires a descent CPU (or even better a GPU). I could use another model called [mobilenet](https://github.com/tensorflow/models/blob/master/slim/nets/mobilenet_v1.md) which is a _low latency, low power_ model. 
+Inception is very good. But it requires a descent CPU (or even better a GPU). I could use another model called [MobileNet](https://github.com/tensorflow/models/blob/master/slim/nets/mobilenet_v1.md) which is a _low latency, low power_ model. 
 It has been [opensourced](https://research.googleblog.com/2017/06/mobilenets-open-source-models-for.html) in june 2017. The tensorflow team has added the ability to retrain it the same way inception is (by retraining the last layer). It's worth a look.
 
 ### Detecting only the family
@@ -249,5 +253,5 @@ To do that I need to train the neuron network to classify classes such as:
 * kid1
 * kid2 
 
-To do so, I need training sets (labeled pictures) of my family. The best way to get some, is to write a "memory cortex" to use it with my [cortical](https://github.com/owulveryck/cortical) project.
+To do so, I need training sets (labeled pictures) of my family. The best way to get it, is to write a "memory cortex" to use it with my [cortical](https://github.com/owulveryck/cortical) project as explained in my previous post: [Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM](https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html).
 
