@@ -1,13 +1,13 @@
 ---
 date: 2017-07-07T21:06:46+02:00
-description: "Imagine a CCTV at home that would trigger and alert when it detects a movement. Ok, this is easy. Imagine a CCTV that would trigger an alert when it detects a human. A little bit trickier. Now imagine a CCTV that would trigger an alert when it sees someone who is not from the family."
+description: "Imagine a CCTV at home that would trigger an alert when it detects a movement. Ok, this is easy. Imagine a CCTV that would trigger an alert when it detects a human. A little bit trickier. Now imagine a CCTV that would trigger an alert when it sees someone who is not from the family."
 draft: false
 images:
 - /assets/images/tensorflowserving-4.png
 title: A "Smart" CCTV with Tensorflow, and Inception? On a rapsberry pi?
 ---
 
-Imagine a CCTV at home that would trigger and alert when it detects a movement. 
+Imagine a CCTV at home that would trigger an alert when it detects a movement. 
 
 Ok, this is easy. 
 
@@ -22,7 +22,7 @@ In this article, I will describe the method. I will also retrain a neural networ
 
 # Machine learning and computer vision
 
-Machine learning and tooling around it has increased and gain in efficiency in the past years. it now "easy" to code a model that can be trained to detect and classify elements from a picture. 
+Machine learning and tooling around it has increased and gained in efficiency in the past years. it now "easy" to code a model that can be trained to detect and classify elements from a picture. 
 
 Cloud providers are offering services that can instantly tag and label elements from an image. To achieve the goal of the CCTV, it would be really easy to use, for example, [AWS rekognition](https://aws.amazon.com/rekognition/), train the model, and post a request for each image seen.
 
@@ -36,18 +36,20 @@ I don't even talk about network latency because my CCTV would be pseudo-real-tim
 
 The best solution would be to run the computer vision locally. There are several methods to detect people. The most up-to-date-and-accurate one is based on machine learning and precisely on neural network.
 
-The (really simplified) principle is: 
+__The very simplified principle of neural network and computer vision:__
+
+There is a lot of literacy on the web around that, but here a very small explanation to understand the rest of this post:
 
 Imagine a picture as a sequence of numbers from 0 to 1 (0 for black 1 for white for example). Imagine a mathematical equation `f`.
-You do not now what the content of `f` is. You only tell the computer: "guess a value of `f` such as `f(pictures of a man) = man`.
-Then you feed him with a lot of pictures of men, and for every picture, the computer not only guess a function `f` but it adapts it so it can detect every men in every pictures.
+You do not know what the content of `f` is. You only tell the computer: "guess a value of `f` such as `f(pictures of a man) = man`.
+Then you feed him with a lot of pictures of men, and for every picture, the computer not only guess a function `f` but it adapts it so it can detect every man in every picture.
 
 Sounds magical?
 
-Actually the computer doe not start with a void `f` function. You provide him a kind of skeleton that you call the neural network.
+Actually, the computer does not start with a void `f` function. You provide it with a kind of skeleton that you call the neural network.
 A neural network is a network of tiny function (neuron) that are applied on the decomposed values of the input (such as a pixel in a photo). 
 
-Depending of the mathematical function coded in the neuron, it is activated by its inputs (there can be several inputs for a single neuron) of not.
+Depending on the mathematical function coded in the neuron, it is activated by its inputs (there can be several inputs for a single neuron) or not.
 
 You can use several layers of neurons. Each layer is composed of neurons feed by the outputs of the neurons of the previous layer.
 
@@ -64,11 +66,11 @@ I won't dig any further into this description. You can read papers about the [pe
 
 ### Tensorflow
 
-I have already blogged about tensorflow. Tensorflow is not a ML library. It is a mathematical library. It self-describes itself as an  _open source software library for numerical computation using data flow graphs. Nodes in the graph represent mathematical operations, while the graph edges represent the multidimensional data arrays (tensors) communicated between them._
+I have already blogged about tensorflow. Tensorflow is not a ML library. It is a mathematical library. It is self-described as  _an open source software library for numerical computation using data flow graphs. Nodes in the graph represent mathematical operations, while the graph edges represent the multidimensional data arrays (tensors) communicated between them._
 
-It is therefore an excellent tool, suitable for machine learning and specially for dealing with neural networks. It is brilliant with computer vision as the pictures are arrays of pixels and if you add the color, you can represent every picture by a tensor.
+It is, therefore, an excellent tool, suitable for machine learning and especially for dealing with neural networks. It is brilliant with computer vision as the pictures are arrays of pixels and if you add the colour, you can represent every picture by a tensor.
 
-Even better, the models generated by tensorflow can be saved once learned and transfered to another device. For example, you can train your models on very powerfull machines and simply copy the resulted graph to your client (for example a phone). The graph can then be applied to an input taken from the device such as a photo.
+Even better, the models generated by tensorflow can be saved once learned and transferred to another device. For example, you can train your models on very powerful machines and simply copy the resulted graph to your client (for example a phone). The graph can then be applied to an input taken from the device such as a photo.
 
 ### Inception
 
@@ -78,7 +80,7 @@ Inception is exceptionally accurate for computer vision. It can reach 78% accura
 
 On top of that, Inception is implemented with Tensorflow, and well documented. Therefore, it easy "easy" to use it, to train it and "to retrain it".
 
-This picture is a representation of the inception v3 model. You can see the different layers of the model as explained earlier.
+here is a graphical representation of the inception v3 model. You can see the different layers of the model as explained earlier.
 
 <center>
 {{< figure src="https://raw.githubusercontent.com/tensorflow/models/master/inception/g3doc/inception_v3_architecture.png" link="https://github.com/tensorflow/models/tree/master/inception" caption="Inception v3 architecture" >}}
@@ -92,11 +94,11 @@ I am using the excellent blog post [How to Retrain Inception's Final Layer for N
 The purpose of the article is to retrain the network in order to give it the ability to categorize (recognize) different kind of flowers.
 I will use exactly the same principle to recognize a class "people".
 
-I will (re)train the model on a spot instance on AWS (to get it cheap), and download the model to use it locally from a go code.
+I will perform the task on a spot instance on AWS (to get it cheap), and download the model to use it locally from a go code.
 
 ## Phase 1: recognizing usual people
 
-To keep it simple, I've created a "class" people with the flowers classes. It means that I simple added a directory "people" to my "flowers" for now.
+To keep it simple, I've created a "class" people with the flowers classes. It means that I simply added a directory "people" to my "flowers" for now.
 
 ```
 [~/flower_photos]$ ls -lrt
@@ -132,7 +134,7 @@ do
 done
 {{</ highlight >}}
 
-Then I remove all "non image" files:
+Then I remove all "non-image" files:
 
 {{< highlight shell >}}
 for i in $(ls *jpg)
@@ -149,7 +151,7 @@ I've had one "issue" during the learning phase. When I executed:
 
 it failed with a message about `ModuleNotFoundError: No module named 'backports'`. I Googled and found the solution in this [issue](https://github.com/tensorflow/serving/issues/489#issuecomment-313671459). It is because I am using python3 and the tutorial has been written for python 2. No big deal.
 
-At the end of the training (which took 12 minutes on a c4.2xlarge spot instance on AWS) I have two files that holds the previous informations.
+At the end of the training (which took 12 minutes on a c4.2xlarge spot instance on AWS) I have two files that hold the previous information.
 
 ```
 ...
@@ -179,9 +181,9 @@ A binding for go exists, but it is only implementing the core library of tensorf
 
 The workflow is:
 
-- read the exported model from the disk and creating a new graph
-- read the label files and setting the labels in an array of string
-- grab jpeg pictures from the webcam in jpeg (via v4l) in a for loop
+- read the exported model from the disk and create a new graph
+- read the label files and set the labels in an array of string
+- grab jpeg pictures from the webcam in jpeg (via v4l) in an endless for loop
 - Normalize the picture (see below) and create a tensor from the jpeg file.
 - Apply the inception model onto the Tensor and getting the `final_result`
 - Extract the most important value from the output vector (the better probability) and display the corresponding label.
@@ -192,15 +194,15 @@ I will only expose the trickiest parts.
 
 I use a wrapper around `v4l` in go called [go-webcam](https://github.com/blackjack/webcam). As my webcam has MJPEG capabilities, each frame is already in JPEG format.
 
-I am applying the tensorflow model sequentially within the foor loop. The problem is that it takes some time to process. And while it is processing the driver may buffer some pictures. Therefore I am totally loosing the synchronism. My code may warn me that it has find a person too late.
-To avoid this, I am using a non blocking tick in a go channel within the for loop. Therefore I do not process every single frame, but I process a frame every x milliseconds and I discard the rest.
+I am applying the tensorflow model sequentially within the for loop. The problem is that it takes some time to process. And while it is processing the driver may buffer some pictures. Therefore I am totally losing the synchronism. My code may warn me that it has found a person too late.
+To avoid this, I am using a non-blocking tick in a go channel within the loop. Therefore I do not process every single frame, but I process a frame every x milliseconds and I discard the rest.
 I could have used a pool, but that would have add complexity for the example.
 
 {{< gist owulveryck 1f3fc2366e5a35ab119633d57ad074b6 "tick.go" >}}
 
 ### Normalizing the picture
 
-The [example described in the go package](https://godoc.org/github.com/tensorflow/tensorflow/tensorflow/go) is using an old inception implementation (actually version 5h which is older than the v3). Therefore it needs some adjustments. The function that produces a Tensorflow graph that will be used to normalize the picture didn't have the correct normalization values (those defined by the author of the inception v3 model) 
+The [example described on the go package](https://godoc.org/github.com/tensorflow/tensorflow/tensorflow/go) is using an old inception implementation (actually version 5h which is older than the v3). Therefore it needs some adjustments. The function that produces a Tensorflow graph that will be used to normalize the picture didn't have the correct normalization values (those defined by the author of the inception v3 model) 
 
 Here is an extract from [Image Recognition](https://www.tensorflow.org/tutorials/image_recognition):
 
@@ -216,7 +218,7 @@ Apart from that the rest of the code remains similar.
 
 ## Running it on a laptop
 
-The program runs as expected at the rate of 2 images per seconds without overheating on a modern laptop. I have used it to monitor my house while I was on vacation. Every success was sent on an s3 bucket, so in case of intrusion in my house I would still have the pictures. I say that it has worked because the only pictures it has recorded were:
+The program runs as expected at the rate of 2 images per seconds without overheating on a modern laptop. I have used it to monitor my house while I was on vacation. Every success was sent on an s3 bucket, so in case of the intrusion in my house, I would still have the pictures. I say that it has worked because the only pictures it has recorded were:
 
 * me, leaving the house
 * me, entering the house 2 weeks later.
@@ -240,17 +242,18 @@ $ CC=arm-linux-gnueabihf-gcc-5 GOOS=linux GOARCH=arm GOARM=6 CGO_ENABLED=1 go bu
 
 #### Performances
 
-Inception is very good. But it requires a descent CPU (or even better a GPU). I could use another model called [MobileNet](https://github.com/tensorflow/models/blob/master/slim/nets/mobilenet_v1.md) which is a _low latency, low power_ model. 
-It has been [opensourced](https://research.googleblog.com/2017/06/mobilenets-open-source-models-for.html) in june 2017. The tensorflow team has added the ability to retrain it the same way inception is (by retraining the last layer). It's worth a look.
+Inception is very good. But it requires a decent CPU (or even better a GPU). I could use another model called [MobileNet](https://github.com/tensorflow/models/blob/master/slim/nets/mobilenet_v1.md) which is a _low latency, low power_ model. 
+It has been [opensourced](https://research.googleblog.com/2017/06/mobilenets-open-source-models-for.html) in June 2017. The tensorflow team has added the ability to retrain it the same way inception is (by retraining the last layer). It's worth a look.
 
 ### Detecting only the family
-As I explained in the begining of the post, I want this system to trigger only if it detects someone that is not part of the family.
+As I explained in the beginning of the post, I want this system to trigger only if it detects someone that is not part of the family.
 To do that I need to train the neuron network to classify classes such as: 
+
 * people 
 * me 
 * my wife 
 * kid1
 * kid2 
 
-To do so, I need training sets (labeled pictures) of my family. The best way to get it, is to write a "memory cortex" to use it with my [cortical](https://github.com/owulveryck/cortical) project as explained in my previous post: [Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM](https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html).
+To do so, I need training sets (labeled pictures) of my family. The best way to get it is to write a "memory cortex" to use it with my [cortical](https://github.com/owulveryck/cortical) project as explained in my previous post: [Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM](https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html).
 
