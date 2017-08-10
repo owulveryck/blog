@@ -1,2 +1,2 @@
 # blog
-Les sources "hugo" de owulveryck.github.io
+My blog content [blog.owulveryck.info](blog.owulveryck.info)
