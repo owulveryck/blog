@@ -1,2 +1,2 @@
 # blog
-Les sources "hugo" de owulveryck.github.io
+[https://blog.owulveryck.info](https://blog.owulveryck.info)
