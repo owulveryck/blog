@@ -28,3 +28,18 @@ Of course, those reasons are personals and can be argued (and subject to _troll_
 <center>
 ![IT helpdesk](/assets/images/have-you-tried.jpg)
 </center>
+
+# Part II: Apple (does not) Care
+
+Actually both people from Apple Care and from the Apple Store told me that they could be exception. Of course they did not want to tell me the reasons.
+In a similar situation, some people reported that their [iPhone has been changed for free](https://discussions.apple.com/message/31836225#message31836225). Taking different treatement depending of who is asking heavily sounds like discrimination to me: 
+
+<center>
+![discrimination](/assets/images/discrimination.png)
+</center>
+
+Anyway, let's move on and "seek for the truth".
+
+# Part III: Geek (at last!)
+
+[https://developer.apple.com/bug-reporting/profiles-and-logs/](https://developer.apple.com/bug-reporting/profiles-and-logs/)
