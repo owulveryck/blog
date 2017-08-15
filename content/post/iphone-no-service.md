@@ -129,3 +129,16 @@ The qualcomm modem is a [MDM9625](https://www.theiphonewiki.com/wiki/MDM9635)
 
 [https://developer.apple.com/bug-reporting/profiles-and-logs/](https://developer.apple.com/bug-reporting/profiles-and-logs/)
 
+
+## Is the SIM card ok
+
+`iPhone CommCenter[75] <Notice>: #N SIM initialization complete; all essential information available #sim-ready`
+
+`misd[31] <Notice>: carrier service is available`
+
+
+`iPhone CommCenter[75] <Notice>: #I Unbrick device was successful `
+The params are displayed with the profile update
+` #I Received activation info: <private>       `
+
+`16873.516 [I] evt: Firing event 'recalculateConnectionAvailability': with params= 0, Postponement status change  `
