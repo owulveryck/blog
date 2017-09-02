@@ -9,7 +9,244 @@ tags:
 title: From a command line tools to a microservice - The example of hashicorp tools (terraform) and grpc
 ---
 
+# About the cli utilities
 
-$$\frac{\partial terraform}{\partial cli} + grpc= \mu service(terraform)$$
+I come from the sysadmin world... Precisely the unix world (I have been a BSD poweruser for years). Therefore I have learned to use and love what's called "_the cli utilities_". Cli utilities are all those tools that makes unix sexy and "user friendly". 
+
+<center>
+Because, yes, Unix **is user-friendly** (it's just picky about its friends[^1]  ).
+</center>
+
+[^1]: This sentence is not from me. I read it once somewhere on the Internet but I cannot find anybody to give the credit to.
+
+From a user perspective, cli tools remains a must nowadays because:
+
+* There are usually in the pure unix phiosophy: simple enough to use for what they were made for.
+* They can be easily wrapped into scripts. Therefore it is easy to automate what you do manually by hand.
+
+## Hashicorp's cli structure
+
+Hashicorp "cli" products are using a go library made by Mitchell Hashimoto called: ................ "[cli](https://github.com/mitchellh/cli)" ! 
+
+This library allows a lot more flexibility than the simple "flags" package from the go core library.
+
+## Example
+
+{{< highlight go >}}
+func main() {
+      c := cli.NewCLI("server", "1.0.0")
+      c.Args = os.Args[1:]
+      c.Commands = map[string]cli.CommandFactory{
+            "hello": func() (cli.Command, error) {
+                      return &HelloCommand{}, nil
+            },
+            "goodbye": func() (cli.Command, error) {
+                      return &GoodbyeCommand{}, nil
+            },
+      }
+      exitStatus, err := c.Run()
+      ... 
+}
+{{</ highlight >}}
+
+Then we simple create the `HelloCommand` structure that will fullfill the [`cli.Command`](https://godoc.org/github.com/mitchellh/cli#Command) interface
+
+{{< highlight go >}}
+type HelloCommand struct{}
+
+func (t *HelloCommand) Help() string {
+      return "hello [arg0] [arg1] ... says hello to everyone"
+}
+
+func (t *HelloCommand) Run(args []string) int {
+      fmt.Println("hello", args)
+      return 0
+}
+
+func (t *HelloCommand) Synopsis() string {
+      return "A sample command that says hello on stdout"
+}
+{{</ highlight >}}
+
+After a simple `go build`, here is the behaviour of our new cli tool:
+{{< highlight shell >}}
+~ ./server help
+Usage: server [--version] [--help] <command> [<args>]
+
+Available commands are:
+    goodbye    synopsis...
+    hello      A sample command that says hello on stdout
+
+~ ./server hello -help
+hello [arg0] [arg1] ... says hello to everyone
+
+~ ./server/server hello a b c
+hello [a b c]
+{{</ highlight >}}
+
+# Micro-services
+
+So why is that cool? 
+
+You may have notice that the action triggers the execution of a function. This call happens within the executable itself. What can we do if we want to "serve" this function so it can be called from a different server?
+
+## Rest? 
+
+## RPC !
+
+Let me quote this from the chapter "[The Production Environment at Google, from the Viewpoint of an SRE](https://landing.google.com/sre/book/chapters/production-environment.html#our-software-infrastructure-XQs4iw)" of the SRE book:
+
+> _All of Google's services communicate using a Remote Procedure Call (RPC) infrastructure named Stubby; an open source version, gRPC, is available. Often, an RPC call is made even when a call to a subroutine in the local program needs to be performed. This makes it easier to refactor the call into a different server if more modularity is needed, or when a server's codebase grows. GSLB can load balance RPCs in the same way it load balances externally visible services._
+
+### gRPC
+
+So what we want is calling the `Run()` function of the `HelloCommand` "class".
+
+### The protobuf contract
+
+{{< highlight protobuf >}}
+syntax = "proto3";
+
+package myservice;
+
+service MyService {
+    rpc Hello (Arg) returns (Output) {}
+    rpc Goodbye (Arg) returns (Output) {}
+}
+
+message Arg {
+    repeated string args = 1;
+}
+
+message Output {
+    int32 retcode = 1;
+}
+{{</highlight >}}
+
+### The implementation of the "contract"
+
+#### Workspace organisation
+
+I will have two utilities: 
+
+* a server (the actual cli tool that will respond to the grpc request)
+* a grpc client
+
+The "contract" definition will reside in its own package so it will be shared by the server and the client.
+
+`protoc --go_out=plugins=grpc:. myservice/myservice.proto`
+
+The interface 
+
+{{< highlight go >}}
+type MyServiceServer interface {
+      // Sends a greeting
+      Hello(context.Context, *Arg) (*Output, error)
+      Goodbye(context.Context, *Arg) (*Output, error)
+}
+{{</highlight >}}
+
+#### The new _server.go_
+Let's create a structure that will fullfill the MyServiceServer interface in order to use is as an argument to the `RegisterMyServiceServer` function.
+(This function is simply an autogenerated wrapper around the [`RegisterService`](https://godoc.org/google.golang.org/grpc#Server.RegisterService) method of the gRPC [`Server`](https://godoc.org/google.golang.org/grpc#Server) type).
+
+_Note_: the name _grpcCommands_ is not linked to any interface and can be changed.
+{{< highlight go >}}
+type grpcCommands struct {}
+
+func (g *grpcCommands) Hello(ctx context.Context, in *myservice.Arg) (*myservice.Output, error) {
+    return &myservice.Output{int32(0)}, err
+}
+func (g *grpcCommands) Goodbye(ctx context.Context, in *myservice.Arg) (*myservice.Output, error) {
+    return &myservice.Output{int32(0)}, err
+}
+{{</ highlight >}}
+
+We can now create a gRPC listener like this: 
+{{< highlight go >}}
+listener, _ := net.Listen("tcp", "127.0.0.1:1234")
+grpcServer := grpc.NewServer()
+myservice.RegisterMyServiceServer(grpcServer, &grpcCommands{})
+grpcServer.Serve(listener)
+{{</ highlight >}}
+
+So far so good... The code compiles, but does not perform any action and always return 0.
+Now let's use the grpcCommands structure as a bridge between the `cli.Command` and the grpc service.
+
+What we will do is to embed the `c.Commands` object inside the structure and trigger the appropriate objects's `Run()` method from the corresponding gRPC procedures.
+
+So first, let's embed the `c.Commands` object.
+
+{{< highlight go >}}
+type grpcCommands struct {
+      commands map[string]cli.CommandFactory
+}
+{{</ highlight >}}
+
+Then change the `Hello` and `Goodbye` methods of `grpcCommands` so they trigger respectivly:
+
+* `HelloCommand.Run(args)`
+* `GoodbyeCommand.Run(args)`
+    
+with `args` being the string array as defined in `myservice.Arg.Args`. //TODO: more explanation
+
+{{< highlight go >}}
+func (g *grpcCommands) Hello(ctx context.Context, in *myservice.Arg) (*myservice.Output, error) {
+      runner, err := g.commands["hello"]()
+      if err != nil {
+            return int32(0), err
+      }
+      ret = int32(runner.Run(in.Args))
+      return &myservice.Output{int32(ret)}, err
+}
+func (g *grpcCommands) Goodbye(ctx context.Context, in *myservice.Arg) (*myservice.Output, error) {
+      runner, err := g.commands["goodbye"]()
+      if err != nil {
+            return int32(0), err
+      }
+      ret = int32(runner.Run(in.Args))
+      return &myservice.Output{int32(ret)}, err
+}
+{{</ highlight >}}
+
+Let's factorize a little bit and create a wrapper (that will be useful in the next section):
+
+{{< highlight go >}}
+func wrapper(cf cli.CommandFactory, args []string) (int32, error) {
+      runner, err := cf()
+      if err != nil {
+            return int32(0), err
+      }
+      return int32(runner.Run(in.Args)), nil
+}
+
+func (g *grpcCommands) Hello(ctx context.Context, in *myservice.Arg) (*myservice.Output, error) {
+      ret, err := wrapper(g.commands["hello"])
+      return &myservice.Output{int32(ret)}, err
+}
+func (g *grpcCommands) Goodbye(ctx context.Context, in *myservice.Arg) (*myservice.Output, error) {
+      ret, err := wrapper(g.commands["goodbye"])
+      return &myservice.Output{int32(ret)}, err
+}
+{{</ highlight >}}
 
 
+
+# Going further
+
+## stdout / stderr
+{{< highlight protobuf >}}
+message Output {
+    int32 retcode = 1;
+    bytes  stdout = 2;
+    bytes stderr = 3;
+}
+{{</highlight >}}
+
+
+## Terraform ?
+
+$$\frac{\partial terraform}{\partial cli} + grpc^{protobuf} = \mu service(terraform)$$ [^2]
+ 
+
+[^2]: What I mean is that we are going to derivate terraform by altering the "cli" module, add it a pinch of grpc powered by protobuf, and it will give us a beautiful terraform microservice. I know, this mathematical formulae comes from nowhere. But I simply like the beautifulness of this language. (I would have been damned by my math teachers because I have used the mathematical language to describe something that is not mathematical... Would you please forgive me, gentlemen :)
