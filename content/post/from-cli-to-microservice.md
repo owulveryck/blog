@@ -418,10 +418,55 @@ type Output struct {
 }
 {{</highlight >}}
 
+TODO: Complete here!
+{{< highlight go >}}
+func wrapper(cf cli.CommandFactory, args []string) (int32, []byte, []byte, error) {
+	var ret int32
+	oldStdout := os.Stdout // keep backup of the real stdout
+	oldStderr := os.Stderr
+
+	// Backup the stdout
+	r, w, err := os.Pipe()
+        //...
+	re, we, err := os.Pipe()
+        //...
+	os.Stdout = w
+	os.Stderr = we
+
+	runner, err := cf()
+        //...
+	ret = int32(runner.Run(args))
+
+	outC := make(chan []byte)
+	errC := make(chan []byte)
+	// copy the output in a separate goroutine so printing can't block indefinitely
+	go func() {
+		var buf bytes.Buffer
+		io.Copy(&buf, r)
+		outC <- buf.Bytes()
+	}()
+	go func() {
+		var buf bytes.Buffer
+		io.Copy(&buf, re)
+		errC <- buf.Bytes()
+	}()
+
+	// back to normal state
+	w.Close()
+	we.Close()
+	os.Stdout = oldStdout // restoring the real stdout
+	os.Stderr = oldStderr
+	stdout := <-outC
+	stderr := <-errC
+	return ret, stdout, stderr, nil
+}
+{{</highlight >}}
+
 
 ## Terraform ?
 
 $$\frac{\partial terraform}{\partial cli} + grpc^{protobuf} = \mu service(terraform)$$ [^3]
  
 [^3]: What I mean is that we are going to derivate terraform by altering the "cli" module, add it a pinch of grpc powered by protobuf, and it will give us a beautiful terraform microservice. I know, this mathematical formulae comes from nowhere. But I simply like the beautifulness of this language. (I would have been damned by my math teachers because I have used the mathematical language to describe something that is not mathematical... Would you please forgive me, gentlemen :)
+
 
