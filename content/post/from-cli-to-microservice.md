@@ -529,7 +529,7 @@ We are going to derivate terraform by changing only its cli interface, add some 
 
 $$\frac{\partial terraform}{\partial cli} + grpc^{protobuf} = \mu service(terraform)$$ [^3]
 
-[^3]: I know, these mathematical formulae come from nowhere. But I simply like the beautifulness of this language. (I would have been damned by my math teachers because I have used the mathematical language to describe something that is not mathematicalâ¦ Would you please forgive me, gentlemen :) 
+[^3]: I know, this mathematical equation come from nowhere. But I simply like the beautifulness of this language. (I would have been damned by my math teachers because I have used the mathematical language to describe something that is not mathematical. Would you please forgive me, gentlemen :) 
 
 ### About concurrency
 
@@ -590,7 +590,161 @@ message Output {
 }
 {{</ highlight >}}
 
-Then i generate the `go` version of the contract with: `protoc --go_out=plugins=grpc:. terraformservice/terraform.proto`
+Then I generate the `go` version of the contract with:
 
+`protoc --go_out=plugins=grpc:. terraformservice/terraform.proto`
 
+### The go implementation of the interface
 
+I am using a similar structure as the one defined in the previous example.
+I only change the methods to match the new ones:
+
+{{< highlight go >}}
+type grpcCommands struct {
+      commands map[string]cli.CommandFactory
+}
+
+func (g *grpcCommands) Plan(ctx context.Context, in *terraformservice.Arg) (*terraformservice.Output, error) {
+      ret, stdout, stderr, err := wrapper(g.commands["plan"], in.Args)
+      return &terraformservice.Output{ret, stdout, stderr}, err
+}
+{{</ highlight >}}
+
+The wrapper function remains exactly the same as the one defined before becaus I didn't change the Output format.
+
+### Setting a gRPC server in the main function
+
+The only modification that has to be done is to create a listener for the grpc like the one we did before.
+We place it in the main code, just before the execution of the `Cli.Run()` call: 
+
+{{< highlight go >}}
+if len(cliRunner.Args) == 0 {
+        log.Println("Listening on 127.0.0.1:1234")
+        listener, err := net.Listen("tcp", "127.0.0.1:1234")
+        if err != nil {
+                log.Fatalf("failed to listen: %v", err)
+        }
+        grpcServer := grpc.NewServer()
+        terraformservice.RegisterTerraformServer(grpcServer, &grpcCommands{cliRunner.Commands})
+        // determine whether to use TLS
+        grpcServer.Serve(listener)
+}
+{{</ highlight >}}
+
+### Testing it
+
+The code compiles without any problem.
+I have triggered the `terraform init` and I have a listening process waiting for a call:
+
+```shelli
+~ netstat -lntp | grep 1234
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 127.0.0.1:1234          0.0.0.0:*               LISTEN      9053/tfoliv     
+```
+Let's launch a client:
+
+{{< highlight go >}}
+func main() {
+      conn, err := grpc.Dial("127.0.0.1:1234", grpc.WithInsecure())
+      if err != nil {
+            log.Fatal("Cannot reach grpc server", err)
+      }
+      defer conn.Close()
+      client := terraformservice.NewTerraformClient(conn)
+      output, err := client.Plan(context.Background(), &terraformservice.Arg{os.Args[1:]})
+      stdout := bytes.NewBuffer(output.Stdout)
+      stderr := bytes.NewBuffer(output.Stderr)
+      io.Copy(os.Stdout, stdout)
+      io.Copy(os.Stderr, stderr)
+      fmt.Println(output.Retcode)
+      os.Exit(output.Retcode)
+}
+{{</ highlight >}}
+
+```shell
+~ ./grpcclient -var 'key_name=terraform' -var 'public_key_path=~/.ssh/terraform.pub'`
+~ echo $?
+~ 0
+```
+
+Too bad, the proper function has been called, the return code is ok, but all the output went onto the console of the server... Anyway, the RPC has worked.
+
+I can even remove the default parameters and pass them as an argument of my client:
+
+```shell
+~ ./grpcclient -var 'key_name=terraform' -var 'public_key_path=~/.ssh/terraform.pub'
+~ echo $?
+~ 0
+```
+
+And let's see if I give a non existent path:
+
+```shell
+~ ./grpcclient -var 'key_name=terraform' -var 'public_key_path=~/.ssh/nonexistent'
+~ echo $?
+~ 1
+```
+
+_about the output_: I have been a little bit optimistic about the stdout and stderr. Actually to make it work, the best option would be to implement a custom `UI` that redirect stdout and stderr to the grpc stream. I will try an implementation as soon as I will have enough time to do so.
+
+# Conclusion
+
+Transforming terraform into a webservice has required a very little modification of the terraform code itself:
+
+{{< highlight diff >}}
+diff --git a/main.go b/main.go
+index ca4ec7c..da5215b 100644
+--- a/main.go
++++ b/main.go
+@@ -5,14 +5,18 @@ import (
+        "io"
+        "io/ioutil"
+        "log"
++       "net"
+        "os"
+        "runtime"
+        "strings"
+        "sync"
+ 
++       "google.golang.org/grpc"
++
+        "github.com/hashicorp/go-plugin"
+        "github.com/hashicorp/terraform/helper/logging"
+        "github.com/hashicorp/terraform/terraform"
++       "github.com/hashicorp/terraform/terraformservice"
+        "github.com/mattn/go-colorable"
+        "github.com/mattn/go-shellwords"
+        "github.com/mitchellh/cli"
+@@ -185,6 +189,18 @@ func wrappedMain() int {
+        PluginOverrides.Providers = config.Providers
+        PluginOverrides.Provisioners = config.Provisioners
+ 
++       if len(cliRunner.Args) == 0 {
++               log.Println("Listening on 127.0.0.1:1234")
++               listener, err := net.Listen("tcp", "127.0.0.1:1234")
++               if err != nil {
++                       log.Fatalf("failed to listen: %v", err)
++               }
++               grpcServer := grpc.NewServer()
++               terraformservice.RegisterTerraformServer(grpcServer, &grpcCommands{cliRunner.Commands})
++               // determine whether to use TLS
++               grpcServer.Serve(listener)
++       }
++
+        exitCode, err := cliRunner.Run()
+        if err != nil {
+                Ui.Error(fmt.Sprintf("Error executing CLI: %s", err.Error()))
+{{</ highlight >}}
+
+Of course, there is a bit of work to setup a complete terraform-as-a-service architecture, but it look promising.
+
+The only think that hasn't been implemented are:
+
+* The redirect of the stdout and stderr to the client
+* a kind of interactivity if terraform asks for something
+* a proper concurrent backend...
+
+Regarding grpc and protobuf:
+gRPC is a very nice protocol, I am really looking forward an implementation in javascript to target the browser.
+Meanwhile it is possible and easy to setup a grpc-to-json proxy if any web client is needed.
