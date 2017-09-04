@@ -22,7 +22,7 @@ I come from the sysadmin world... Precisely the Unix world (I have been a BSD us
 Because, yes, Unix **is user-friendly** (it's just picky about its friends[^1]).
 </center>
 
-[^1]: This sentence is not from me. I read it once somewhere on the Internet but I cannot find anybody to give the credit to.
+[^1]: This sentence is not from me. I read it once, somewhere, on the Internet. I cannot find anybody to give the credit to.
 
 From a user perspective, cli tools remains a must nowadays because:
 
@@ -529,21 +529,68 @@ We are going to derivate terraform by changing only its cli interface, add some 
 
 $$\frac{\partial terraform}{\partial cli} + grpc^{protobuf} = \mu service(terraform)$$ [^3]
 
+[^3]: I know, these mathematical formulae come from nowhere. But I simply like the beautifulness of this language. (I would have been damned by my math teachers because I have used the mathematical language to describe something that is not mathematicalâ¦ Would you please forgive me, gentlemen :) 
+
 ### About concurrency
 
 Terraform uses [backends](https://www.terraform.io/docs/backends/index.html) to store its states.
-By default it rely on the local filesystem, which is not concurrent safe and cannot be used when dealing with webservices.
+By default it rely on the local filesystem, which is, obviously, not concurrent safe. It does not scale and cannot be used when dealing with webservices.
 For the purpose of my article, I won't dig into the backend principle and stick to the local one.
-Of course, this will only work with one and only one client. If you plan to do more work around terraform-as-a-service, changing the backend will be a must!
+Hence, this will only work with one and only one client. If you plan to do more work around terraform-as-a-service, changing the backend is a must!
 
-### What will I test
+### What will I test?
 
-In order to narrow the exercice, I will partially implement the `plan` command. My test environment.
-On top of that, I will not implement any kind of interactivity. All the variables should be filled. 
+In order to narrow the exercice, I will partially implement the `plan` command.
 
-My test case is the creation of an `EC2` instance on AWS.
+My test case is the creation of an `EC2` instance on AWS. This example is a copy/paste of the example [Basic Two-Tier AWS Archtecture](https://github.com/terraform-providers/terraform-provider-aws/tree/master/examples/two-tier).
 
- 
-[^3]: I know, these mathematical formulae come from nowhere. But I simply like the beautifulness of this language. (I would have been damned by my math teachers because I have used the mathematical language to describe something that is not mathematicalâ¦ Would you please forgive me, gentlemen :) 
+I will not implement any kind of interactivity. Therefore I have added som default values for the ssh key name and path.
+
+Let's check that the basic cli is working:
+
+{{< highlight shell >}}
+localhost two-tier [master*] terraform plan | tail
+      enable_classiclink_dns_support:   "<computed>"
+      enable_dns_hostnames:             "<computed>"
+      enable_dns_support:               "true"
+      instance_tenancy:                 "<computed>"
+      ipv6_association_id:              "<computed>"
+      ipv6_cidr_block:                  "<computed>"
+      main_route_table_id:              "<computed>"
+
+Plan: 9 to add, 0 to change, 0 to destroy.
+{{</ highlight >}}
+
+Ok, let's "hack" terraform!
+
+### hacking Terraform
+
+#### Creating the protobuf contract
+
+The contract will be placed in a `terraformservice` package.
+I am using a similar approche as the one used for the greeting example described before:
+
+{{< highlight protobuf >}}
+syntax = "proto3";
+
+package terraformservice;
+
+service Terraform {
+    rpc Plan (Arg) returns (Output) {}
+}
+
+message Arg {
+    repeated string args = 1;
+}
+
+message Output {
+    int32 retcode = 1;
+    bytes stdout = 2;
+    bytes stderr = 3;
+}
+{{</ highlight >}}
+
+Then i generate the `go` version of the contract with: `protoc --go_out=plugins=grpc:. terraformservice/terraform.proto`
+
 
 
