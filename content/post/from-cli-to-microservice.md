@@ -2,7 +2,7 @@
 categories:
 date: 2017-09-02T13:28:36+02:00
 description: "This article explains how to turn a golang utility into a webservice using gRPC (and protobuf). I take the example of Hashicorp tools because they are often used as a leverage for the DevOps transformation. Often, the Ops use the tools for themselves, but when comes the time to provide a service around them, they are usually scared to open the engine. They prefer to make a factory around the service, which is often less reliable than a little piece of code fully tested."
-draft: true
+draft: false
 images:
 - /assets/images/terraformcli.png
 tags:
