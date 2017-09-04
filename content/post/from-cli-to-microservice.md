@@ -6,7 +6,7 @@ draft: false
 images:
 - /assets/images/terraformcli.png
 tags:
-title: From command line tools to a microservice - The example of Hashicorp tools (terraform) and gRPC
+title: From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC
 ---
 
 This post is a little bit different from the last ones. As usual, the introduction tries to be open, but it quickly goes deeper into a go implementation.

@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <lastBuildDate>Fri, 07 Jul 2017 21:06:46 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 02 Sep 2017 13:28:36 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</title>
+      <link>https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html</link>
+      <pubDate>Sat, 02 Sep 2017 13:28:36 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html</guid>
+      <description>This post is a little bit different from the last ones. As usual, the introduction tries to be open, but it quickly goes deeper into a go implementation. Some of the explanations may be tricky from time to times and therefore not very clear. As usual, do not hesitate to send me any comment via this blog or via twitter @owulveryck.
+TL;DR: This is a step-by-step example that turns a golang cli utility into a webservice powered by gRPC and protobuf.</description>
+    </item>
     
     <item>
       <title>A &#34;Smart&#34; CCTV with Tensorflow, and Inception? On a rapsberry pi?</title>
