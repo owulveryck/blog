@@ -1,16 +1,18 @@
 ---
 categories:
 date: 2017-09-02T13:28:36+02:00
-description: ""
+description: "This is a post that explains how to turn a golang utility into a webservice using gRPC. "
 draft: true
 images:
 - /assets/images/terraformcli.png
 tags:
-title: From a command line tools to a microservice - The example of hashicorp tools (terraform) and grpc
+title: From command line tools to a microservice - The example of Hashicorp tools (terraform) and gRPC
 ---
 
 This post is a little bit different from the last ones. As usual the introduction tries to be open, but it quickly goes deeper into a go implementation.
 Some of the explanations may be tricky from time to times and therefore not very clear. As usual, do not hesitate to send me any comment via this blog or via twitter [@owulveryck](https://twitter.com/owulveryck).
+
+**TL;DR**: This is a step-by-step example that turns a golang cli utility into a webservice powered by gRPC and protobuf. The code can be found [here](https://github.com/owulveryck/cli-grpc-example).
 
 # About the cli utilities
 
@@ -119,7 +121,7 @@ Now, let's see if we can turn this into a webservice.
 
 # Micro-services
 
-<center>_The biggest issue in changing a monolith into microservices lies in changing the communication pattern._[^2]</center>
+<center>_The biggest issue in changing a monolith into microservices lies in changing the communication pattern. - Martin Fowler_[^2]</center>
 
 [^2]: from [Martin Fowler's Microservices definition](https://martinfowler.com/articles/microservices.html#SmartEndpointsAndDumbPipes).
 
@@ -418,7 +420,40 @@ type Output struct {
 }
 {{</highlight >}}
 
-TODO: Complete here!
+We have changed the Output type, but as all the fields are embedded within the structure, the "service implementation" interface (`grpcCommand`) has not changed.
+We only need to change a little bit the implementation in order to return a more complete `Output` object:
+
+{{< highlight go >}}
+func (g *grpcCommands) Hello(ctx context.Context, in *myservice.Arg) (*myservice.Output, error) {
+    var stdout, stderr []byte
+    // ...
+    return &myservice.Output{ret, stdout, stderr}, err
+}
+{{</ highlight >}}
+
+Now we have to change the `wrapper` function that has been defined previously to return the content of stdout and stderr:
+
+{{< highlight go >}}
+func wrapper(cf cli.CommandFactory, args []string) (int32, []byte, []byte, error) {
+    // ...
+}
+func (g *grpcCommands) Hello(ctx context.Context, in *myservice.Arg) (*myservice.Output, error) {
+    var stdout, stderr []byte
+    ret, stdout, stderr, err := wrapper(g.commands["hello"], in.Args)
+    return &myservice.Output{ret, stdout, stderr}, err
+}
+{{</ highlight >}}
+
+All the job of capturing stdout and stderr is done within the wrapper function (This solution has been found on [stackoverflow](https://stackoverflow.com/questions/10473800/in-go-how-do-i-capture-stdout-of-a-function-into-a-string):
+
+* first we save the standard `stdout` and `stderr`
+* we create two times, two file descriptor linked with a pipe (one for stdout and one for stderr)
+* we assing the standard `stdout` and `stderr` to the intput of the pipe. From now on, every interaction will be written to the pipe and will be received into the variable decalred as output of the pipe
+* then we actualy execute the function (the business logic)
+* we get the content of the output and save it to variable
+* and then we restore stdout and stderr
+
+Here is the implementation of the `wrapper`:
 {{< highlight go >}}
 func wrapper(cf cli.CommandFactory, args []string) (int32, []byte, []byte, error) {
 	var ret int32
@@ -427,14 +462,14 @@ func wrapper(cf cli.CommandFactory, args []string) (int32, []byte, []byte, error
 
 	// Backup the stdout
 	r, w, err := os.Pipe()
-        //...
+        // ...
 	re, we, err := os.Pipe()
         //...
 	os.Stdout = w
 	os.Stderr = we
 
 	runner, err := cf()
-        //...
+        // ...
 	ret = int32(runner.Run(args))
 
 	outC := make(chan []byte)
@@ -462,11 +497,53 @@ func wrapper(cf cli.CommandFactory, args []string) (int32, []byte, []byte, error
 }
 {{</highlight >}}
 
+**Et voilà**, the cli has been transformed into a grpc webservice. The full code is available on [github](https://github.com/owulveryck/cli-grpc-example).
+
+### Side note about race conditions
+
+The map used for cli.Command is not concurrent safe. But there is no goroutine that actually write to it so it should be ok.
+I have written a little benchmark of our function and passed it to the race detector. And it did not find any problem:
+
+```shell
+go test -race -bench=.      
+goos: linux
+goarch: amd64
+pkg: github.com/owulveryck/cli-grpc-example/server
+BenchmarkHello-2             200          10483400 ns/op
+PASS
+ok      github.com/owulveryck/cli-grpc-example/server   4.130s
+```
+
+The benchmark shows good result on my little chromebook, gRPC seems very efficient, but actually testing it is beyond the scope of this article.
+
+### Interactivity
+
+Sometimes, cli tools ask questions. Another good point with gRPC is that it is bidirectionnal. Therefore, it would be possible to send the question from the server to the client and get the response back. I let that for another experiment.
 
 ## Terraform ?
 
+At the begining of this article, I have explained that I was using this specific cli in order to derivate hashicorp tools and turned them into webservices.
+Let's take an example with the excellent terraform.
+
+We are going to derivate terraform by changing only its cli interface, add some gRPC powered by protobuf... 
+
 $$\frac{\partial terraform}{\partial cli} + grpc^{protobuf} = \mu service(terraform)$$ [^3]
+
+### About concurrency
+
+Terraform uses [backends](https://www.terraform.io/docs/backends/index.html) to store its states.
+By default it rely on the local filesystem, which is not concurrent safe and cannot be used when dealing with webservices.
+For the purpose of my article, I won't dig into the backend principle and stick to the local one.
+Of course, this will only work with one and only one client. If you plan to do more work around terraform-as-a-service, changing the backend will be a must!
+
+### What will I test
+
+In order to narrow the exercice, I will partially implement the `plan` command. My test environment.
+On top of that, I will not implement any kind of interactivity. All the variables should be filled. 
+
+My test case is the creation of an `EC2` instance on AWS.
+
  
-[^3]: What I mean is that we are going to derivate terraform by altering the "cli" module, add it a pinch of grpc powered by protobuf, and it will give us a beautiful terraform microservice. I know, this mathematical formulae comes from nowhere. But I simply like the beautifulness of this language. (I would have been damned by my math teachers because I have used the mathematical language to describe something that is not mathematical... Would you please forgive me, gentlemen :)
+[^3]: I know, these mathematical formulae come from nowhere. But I simply like the beautifulness of this language. (I would have been damned by my math teachers because I have used the mathematical language to describe something that is not mathematicalâ¦ Would you please forgive me, gentlemen :) 
 
 
