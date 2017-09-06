@@ -55,7 +55,7 @@ One of the elements of the Cli structure is `Commands` which is a `map` that tak
 
 ## Example
 
-First, let's create a very simple tool using now.
+First, let's create a very simple tool using the "cli" package.
 The tool will have two "commands":
 
 * hello: will display _hello args...._  on `stdout` 
@@ -663,7 +663,7 @@ func main() {
 {{</ highlight >}}
 
 ```shell
-~ ./grpcclient -var 'key_name=terraform' -var 'public_key_path=~/.ssh/terraform.pub'`
+~ ./grpcclient`
 ~ echo $?
 ~ 0
 ```
