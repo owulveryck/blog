@@ -663,7 +663,7 @@ func main() {
 {{</ highlight >}}
 
 ```shell
-~ ./grpcclient`
+~ ./grpcclient
 ~ echo $?
 ~ 0
 ```
