@@ -153,13 +153,88 @@ I will simply copy the function into my main package
 
 ## About the UI
 
+In the example cli that I developped in the previous post, what I did was to redirect stdout and stderr to an array of bytes, in order to capture it and send it back to a gRPC client.
+I noticed that this was not working with Terraform.
+This is because of the UI!
+UI is an interface whose purpose is to get the output stream and write it down to a specific io.Writer.
+
+Our tool will need a custom UI.
+
 ### A custom UI
 
-# About concurrency
+As UI is an interface ([see the doc here](https://godoc.org/github.com/mitchellh/cli#Ui)), it is easy to implement our own. Let's define a structure that holds two array of bytes called `stdout` and `stderr`. Then let's implement the methods that will write into this elements:
+
+{{< highlight go >}}
+type grpcUI struct {
+    stdout []byte
+    stderr []byte
+}
+
+func (g *grpcUI) Output(msg string) {
+    g.stdout = append(g.stdout, []byte(msg)...)
+}
+{{</ highlight>}}
+
+_Note 1_: I omit the methods `Info`, `Warn`, and `Error` for brevity.
+
+_Note 2_: For now, I do not implement any logic into the `Ask` and `AskSecret` methods. Therefore, my client will not be able to ask something. But as gRPC is bidirectional, it would be possible to implement such an interaction.
+
+Now, we can instantiate this UI for every call, and assing it to the meta-options of the command:
+
+{{< highlight go >}}
+var stdout []byte
+var stderr []byte
+myUI := &grpcUI{
+    stdout: stdout,
+    stderr: stderr,
+}
+tfCommand.Meta.Ui = myUI
+{{</ highlight >}}
+
+So far, so good: we now have a new terraform binary, that is working via gRPC with a very little bit of code.
+
+# What did we miss?
+
+## Multi-stack
+It is fun but not usable for real purpose because the server needs to be launched from the directory where the tf files are... 
+Therefore the service can only be used for one single terraform stack... Come on!
+
+Let's change that and pass as a parameter of the RPC call the directory where the server needs to work. It is as simple as adding an extra argument to the `message Arg`:
+
+{{< highlight protobuf >}}
+message Arg {
+    string workingDir = 1;
+    repeated string args = 2;
+}
+{{</ highlight >}}
+
+and then, simply do a `change directory` in the implementation of the command:
+
+{{< highlight go >}}
+func (g *grpcCommands) Init(ctx context.Context, in *pb.Arg) (*pb.Output, error) {
+    err := os.Chdir(in.WorkingDir)
+    if err != nil {
+        return &pb.Output{int32(0), nil, nil}, err
+    }
+    tfCommand := &command.InitCommand{
+        Meta: g.meta,
+    }
+    var stdout []byte
+    var stderr []byte
+    myUI := &grpcUI{
+        stdout: stdout,
+        stderr: stderr,
+    }
+    ret := int32(tfCommand.Run(in.Args))
+    return &pb.Output{ret, stdout, stderr}, err
+}
+{{</ highlight >}}
 
 ## Implementing a new _push_ command
 
-## Setting the working directory
+Now that we have a terraform service how can it be used by a client.
+Assume that this service is deployed on a remote machine. We do not want everybody to log into the host to write their stack in the local filesystem.
+
 
 # going further...
 
