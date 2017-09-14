@@ -232,9 +232,70 @@ func (g *grpcCommands) Init(ctx context.Context, in *pb.Arg) (*pb.Output, error)
 
 ## Implementing a new _push_ command
 
-Now that we have a terraform service how can it be used by a client.
-Assume that this service is deployed on a remote machine. We do not want everybody to log into the host to write their stack in the local filesystem.
+I have a terraform service. Alright.
+Can an "Ops" use it?
 
+The service we have deployed is working exactly like terraform. I have only changed the user interface.
+Therefore, the terraform stacks must be present locally on the host.
+
+Obviously we do not want to give access to the server that hosts terraform. This is not how micro-services work.
+
+Terraform has a push command that hashicorp has implemented to communicate with terraform enterprise.
+
+Let's take the same principle and implement my own _push_ command.
+
+### Principle
+
+The push command will zip all the `tf` files in the current directory in memory, and transfer the zip via a specific message to the server.
+The server will then decompress the zip in a uniq temp directory and send back the ID of that directory.
+Then every other terraform command can use the id of the directory and use the stack.
+
+Let's implement a protobuf contract:
+
+{{< highlight protobuf >}}
+service Terraform {
+    // ...
+    rpc Push(stream Body) returns (Id) {}
+}
+
+message Body {
+    bytes zipfile = 1;
+}
+
+message Id {
+    string tmpdir = 1;
+} 
+{{</ highlight >}}
+
+_Note_: By now I assume that the whole zip can fit into a single message. I will probably have to implement chuncking later
+
+Then Instanciate the definition into the code of the server:
+
+{{< highlight go >}}
+func (g *grpcCommands) Push(stream pb.Terraform_PushServer) error {
+    workdir, err := ioutil.TempDir("", ".terraformgrpc")
+    if err != nil {
+    return err
+    }
+    err = os.Chdir(workdir)
+    if err != nil {
+    return err
+    }
+
+    body, err := stream.Recv()
+    if err == io.EOF || err == nil {
+        // We have all the file
+        // Now let's extract the zipfile
+        // ...
+    }
+    if err != nil {
+        return err
+    }
+    return stream.SendAndClose(&pb.Id{
+            Tmpdir: workdir,
+    })
+}
+{{</ highlight >}}
 
 # going further...
 
@@ -242,14 +303,15 @@ Assume that this service is deployed on a remote machine. We do not want everybo
 
 # Hip[^1] is _cooler than cool_: Introducing _Nhite_
 
+[^1]: [hip definition on wikipedia](https://en.wikipedia.org/wiki/Hip_(slang))
+
 ## The organisation structure
 
 ### Demo?
 
-[^1]: [hip definition on wikipedia](https://en.wikipedia.org/wiki/Hip_(slang))
 
 I have packed everything into an organization called nhite.
-There is still a lot to do, but I really think that this could make sense to create a community. I may give a product by the end, or go in my attic of dead project.
+There is still a lot to do, but I really think that this could make sense to create a community. It may give a product by the end, or go in my attic of dead projects.
 Anyway, so far I've had a lot of fun!
 
 
