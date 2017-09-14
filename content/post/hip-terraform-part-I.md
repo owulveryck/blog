@@ -326,7 +326,7 @@ Therefore I have setup a GitHub organisation and a GitHub project to centralize 
 
 The project is called Nhite.
 
-* The GitHub organization is called [nhite](
+* The GitHub organization is called [nhite](https://github.com/nhite)
 * The web page is [https://nhite.github.io](https://nhite.github.io)
 
 There is still a lot to do, but I really think that this could make sense to create a community. It may give a product by the end, or go in my attic of dead projects.

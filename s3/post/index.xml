@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <lastBuildDate>Sat, 02 Sep 2017 13:28:36 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 12 Sep 2017 13:28:36 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Terraform is hip... Introducing Nhite</title>
+      <link>https://blog.owulveryck.info/2017/09/12/terraform-is-hip...-introducing-nhite.html</link>
+      <pubDate>Tue, 12 Sep 2017 13:28:36 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/09/12/terraform-is-hip...-introducing-nhite.html</guid>
+      <description>In a previous post, I did some experiments with gRPC, protocol buffer and Terraform. The idea was to transform the &amp;ldquo;Terraform&amp;rdquo; cli tool into a micro-service thanks to gRPC.
+This post is the second part of the experiment. I will go deeper in the code and see if it is possible to create a brand new utility, without hacking Terraform. The idea is to import some of the packages that compose the binary and create my own service based on gRPC.</description>
+    </item>
     
     <item>
       <title>From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</title>

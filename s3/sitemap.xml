@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://blog.owulveryck.info/2017/09/12/terraform-is-hip...-introducing-nhite.html</loc>
+    <lastmod>2017-09-12T13:28:36+02:00</lastmod>
+  </url>
   
   <url>
     <loc>https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html</loc>
@@ -525,7 +531,7 @@
   
   <url>
     <loc>https://blog.owulveryck.info/post.html</loc>
-    <lastmod>2017-09-02T13:28:36+02:00</lastmod>
+    <lastmod>2017-09-12T13:28:36+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -675,7 +681,7 @@
   
   <url>
     <loc>https://blog.owulveryck.info/</loc>
-    <lastmod>2017-09-02T13:28:36+02:00</lastmod>
+    <lastmod>2017-09-12T13:28:36+02:00</lastmod>
     <priority>0</priority>
   </url>
   

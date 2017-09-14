@@ -14,7 +14,7 @@
 
 
 
-<meta property="og:updated_time" content="2017-09-02T13:28:36&#43;02:00"/>
+<meta property="og:updated_time" content="2017-09-12T13:28:36&#43;02:00"/>
 
 
 
@@ -30,6 +30,9 @@
 <meta itemprop="description" content="Olivier Wulveryck&#39;s (tech) blog">
 
 
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Posts"/>
+<meta name="twitter:description" content="Olivier Wulveryck&#39;s (tech) blog"/>
+<meta name="twitter:site" content="@owulveryck"/>
 
 
 
@@ -38,7 +41,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.20.7" />
+<meta name="generator" content="Hugo 0.27" />
 
 
     <link rel="canonical" href="https://blog.owulveryck.info/post.html">
@@ -107,6 +110,38 @@ ga('send', 'pageview');
 
           
 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-09-12T13:28:36&#43;02:00">Tue Sep 12, 2017</time> by Olivier Wulveryck</p>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/09/12/terraform-is-hip...-introducing-nhite.html'>
+      
+        <div class="crop">
+      <img src="https://nhite.github.io/images/logo.png" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+    <div class="col-sm-10">
+      <h5>
+        This is a second part of the last article. I now really dig into Terraform. This article will explain how to use the Terraform sub-packages in order to create a brand new binary that acts as a gRPC server instead of a cli.
+      </h5>
+    </div>
+    </div>
+  </div>
+      In a previous post, I did some experiments with gRPC, protocol buffer and Terraform. The idea was to transform the &ldquo;Terraform&rdquo; cli tool into a micro-service thanks to gRPC.
+This post is the second part of the experiment. I will go deeper in the code and see if it is possible to create a brand new utility, without hacking Terraform. The idea is to import some of the packages that compose the binary and create my own service based on gRPC.
+
+  <a href='https://blog.owulveryck.info/2017/09/12/terraform-is-hip...-introducing-nhite.html'>Read more →</a>
+</article> 
 
 
 
@@ -249,42 +284,6 @@ During the month of may, I have had the chance to attend to the Google Next even
 
 
 
-<article class="blog-post">
-  <header>
-    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/04/24/retour-sur-les-conf%C3%A9rences-dotscale-%C3%A9dition-2017..html">Retour sur les conférences dotScale, édition 2017.</a></h2>
-    <p class="blog-post-meta"><time datetime="2017-04-24T20:51:22&#43;02:00">Mon Apr 24, 2017</time> by Olivier Wulveryck in 
-<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="/categories/conference" rel="category tag">conference</a>
-
-
-</p>
-  </header>
-  <div class="container">
-  <div class="row">
-    <div class="col-sm-2 frame-round">
-  <a href='https://blog.owulveryck.info/2017/04/24/retour-sur-les-conf%C3%A9rences-dotscale-%C3%A9dition-2017..html'>
-      
-        <div class="crop">
-      <img src="https://pbs.twimg.com/profile_images/659732730784129025/TlfVUxEl.png" alt=""></img>
-    </div>
-      
-    </a>
-    </div>
-    <div class="col-sm-10">
-      <h5>
-        Mon retour sur les conférences de la dotScale édition 2017 [In French]
-      </h5>
-    </div>
-    </div>
-  </div>
-      Note This post is written in french, as it was, at first, targeted for another support. I apologize for the people who do not speak the language.
-A propos de la dotScale Lundi 24 avril se tenait la cinquième édition de la conférence dotScale qui se décrit elle-même comme étant la tech conférence Européenne sur la &ldquo;scalabilité&rdquo;. Cette conférence se veut être le &ldquo;TED&rdquo; des informaticiens. Elle se déroule dans le prestigieux théâtre de Paris.
-
-  <a href='https://blog.owulveryck.info/2017/04/24/retour-sur-les-conf%C3%A9rences-dotscale-%C3%A9dition-2017..html'>Read more →</a>
-</article> 
-
-
-
-
 <nav class="blog-pagination">
   
   
@@ -313,6 +312,9 @@ A propos de la dotScale Lundi 24 avril se tenait la cinquième édition de la co
     <h4>Recent Posts</h4>
     <ol class="list-unstyled">
       
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
       <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
       <hr>
       
@@ -323,9 +325,6 @@ A propos de la dotScale Lundi 24 avril se tenait la cinquième édition de la co
       <hr>
       
       <li><a href="/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html">Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM</a></li>
-      <hr>
-      
-      <li><a href="/2017/04/24/retour-sur-les-conf%C3%A9rences-dotscale-%C3%A9dition-2017..html">Retour sur les conférences dotScale, édition 2017.</a></li>
       <hr>
       
     </ol>
