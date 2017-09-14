@@ -267,7 +267,7 @@ message Id {
 } 
 {{</ highlight >}}
 
-_Note_: By now I assume that the whole zip can fit into a single message. I will probably have to implement chuncking later
+_Note_: By now I assume that the whole zip can fit into a single message. I will probably have to implement chunking later
 
 Then Instanciate the definition into the code of the server:
 
@@ -299,11 +299,34 @@ func (g *grpcCommands) Push(stream pb.Terraform_PushServer) error {
 
 # going further...
 
+The problem with this architecture is that it' statefull, and therefore easily scalable.
+
+A solution would be to store the zip file in a third party service, identify it with a uniq id.
+And then call the Terraform commands with this ID as a parameter. 
+The terraform engine would then grab the zip file from the third party service if needed and process the file
+
 ## Implementing a micro-service of backend
+
+I want to keep the same logic, therefore the storage service can be a gRPC microservice.
+We can then have different services (such as s3, google storage, dynamodb, NAS, ...) written in different languages.
+
+The terraform service will act as a client of this "backend" service (take care, it is not the same backend as the one defined within terraform).
+
+Our terraform-service can then be configured in runtime to call the host/port of the correct backend-service. We can even imagine the backend address being served via consul.
+
+This is a work in progress and may be part of another blog post anyway.
 
 # Hip[^1] is _cooler than cool_: Introducing _Nhite_
 
 [^1]: [hip definition on wikipedia](https://en.wikipedia.org/wiki/Hip_(slang))
+
+I have talked to some people about all this stuff and I feel that people are interested.
+Therefore I have setup a github organisation and a github project to centralized what I will do around that.
+
+The project is called Nhite.
+
+* The github organization is called [nhite](
+* The web page is [https://nhite.github.io](https://nhite.github.io)
 
 ## The organisation structure
 
