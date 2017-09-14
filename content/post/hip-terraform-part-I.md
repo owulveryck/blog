@@ -1,7 +1,7 @@
 ---
 categories:
 date: 2017-09-12T13:28:36+02:00
-description: "This is a second part of the last article. I now really dig into terraform. This article will explain how to use the Terraform sub-packages in order to create a brand new binary that acts as a gRPC server instead of a cli."
+description: "This is a second part of the last article. I now really dig into Terraform. This article will explain how to use the Terraform sub-packages in order to create a brand new binary that acts as a gRPC server instead of a cli."
 draft: false
 images:
 - https://nhite.github.io/images/logo.png
@@ -10,19 +10,19 @@ title: Terraform is hip... Introducing Nhite
 ---
 
 In a previous post, I did some experiments with gRPC, protocol buffer and Terraform.
-The idea was to transform the "terraform" cli tool into a micro-service thanks to gRPC.
+The idea was to transform the "Terraform" cli tool into a micro-service thanks to gRPC.
 
 This post is the second part of the experiment. I will go deeper in the code and see if it is possible
-to create a brand new utility, without hacking terraform. The idea is to import some of the packages that compose the binary
+to create a brand new utility, without hacking Terraform. The idea is to import some of the packages that compose the binary
 and create my own service based on gRPC.
 
-# The terraform structure
+# The Terraform structure
 
 Terraform is a binary utility written in `go`.
 The `main` package resides in the root directory of the `terraform` directory.
 As usual with go projects, all other subdirectories are different modules.
 
-The whole business logic of terraform is coded into the subpackages. The "`main`" package is simply an envelop for kick-starting the utility (env variables, etc.) and to initiate the command line.
+The whole business logic of Terraform is coded into the subpackages. The "`main`" package is simply an envelop for kick-starting the utility (env variables, etc.) and to initiate the command line.
 
 ### The cli implementation
 
@@ -32,15 +32,15 @@ As explained in the previous post, this cli package is calling a specific functi
 ### The _command_ package
 
 Every single action is fulfilling the `cli.Command` interface and is implemented in the [`command`](https://godoc.org/github.com/hashicorp/terraform/command) subpackage.
-Therefore, every "action" of terraform has a definition in the command package and the logic is coded into a `Run(args []string) int` method (see the [doc of the Command interface for a complete definition](https://godoc.org/github.com/mitchellh/cli#Command).
+Therefore, every "action" of Terraform has a definition in the command package and the logic is coded into a `Run(args []string) int` method (see the [doc of the Command interface for a complete definition](https://godoc.org/github.com/mitchellh/cli#Command).
 
 # Creating a new binary
 
-The idea is not to hack any of the packages of terraform to allow an easier maintenance of my code. 
+The idea is not to hack any of the packages of Terraform to allow an easier maintenance of my code. 
 In order to create a custom service, I will instead implement a new utility; therefore a new `main` package.
 This package will implement a gRPC server. This server will implement wrappers around the functions declared in the `terraform.Command` package.
 
-For the purpose of my poc, I will only implement three actions of terraform:
+For the purpose of my POC, I will only implement three actions of Terraform:
 
 * `terraform init`
 * `terraform plan`
@@ -76,7 +76,7 @@ message Output {
 
 ## Fulfilling the contract
 
-As described previoulsy, I am creating a `grpcCommand` structure that will have the required methods to fulfill the contract:
+As described previously, I am creating a `grpcCommand` structure that will have the required methods to fulfill the contract:
 
 {{< highlight go >}}
 type grpcCommands struct {}
@@ -93,9 +93,9 @@ func (g *grpcCommands) Apply(ctx context.Context, in *pb.Arg) (*pb.Output, error
 {{</ highlight >}}
 
 In the previous post, I have filled the `grpcCommand` structure with a `map` filled with the command definition.
-The idea was to keep the same cli interface.
+The idea was to keep the same CLI interface.
 As we are now building a completely new binary with only a gRPC interface, we don't need that anymore.
-Indeed, there is still a need to execute the `Run` method of every terraform command.
+Indeed, there is still a need to execute the `Run` method of every Terraform command.
 
 Let's take the example of the Init command. 
 
@@ -134,7 +134,7 @@ func (g *grpcCommands) Init(ctx context.Context, in *pb.Arg) (*pb.Output, error)
 Now that we have a proper `grpcCommand` than can be registered to the grpc server, let's see how to create an instance.
 As the grpcCommand only contains one field, we simply need to create a `meta` object.
 
-Let's simply copy/paste the code done in terraform's main package and we now have:
+Let's simply copy/paste the code done in Terraform's main package and we now have:
 
 {{< highlight go >}}
 var PluginOverrides command.PluginOverrides
@@ -153,7 +153,7 @@ I will simply copy the function into my main package
 
 ## About the UI
 
-In the example cli that I developped in the previous post, what I did was to redirect stdout and stderr to an array of bytes, in order to capture it and send it back to a gRPC client.
+In the example CLI that I developed in the previous post, what I did was to redirect stdout and stderr to an array of bytes, in order to capture it and send it back to a gRPC client.
 I noticed that this was not working with Terraform.
 This is because of the UI!
 UI is an interface whose purpose is to get the output stream and write it down to a specific io.Writer.
@@ -179,7 +179,7 @@ _Note 1_: I omit the methods `Info`, `Warn`, and `Error` for brevity.
 
 _Note 2_: For now, I do not implement any logic into the `Ask` and `AskSecret` methods. Therefore, my client will not be able to ask something. But as gRPC is bidirectional, it would be possible to implement such an interaction.
 
-Now, we can instantiate this UI for every call, and assing it to the meta-options of the command:
+Now, we can instantiate this UI for every call, and assign it to the meta-options of the command:
 
 {{< highlight go >}}
 var stdout []byte
@@ -191,13 +191,13 @@ myUI := &grpcUI{
 tfCommand.Meta.Ui = myUI
 {{</ highlight >}}
 
-So far, so good: we now have a new terraform binary, that is working via gRPC with a very little bit of code.
+So far, so good: we now have a new Terraform binary, that is working via gRPC with a very little bit of code.
 
 # What did we miss?
 
 ## Multi-stack
-It is fun but not usable for real purpose because the server needs to be launched from the directory where the tf files are... 
-Therefore the service can only be used for one single terraform stack... Come on!
+It is fun but not usable for real purpose because the server needs to be launched from the directory where the _tf_ files are... 
+Therefore the service can only be used for one single Terraform stack... Come on!
 
 Let's change that and pass as a parameter of the RPC call the directory where the server needs to work. It is as simple as adding an extra argument to the `message Arg`:
 
@@ -232,23 +232,24 @@ func (g *grpcCommands) Init(ctx context.Context, in *pb.Arg) (*pb.Output, error)
 
 ## Implementing a new _push_ command
 
-I have a terraform service. Alright.
-Can an "Ops" use it?
+I have a Terraform service. Alright.
+Can an "Operator" use it?
 
-The service we have deployed is working exactly like terraform. I have only changed the user interface.
-Therefore, the terraform stacks must be present locally on the host.
+The service we have deployed is working exactly like Terraform. I have only changed the user interface.
+Therefore, in order to deploy a stack, the 'tf' files must be present locally on the host.
 
-Obviously we do not want to give access to the server that hosts terraform. This is not how micro-services work.
+Obviously we do not want to give access to the server that hosts Terraform. This is not how micro-services work.
 
-Terraform has a push command that hashicorp has implemented to communicate with terraform enterprise.
+Terraform has a push command that Hashicorp has implemented to communicate with Terraform enterprise.
+This command is linked with their close-source product called "Atlas" and is therefore useless for us.
 
-Let's take the same principle and implement my own _push_ command.
+Let's take the same principle and implement our own _push_ command.
 
 ### Principle
 
-The push command will zip all the `tf` files in the current directory in memory, and transfer the zip via a specific message to the server.
-The server will then decompress the zip in a uniq temp directory and send back the ID of that directory.
-Then every other terraform command can use the id of the directory and use the stack.
+The push command will zip all the `tf` files of the current directory in memory, and transfer the zip via a specific message to the server.
+The server will then decompress the zip into a unique temporary directory and send back the ID of that directory.
+Then every other Terraform command can use the id of the directory and use the stack (as before).
 
 Let's implement a protobuf contract:
 
@@ -269,7 +270,7 @@ message Id {
 
 _Note_: By now I assume that the whole zip can fit into a single message. I will probably have to implement chunking later
 
-Then Instanciate the definition into the code of the server:
+Then instantiate the definition into the code of the server:
 
 {{< highlight go >}}
 func (g *grpcCommands) Push(stream pb.Terraform_PushServer) error {
@@ -299,43 +300,34 @@ func (g *grpcCommands) Push(stream pb.Terraform_PushServer) error {
 
 # going further...
 
-The problem with this architecture is that it' statefull, and therefore easily scalable.
+The problem with this architecture is that it's stateful, and therefore easily scalable.
 
-A solution would be to store the zip file in a third party service, identify it with a uniq id.
+A solution would be to store the zip file in a third party service, identify it with a unique id.
 And then call the Terraform commands with this ID as a parameter. 
-The terraform engine would then grab the zip file from the third party service if needed and process the file
+The Terraform engine would then grab the zip file from the third party service if needed and process the file
 
 ## Implementing a micro-service of backend
 
 I want to keep the same logic, therefore the storage service can be a gRPC microservice.
 We can then have different services (such as s3, google storage, dynamodb, NAS, ...) written in different languages.
 
-The terraform service will act as a client of this "backend" service (take care, it is not the same backend as the one defined within terraform).
+The Terraform service will act as a client of this "backend" service (take care, it is not the same backend as the one defined within Terraform).
 
-Our terraform-service can then be configured in runtime to call the host/port of the correct backend-service. We can even imagine the backend address being served via consul.
+Our Terraform-service can then be configured in runtime to call the host/port of the correct backend-service. We can even imagine the backend address being served via consul.
 
-This is a work in progress and may be part of another blog post anyway.
+This is a work in progress and may be part of another blog post.
 
 # Hip[^1] is _cooler than cool_: Introducing _Nhite_
 
 [^1]: [hip definition on wikipedia](https://en.wikipedia.org/wiki/Hip_(slang))
 
 I have talked to some people about all this stuff and I feel that people are interested.
-Therefore I have setup a github organisation and a github project to centralized what I will do around that.
+Therefore I have setup a GitHub organisation and a GitHub project to centralize what I will do around that.
 
 The project is called Nhite.
 
-* The github organization is called [nhite](
+* The GitHub organization is called [nhite](
 * The web page is [https://nhite.github.io](https://nhite.github.io)
 
-## The organisation structure
-
-### Demo?
-
-
-I have packed everything into an organization called nhite.
 There is still a lot to do, but I really think that this could make sense to create a community. It may give a product by the end, or go in my attic of dead projects.
 Anyway, so far I've had a lot of fun!
-
-
-
