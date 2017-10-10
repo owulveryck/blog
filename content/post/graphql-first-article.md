@@ -91,7 +91,7 @@ type Product {
 type ProductFamily {
   products: [Product]!
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 One offer is composed of a mandatory price list. An offer must be of a pre-defined type: _OnDemand_ or _Reserved_.
 Let's define this:
@@ -119,7 +119,7 @@ type Price {
   currency: String
   price: Float
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 At the very end we define the _queries_ 
 Let's start by defining a single query. To make it simple for the purpose of the post, Let's assume that we will try to get a whole _product family_.
@@ -131,7 +131,7 @@ The Query definition is therefore:
 type Query {
     products(sku: String): [Product]
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 We will query products (`{products}`) and it will return a ProductFamily.
 
@@ -148,7 +148,7 @@ Let's see now how a typical query would look like. To understand the structure o
     }
   }
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 This query should normally return all the products of the family and display their location and their type.
 Let's try to implement this
@@ -161,7 +161,7 @@ To use it:
 
 {{< highlight go >}}
 import "github.com/graphql-go/graphql"
-{{< /highlight >}}
+{{</ highlight >}}
 
 To keep it simple, I will load all the products and offers in memory. In the real life, we should implement an access to whatever database. But that is a strength of the GraphQL model: The flexibility. The backend can be changed later without breaking the model or the API.
 
@@ -185,7 +185,7 @@ schemaConfig := graphql.SchemaConfig{
        Query: graphql.NewObject(rootQuery),
 }
 schema, err := graphql.NewSchema(schemaConfig)
-{{< /highlight >}}
+{{</ highlight >}}
 
 ### Defining the fields
 
@@ -200,7 +200,7 @@ fields := graphql.Fields{
         "products": &graphql.Field{
              Type: graphql.NewList(productType),
         ...
-{{< /highlight >}}
+{{</ highlight >}}
 
 We will see in a minute how to define the _productType_. Before, we must provide a way to seek for the product in the database.
 This is done by implementing the `Resolve` function:
@@ -211,7 +211,7 @@ fields := graphql.Fields{
              Type: graphql.NewList(productType),
              Resolve: func(p graphql.ResolveParams) (interface{}, error) {
         ...
-{{< /highlight >}}
+{{</ highlight >}}
 
 The resolv function will return all the products in our database.
 
@@ -231,13 +231,13 @@ fields := graphql.Fields{
               },
               Resolve: func(p graphql.ResolveParams) (interface{}, error) {
         ...
-{{< /highlight >}}
+{{</ highlight >}}
 
 as the argument is not mandatory, we will use an if statement in the Resolve function to check whether we have a sku or not:
 
 {{< highlight go >}}
 if sku, skuok := p.Args["sku"].(string); skuok {
-{{< /highlight >}}
+{{</ highlight >}}
 
 ### Defining the _productType_
 
@@ -262,7 +262,7 @@ var productType = graphql.NewObject(graphql.ObjectConfig{
                 },
         },
 })
-{{< /highlight >}}
+{{</ highlight >}}
 
 A productType is a graphql object composed of the 4 fields. Those fields will be returned as string in the graphql.
 
@@ -279,7 +279,7 @@ r := graphql.Do(params)
 if r.HasErrors() {
     log.Fatalf("Failed due to errors: %v\n", r.Errors)
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 ### A couple of tests...
     ./pricing -db bla -query "{products(sku:\"HZC9FAP4F9Y8JW67\"){location}}" | jq "."
@@ -293,7 +293,7 @@ if r.HasErrors() {
     ]
   }
 }
-{{< /highlight >}}
+{{</ highlight >}}
      
     ./pricing -db bla -query "{products(sku:\"HZC9FAP4F9Y8JW67\"){location,instanceType}}" | jq "."
 {{< highlight json >}}
@@ -307,7 +307,7 @@ if r.HasErrors() {
     ]
   }
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
     ./pricing -db bla -query "{products{location}}" | jq "." | head -15
 {{< highlight json >}}
@@ -327,7 +327,7 @@ if r.HasErrors() {
         "location": "Asia Pacific (Sydney)"
       },
 
-{{< /highlight >}}
+{{</ highlight >}}
 
     ./pricing -db bla -query "{products{location,operatingSystem}}" | jq "." | head -20
 {{< highlight json >}}
@@ -350,7 +350,7 @@ if r.HasErrors() {
         "operatingSystem": "SUSE",
         "location": "US East (N. Virginia)"
       },
-{{< /highlight >}}
+{{</ highlight >}}
 
 ## Adding the Offers
 
@@ -377,7 +377,7 @@ var offerType = graphql.NewObject(graphql.ObjectConfig{
                 },
         },
 })
-{{< /highlight >}}
+{{</ highlight >}}
 
 And then make the productType aware of this new type:
 
@@ -402,7 +402,7 @@ var productType = graphql.NewObject(graphql.ObjectConfig{
                 },
         },
 })
-{{< /highlight >}}
+{{</ highlight >}}
 
 Then, make sure that the resolv function is able to fill the structure of the product with the correct offer.
 
@@ -426,7 +426,7 @@ Then, make sure that the resolv function is able to fill the structure of the pr
     ]
   }
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 This is it!
 

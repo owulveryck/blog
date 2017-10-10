@@ -57,7 +57,7 @@ func (l *Linda) EvalC(env *zygo.Glisp, name string, args []zygo.Sexp) (zygo.Sexp
     ...
     return zygo.SexpNull, nil
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 ## First attempt
 
@@ -88,7 +88,7 @@ Regarding the problem of the philosopher, I had to change the definition of `phi
 Here is what is posted in the tuple space when the evalc function is called:
 {{< highlight lisp >}}
 (defn phil [i num] ((begin (begin (printf "%v is thinking\n" i) (sleep 10000) (printf "/%v is thinking\n" i)) (in "room ticket") (printf "%v is in the room\n" i) (in "chopstick" i) (printf "%v took the %v's chopstick\n" i i) (in "chopstick" (mod (+ i 1) num)) (printf "%v took the %v's chopstick\n" i (mod (+ i 1) num)) (begin (printf "%v is eating\n" i) (sleep 10000) (printf "/%v is eating\n" i)) (printf "%v released the %v's chopstick\n" i i) (out "chopstick" i) (printf "%v released the %v's chopstick\n" i (mod (+ i 1) num)) (out "chopstick" (mod (+ i 1) num)) (printf "%v left the room\n" i) (out "room ticket") (phil i num)))) 0 5
-{{< /highlight >}}
+{{</ highlight >}}
 
 In the worker process, I am creating a new environment, loading the function (the `defn` part), and constructing an expression to be evaluated by the env. 
 This is what the environment evalutates:
@@ -118,7 +118,7 @@ This is what the environment evalutates:
     (out "room ticket")
     (phil i num))))
 (phil 0 5)
-{{< /highlight >}}
+{{</ highlight >}}
 
 # Runtime
 

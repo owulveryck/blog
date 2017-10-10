@@ -238,7 +238,7 @@ $ sudo apt install gcc-arm-linux-gnueabihf
 # Compile it
 $ export CC=arm-linux-gnueabihf-gcc
 $ CC=arm-linux-gnueabihf-gcc-5 GOOS=linux GOARCH=arm GOARM=6 CGO_ENABLED=1 go build  -o myprogram -ldflags="-extld=$CC"
-{{< /highlight >}}
+{{</ highlight >}}
 
 #### Performances
 

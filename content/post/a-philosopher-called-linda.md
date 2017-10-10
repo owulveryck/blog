@@ -134,7 +134,7 @@ Phil(i)
       out("room ticket");
     }
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 
 {{< highlight c >}}
@@ -148,7 +148,7 @@ initialize()
       out("room ticket");
   }
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 ### What is needed
 
@@ -162,14 +162,14 @@ type Linda struct {
   Input  <-chan interface{}
   Output chan<- interface{}
 }
-{{< /highlight  >}}
+{{</ highlight  >}}
 
 #### The _Tuple_ type
 As a tuple I will use a flat go structure. Therefore I can describe a tuple as an interface{}
 
 {{< highlight go >}}
 type Tuple interface{}
-{{< /highlight  >}}
+{{</ highlight  >}}
 
 #### The _in_ action
 
@@ -187,7 +187,7 @@ func (l *Linda) In(m Tuple) {
       l.Output <- m
   }
 }
-{{< /highlight  >}}
+{{</ highlight  >}}
 
 ### The _eval_ function
 
@@ -207,7 +207,7 @@ func (l *Linda) Eval(fns []interface{}) {
 		go fn.Call(args)
 	}
 }
-{{< /highlight  >}}
+{{</ highlight  >}}
 
 ## Back to the philosophers...
 
@@ -222,7 +222,7 @@ for i := 0; i < num; i++ {
         ld.Out(ticket{})
     }
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 
 {{< highlight go >}}
@@ -241,7 +241,7 @@ func phil(i int) {
         ld.Out(ticket{})
     }
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 ### The tuple space
 We have Linda... that can put and read tuples via channels... But we still need to plug those channels to the tuple space.
@@ -253,7 +253,7 @@ go func() {
         input <- i
     }
 }()
-{{< /highlight >}}
+{{</ highlight >}}
 
 ## Execution
 

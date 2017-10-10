@@ -62,7 +62,7 @@ Here is my payload. I want both features for my test:
     "inputUri": "gs://video-test-blog/trailer.mp4",
     "features": ["SHOT_CHANGE_DETECTION","LABEL_DETECTION"]
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 ## Launching the request
 
@@ -76,7 +76,7 @@ curl -s -k -H 'Content-Type: application/json' \
       -H 'Authorization: Bearer MYTOKEN' \
       'https://videointelligence.googleapis.com/v1beta1/videos:annotate' \
       -d @demo.json
-{{< /highlight >}}
+{{</ highlight >}}
 
 The action replies with a JSON containing an `operation name`. Actually, the operation is long and asynchronous. This `operation name` can be used to get the processing status.
 
@@ -84,7 +84,7 @@ The action replies with a JSON containing an `operation name`. Actually, the ope
 {
    "name": "us-east1.16784866925473582660"
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 ### Getting the status
 
@@ -94,7 +94,7 @@ To request the status, we need to query the service to get the status of the ope
 curl -s -k -H 'Content-Type: application/json' \
       -H 'Authorization: Bearer MYTOKEN' \
       'https://videointelligence.googleapis.com/v1/operations/us-east1.16784866925473582660'
-{{< /highlight >}}
+{{</ highlight >}}
 
 It returns a result in `json` that in which we can find three important fields:
 
@@ -140,7 +140,7 @@ Here is a sample output: (the full result is [here](/assets/video-intelligence/v
   "done": true,
   //...
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 # Interpreting the results
 

@@ -57,7 +57,7 @@ type test struct {
     Last string `csv:"nom"`
     Test string `csv:"nonexitent"`
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 Then, I am reading the first row of the CSV file and then ranging the field names of the struct to fill a map with the field key as key and the col number as value. I set '-1' if the field is not found:
 
@@ -73,7 +73,7 @@ for i := 0; i < et.NumField(); i++ {
                 return -1
         }(et.Field(i).Tag.Get("csv"), header)
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 Then I can parse the CSV file and fill a channel with one object by row... 
 See the full example [here](https://gist.github.com/owulveryck/0fc68c90fa4875647b54f62e2066707d)
@@ -104,7 +104,7 @@ KeySchema: []*dynamodb.KeySchemaElement{
                 KeyType:       aws.String("RANGE"),
         },
 },
-{{< /highlight >}}
+{{</ highlight >}}
 
 I will set an initial provisioning of 600. This would cost a lot of money but I will reduce it later to spare. The high provisioning rate is needed otherwise it would take me hours to integrate the CSV.
 
@@ -113,7 +113,7 @@ ProvisionedThroughput: &dynamodb.ProvisionedThroughput{
         ReadCapacityUnits:  aws.Int64(5),
         WriteCapacityUnits: aws.Int64(300),
 },
-{{< /highlight >}}
+{{</ highlight >}}
 
 The code for creating the table is [here](https://gist.github.com/owulveryck/6663983b41c669617704558a030a3392#file-dynamodbcreatetable-go)
 
@@ -139,7 +139,7 @@ for v := range c {
     }
     svc.PutItem(params)
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 ## Going concurrent
 
@@ -165,7 +165,7 @@ for v := range c {
         <-guard
     }
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 ## Using a backoff algorithm
 
@@ -195,7 +195,7 @@ backoff.Retry(func() error {
     // Do the insert here
     return nil
 }, backoff.NewExponentialBackOff())
-{{< /highlight >}}
+{{</ highlight >}}
 
 # Step 4: Updating the table and reducing the write capacity
 
@@ -211,7 +211,7 @@ params := &dynamodb.UpdateTableInput{
     },
 }
 resp, err := svc.UpdateTable(params)
-{{< /highlight >}}
+{{</ highlight >}}
 
 # Conclusion: it works
 

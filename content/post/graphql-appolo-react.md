@@ -66,7 +66,7 @@ To use it decently, I have installed two plugins via [vundle:
 # from my ~/.vimrc
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'     
-{{< /highlight >}}
+{{</ highlight >}}
 
 I have also installed [eslint](http://eslint.org/) which is a pluggable linting utility compatible with [syntastic](https://github.com/vim-syntastic/syntastic).
 
@@ -74,14 +74,14 @@ I have also installed [eslint](http://eslint.org/) which is a pluggable linting 
 sudo npm install -g eslint
 sudo npm install -g babel-eslint
 sudo npm install -g eslint-plugin-react              
-{{< /highlight >}}
+{{</ highlight >}}
 
 I have also configured [syntastic](https://github.com/vim-syntastic/syntastic) to understand correctly the javascript and the react syntax by using 
 
 {{< highlight shell >}}
 # from my ~/.vimrc
 let g:syntastic_javascript_checkers = ['eslint'] 
-{{< /highlight >}}
+{{</ highlight >}}
 
 # Let's code
 
@@ -92,7 +92,7 @@ let g:syntastic_javascript_checkers = ['eslint']
 {{< highlight shell >}}
 sudo npm install -g react_
 sudo npm install -g create-react-app
-{{< /highlight >}}
+{{</ highlight >}}
 
 The create-react-app is a helper program that pre-configure a lot of stuff for you (such as babel or webpack) to focus on the code instead of the tooling.
 
@@ -100,7 +100,7 @@ The create-react-app is a helper program that pre-configure a lot of stuff for y
 
 {{< highlight shell >}}
 create-react-app blog-test
-{{< /highlight >}}
+{{</ highlight >}}
 
 This will create a directory `blog-test`, download all the base packages that are necessary for a hello-world app and create an application skeleton.
 
@@ -145,7 +145,7 @@ As explained, I will used the Apollo and react-table dependencies. Let's install
 {{< highlight shell >}}
 npm install react-apollo --save
 npm install react-table
-{{< /highlight >}}
+{{</ highlight >}}
 
 ## Let's write the code of the application
 
@@ -158,7 +158,7 @@ First, we need to import the `Apollo` dependencies:
 
 {{< highlight js >}}
 import { ApolloClient, ApolloProvider, createNetworkInterface } from 'react-apollo';
-{{< /highlight >}}
+{{</ highlight >}}
 
 Then we will instanciate the connection in the Constructor of the App component as written in Apollo's documentation:
 
@@ -177,7 +177,7 @@ class App extends Component {
  
    render() {
    ...
-{{< /highlight >}}
+{{</ highlight >}}
 
 _Note_ : The version of the server on github has been tweaked to handle the CORS Preflight request.
 
@@ -191,7 +191,7 @@ render() {
       <ApolloProvider client={this.client}>
       </ApolloProvider>
 ...
-{{< /highlight >}}
+{{</ highlight >}}
 
 ### Defining the table
 
@@ -200,7 +200,7 @@ To use the react-table, we need to import the component:
 {{< highlight js >}}
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-{{< /highlight >}}
+{{</ highlight >}}
 
 _Note_ : I also import the CSS
 
@@ -222,7 +222,7 @@ const columns = [{
     header: 'Operating System',
     accessor: 'operatingSystem'
 }]
-{{< /highlight >}}
+{{</ highlight >}}
 
 Then we create a component `ProductList` that will render the table:
 
@@ -241,7 +241,7 @@ function ProductList({ loading, products }) {
      );
   } 
 } 
-{{< /highlight >}}
+{{</ highlight >}}
 
 Then we change the render function to use the ProductList instead of the default view:
 
@@ -256,7 +256,7 @@ render() {
     </div>
   );
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 If you did everything correctly, you shoud see this:
 
@@ -270,7 +270,7 @@ To use the Graphql components of Apollo, we need to import them:
 
 {{< highlight js >}}
 import { gql, graphql } from 'react-apollo';
-{{< /highlight >}}
+{{</ highlight >}}
 
 Then, let's create the query as a constant in the exact same manner as when we did it with GraphiQL (cf last post):
 
@@ -285,7 +285,7 @@ query products {
   }                                                                                                                                                                                                             
 }
 `
-{{< /highlight >}}
+{{</ highlight >}}
 
 Now the "tricky" part: We must change the Component ProductList to use our Data.
 This is documented on the Apollo Website under the section [Requesting Data](http://dev.apollodata.com/react/initialization.html):
@@ -301,7 +301,7 @@ const ProductListWithData = graphql(allProducts, {
     products,
   }),
 })(ProductList);
-{{< /highlight >}}
+{{</ highlight >}}
 
 And use it within the Apollo provider instead of the ProductList Component
 
@@ -316,7 +316,7 @@ render() {
     </div>
   );
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 # Conclusion
 

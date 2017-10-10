@@ -74,7 +74,7 @@ For example the Out function is implemented with this signature:
 func (l *Linda) Out(env *zygo.Glisp, name string, args []zygo.Sexp) (zygo.Sexp, error) {
     ...
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 and it will be presented to the repl by this command:
 
@@ -82,7 +82,7 @@ and it will be presented to the repl by this command:
 lda := &linda.Linda{}
 env := zygo.NewGlisp()
 env.AddFunction("out", lda.Out)
-{{< /highlight >}}
+{{</ highlight >}}
 
 I have decided to let the linda implementation in a separate package and to implement the repl ad a separate command.
 
@@ -132,7 +132,7 @@ This is how it looks like:
     (out "chopstick" (mod (+ i 1) num))
     (out "room ticket")
     (phil i num))))
-{{< /highlight >}}
+{{</ highlight >}}
 
 ## Execution
 

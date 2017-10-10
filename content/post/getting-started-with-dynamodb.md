@@ -66,7 +66,7 @@ We have:
       }
    }
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 There are three important entries but only two are mandatories:
 
@@ -103,7 +103,7 @@ type offerIndex struct {
     PublicationDate time.Time        `json:"publicationDate"`
     Offers          map[string]offer `json:"offers"`
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 An offer in the index is characterized by three elements. I am catching all of them, but only `CurrrentVersionURL` is useful in my case.
 {{< highlight go >}}
@@ -112,7 +112,7 @@ type offer struct {
     VersionIndexURL   string `json:"versionIndexUrl"`
     CurrentVersionURL string `json:"currentVersionUrl"`
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 #### Products
 I hold all the product details in a structure. The product details holds all the products in a map whose key is the SKU. Therefore a SKU field is useless.
@@ -127,7 +127,7 @@ type productDetails struct {
         Attributes    map[string]interface{} `json:"attributes"`
     } `json:"products"`
 }
-{{< /highlight >}}
+{{</ highlight >}}
 
 ### Getting the data
 
@@ -139,13 +139,13 @@ resp, err := http.Get("https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/i
 var oi offerIndex
 err = json.NewDecoder(resp.Body).Decode(&oi)
 // oi contains all the offers
-{{< /highlight >}}
+{{</ highlight >}}
 
 Then loop for each offer and do a `GET` of every `CurrentVersionURL`
 {{< highlight go >}}
 for _ , o := range oi.Offers {
         resp, err := http.Get("https://pricing.us-east-1.amazonaws.com" + o.CurrentVersionURL)
-{{< /highlight >}}
+{{</ highlight >}}
 
 #### And products
 
@@ -154,7 +154,7 @@ The same principles applies for the products, we decode the stream in an object:
 {{< highlight go >}}
 var pd productDetails
 err = json.NewDecoder(resp.Body).Decode(&pd)
-{{< /highlight >}}
+{{</ highlight >}}
 
 Now that we have all the informations we are ready to store them in the database.
 
@@ -165,7 +165,7 @@ As usual with any AWS access, you need to create a `session` and a `service` obj
 {{< highlight go >}}
 sess, err := session.NewSession()
 svc := dynamodb.New(sess)
-{{< /highlight >}}
+{{</ highlight >}}
 
 The [session](http://docs.aws.amazon.com/sdk-for-go/api/aws/session/) will take care of the credentials by reading the appropriate files or environment variables.
 
@@ -201,7 +201,7 @@ for k, v := range pd.Products {
       item["SKU"], err = dynamodbattribute.Marshal(k)
       item["ProductFamily"], err = dynamodbattribute.Marshal(v.ProductFamily)
       item["Attributes"], err = dynamodbattribute.Marshal(v.Attributes)
-{{< /highlight >}}
+{{</ highlight >}}
 
 Once I have an Item, I can create the parameters and send the request to the DB:
 
@@ -211,7 +211,7 @@ Item:      item,
 }
 // Now put the item, discarding the result
 _ , err = svc.PutItem(params)
-{{< /highlight >}}
+{{</ highlight >}}
 
 # Execution and conclusion
 
