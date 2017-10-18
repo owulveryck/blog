@@ -206,7 +206,7 @@ message Arg {
 message Output {
     int32 retcode = 1;
 }
-{{</highlight >}}
+{{</ highlight >}}
 
 Here is the English description of the contract:
 
@@ -257,7 +257,7 @@ type MyServiceServer interface {
       Hello(context.Context, *Arg) (*Output, error)
       Goodbye(context.Context, *Arg) (*Output, error)
 }
-{{</highlight >}}
+{{</ highlight >}}
 
 To create a "service implementation" in our "cli" utility, we need to create any structure that implements the Hello(...) and Goodbye(...) methods.
 Let's call our structure `grpcCommands`:
@@ -408,7 +408,7 @@ message Output {
     bytes stdout = 2;
     bytes stderr = 3;
 }
-{{</highlight >}}
+{{</ highlight >}}
 
 The generated file contains the following definition for `Output`:
 
@@ -418,7 +418,7 @@ type Output struct {
       Stdout  []byte `protobuf:"bytes,2,opt,name=stdout,proto3" json:"stdout,omitempty"`
       Stderr  []byte `protobuf:"bytes,3,opt,name=stderr,proto3" json:"stderr,omitempty"`
 }
-{{</highlight >}}
+{{</ highlight >}}
 
 We have changed the Output type, but as all the fields are embedded within the structure, the "service implementation" interface (`grpcCommand`) has not changed.
 We only need to change a little bit the implementation in order to return a completed `Output` object:
@@ -495,7 +495,7 @@ func wrapper(cf cli.CommandFactory, args []string) (int32, []byte, []byte, error
 	stderr := <-errC
 	return ret, stdout, stderr, nil
 }
-{{</highlight >}}
+{{</ highlight >}}
 
 **Et voilà**, the cli has been transformed into a grpc webservice. The full code is available on [GitHub](https://github.com/owulveryck/cli-grpc-example).
 
