@@ -11,7 +11,7 @@ tags:
 title: Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM
 ---
 
-**TL;DR:** Thank you for passing by. This article is, as usual, geek oriented. However if you are not a geek, and/or you are in a hurry, you can jump to the conclusion: _[Any real application?](#any-real-application)_
+**TL;DR:** Thank you for passing by. This article is, as usual, geek oriented. However, if you are not a geek, and/or you are in a hurry, you can jump to the conclusion: _[Any real application?](#any-real-application)_
 
 During the month of may, I have had the chance to attend to the Google Next event in London and the dotAI in Paris. In both conferences I learned a lot about machine learning. 
 
@@ -29,7 +29,7 @@ First of all, it has bindings so it can be used within various programming langu
 * java
 * go
 
-However to be honest, mainly python and c++ are described in the documentation. And to be even more honest I think that python is the language that you should use to prototype applications.
+However, to be honest, mainly python and c++ are described in the documentation. And to be even more honest I think that python is the language that you should use to prototype applications.
 
 ### ML and neuron network examples
 
@@ -55,9 +55,9 @@ _Note_ Other ML services from GCP such as cloud vision, translate, or image sear
 
 # So What?
 
-I want to play with image recognition. Actually I already did a test with AWS's rekognition service ([See this post](/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html)).  However the problems were:
+I want to play with image recognition. Actually I already did a test with AWS's rekognition service ([See this post](/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html)).  However, the problems were:
 
-* I relied on a low-level webcam implementation. Therefore the code was not portable;
+* I relied on a low-level webcam implementation. Therefore, the code was not portable;
 * I had no preview of what my computer was looking at;
 * I could not execute it on any mobile app for a demo; 
 
@@ -69,7 +69,7 @@ The idea is to get a video stream and grab pictures from this stream in order to
 
 I will present different objects in front of my webcam, and their name will be displayed on the screen.
 
-The architecture is client server: The Chrome is the eye of my bot, it communicate with the brain (a webservice in go that is running a pre-trained tensorflow neural network) via a websocket.
+The architecture is client server: The Chrome is the eye of my bot, it communicates with the brain (a webservice in go that is running a pre-trained tensorflow neural network) via a websocket.
 
 **The rest of this paragraph is geek/javascript, if you're not interested you can jump to the next paragraph about the brain implementation called _[Cortical](#the-brain-cortical)_**
 
@@ -162,9 +162,9 @@ ws.onmessage = function(event) {
 
 ### Sending pictures to the websocket: actually seeing
 
-I didn't find a way to send the video stream to the brain via the websocket. Therefore I will do what everybody does: create a canvas and "take" a picture from the video:
+I didn't find a way to send the video stream to the brain via the websocket. Therefore, I will do what everybody does: create a canvas and "take" a picture from the video:
 
-The method [toDataURL()](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL) will take care of encoding the picture in a well known format (png or jpeg).
+The method [toDataURL()](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL) will take care of encoding the picture in a well-known format (png or jpeg).
 
 {{< highlight js >}}
 function takeSnapshot() {
@@ -207,7 +207,7 @@ function talk(message) {
 
 Therefore, simply adding a call to this function in the "onmessage" event of the websocket will trigger the voice of Chrome. 
 
-Listening is a little bit trickier. It is done by a call to the `webkitSpeechRecognition();` method. This [blog post](https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API) explains in detail how this works.
+Listening is a bit trickier. It is done by a call to the `webkitSpeechRecognition();` method. This [blog post](https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API) explains in detail how this works.
 
 The call is also event based. What's important is that, in chrome, by default, it will use an API call to the Google's engine. Therefore the recognition won't work offline.
 
@@ -225,13 +225,13 @@ recognition.onresult = function(event) {
 };
 {{</ highlight >}}
 
-_Now that we have setup the senses, let's make a "brain"_
+_Now that we have set up the senses, let's make a "brain"_
 
 # The _brain_: **Cortical**
 ![Picture](https://github.com/owulveryck/cortical/raw/master/doc/cortical.png)
 
 
-Now, let me explain what is, according to me, the **most interesting part** of this post. By now, all that I have done is a little bit of javascript to grab a picture. This is not a big deal, and there is no machine learning yet (besides the speech recognition built-in in chrome).
+Now, let me explain what is, according to me, the **most interesting part** of this post. By now, all that I have done is a bit of javascript to grab a picture. This is not a big deal, and there is no machine learning yet (besides the speech recognition built-in in chrome).
 What I need now is to actually process the messages so the computer can tell what it sees.
 
 For this purpose I have developed a message dispatcher. This dispatcher, called _Cortical_  is available on [github](https://github.com/owulveryck/cortical)

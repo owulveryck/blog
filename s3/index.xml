@@ -19,7 +19,7 @@
       
       <guid>https://blog.owulveryck.info/2017/09/12/terraform-is-hip...-introducing-nhite.html</guid>
       <description>In a previous post, I did some experiments with gRPC, protocol buffer and Terraform. The idea was to transform the &amp;ldquo;Terraform&amp;rdquo; cli tool into a micro-service thanks to gRPC.
-This post is the second part of the experiment. I will go deeper in the code and see if it is possible to create a brand new utility, without hacking Terraform. The idea is to import some of the packages that compose the binary and create my own service based on gRPC.</description>
+This post is the second part of the experiment. I will go deeper in the code and see if it is possible to create a brand new utility, without hacking Terraform. The idea is to import some packages that compose the binary and create my own service based on gRPC.</description>
     </item>
     
     <item>
@@ -28,7 +28,7 @@ This post is the second part of the experiment. I will go deeper in the code and
       <pubDate>Sat, 02 Sep 2017 13:28:36 +0200</pubDate>
       
       <guid>https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html</guid>
-      <description>This post is a little bit different from the last ones. As usual, the introduction tries to be open, but it quickly goes deeper into a go implementation. Some of the explanations may be tricky from time to times and therefore not very clear. As usual, do not hesitate to send me any comment via this blog or via twitter @owulveryck.
+      <description>This post is a little different from the last ones. As usual, the introduction tries to be open, but it quickly goes deeper into a go implementation. Some explanations may be tricky from time to times and therefore not very clear. As usual, do not hesitate to send me any comment via this blog or via twitter @owulveryck.
 TL;DR: This is a step-by-step example that turns a golang cli utility into a webservice powered by gRPC and protobuf.</description>
     </item>
     
@@ -64,7 +64,7 @@ Why this parody?
       <pubDate>Tue, 16 May 2017 21:43:46 +0200</pubDate>
       
       <guid>https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html</guid>
-      <description>TL;DR: Thank you for passing by. This article is, as usual, geek oriented. However if you are not a geek, and/or you are in a hurry, you can jump to the conclusion: Any real application?
+      <description>TL;DR: Thank you for passing by. This article is, as usual, geek oriented. However, if you are not a geek, and/or you are in a hurry, you can jump to the conclusion: Any real application?
 During the month of may, I have had the chance to attend to the Google Next event in London and the dotAI in Paris. In both conferences I learned a lot about machine learning.</description>
     </item>
     

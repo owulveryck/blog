@@ -13,7 +13,7 @@ In a previous post, I did some experiments with gRPC, protocol buffer and Terraf
 The idea was to transform the "Terraform" cli tool into a micro-service thanks to gRPC.
 
 This post is the second part of the experiment. I will go deeper in the code and see if it is possible
-to create a brand new utility, without hacking Terraform. The idea is to import some of the packages that compose the binary
+to create a brand new utility, without hacking Terraform. The idea is to import some packages that compose the binary
 and create my own service based on gRPC.
 
 # The Terraform structure
@@ -22,7 +22,7 @@ Terraform is a binary utility written in `go`.
 The `main` package resides in the root directory of the `terraform` directory.
 As usual with go projects, all other subdirectories are different modules.
 
-The whole business logic of Terraform is coded into the subpackages. The "`main`" package is simply an envelop for kick-starting the utility (env variables, etc.) and to initiate the command line.
+The whole business logic of Terraform is coded into the subpackages. The "`main`" package is simply an enveloppe for kick-starting the utility (env variables, etc.) and to initiate the command line.
 
 ### The cli implementation
 
@@ -162,7 +162,7 @@ Our tool will need a custom UI.
 
 ### A custom UI
 
-As UI is an interface ([see the doc here](https://godoc.org/github.com/mitchellh/cli#Ui)), it is easy to implement our own. Let's define a structure that holds two array of bytes called `stdout` and `stderr`. Then let's implement the methods that will write into this elements:
+As UI is an interface ([see the doc here](https://godoc.org/github.com/mitchellh/cli#Ui)), it is easy to implement our own. Let's define a structure that holds two array of bytes called `stdout` and `stderr`. Then let's implement the methods that will write into these elements:
 
 {{< highlight go >}}
 type grpcUI struct {
@@ -191,7 +191,7 @@ myUI := &grpcUI{
 tfCommand.Meta.Ui = myUI
 {{</ highlight >}}
 
-So far, so good: we now have a new Terraform binary, that is working via gRPC with a very little bit of code.
+So far, so good: we now have a new Terraform binary, that is working via gRPC with a very little code.
 
 # What did we miss?
 
@@ -322,7 +322,7 @@ This is a work in progress and may be part of another blog post.
 [^1]: [hip definition on wikipedia](https://en.wikipedia.org/wiki/Hip_(slang))
 
 I have talked to some people about all this stuff and I feel that people are interested.
-Therefore I have setup a GitHub organisation and a GitHub project to centralize what I will do around that.
+Therefore, I have set up a GitHub organisation and a GitHub project to centralize what I will do around that.
 
 The project is called Nhite.
 
