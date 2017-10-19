@@ -9,14 +9,14 @@ tags:
 title: From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC
 ---
 
-This post is a little bit different from the last ones. As usual, the introduction tries to be open, but it quickly goes deeper into a go implementation.
-Some of the explanations may be tricky from time to times and therefore not very clear. As usual, do not hesitate to send me any comment via this blog or via twitter [@owulveryck](https://twitter.com/owulveryck).
+This post is a little different from the last ones. As usual, the introduction tries to be open, but it quickly goes deeper into a go implementation.
+Some explanations may be tricky from time to times and therefore not very clear. As usual, do not hesitate to send me any comment via this blog or via twitter [@owulveryck](https://twitter.com/owulveryck).
 
 **TL;DR**: This is a step-by-step example that turns a golang cli utility into a webservice powered by gRPC and protobuf. The code can be found [here](https://github.com/owulveryck/cli-grpc-example).
 
 # About the cli utilities
 
-I come from the sysadmin world... Precisely the Unix world (I have been a BSD user for years). Therefore I have learned to use and love "_the cli utilities_". Cli utilities are all those tools that make Unix sexy and "user-friendly". 
+I come from the sysadmin world... Precisely the Unix world (I have been a BSD user for years). Therefore, I have learned to use and love "_the cli utilities_". Cli utilities are all those tools that make Unix sexy and "user-friendly". 
 
 <center>
 Because, yes, Unix **is user-friendly** (it's just picky about its friends[^1]).
@@ -125,7 +125,7 @@ Now, let's see if we can turn this into a webservice.
 
 [^2]: from [Martin Fowler's Microservices definition](https://martinfowler.com/articles/microservices.html#SmartEndpointsAndDumbPipes).
 
-There is, according to me, two options to consider to turn our application into a webservice:
+There is, according to me, two options to consider turning our application into a webservice:
 
 * a RESTish communication and interface;
 * an RPC based communication.
@@ -345,7 +345,7 @@ func (g *grpcCommands) Goodbye(ctx context.Context, in *myservice.Arg) (*myservi
 }
 {{</ highlight >}}
 
-Let's factorize a little bit and create a wrapper (that will be useful in the next section):
+Let's factorize a bit and create a wrapper (that will be useful in the next section):
 
 {{< highlight go >}}
 func wrapper(cf cli.CommandFactory, args []string) (int32, error) {
@@ -366,7 +366,7 @@ func (g *grpcCommands) Goodbye(ctx context.Context, in *myservice.Arg) (*myservi
 }
 {{</ highlight >}}
 
-Now we have everything needed to turn our cli into a gRPC service. With a little bit of plumbing, the code compiles and the service runs.
+Now we have everything needed to turn our cli into a gRPC service. With a bit of plumbing, the code compiles and the service runs.
 The full implementation of the service can be found [here](https://github.com/owulveryck/cli-grpc-example/blob/master/server/main.go).
 
 ## A very quick client
@@ -447,7 +447,7 @@ func (g *grpcCommands) Hello(ctx context.Context, in *myservice.Arg) (*myservice
 All the job of capturing stdout and stderr is done within the wrapper function (This solution has been found on [StackOverflow](https://stackoverflow.com/questions/10473800/in-go-how-do-i-capture-stdout-of-a-function-into-a-string):
 
 * first, we backup the standard `stdout` and `stderr`
-* then, we create two times, two file descriptor linked with a pipe (one for stdout and one for stderr)
+* then, we create two times, two file descriptors linked with a pipe (one for stdout and one for stderr)
 * we assign the standard `stdout` and `stderr` to the input of the pipe. From now on, every interaction will be written to the pipe and will be received into the variable declared as output of the pipe
 * then, we actually execute the function (the business logic)
 * we get the content of the output and save it to variable
@@ -544,7 +544,7 @@ In order to narrow the exercise, I will partially implement the `plan` command.
 
 My test case is the creation of an `EC2` instance on AWS. This example is a copy/paste of the example [Basic Two-Tier AWS Architecture](https://github.com/terraform-providers/terraform-provider-aws/tree/master/examples/two-tier).
 
-I will not implement any kind of interactivity. Therefore I have added some default values for the ssh key name and path.
+I will not implement any kind of interactivity. Therefore, I have added some default values for the ssh key name and path.
 
 Let's check that the basic cli is working:
 
@@ -686,7 +686,7 @@ And let's see if I give a non existent path:
 ~ 1
 ```
 
-_about the output_: I have been a little bit optimistic about the stdout and stderr. 
+_about the output_: I have been a little optimistic about the stdout and stderr. 
 Actually, to make it work, the best option would be to implement a custom `UI` (it should not be difficult because [`Ui is also an interface`](https://godoc.org/github.com/mitchellh/cli#Ui)).
 I will try an implementation as soon as I will have enough time to do so. But for now, I have reached my first goal, and this post is long enough :)
 
@@ -743,7 +743,7 @@ Of course, there is a bit of work to setup a complete terraform-as-a-service arc
 
 Regarding grpc and protobuf:
 gRPC is a very nice protocol, I am really looking forward an implementation in javascript to target the browser
-(Meanwhile it is possible and easy to setup a grpc-to-json proxy if any web client is needed). 
+(Meanwhile it is possible and easy to set up a grpc-to-json proxy if any web client is needed). 
 
 But it reminds us that the main target of RPC is machine-to-machine communication. This is something that the ease-of-use-and-read of json has shadowed...
 
