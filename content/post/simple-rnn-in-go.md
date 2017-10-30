@@ -59,13 +59,15 @@ What will be the winning sequence of week 8?
 "2 3 4 5 6 1". Cool, you are rich! 
 How did you do? You have memorized the sequence. RNN does exactly the same.
 
-- So I can predict the next lottery? 
+- So, I can predict the next lottery? 
 - No, because there is no sequence in the lottery, it is pure randomness.
 
-In other wordsm there is no "recurrence" in the drawing, therefore "recurrent" neural networks cannot be applied. 
+In other words there is no "recurrence" in the drawing, therefore "recurrent" neural networks cannot be applied. 
  
 Anyway, beside the lottery, a lot of events are, in essence, recurrent.
-But, the recurrency model is not easy to detect, this is where a RNN could help us a lot in our professional lifes.
+But, the recurrency model is not always easy to detect.
+
+This is where a RNN could help us a lot in our professional lifes.
 
 For example, on certain systems, you can have failures "every now-and-then". Even if you don't find the root cause, it could be useful to predict the next failure. 
 If you have enough data about the past failures, the RNN could learn the pattern, and tell you when the next failure will occur.
@@ -80,10 +82,33 @@ I have then decided to fully implement a RNN from scratch in GO with a simple go
 _Whatever is well conceived is clearly said, And the words to say it flow with ease._
 (_Ce que l'on conçoit bien s'énonce clairement, et les mots pour le dire arrivent aisément._)
 
-
 __Nicolas Boileau__
 
 # The initial example
 
+All the following example is basically an adaptation of Andrej Karpathy's post: [The Unreasonable Effectiveness of Recurrent Neural Networks](http://karpathy.github.io/2015/05/21/rnn-effectiveness/).
 
+I strongly encourage you to read the post. Indeed, I will give you a couple of explanation of the principle.
+The goal is to write and train a RNN with a certain amount of text data.
 
+Then, once the RNN is trained, we ask it to generate a new text based on what it has learned.
+
+## How does it work?
+
+Consider the "HELLO" example as described in Karpathy's post.
+The vocabulary of the example is composed of 4 letters: h, e, l and o.
+
+The goal is to train the RNN network in order to make it predict the next letter.
+
+Therefore, if I give an _H_ as input the fully trained RNN, it will return an _E_,
+
+Then, the _E_ will become the input, and the output will be an _L_.
+
+This _L_ will become the new input. After an _L_, I can have another _L_ or an _O_; but the RNN has a memory,
+in essence, it remember the last letters. Then, it will most probably choose a second _L_, based on the _H_ and _E_.
+
+Now we have another _L_ as input, but the context has changed, and the RNN should be able to produce an _O_.
+
+## A classification problem
+
+This is a classification problem. 
