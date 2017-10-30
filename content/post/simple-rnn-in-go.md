@@ -96,26 +96,110 @@ Then, once the RNN is trained, we ask it to generate a new text based on what it
 ## How does it work?
 
 Consider the "HELLO" example as described in Karpathy's post.
-The vocabulary of the example is composed of 4 letters: h, e, l and o.
+The vocabulary of the example is composed of 4 letters: `H`, `E`, `L` and `O`. 
+
 
 The goal is to train the RNN network in order to make it predict the next letter.
 
-Therefore, if I give an _H_ as input the fully trained RNN, it will return an _E_,
+Therefore, if I give an `H` as input the fully trained RNN, it will return an `E`,
 
-Then, the _E_ will become the input, and the output will be an _L_.
+Then, the `E` will become the input, and the output will be an `L`.
 
-This _L_ will become the new input. After an _L_, I can have another _L_ or an _O_; but the RNN has a memory,
-in essence, it remember the last letters. Then, it will most probably choose a second _L_, based on the _H_ and _E_.
+This `L` will become the new input. Here is a difficulty: after an `L`, there can be 
 
-Now we have another _L_ as input, but the context has changed, and the RNN should be able to produce an _O_.
+* another `L` or 
+* an `O`; 
+
+This is what make RNN suitable for this case: RNN has a memory!
+Then, it will most probably choose a second `L`, based, not only on the last letter, but also on the previous `H` and `E` it has seen.
+
+If correctly trained, the RNN should be able to produce an `O`.
 
 ## A classification problem
 
-This is a classification problem. 
+In practice, this is a [classification problem](https://en.wikipedia.org/wiki/Statistical_classification); Consider that every letter in the alphabet is a class.
+Given a sequence of letter as input, the mechanism should predict to which class it belongs. This class is be the next letter to be displayed.
+
+For example: 
+
+- `h` belongs to class `e`
+- `h e` belongs to class `l`
+- `h e l` also belongs to classe `l`
+- `h e l l` belongs to class `o`
+
+The goal of the network is to give a probability for each class given the input and the context.
+So, every letter will be given a value between 0 and 1 by the algorithm.
+
+If we formalize that in an array, the ideal situation would be:
+
+<html>
+<table border=1 align=center>
+<tr>
+<th>context</th><th>input</th>
+<th>Probability that the class is h</th>
+<th>Probability that the class is e</th>
+<th>Probability that the class is l</th>
+<th>Probability that the class is o</th>
+</tr>
+<tr><td></td><td>h</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>h</td><td>e</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>h e</td><td>l</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>h e l</td><td>l</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+</table>
+</html>
+
+In pratcice, we may have something slightly different (this is an example, do not try to interpret the values):
+
+<html>
+<table border=1 align=center>
+<tr>
+<th>context</th><th>input</th>
+<th>Probability that the class is h</th>
+<th>Probability that the class is e</th>
+<th>Probability that the class is l</th>
+<th>Probability that the class is o</th>
+</tr>
+<tr><td></td><td>h</td><td>0.1</td><td>0.8</td><td>0.05</td><td>0.05</td></tr>
+<tr><td>h</td><td>e</td><td>0.1</td><td>0.07</td><td>0.8</td><td>0.03</td></tr>
+<tr><td>h e</td><td>l</td><td>0.05</td><td>0.05</td><td>0.5</td><td>0.4</td></tr>
+<tr><td>h e l</td><td>l</td><td>0.05</td><td>0.05</td><td>0.4</td><td>0.5</td></tr>
+</table>
+</html>
+
+We have encoded the output into an array; in mathematics, such array is called a vector.
+
+On the same principle, we can encode the input letters into a _1-of-k_ vector (1 in the cell corresponding to character, 0 elsewhere).
+
+<pre> 
+<code>  
+    h e l o
+h = 1 0 0 0
+e = 0 1 0 0
+l = 0 0 1 0
+o = 0 0 0 1
+</code>
+</pre>
+
+The purpose of the prediction is to apply a mathematical function to an input vector in order to produce an output vector that will allow us to classify the output (and to to predict the next character).
+The RNN does not know natively an equation able to predict the correct values. Instead, it knows a mathematical model (a mathematical function) that contains a lot of parameters or variables. With correct values, those parameters applied to the mathematical model should allow to reach the goal.
+Adapting the parameters is called the _training process_. By giving the RNN a lot of data, and the expected output classes, we will allow the RNN to adjust its internal parameters.
+At each step, the difference between the output and the expected result is evaluated; it is call "the loss". The purpose of the adaptation, it to reduce the loss at every step.
+
+_It is not the purpose of this article to give details about the mathematical functions involved. Now, let's dig into the code._
+
+# Let's geek
+
+My goal is to generate a code that will be able to gerenate a Shakespeare play as described in Karpathy's blog post.
+His implementation in python is [here](https://gist.github.com/karpathy/d4dee566867f8291f086); you can find my implemetation [here](https://github.com/owulveryck/min-char-rnn).
 
 # Code organisation
 
+To fully understand what is related to the RNN, and what is more related to the example about character recognition, I have created a seperate package for the RNN.
+For the same reason, I have tried to keep parameters as private as possible within the objects.
+
 ## The `rnn` package
+
+This package contains the model of the RNN. It shoud be independant of the example (min-char), and could probably be suitable to another classification problem.
 
 ### The RNN object
 
