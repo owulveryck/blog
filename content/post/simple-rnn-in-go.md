@@ -112,3 +112,30 @@ Now we have another _L_ as input, but the context has changed, and the RNN shoul
 ## A classification problem
 
 This is a classification problem. 
+
+# Code organisation
+
+## The `rnn` package
+
+### The RNN object
+
+### RNN's step
+
+### The `Train`  method
+
+### Forward processing
+
+### Back propagation through time
+
+### Adapting the parameters via "AdaGrad"
+
+### The sample method
+
+## The main tool
+
+### 1-of-k encoding/decoding
+
+# Example
+
+# Conclusion
+
