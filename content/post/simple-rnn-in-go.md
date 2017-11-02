@@ -16,15 +16,19 @@ type: post
 A couple of months ago, I have attented to the Google Cloud Next 17 event in London.
 Among the talks about SRE, and keynotes, I've had the chance to listen to Martin Gorner's excellent introduction: [TensorFlow and Deep Learning without a PhD, Part 2](https://www.youtube.com/watch?v=fTUwdXUFfI8). If you don't want to look at the video, here is a quick summary:  
 
-_a 100 of lines of python are reading all of Shakespeare's playsr;, it learns his stysle, and then generates a brand new play from scratch._ 
+_a 100 of lines of python are reading all Shakespeare's plays;, it learns his stysle, and then generates a brand new play from scratch._ 
 
 Of course, when you are not data-scientist (and I am not), this looks pretty amazing (and a bit magical).
 
 Back home, I have told my friend how amazing it was. I have downloaded the code from [github](https://github.com/martin-gorner/tensorflow-rnn-shakespeare), installed tensorflow, and played my Shakespeare to show them.
-They told me: _and you know how this works? Well...._
+They told me: 
+
+- _and you know how this works?_ 
+- _Well..._ let's be honnest, I had only a vague idea.
+
 
 It was about something called "Recurrent Neural Networks". 
-Then I dived into the internet... 100 lines of python shouldn't be hard to understand and reproduce... It took me months to be able to write this post.
+I dived into the internet... 100 lines of python shouldn't be hard to understand and reproduce... It took me months to be able to write this post.
 I hope I will be as helpful to you as it is to me.
 
 ## The RNN and I, first episode of a time-serie 
@@ -97,7 +101,6 @@ Then, once the RNN is trained, we ask it to generate a new text based on what it
 
 Consider the "HELLO" example as described in Karpathy's post.
 The vocabulary of the example is composed of 4 letters: `H`, `E`, `L` and `O`. 
-
 
 The goal is to train the RNN network in order to make it predict the next letter.
 
@@ -199,25 +202,130 @@ For the same reason, I have tried to keep parameters as private as possible with
 
 ## The `rnn` package
 
-This package contains the model of the RNN. It shoud be independant of the example (min-char), and could probably be suitable to another classification problem.
+This package contains the model of the RNN. It is independant of the example (min-char); therefore it should probably be suitable to another classification problem.
+
+I am using the `mat64.Dense` structure to represent the matrices. To represent a column vector, I am simply using `[]float64` elements. 
 
 ### The RNN object
 
+The RNN structure holds the three matrices that represent the weights to be adapted:
+
+* Wxh
+* Whh
+* Why
+
+On top of that, the RNN store two "vectors" that represent the biais.
+The hidden vector is not stored within the structure. Actually, only the last hidden vector evaluated in the process of feedforward/backpropagation is stored
+within the structure.
+Not storing the hidden vector within the structure, allows to use the same "step" function in the sampling process as well as the training process.
+
 ### RNN's step
+
+RNN's step method is the proper implementation of the RNN as described by _Karpathy_.
+As explained before, the hidden state is not part of the RNN structure, therefore it is an output of the step function:
+
+{{< highlight go >}}
+func (rnn *RNN) step(x, hprev []float64) (y, h []float64) {
+	h = tanh(
+		add(
+			dot(rnn.wxh, x),
+			dot(rnn.whh, hprev),
+			rnn.bh,
+		))
+	y = add(
+		dot(rnn.why, h),
+		rnn.by)
+	return
+}
+{{</ highlight >}}
+
+You see here that the step function of my RNN takes two vector as input: 
+
+* a vector that represents the currently evaluated item
+* a hidden vector that stores the memory of the passed elements
+
+It returns two vector:
+
+* the evaluated output in term of vector
+* a new and updated hidden vector
+
+_Note_ : For clarity, I have declared a couple of math helpers such as `dot`, `tanh` and `add`
 
 ### The `Train`  method
 
+This method is returning two channels and triggers a goroutine for training the network.
+
+{{< highlight go >}}
+func (rnn *RNN) Train() (chan<- TrainingSet, chan float64) {
+    ...
+}
+{{</ highlight >}}
+
+The first channel is a feeding channel for the RNN. It receives a `TrainingSet` that is composed of:
+
+* an input vector
+* a target vector 
+
+The training goroutine will read the channel, and get all the TrainingSet.
+It will evaluates the input of the training set and use the target to adapt the parameters
+
+The second channel is a non blocking channel. It is used to transfer the loss evaluation.
+
 ### Forward processing
+
+The forward processing takes a batch of inputs (and array of array) and a batch of outputs.
+It runs the step as many times as needed and stores the hidden vectors in a temporary array, then the values are used for the back propagation.
+
+{{< highlight go >}}
+func (rnn *RNN) forwardPass(xs [][]float64, hprev []float64) (ys, hs [][]float64) {
+    ...
+}
+{{</ highlight >}}
 
 ### Back propagation through time
 
+The back propagation is evaluating the gradient. With this evaluation, we can adapt the parameters. 
+
 ### Adapting the parameters via "AdaGrad"
 
-### The sample method
+The method that has been used by Karapathy is the Adaptative gradient.
+The adaptative gradient needs a memory; therefore I have declared a new object for the adagrad with a simple Apply method.
+The `apply` method takes the neural network as a parameter as well as the previously evaluated derivated.
+It then updated the RNN
+
+## Codecs
+
+This RNN implementation is enough to generate the Shakespeare. 
+In order to work with any character (= any symbol), the best way to go is to use the concept of [rune](https://blog.golang.org/strings).
+The first implementation of the min-char-rnn I made, was using this package and a couple of method to 1-of-k encode and decode the rune I was reading from a text file.
+
+This was ok, but I was stuck within the character based neural network.
+As I exaplained before, the RNN package is working with vectors, and have no knowledge about characters, pictures, bytes or whatever.
+
+So to continue with this level of abstraction, I have declared a codec interface that will be fullfilled with a "character based" implementation.
+
+### The codec interface
+
+The codec interface describes the required methods any object must implement in order to use the RNN.
+
+The most important methods are:
+
+{{< highlight go >}}
+Decode([][]float64) io.Reader
+Encode(io.Reader) [][]float64
+{{</ highlight >}}
+
+Actually, those methods are dealing with arrays of vectors on one side, and with `io.Reader` on the other side.
+Therefore, it can use any input type, from a text representation to a data flow over the network.
+
+The other methods are simply helpful (and I should rework that anyway, because _Pike_ loves the one-function-interfaces, and _Pike_ knows!)
+
+### The char implementation of the codec interface
+
+As explained before, the char implementation consists of a couple of methods that reads a file and encode it.
+It can also decode a generated output.
 
 ## The main tool
-
-### 1-of-k encoding/decoding
 
 # Example
 
