@@ -52,11 +52,11 @@ For example, from an explanation to another, I've learned that RNN could, by nat
 We are still in the area of what is called "supervised learning". Therefore, based on what events it has learned, the algorithm can predict what event will come next; but only if it is something that has already been seen. 
 Let me take an example. Consider a lottery game (everybody ask me about this):
 
-To win, you need to own a ticket with a sequence of numbers that corresponds to the one that will be choosen randomly at the next lottery draw.
-If RNN you can predict the future, it could predict which sequence will be choosen.
+To win, you need to own a ticket with a sequence of numbers that corresponds to the one that will be chosen randomly at the next lottery draw.
+If RNN you can predict the future, it could predict which sequence will be chosen.
 
 The RNN is supervised learning, therefore, it can only predict things based on stuffs it has already seen. So If every week the draw is made of "1 2 3 4 5 6", the RNN can lear, and tell us that the next draw will be: "1 2 3 4 5 6".
-Obiously this is useless; now let's consider a more complex sequence:
+Obviously this is useless; now let's consider a more complex sequence:
 
 Week | sequence
 -----|---------
@@ -82,7 +82,7 @@ In other words there is no "_recurrence_" in the drawing, therefore "_recurrent_
 Anyway, beside the lottery, a lot of events are, in essence, recurrent.
 The point is that the recurrency model is usually not obvious and therefore not easy to detect.
 
-This is where a RNN could shine and enhance our professional lifes.
+This is where a RNN could shine and enhance our professional lives.
 
 For example, on certain systems, you can have failures "every now-and-then". Even if you don't find the root cause, it could be useful to predict the next failure. 
 If you have enough data about the past failures, the RNN could learn the pattern, and tell you when the next failure will occur.
@@ -212,19 +212,19 @@ _It is not the purpose of this article to give details about the mathematical fu
 
 From now on, things are related to the implementation; feel free to skip this part and jump straight to the conclusion if your are not interested in coding.
 
-My goal is to generate a code that will be able to gerenate a Shakespeare play as described in Karpathy's blog post.
-His implementation in python is [here](https://gist.github.com/karpathy/d4dee566867f8291f086); you can find my implemetation [here](https://github.com/owulveryck/min-char-rnn).
+My goal is to generate a code that will be able to generate a Shakespeare play as described in Karpathy's blog post.
+His implementation in python is [here](https://gist.github.com/karpathy/d4dee566867f8291f086); you can find my implementation [here](https://github.com/owulveryck/min-char-rnn).
 
 **edit**: at first, it was a simple transcript from python to go, but the tool has been enhanced and is now a more generic tool that is able to use a RNN as a processing units for any function that is able to encode and decode bytes into a vector.
 
 # The rnn package
 
-To fully understand what is related to the RNN, and what is more related to the example about character recognition, I have created a seperate package for the RNN.
+To fully understand what is related to the RNN, and what is more related to the example about character recognition, I have created a separate package for the RNN.
 For the same reason, I have tried to keep parameters as private as possible within the objects.
 
-The package should be independant of the example (min-char); therefore it should probably be suitable to another classification problem.
+The package should be independent of the example (min-char); therefore it should probably be suitable to another classification problem.
 
-I am using the [`mat64.Dense`](https://godoc.org/github.com/gonum/matrix/mat64) structure to represent the matrices. To represent a column vector, I have choosen to use simple `[]float64` elements (for more info: [Go Slices: usage and internals](https://blog.golang.org/go-slices-usage-and-internals#clices)). 
+I am using the [`mat64.Dense`](https://godoc.org/github.com/gonum/matrix/mat64) structure to represent the matrices. To represent a column vector, I have chosen to use simple `[]float64` elements (for more info: [Go Slices: usage and internals](https://blog.golang.org/go-slices-usage-and-internals#clices)). 
 
 ### The RNN object
 
@@ -234,7 +234,7 @@ The RNN structure holds the three matrices that represent the weights to be adap
 * Whh
 * Why
 
-On top of that, the RNN store two "vectors" that represent the [biais](https://stackoverflow.com/questions/2480650/role-of-bias-in-neural-networks) for the hidden layer and for the output layer.
+On top of that, the RNN store two "vectors" that represent the [bias](https://stackoverflow.com/questions/2480650/role-of-bias-in-neural-networks) for the hidden layer and for the output layer.
 The hidden vector is not stored within the structure. Actually, only the last hidden vector evaluated in the process of feedforward/backpropagation is stored.
 Not storing the hidden vector within the structure, allows to use the same "step" function in the sampling process as well as the training process.
 
@@ -307,25 +307,25 @@ The back propagation is evaluating the gradient. Once the evaluation is done, we
 
 ### Adapting the parameters via "AdaGrad"
 
-The method that has been used by Karapathy is the Adaptative gradient.
-The adaptative gradient needs a memory; therefore I have declared a new object for the adagrad with a simple Apply method.
+The method that has been used by Karapathy is the Adaptive gradient.
+The adaptive gradient needs a memory; therefore I have declared a new object for the adagrad with a simple Apply method.
 The `apply` method  of the `adagrad` object takes the neural network as a parameter as well as the previously evaluated gradients.
-
+e
 Once this process is done, the RNN is trained and is usable. 
 
 ### Prediction 
 
-I have implelented a `Predict` method that applies the same method. But the difference is that it starts with an empty memory (the hidden vector is zeroed), takes a sample text as input and generate the output without evaluating the gradient nor adapting the parameters.
+I have implemented a `Predict` method that applies the same method. But the difference is that it starts with an empty memory (the hidden vector is zeroed), takes a sample text as input and generate the output without evaluating the gradient nor adapting the parameters.
 
 This RNN implementation is enough to generate the Shakespeare, and it works
 
-## Enahncement of the tool: implementing codecs
+## Enhancement of the tool: implementing codecs
 
 In order to work with any character (= any symbol), the best way to go is to use the concept of [rune](https://blog.golang.org/strings).
 The first implementation of the min-char-rnn I made, was using this package and a couple of method to 1-of-k encode and decode the rune I was reading from a text file.
 
 This was ok, but I was stuck within the character based neural network.
-As I exaplained before, the RNN package is working with vectors, and have no knowledge about characters, pictures, bytes or whatever.
+As I explained before, the RNN package is working with vectors, and have no knowledge about characters, pictures, bytes or whatever.
 
 So to continue with this level of abstraction, I have declared a codec interface. The character based example will be a simple implementation that will fulfill the codec interface.
 It will allow to implement whatever codec to use my RNN (imagine a log parser, an image encoder/decoder, a webservice [_insert whatever fancy idea here_]...)
@@ -352,7 +352,7 @@ I will simply explain a particular method:
 ApplyDist([]float64) []float64
 ```
 
-This method is a post processing of the output vector. Actually, the returned vector is made of normalized probabilities of event. In a classification mechanism, one element must be choosen. Obviously, it shall choose the one with the best probability. But, in the case of the char example, we can add some randomness by choosing randomly and applying a certain distribution (I have implemented a [Bernouilli distribution](https://godoc.org/github.com/gonum/stat/distuv#Categorical) for the char codec that is selectable by setting ` CHAR_CODEC_CHOICE=soft` in the environment). It also let the possibility to get the raw normalized probabilities by implementing a no-ops func.
+This method is a post processing of the output vector. Actually, the returned vector is made of normalized probabilities of event. In a classification mechanism, one element must be chosen. Obviously, it shall choose the one with the best probability. But, in the case of the char example, we can add some randomness by choosing randomly and applying a certain distribution (I have implemented a [Bernouilli distribution](https://godoc.org/github.com/gonum/stat/distuv#Categorical) for the char codec that is selectable by setting ` CHAR_CODEC_CHOICE=soft` in the environment). It also let the possibility to get the raw normalized probabilities by implementing a no-ops func.
 
 ### The char implementation of the codec interface
 
@@ -372,11 +372,11 @@ Here is an example of the generated shakespeare. The network is not fully traine
 
 # Conclusion
 
-This is only the begining of what I am planing with RNN. I have now understood the principle. The tool offers me very good oportunities to develop some sample that could be useful in my everyday life.
-For example, I am planing to write a codec that would parse log files of an application. This pplication would generate an output that could be decoded into a status of the plateform, such as red, green and blue.
-With the correct data about when warnings or failures occured, it could be doable to predict the next failure... before it happens.
+This is only the beginning of what I am planing with RNN. I have now understood the principle. The tool offers me very good opportunities to develop some sample that could be useful in my everyday life.
+For example, I am planing to write a codec that would parse log files of an application. This application would generate an output that could be decoded into a status of the platform, such as red, green and blue.
+With the correct data about when warnings or failures occurred, it could be doable to predict the next failure... before it happens.
 
-The code is on my github. It needs twaking and deep testing. I have learned as well that testing a neural network was not as easy as testing a web app.
+The code is on my github. It needs tweaking and deep testing. I have learned as well that testing a neural network was not as easy as testing a web app.
 I have implemented a backup and restore mechanism, therefore you can retrain a model, or use a pre-trained model.
 
 I have also uploaded a binary distribution and a pre-trained model if you want to play with it on your PC on [github](https://github.com/owulveryck/min-char-rnn).
