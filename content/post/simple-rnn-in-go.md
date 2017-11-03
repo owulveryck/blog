@@ -243,7 +243,7 @@ Not storing the hidden vector within the structure, allows to use the same "step
 RNN's step method is the proper implementation of the RNN as described by _Karpathy_.
 As explained before, the hidden state is not part of the RNN structure, therefore it is an output of the step function:
 
-{{< highlight go >}}
+```go
 func (rnn *RNN) step(x, hprev []float64) (y, h []float64) {
 	h = tanh(
 		add(
@@ -256,7 +256,7 @@ func (rnn *RNN) step(x, hprev []float64) (y, h []float64) {
 		rnn.by)
 	return
 }
-{{</ highlight >}}
+```
 
 You see here that the step function of my RNN takes two vector as input: 
 
@@ -274,11 +274,11 @@ _Note_ : For clarity, I have declared a couple of math helpers such as `dot`, `t
 
 This method is returning two channels and triggers a goroutine that does the job of training.
 
-{{< highlight go >}}
+```go
 func (rnn *RNN) Train() (chan<- TrainingSet, chan float64) {
     ...
 }
-{{</ highlight >}}
+```
 
 The first channel is a feeding channel for the RNN. It receives a `TrainingSet` that is composed of:
 
@@ -295,11 +295,11 @@ The second channel is a non blocking channel. It is used to transfer the loss ev
 The forward processing takes a batch of inputs (an array of array) and a sequence of outputs.
 It runs the step as many times as needed and stores the hidden vectors in a temporary array, then the values are used for the back propagation.
 
-{{< highlight go >}}
+```go
 func (rnn *RNN) forwardPass(xs [][]float64, hprev []float64) (ys, hs [][]float64) {
     ...
 }
-{{</ highlight >}}
+```
 
 ### Back propagation through time
 
@@ -336,15 +336,23 @@ The codec interface describes the required methods any object must implement in 
 
 The most important methods are:
 
-{{< highlight go >}}
+```go
 Decode([][]float64) io.Reader
 Encode(io.Reader) [][]float64
-{{</ highlight >}}
+```
 
 Actually, those methods are dealing with arrays of vectors on one side, and with `io.Reader` on the other side.
 Therefore, it can use any input type, from a text representation to a data flow over the network (and if you are _gopher_, you know how cool `io.Reader`s are!)
 
 The other methods are simply helper funcs I use to train the network. (and I should rework that anyway, because _Pike_ loves the one-function-interfaces, and _Pike_ knows!)
+
+I will simply explain a particular method: 
+
+```go
+ApplyDist([]float64) []float64
+```
+
+This method is a post processing of the output vector. Actually, the returned vector is made of normalized probabilities of event. In a classification mechanism, one element must be choosen. Obviously, it shall choose the one with the best probability. But, in the case of the char example, we can add some randomness by choosing randomly and applying a certain distribution (I have implemented a [Bernouilli distribution](https://godoc.org/github.com/gonum/stat/distuv#Categorical) for the char codec that is selectable by setting ` CHAR_CODEC_CHOICE=soft` in the environment). It also let the possibility to get the raw normalized probabilities by implementing a no-ops func.
 
 ### The char implementation of the codec interface
 
@@ -360,7 +368,7 @@ It can be used to train the network or to generate an output. The parameters are
 
 # Example
 
-Here is an example of the generated shakespeare
+Here is an example of the generated shakespeare. The network is not fully trained, and I did not try to optimize the input, therefore, you don't see a proper play (yet).
 
 # Conclusion
 
