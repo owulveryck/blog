@@ -9,10 +9,10 @@ type: post
 
 # Shakespeare and I, encounter of the third type
 
-A couple of months ago, I have attented to the Google Cloud Next 17 event in London.
+A couple of months ago, I have attended to the Google Cloud Next 17 event in London.
 Among the talks about SRE, and keynotes, I've had the chance to listen to Martin Gorner's excellent introduction: [TensorFlow and Deep Learning without a PhD, Part 2](https://www.youtube.com/watch?v=fTUwdXUFfI8). If you don't want to look at the video, here is a quick summary:
 
-_a 100 of lines of python are reading all Shakespeare's plays;, it learns his stysle, and then generates a brand new play from scratch._ 
+_a 100 of lines of python are reading all Shakespeare's plays;, it learns his style, and then generates a brand new play from scratch._ 
 
 Of course, when you are not data-scientist (and I am not), this looks pretty amazing (and a bit magical).
 
@@ -20,7 +20,7 @@ Back home, I have told my friend how amazing it was. I have downloaded the code 
 In essence, here is what they told me:
 
 - _Amazing, and you know how this works?_ 
-- _Well..._ let's be honnest, I had only a vague idea.
+- _Well..._ let's be honest, I had only a vague idea.
 
 It was about something called "Recurrent Neural Networks". 
 I dived into the internet... 100 lines of python shouldn't be hard to understand and reproduce... Conclusion: it took me months to be able to write this post.
