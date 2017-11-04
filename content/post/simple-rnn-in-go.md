@@ -9,10 +9,10 @@ type: post
 
 # Shakespeare and I, encounter of the third type
 
-A couple of months ago, I have attended to the Google Cloud Next 17 event in London.
+A couple of months ago, I have attended the Google Cloud Next 17 event in London.
 Among the talks about SRE, and keynotes, I've had the chance to listen to Martin Gorner's excellent introduction: [TensorFlow and Deep Learning without a PhD, Part 2](https://www.youtube.com/watch?v=fTUwdXUFfI8). If you don't want to look at the video, here is a quick summary:
 
-_a 100 of lines of python are reading all Shakespeare's plays;, it learns his style, and then generates a brand new play from scratch._ 
+_a 100 of lines of python are reading all Shakespeare's plays; it learns his style, and then generates a brand new play from scratch._ 
 
 Of course, when you are not data-scientist (and I am not), this looks pretty amazing (and a bit magical).
 
@@ -23,22 +23,25 @@ In essence, here is what they told me:
 - _Well..._ let's be honest, I had only a vague idea.
 
 It was about something called "Recurrent Neural Networks". 
-I dived into the internet... 100 lines of python shouldn't be hard to understand and reproduce... Conclusion: it took me months to be able to write this post.
-This article is about the structure and the possibilities offered by tools powered by recurrent neural network. 
+I dived into the internet... 100 lines of python shouldn't be hard to understand, and to reproduce ?
+Was-it? Actually, it took me months to be able to write this post, without any previous knowledge, it was not that easy.
 
-It is divided in two parts:
+So here is why I finally wrote this article. I want to be sure that I have understood the structure and the possibilities offered by recurrent neural network.
+I aslo wanted to see whether building a RNN powered tool was doable easily.
+
+This document is divided into two:
 
 * the first part is about recurrent neural networks in general;
 * the second part is about a toy I made in GO to play with RNNs
 
-The goal of this text is not about the mathematics behind the neural nerworks in general.
-I may talk about vectors, but I will not talk about non-linearity or hyperbolic functions. 
+The goal of this text is not to talk about the mathematics behind the neural nerworks.
+Of course, I may talk about vectors, but I will not talk about non-linearity or hyperbolic functions. 
 
-I hope you will as much enthusiast as I am, and do not hesitate to give me any feedback or correction that may improve my work.
+I hope you will as much enthusiast as I am. Anyway Do not hesitate to give me any feedback or correction that may improve my work.
 
 # First part: The RNN and I, first episode of a time-serie 
 
-The Web is full of resources about machine learning. You can easily find very great articles, very well illustrated about neural networks.
+The Web is full of resources about machine learning. You can easily find great articles, very well illustrated about neural networks.
 I've read a lot...
 
 The more I was reading, the more excited I was. 
@@ -49,13 +52,14 @@ For example, from an explanation to another, I've learned that RNN could, by nat
 - _Wait, does it mean that it can predict the future?_,
 - Well, kind of...
 
-We are still in the area of what is called "supervised learning". Therefore, based on what events it has learned, the algorithm can predict what event will come next; but only if it is something that has already been seen. 
+It is still in the area of "supervised learning". Therefore, the algorithm learns eventsi. Based on this, the algorithm can predict what may come next; but only if it is something it has already seen. 
 Let me take an example. Consider a lottery game (everybody ask me about this):
 
 To win, you need to own a ticket with a sequence of numbers that corresponds to the one that will be chosen randomly at the next lottery draw.
-If RNN you can predict the future, it could predict which sequence will be chosen.
+If RNN you can predict the future, it should, basically, be able to predict it.
 
-The RNN is supervised learning, therefore, it can only predict things based on stuffs it has already seen. So If every week the draw is made of "1 2 3 4 5 6", the RNN can lear, and tell us that the next draw will be: "1 2 3 4 5 6".
+The RNN must learn about the sequences and then it applies its knowledge. So If every week the draw is made of "1 2 3 4 5 6", the RNN will learn, and tell that the next draw will be: "1 2 3 4 5 6".
+
 Obviously this is useless; now let's consider a more complex sequence:
 
 Week | sequence
@@ -67,9 +71,9 @@ Week | sequence
 5    | 5 6 1 2 3 4
 6    | 6 1 2 3 4 5
 7    | 1 2 3 4 5 6
-     | ...
+8    | ? ? ? ? ? ?
 
-What will be the winning sequence of week 8? 
+Question: What will be the winning sequence of week 8? 
 
 "2 3 4 5 6 1". Cool, you are rich! 
 How did you do? You have memorized the sequence. RNN does exactly the same.
@@ -80,26 +84,36 @@ How did you do? You have memorized the sequence. RNN does exactly the same.
 In other words there is no "_recurrence_" in the drawing, therefore "_recurrent_" neural networks do not be applied. 
  
 Anyway, beside the lottery, a lot of events are, in essence, recurrent.
-The point is that the recurrency model is usually not obvious and therefore not easy to detect.
+The point is that the recurrency model is usually not obvious and therefore not easy to detect. This is the famous "feeling" of the experts. 
+
+For example you may recognize those dialogs:
+
+- Will the system crash?
+- based of what I see and what I know, I [don't] think so.
+
+- Will the sales increase on sunday?
+- based on the current market situation and on my experience, it may.
 
 This is where a RNN could shine and enhance our professional lives.
 
-For example, on certain systems, you can have failures "every now-and-then". Even if you don't find the root cause, it could be useful to predict the next failure. 
+In a pure IT context, for example, you have failures "every now-and-then". Even if you don't find the root cause, it could be useful to predict the next failure. 
 If you have enough data about the past failures, the RNN could learn the pattern, and tell you when the next failure will occur.
 
 <center>
 {{< tweet 844561153229541376 >}}
 </center>
 
+### Experimenting with RNN
+
 I needed a simple tool to do some experimentation.
-A huge majority of articles dealing with ML are using python and a framework (here tensorflow) as a supports. 
+A huge majority of articles that deals with ML are using python and a framework (here tensorflow).
 To me, it has two major drawbacks:
 
-* We need to fully understand how use the framework;
-* As it is python related, and I am not fluent in python, building and deploying efficient tools could take me some time;
+* I need to fully understand how use the framework;
+* as it is python related, and I am not fluent in python, building **and deploying** efficient tools could take me some time;
 
 About the second point, let me be a bit more specific. I have seen a lot of samples that could do very beautiful stuffs based on fake data.
-Playing with every day data would usually imply to rewrite the tool from scratch... Therefore, I have then decided to fully implement a RNN from scratch in GO with a simple goal: to understand what I was writing (I am "fluent" in go, that have save me days of debugging).
+Playing with every day data usually implies to rewrite the tool, from scratch... Therefore, I have have decided to fully implement a RNN engine from scratch in GO. The goal is simple: to understand what I am writing (I am "fluent" in go, that have save me days of debugging).
 
 _Whatever is well conceived is clearly said, And the words to say it flow with ease._
 (_Ce que l'on conçoit bien s'énonce clairement, et les mots pour le dire arrivent aisément._)
