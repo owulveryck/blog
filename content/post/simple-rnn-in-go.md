@@ -9,14 +9,14 @@ type: post
 
 # Shakespeare and I, encounter of the third type
 
-A couple of months ago, I have attended the Google Cloud Next 17 event in London.
-Among the talks about SRE, and keynotes, I've had the chance to listen to Martin Gorner's excellent introduction: [TensorFlow and Deep Learning without a PhD, Part 2](https://www.youtube.com/watch?v=fTUwdXUFfI8). If you don't want to look at the video, here is a quick summary:
+A couple of months ago, I attended the Google Cloud Next 17 event in London.
+Among the talks about SRE, and keynotes, I had the chance to listen to Martin Gorner's excellent introduction: [TensorFlow and Deep Learning without a PhD, Part 2](https://www.youtube.com/watch?v=fTUwdXUFfI8). If you don't want to look at the video, here is a quick summary:
 
 _a 100 of lines of python are reading all Shakespeare's plays; it learns his style, and then generates a brand new play from scratch._ 
 
-Of course, when you are not data-scientist (and I am not), this looks pretty amazing (and a bit magical).
+Of course, when you are not a data-scientist (and I am not), this looks pretty amazing (and a bit magical).
 
-Back home, I have told my friends how amazing it was. I have downloaded the code from [github](https://github.com/martin-gorner/tensorflow-rnn-shakespeare), installed tensorflow, and played my Shakespeare to show them.
+Back home, I told my friends how amazing it was. I downloaded the code from [github](https://github.com/martin-gorner/tensorflow-rnn-shakespeare), installed tensorflow, and played my Shakespeare to show them.
 In essence, here is what they told me:
 
 - _"Amazing, and you know how this works?_ 
@@ -24,7 +24,7 @@ In essence, here is what they told me:
 
 It was about something called "Recurrent Neural Networks" (aka _RNN_). 
 I dived into the internet... 100 lines of python shouldn't be hard to understand. And to reproduce ?
-Was it? 
+Where they? 
 
 Actually, it took me months to be able to write this post, without any previous knowledge, it was not that easy.
 
@@ -36,10 +36,10 @@ This document is divided into two parts:
 * the first part is about recurrent neural networks in general;
 * the second part is about a toy I made in GO to play with RNNs.
 
-The goal of this text is not to talk about the mathematics behind the neural nerworks.
+The goal of this text is not to talk about the mathematics behind the neural networks.
 Of course, I may talk about vectors, but I will not talk about non-linearity or hyperbolic functions. 
 
-I hope you will be enthusiast, as much as I am. 
+I hope you will be enthusiastic, as much as I am. 
 
 Anyway, do not hesitate to give me any feedback or suggestion that may improve my work.
 
@@ -61,7 +61,7 @@ It is still in the area of "supervised learning".
 Therefore, the algorithm learns events. Based on this, the algorithm can predict what may come next; but only if it is something it has already seen. 
 Let's take an example. Consider a lottery game (everybody ask me about this):
 
-To win, your ticket's sequence of number must be identical to the one that will be chosen, randomly, at the next draw.
+To win, your ticket's sequence of numbers must be identical to the one that will be chosen, randomly, at the next draw.
 If RNN can predict the future, it should, basically, be able to predict it.
 
 The RNN must learn about the sequences to apply its knowledge (and become a fortune-teller). So If every week the draw is made of "1 2 3 4 5 6", the RNN will learn, and tell that the next draw will be: "1 2 3 4 5 6".
@@ -82,7 +82,7 @@ Week | sequence
 Question: What will be the winning sequence of week 8? 
 
 "2 3 4 5 6 1". Cool, you are rich! 
-How did you do? You have memorized the sequence. 
+How did you do it? You memorized the sequence. 
 
 RNN does exactly the same.
 
@@ -144,7 +144,7 @@ _"Ce que l'on conçoit bien s'énonce clairement, et les mots pour le dire arriv
 
 The following example is basically an adaptation of Andrej Karpathy's post: [The Unreasonable Effectiveness of Recurrent Neural Networks](http://karpathy.github.io/2015/05/21/rnn-effectiveness/). I strongly encourage you to read it. 
 
-Anyway, I will give you a couple of explanation of the principle.
+Anyway, I will give you a couple of explanations of the principle.
 The goal is to write and train a RNN with a certain amount of text data.
 
 Then, once the RNN is trained, we ask the tool to generate a new text based on what it has learned, character by character.
@@ -165,7 +165,7 @@ This `L` will become the new input. Here is a difficulty: after an `L`, there ca
 * another `L`, 
 * or an `O`. 
 
-This is what make RNN suitable for this case: RNN has a memory!
+This is what make RNN suitable for this case: RNN have a memory!
 Then, it will most probably choose a second `L`, based, not only on the last letter, but also on the previous `H` and `E` it has seen.
 
 Correctly trained, the RNN should be able to produce an `O`.
@@ -258,11 +258,11 @@ From now on, let's talk about the implementation; feel free to skip this part an
 I want to create a tool able to generate a Shakespeare play as described in Karpathy's blog post.
 His implementation in Python is [here](https://gist.github.com/karpathy/d4dee566867f8291f086); you can find mine [here](https://github.com/owulveryck/min-char-rnn).
 
-**edit** At first, it was a simple transcript from Python to GO, but the tool has been enhanced. It is now a more generic tool able to use RNN as a processing unit. It's pluggable to any code able to encode and decode a secquence of bytes into a vector.
+**edit** At first, it was a simple transcript from Python to GO, but the tool has been enhanced. It is now a more generic tool able to use RNN as a processing unit. It's pluggable to any code able to encode and decode a sequence of bytes into a vector.
 
 ## The rnn package
 
-I have created a seperate package for two reasons:
+I have created a separate package for two reasons:
 
 * to fully understand what is related to the RNN;
 * to see what is related to the example about character recognition.
@@ -396,7 +396,7 @@ Encode(io.Reader) [][]float64
 Those methods are dealing with arrays of vectors on one side, and with `io.Reader` on the other side.
 Therefore, it can use any input type, from a text representation to a data flow over the network (and if you are _gopher_, you know how cool `io.Reader` are!)
 
-The other methods are simply helper functions useful to train the network. I have also chosen to add a post processin method: 
+The other methods are simply helper functions useful to train the network. I have also chosen to add a post processing method: 
 
 ```go
 ApplyDist([]float64) []float64
@@ -411,7 +411,7 @@ I have implemented a [Bernouilli distribution](https://godoc.org/github.com/gonu
 
 This function also let the possibility to get the raw normalized probabilities by implementing a no-ops func.
 
-_Note_ : This nterface should be reworked, because _Pike_ loves the one-function-interfaces, and _Pike_ knows!
+_Note_ : This interface should be reworked, because _Pike_ loves the one-function-interfaces, and _Pike_ knows!
 
 ### The char implementation of the codec interface
 
@@ -425,7 +425,7 @@ It is that simple. It also serve as an example for whatever new codec implementa
 The main tool is just the glue between all the packages. 
 It can be used to train the network or to generate an output. The parameters are tweakable via environment variables (actually each package deals with their own environment variables).
 
-you can find all the code on my [GitHub](https://github.com/owulveryck/min-char-rnn). It needs tweaking and deep testing though. 
+you can find all the code on my [gitHub](https://github.com/owulveryck/min-char-rnn). It needs tweaking and deep testing though. 
 I have also uploaded a binary distribution and a pre-trained model (I have implemented a backup and restore mechanism in order to use a pre-trained model).
 
 # Conclusion
