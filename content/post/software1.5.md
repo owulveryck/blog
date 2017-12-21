@@ -32,7 +32,7 @@ I see now why tensorflow is so linked with the machine learning field.
 
 # Equations are graphs
 
-So equations are graphs... Cool, I have always been attracted by the graphical representations. It is a very natural way to understand and express the ideas. This [post](http://gopherdata.io/post/deeplearning_in_go_part_1/) from [Chezxy](https://twitter.com/chewxy) is a perfect illustration of how the expression of a mathematical expression is turned into a graph at a compiler level.
+So equations are graphs... Cool, I have always been attracted by the graphical representations. It is a very natural way to understand and express the ideas. This [post](http://gopherdata.io/post/deeplearning_in_go_part_1/) from [Chewxy](https://twitter.com/chewxy) is a perfect illustration of how the expression of a mathematical expression is turned into a graph at a compiler level.
 
 It sounds that implementing the LSTM as a graph will make the task a lot easier. 
 
@@ -42,13 +42,20 @@ Chewxy is the author of the gorgonia project.
 
 > Package gorgonia is a library that helps facilitate machine learning in Go. Write and evaluate mathematical equations involving multidimensional arrays easily. Do differentiation with them just as easily.
 
+## Writing software
+
+### Considerations about software 1.0 amd software 2.0
+
 _Sidenote about go_: I am a gopher and an Ops. I really like go because I find it easy and fun to do fancy stuffs. But actually go is not the first choice when we talk about machine learning. My goal is to write a kind a virtual machine for software 2.0. I will not explain this in details in this post why go, and anything about software 2.0; But the facilities offered by the go language in order to reach my goal.
 
 # Good ol' software 1.0
 
 ## Lexer/Parser
 
+[goyacc example](https://github.com/golang/tools/tree/master/cmd/goyacc/testdata/expr)
+
 ### goyacc
+
 
 {{< highlight go >}}
 // Forward pass as described here https://en.wikipedia.org/wiki/Long_short-term_memory#LSTM_with_a_forget_gate
