@@ -23,7 +23,7 @@ The art of programming, is, in essence, the faculty for a human to describe the 
 
 ## What is software 2.0?
 
-Not so long ago, I discovered the concept of software 2.0 thanks to [Andrej Karpathy's blog](https://medium.com/@karpathy/software-2-0-a64152b37c35).
+I discovered the concept of software 2.0 thanks to [Andrej Karpathy's blog](https://medium.com/@karpathy/software-2-0-a64152b37c35).
 The idea is similar to any software: a compiler is used to turn a sequence of code into a sequence of bytes. This sequence is interpreted by a machine.
 
 The difference is that the code is a sequence of mathematical equations (called model). Those equations are composed of variables and "constants". Let's call the constants "the weights".
@@ -32,34 +32,42 @@ The compiler is a software 1.0 that is able to transpile the equations into a se
 
 So what is the difference between 1.0 and 2.0? Is it just a matter of language?
 
-No, the major difference is in the art of programming. 
+No, the major difference is in the art of programming and the use case. 
 
-On certain fields, a programmer __cannot__ write an algorithm that will __solve a specific problem__ (eg: I need to recognize a cat on any photo).
+For example:
+
+A programmer __cannot__ write an algorithm that will __solve a specific problem__ (eg: I need to recognize a cat on any photo).
 
 So, the programmer will write a set of equations __able to solve a kind of problem__ (recognize objects on any photo). 
 
-The solution to your specific problem will be given by the evaluation of the _equation_ __and__ _the weights_ (a cat is an object that corresponds to the specific weights: {0,1,3,2,45,6,6,5,3,4,6,....}.)
+The solution to the specific problem will be given by the evaluation of the _equation_ __with__ _its weights_ (a cat is an object that corresponds to the specific weights: {0,1,3,2,45,6,6,5,3,4,6,....}.)
 
-And what makes the software 2.0 so specific, is the amount of weights that is so important that it cannot be determined manually. They are determined empirically. And a computer is faster than any human in this learning process.
+And what makes the software 2.0 so specific? The amount of weights is so important that it cannot be determined manually. They are determined empirically. And a computer is faster than any human in this learning process.
 
+## Example of a software 2.0: Deep learning
 
+Neuron networks are the perfect representation of the software 2.0.
+In my last [blog post](/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html) I have implemented a neural network in pure go.
 
-_Sidenote about go_: I am a gopher and an Ops. I really like go because I find it easy and fun to do fancy stuffs. But actually go is not the first choice when we talk about machine learning. My goal is to write a kind a virtual machine for software 2.0. I will not explain this in details in this post why go, and anything about software 2.0; But the facilities offered by the go language in order to reach my goal.
+_Sidenote about go_: I am a gopher and an Ops. I really like go because I find it easy and fun to do fancy stuffs. But actually go is not the first choice when we talk about machine learning. My goal is to write a kind of portable virtual machine for software 2.0. I will not explain this in details in this post why go, and anything about software 2.0; But the facilities offered by the go language in order to reach my goal.
 
-# Context
-In my last article, I have developped a recurrent neural network in pure go without any third party library.
+### LSTM
 
-As an example, I did an implementation of a character based generation (the famous Shakespeare example).
-I have tried to tune the hyperparameters, but I haven't been able to reach a very usable text.
+LSTM are a bit more complex than vanilla RNN. Therefore, a naive go implementation as made for the RNN will be a harder.
 
-Actually, without any randomness in the generation process, the output was recurrent.
+As one of my goal is to understand how things deeply works, I have tried to implement the back propagation mechanism manually.
+I have read this post from Karpathy: [Yes you should understand backprop](https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b).
 
-For example: 
+The best explanation I have found so far is in [cs231n course from Stanford](http://cs231n.github.io/optimization-2/).
+It is a clear explanation of how the process works. And it is obvious that the graph representation helps a lot in the computation of the gradient.
 
-```
-Hello, The The The The The The ...
-```
+I see now why tensorflow is so linked with the machine learning field.  
 
+### Equations are graphs
+
+So equations are graphs... Cool, I have always been attracted by the graphical representations. It is a very natural way to understand and express the ideas. This [post](http://gopherdata.io/post/deeplearning_in_go_part_1/) from [Chewxy](https://twitter.com/chewxy) is a perfect illustration of how the expression of a mathematical expression is turned into a graph at a compiler level.
+
+It sounds that implementing the LSTM as a graph will make the task a lot easier. 
 
 The point is that the toy I made is based on a vanilla RNN. And Vanillas RNNs are suffering from the [vanishing gradient problem](https://en.wikipedia.org/wiki/Vanishing_gradient_problem).
 This is a well known problem, and one solution is to change the core model for a more robust network called __L__ong __S__hort __T__erm __M__emory network (LSTM for short).
