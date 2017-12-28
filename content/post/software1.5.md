@@ -7,13 +7,18 @@ date = 2017-12-18T16:47:27+01:00
 author = "Olivier Wulveryck"
 +++
 
-In my previous article, I have explained how to code a RNN from scratch in go.
-The goal of this work is to use the RNN as a processing unit for different information that I could grab in my day-to-day work.
-(for example to find a the root-cause of an incident, or as a helper decision tool for capacity management).
+In my previous article, I described an implementation of a RNN from scratch in go.
+The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are.
+(for example to find the root-cause of an incident, or as a helper decision tool for capacity management).
 
-The purpose of this article is to describe a way to code in software 1.0 an execution machine for a software 2.0.
+_Note_ I stick to go, because I have in mind that someday this tool could act as a node of a processing network that would communicate via a tuple space.
+All the node would work in choreography. The set of nodes would be a kind of distributed bot that could monitor a complete IT. That is for another story in a couple of years...
 
-I will first explain the concepts, then I will describe how to implement different parts.
+Back to 2017/2018: the purpose of this article is to describe a way to code in software 1.0 an execution machine for a software 2.0.
+
+I will first explain the concepts.
+Then I will explain why a LSTM (a certain kind of neural network) is a software 2.0.
+Then I will describe a way to parse and execute this software 2.0 on a machine coded in go (software 1.0).
 
 # Considerations about software 1.0 and software 2.0
 
@@ -52,48 +57,49 @@ And what makes the software 2.0 so specific? The amount of weights is so importa
 
 # Example of a software 2.0: Deep learning
 
-Neuron networks are the perfect representation of the software 2.0.
+Neural networks are the perfect representation of the software 2.0.
 In my last [blog post](/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html) I have implemented a recurrent neural network in pure go.
 
-My toy is working, I do not have the expected results: the generated text is poor and repetitive (for example it generates: `hello, the the the the the the...`). Vanillas RNNs are suffering from the [vanishing gradient problem](https://en.wikipedia.org/wiki/Vanishing_gradient_problem) which is most likely the root cause of my problems.
+My toy is working, but I have been disappointed by the results: the generated text is poor and repetitive (for example it generates: `hello, the the the the the the...`). Vanillas RNNs are suffering from the [vanishing gradient problem](https://en.wikipedia.org/wiki/Vanishing_gradient_problem) which is most likely the root cause of my problems.
 
 One solution is to change the core model for a more robust network called __L__ong __S__hort __T__erm __M__emory network (LSTM for short).
 
-The software 2.0 will be an implementation of the equations described 
-
-_Sidenote about go_: I am a gopher and an Ops. I really like go because I find it easy and fun to do fancy stuffs. But actually go is not the first choice when we talk about machine learning. My goal is to write a kind of portable virtual machine for software 2.0. I will not explain this in details in this post why go, and anything about software 2.0; But the facilities offered by the go language in order to reach my goal.
+The software 2.0 will be an implementation of the equations of the LSTM. 
+Form more information about LSTM, I strongly encourage you to read [Understanding LSTM Networks](http://colah.github.io/posts/2015-08-Understanding-LSTMs/) from Christopher Olah.
 
 ## LSTM
 
-LSTM are a bit more complex than vanilla RNN. Therefore, a naive go implementation as made for the RNN will be a harder.
+LSTM are a bit more complex than vanilla RNN. Therefore, a naive go implementation as made for the RNN is harder to code.
 
-As one of my goal is to understand how things deeply works, I have tried to implement the back propagation mechanism manually without any luck.
-I have read this post from Karpathy: [Yes you should understand backprop](https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b).
+As one of my goal is to understand how things deeply works (some articles such as "[Yes you should understand backprop](https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b)" makes me confident that it is not a waste of time).
 
-The best explanation I have found so far is in [cs231n course from Stanford](http://cs231n.github.io/optimization-2/).
+The tricky part of the implementation is in the process called backpropagation.
+I have tried to implement the back propagation mechanism manually without any luck.
+I have search the web for an algorithm. The best explanation I have found so far is in the [cs231n course from Stanford](http://cs231n.github.io/optimization-2/).
 It is a clear explanation of how the process works. And it is obvious that the graph representation helps a lot in the computation of the gradient.
 
 ## Equations are graphs
 
-So equations are graphs... Cool, I have always been attracted by graphs. It is a very natural way to understand and express the ideas. This [post](http://gopherdata.io/post/deeplearning_in_go_part_1/) from [Chewxy](https://twitter.com/chewxy) is a perfect illustration of how the expression of a mathematical expression is turned into a graph at a compiler level.
+So equations are graphs... 
 
-It sounds that implementing the LSTM as a graph will make the task a lot easier. 
+This [post](http://gopherdata.io/post/deeplearning_in_go_part_1/) from [Chewxy](https://twitter.com/chewxy) is a perfect illustration of how the expression of a mathematical expression is turned into a graph at a compiler level.
+
+So my software 1.0 must be made of graphs.
 
 # Writing the machinery: software 1.0
 
-Machine learning is about graphs and tensors. It exists some optimized library to transpile the equations into a graph. Tensorflow is one of those.
-Tensorflow is highly optimized, but the setup of the working environment may be tricky from times to time.
-
-On top of that, the binding exists for the go language, but their purpose is to run a software 2.0 and not to code the model.
-Tensorflow does some things that are too magic for me by now, and it is too much abstract. I want something simpler.
+Machine learning is usually about graphs and tensors. It exists some optimized library to transpile the equations into graphs. Tensorflow is one of those.
+Tensorflow is highly optimized, but the setup of the working environment may be tricky from times to time. As of today, it is not a good candidate for my _skynet robot_ :).
 
 ## Gorgonia
 
-Chewxy, the author of the post about equation, is alors the author of the Gorgonia project. 
+Chewxy, the author of the post about equation, is the author of the Gorgonia project. 
 
 > Package gorgonia is a library that helps facilitate machine learning in Go. Write and evaluate mathematical equations involving multidimensional arrays easily. Do differentiation with them just as easily.
 
-I have talked to Chewxy on the channel #data-science on #slack. He is really commited, and very active. On top of that I am really attracted by the idea of such a library in go. 
+This is exactly the answer to my problem.
+
+I have talked to Chewxy on the channel #data-science on #slack. He is really committed, and very active. On top of that I am really attracted by the idea of such a library in go. 
 I have decided to give gorgonia a try. 
 
 ### Machines, Graphs, Nodes, Values and Backends
@@ -104,12 +110,12 @@ A node is any element in the graph. It is a placeholder that will host a [`Value
 
 A `Value` is an interface. A [`Tensor`](https://godoc.org/gorgonia.org/tensor#Tensor) is a type of `Value`.
 
-`Tensors` contains elements of the same [`Dtype`](https://godoc.org/gorgonia.org/tensor#Dtype). All those elements are stored in concrete arrays of elements (for example `[]float32`).
+`Tensors` are multidimensional arrays that contains elements of the same [`Dtype`](https://godoc.org/gorgonia.org/tensor#Dtype). All those elements are stored in concrete arrays of elements (for example `[]float32`).
 
-To actually compute the graph, Gorgonia is using on of the two implementation of Machines: 
+To actually compute the graph, Gorgonia is using "a machine": 
 
-* [`lispMachine`](https://godoc.org/gorgonia.org/gorgonia#NewLispMachine)
-* [`tapeMachine`](https://godoc.org/gorgonia.org/gorgonia#NewTapeMachine)
+* a [`lispMachine`](https://godoc.org/gorgonia.org/gorgonia#NewLispMachine) or
+* a [`tapeMachine`](https://godoc.org/gorgonia.org/gorgonia#NewTapeMachine)
 
 #### Building a graph
 
@@ -164,48 +170,186 @@ fmt.Println(z.Value().Data())
 // will display [1.75 0] which is a []float32{}
 ```
 
+The problem is:
 
+The more complex the model is, the more verbose the code will be, the harder to debug.
+For example, a LSTM with a forget gate is expressed like this:
+
+![Wikipedia](https://wikimedia.org/api/rest_v1/media/math/render/svg/2db2cba6a0d878e13932fa27ce6f3fb71ad99cf1)
+
+Source:   [wikipedia](https://en.wikipedia.org/wiki/Long_short-term_memory)
+
+Transpiling it with gorgonia will lead to something like this:
+
+```go
+var h0, h1, inputGate *Node
+h0 = Must(Mul(l.wix, inputVector))
+h1 = Must(Mul(l.wih, prevHidden))
+inputGate = Must(Sigmoid(Must(Add(Must(Add(h0, h1)), l.bias_i))))
+
+var h2, h3, forgetGate *Node
+h2 = Must(Mul(l.wfx, inputVector))
+h3 = Must(Mul(l.wfh, prevHidden))
+forgetGate = Must(Sigmoid(Must(Add(Must(Add(h2, h3)), l.bias_f))))
+
+var h4, h5, outputGate *Node
+h4 = Must(Mul(l.wox, inputVector))
+h5 = Must(Mul(l.woh, prevHidden))
+outputGate = Must(Sigmoid(Must(Add(Must(Add(h4, h5)), l.bias_o))))
+
+var h6, h7, cellWrite *Node
+h6 = Must(Mul(l.wcx, inputVector))
+h7 = Must(Mul(l.wch, prevHidden))
+cellWrite = Must(Tanh(Must(Add(Must(Add(h6, h7)), l.bias_c))))
+
+// cell activations
+var retain, write *Node
+retain = Must(HadamardProd(forgetGate, prevCell))
+write = Must(HadamardProd(inputGate, cellWrite))
+cell = Must(Add(retain, write))
+hidden = Must(HadamardProd(outputGate, Must(Tanh(cell))))
+```
+
+Actually the concept is close to the Reverse Polish Notation. But what would make my life easier would be to process the equation written as-is in unicode:
+
+```go
+set(`iₜ`, `σ(Wᵢ·xₜ+Uᵢ·hₜ₋₁+Bᵢ)`)
+set(`fₜ`, `σ(Wf·xₜ+Uf·hₜ₋₁+Bf)`) 
+set(`oₜ`, `σ(Wₒ·xₜ+Uₒ·hₜ₋₁+Bₒ)`)
+set(`ĉₜ`, `tanh(Wc·xₜ+Uc·hₜ₋₁+Bc)`) 
+ct := set(`cₜ`, `fₜ*cₜ₋₁+iₜ*ĉₜ`)
+set(`hc`, `tanh(cₜ)`)
+ht, _ := l.parser.Parse(`oₜ*hc`)
+```
+
+_Note_ If you don't have the correct font to display the unicode character click [here](/assets/lstm/uni-code.png)
 
 ## Good ol' software 1.0
 
+What I will do is to write a lexer and a parser to analyse the mathematical equations written in unicode and generate the corresponding gorgonia execution graph.
+
 ### Lexer/Parser
+
+My first attempt was to use a simple lexer and a simple parser. This is described in many posts over the internet all based on a talk by Rob Pike: [Lexical Scanning in GO](https://talks.golang.org/2011/lex.slide#1).
+I have been able to write the lexer easily. 
+The parser was more difficult to write because of the mathematicals [operator precedence](https://en.wikipedia.org/wiki/Order_of_operations).
+
+After a bunch of documentation about LALR parsers, I have deviced to call an old friend: _yacc_
 
 <center>  
 {{< tweet 941817771863584768 >}}
 </center>
 
-[goyacc example](https://github.com/golang/tools/tree/master/cmd/goyacc/testdata/expr)
+In the world of go, there is [goyacc](https://godoc.org/golang.org/x/tools/cmd/goyacc) whose syntax is compatible with yacc, but which generates parsers written in go.
+I have found a perfect example of a calculator [here](https://github.com/golang/tools/tree/master/cmd/goyacc/testdata/expr)
 
-### goyacc
+###  The grammar
 
-{{< highlight go >}}
-// Forward pass as described here https://en.wikipedia.org/wiki/Long_short-term_memory#LSTM_with_a_forget_gate
-func (l *lstm) fwd(inputVector, prevHidden, prevCell *G.Node) (hidden, cell *G.Node) {
-        // Helper function for clarity
-        set := func(ident, equation string) *G.Node {
-                res, _ := l.parser.Parse(equation)
-                l.parser.Set(ident, res)
-                return res 
-        } 
+The token that I will recognize are the basic matrix operations I need for my LSTM, plus the sigmoid and the tanh function:
 
-        l.parser.Set(`xₜ`, inputVector)
-        l.parser.Set(`hₜ₋₁`, prevHidden)
-        l.parser.Set(`cₜ₋₁`, prevCell)
-        set(`iₜ`, `σ(Wᵢ·xₜ+Uᵢ·hₜ₋₁+Bᵢ)`)
-        set(`fₜ`, `σ(Wf·xₜ+Uf·hₜ₋₁+Bf)`) // dot product made with ctrl+k . M
-        set(`oₜ`, `σ(Wₒ·xₜ+Uₒ·hₜ₋₁+Bₒ)`)
-        // ċₜis a vector of new candidates value
-        set(`ĉₜ`, `tanh(Wc·xₜ+Uc·hₜ₋₁+Bc)`) // c made with ctrl+k c >
-        ct := set(`cₜ`, `fₜ*cₜ₋₁+iₜ*ĉₜ`)
-        set(`hc`, `tanh(cₜ)`)
-        ht, _ := l.parser.Parse(`oₜ*hc`)
-        return ht, ct
+```
+%token '+' '·' '-' '*' '/' '(' ')' '=' 'σ' tanh
+```
+
+the `yylval` are always pointer to Gorgonia nodes
+
+```
+%union {
+        node *G.Node
 }
-{{</ highlight >}}
 
-If you don't have the correct font to display the unicode character, you may find a picture [here](/assets/lstm/uni-code.png)
+%token  <node>  NODE
+```
+
+The grammar and the application of the operators are all described in a couple of lines. For example, addition and multiplications are described like this:
+```
+...
+expr1:
+        expr2
+|       expr1 '+' expr2
+        {
+                $$ = G.Must(G.Add($1,$3))
+        }
+|       expr1 '-' expr2
+        {
+                $$ = G.Must(G.Sub($1,$3))
+        }
+
+expr2:
+        expr3
+|       expr2 '·' expr3
+        {
+                $$ = G.Must(G.Mul($1,$3))
+        }
+|       expr2 '*' expr3
+        {
+                $$ = G.Must(G.HadamardProd($1,$3))
+                        }
+|       expr2 '/' expr3
+        {
+                $$ = G.Must(G.Div($1,$3))
+        }
+...
+```
+
+You can find the complete file [here](https://raw.githubusercontent.com/owulveryck/charRNN/colah/parser/src/expr.y).
+
+### The parser and the lexer
+
+The lexer implementation is a struct type that fullfills the interface 
+
+```go
+type yyLexer interface {
+	Lex(lval *yySymType) int
+	Error(e string)
+}
+```
+
+The Lexer will read elements such as `Wₜ`, but will not know how to associate it with a go variable that holds the pointer to Gorgonia.Node.
+My lexer must be aware of a correspondence between a unicode representation and the go expression.
+I will add a dictionary of elements which is a map whose key is the representation and the value is the pointer to the node:
+
+```go
+type exprLex struct {
+	line []byte
+	peek rune
+        dico map[string]*G.Node // dictionary
+	g      *G.ExprGraph
+        result *G.Node
+        err error
+}
+```
+
+I also add a method `Let` that sets an entry in the dictionary. 
+
+```go
+func (x *exprLex) Let(ident  string, value *G.Node) {
+        x.dico[ident] = value
+}
+```
+
+I will not describe the rest of the file because the implementation is straightforward and easy to read.
+
+### Generating the package
+
+The yacc tools actually generates a parser in go. I have chosen to declare it in its own package.
+The command `goyacc -o ../expr.go -p "gorgonia" expr.y` will generate the file `expr.go` which holds an implementation able to parse my unicode equations.
+
+I have also added a couple of helper function to avoid public methods. My API is therefore simple:
+
+```
+type Parser
+    func NewParser(g *G.ExprGraph) *Parser
+    func (p *Parser) Parse(s string) (*G.Node, error)
+    func (p *Parser) Set(ident string, value *G.Node)
+```
+
+(see [godoc](https://godoc.org/github.com/owulveryck/charRNN/parser) for more details.
+
+# Does it work ?
+
+With my parser, I am able to write a LSTM step easily and to generate an execution graph:
 
 ![image](/assets/lstm/LSTM.png)
 
-# Conclusion
 
