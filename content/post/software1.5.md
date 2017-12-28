@@ -1,11 +1,10 @@
 +++
 images = ["/assets/lstm/LSTM-cell.png"]
 description = ""
-categories = ["category"]
-tags = ["tag1", "tag2"]
 draft = true
 title = "Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go"
 date = 2017-12-18T16:47:27+01:00
+author = "Olivier Wulveryck"
 +++
 
 In my previous article, I have explained how to code a RNN from scratch in go.
@@ -109,7 +108,7 @@ A `Value` is an interface. A [`Tensor`](https://godoc.org/gorgonia.org/tensor#Te
 
 To actually compute the graph, Gorgonia is using on of the two implementation of Machines: 
 
-* [`listMachine`](https://godoc.org/gorgonia.org/gorgonia#NewLispMachine)
+* [`lispMachine`](https://godoc.org/gorgonia.org/gorgonia#NewLispMachine)
 * [`tapeMachine`](https://godoc.org/gorgonia.org/gorgonia#NewTapeMachine)
 
 #### Building a graph
@@ -148,8 +147,8 @@ mat := G.NewMatrix(g,
         G.WithValue(matT),
 )
 
-// z is a new node of the graph "g"
-// Actually it does not contains the actual result because the graph
+// z is a new node of the graph "g".
+// It does not contains the actual result because the graph
 // has not be computed yet
 z, err := G.Mul(mat, vec)
 // ... error handling
