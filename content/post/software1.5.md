@@ -305,9 +305,9 @@ type yyLexer interface {
 }
 ```
 
-The Lexer will read elements such as `Wₜ`, but will not know how to associate it with a go variable that holds the pointer to Gorgonia.Node.
+The Lexer will read elements such as `Wₜ`, but will not know how to associate it with the pointer to Gorgonia.Node.
 My lexer must be aware of a correspondence between a unicode representation and the go expression.
-I will add a dictionary of elements which is a map whose key is the representation and the value is the pointer to the node:
+For this purpose, I add a dictionary of elements. It is a map whose key is the representation and the value is the pointer to the node:
 
 ```go
 type exprLex struct {
