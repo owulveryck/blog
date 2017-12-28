@@ -8,12 +8,19 @@ title = "Parsing mathematical equation to generate computation graphs - First st
 date = 2017-12-18T16:47:27+01:00
 +++
 
+In my previous article, I have explained how to code a RNN from scratch in go.
+The goal of this work is to use the RNN as a processing unit for different information that I could grab in my day-to-day work.
+(for example to find a the root-cause of an incident, or as a helper decision tool for capacity management).
+
+The purpose of this article is to describe a way to code in software 1.0 an execution machine for a software 2.0.
+
+I will first explain the concepts, then I will describe how to implement different parts.
 
 # Considerations about software 1.0 and software 2.0
 
 ## What is a software?
 
-It is sequence of bits and bytes that can be computed, and the produces a result (the solution of a problem for example). 
+It is sequence of bits and bytes that can be computed, and that produces a result (the solution of a problem for example). 
 
 To build a software until now, a compiler is used. Its goal is to turn a "human readable sequence of characters", called code, into the sequence of bytes. 
 
@@ -61,29 +68,104 @@ _Sidenote about go_: I am a gopher and an Ops. I really like go because I find i
 
 LSTM are a bit more complex than vanilla RNN. Therefore, a naive go implementation as made for the RNN will be a harder.
 
-As one of my goal is to understand how things deeply works, I have tried to implement the back propagation mechanism manually.
+As one of my goal is to understand how things deeply works, I have tried to implement the back propagation mechanism manually without any luck.
 I have read this post from Karpathy: [Yes you should understand backprop](https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b).
 
 The best explanation I have found so far is in [cs231n course from Stanford](http://cs231n.github.io/optimization-2/).
 It is a clear explanation of how the process works. And it is obvious that the graph representation helps a lot in the computation of the gradient.
 
-I see now why tensorflow is so linked with the machine learning field.
-
 ## Equations are graphs
 
-So equations are graphs... Cool, I have always been attracted by the graphical representations. It is a very natural way to understand and express the ideas. This [post](http://gopherdata.io/post/deeplearning_in_go_part_1/) from [Chewxy](https://twitter.com/chewxy) is a perfect illustration of how the expression of a mathematical expression is turned into a graph at a compiler level.
+So equations are graphs... Cool, I have always been attracted by graphs. It is a very natural way to understand and express the ideas. This [post](http://gopherdata.io/post/deeplearning_in_go_part_1/) from [Chewxy](https://twitter.com/chewxy) is a perfect illustration of how the expression of a mathematical expression is turned into a graph at a compiler level.
 
 It sounds that implementing the LSTM as a graph will make the task a lot easier. 
 
-The point is that the toy I made is based on a vanilla RNN. And Vanillas RNNs are suffering from the [vanishing gradient problem](https://en.wikipedia.org/wiki/Vanishing_gradient_problem).
-This is a well known problem, and one solution is to change the core model for a more robust network called __L__ong __S__hort __T__erm __M__emory network (LSTM for short).
+# Writing the machinery: software 1.0
 
-## Writing the machinery: software 1.0
+Machine learning is about graphs and tensors. It exists some optimized library to transpile the equations into a graph. Tensorflow is one of those.
+Tensorflow is highly optimized, but the setup of the working environment may be tricky from times to time.
+
+On top of that, the binding exists for the go language, but their purpose is to run a software 2.0 and not to code the model.
+Tensorflow does some things that are too magic for me by now, and it is too much abstract. I want something simpler.
+
 ## Gorgonia
 
-Chewxy is the author of the gorgonia project. 
+Chewxy, the author of the post about equation, is alors the author of the Gorgonia project. 
 
 > Package gorgonia is a library that helps facilitate machine learning in Go. Write and evaluate mathematical equations involving multidimensional arrays easily. Do differentiation with them just as easily.
+
+I have talked to Chewxy on the channel #data-science on #slack. He is really commited, and very active. On top of that I am really attracted by the idea of such a library in go. 
+I have decided to give gorgonia a try. 
+
+### Machines, Graphs, Nodes, Values and Backends
+
+In gorgonia an equation is represented by an [`ExprGraph`](https://godoc.org/github.com/gorgonia/gorgonia#ExprGraph). It is the main entry point of Gorgonia.
+A graph is composed of [`Nodes`](https://godoc.org/github.com/gorgonia/gorgonia#Node).
+A node is any element in the graph. It is a placeholder that will host a [`Value`](https://godoc.org/github.com/gorgonia/gorgonia#Value).
+
+A `Value` is an interface. A [`Tensor`](https://godoc.org/gorgonia.org/tensor#Tensor) is a type of `Value`.
+
+`Tensors` contains elements of the same [`Dtype`](https://godoc.org/gorgonia.org/tensor#Dtype). All those elements are stored in concrete arrays of elements (for example `[]float32`).
+
+To actually compute the graph, Gorgonia is using on of the two implementation of Machines: 
+
+* [`listMachine`](https://godoc.org/gorgonia.org/gorgonia#NewLispMachine)
+* [`tapeMachine`](https://godoc.org/gorgonia.org/gorgonia#NewTapeMachine)
+
+#### Building a graph
+
+To transform a mathematical equation into a graph, we first need to create a graph, then create the Values, assign them to some nodes and add the nodes to the graph.
+
+For example, this equation:
+
+$$z = W \cdot x$$
+With 
+$$W = \begin{bmatrix}0.95 & 0,8 \\\ 0 & 0\end{bmatrix}, x = \begin{bmatrix}1 \\\ 1\end{bmatrix}$$ 
+
+Is written like this in "gorgonia":
+
+```go
+// Create a graph
+g := G.NewGraph()
+
+// Create the backend with the inputs
+vecB := []float32{1,1}
+// Create the tensor and specify its shape
+vecT := tensor.New(tensor.WithBacking(vecB), tensor.WithShape(2))
+// Create a node of type "vector"
+vec := G.NewVector(g,
+        tensor.Float32,    // The type of the data encapsulated within the node
+        G.WithName("x"),   // The name of the node (optional)
+        G.WithShape(2),    // The shape of the Vector
+        G.WithValue(vecT), // The value of the node
+)
+matB := []float32{0.95,0.8,0,0}
+matT := tensor.New(tensor.WithBacking(matB), tensor.WithShape(2, 2))
+mat := G.NewMatrix(g, 
+        tensor.Float32, 
+        G.WithName("W"), 
+        G.WithShape(2, 2), 
+        G.WithValue(matT),
+)
+
+// z is a new node of the graph "g"
+// Actually it does not contains the actual result because the graph
+// has not be computed yet
+z, err := G.Mul(mat, vec)
+// ... error handling
+
+// create a VM to run the program on
+machine := G.NewTapeMachine(g)
+
+// The graph is executed now !
+err = machine.RunAll()
+// ... error handling
+// Now we can print the value of z
+fmt.Println(z.Value().Data())
+// will display [1.75 0] which is a []float32{}
+```
+
+
 
 ## Good ol' software 1.0
 
