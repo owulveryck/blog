@@ -344,12 +344,60 @@ type Parser
     func (p *Parser) Set(ident string, value *G.Node)
 ```
 
-(see [godoc](https://godoc.org/github.com/owulveryck/charRNN/parser) for more details.
+(see [godoc](https://godoc.org/github.com/owulveryck/charRNN/parser) for more details).
 
 # Does it work ?
 
 With my parser, I am able to write a LSTM step easily and to generate an execution graph:
 
+```go
+func (l *lstm) fwd(inputVector, prevHidden, prevCell *G.Node) (hidden, cell *G.Node) {
+	// Helper function for clarity
+	set := func(ident, equation string) *G.Node {
+		res, _ := l.parser.Parse(equation)
+		l.parser.Set(ident, res)
+		return res
+	}
+
+	l.parser.Set(`xₜ`, inputVector)
+	l.parser.Set(`hₜ₋₁`, prevHidden)
+	l.parser.Set(`cₜ₋₁`, prevCell)
+	set(`iₜ`, `σ(Wᵢ·xₜ+Uᵢ·hₜ₋₁+Bᵢ)`)
+	set(`fₜ`, `σ(Wf·xₜ+Uf·hₜ₋₁+Bf)`) // dot product made with ctrl+k . M
+	set(`oₜ`, `σ(Wₒ·xₜ+Uₒ·hₜ₋₁+Bₒ)`)
+	// ċₜis a vector of new candidates value
+	set(`ĉₜ`, `tanh(Wc·xₜ+Uc·hₜ₋₁+Bc)`) // c made with ctrl+k c >
+	ct := set(`cₜ`, `fₜ*cₜ₋₁+iₜ*ĉₜ`)
+	set(`hc`, `tanh(cₜ)`)
+	ht, _ := l.parser.Parse(`oₜ*hc`)
+	return ht, ct
+}
+```
+
+which leads to: 
+
 ![image](/assets/lstm/LSTM.png)
+Now I will be able to work deeply on the software 2.0 part.
 
+# Conclusion
 
+As Karpathy's explained: we will still need software 1.0 to build software 2.0. 
+In my example, the software 2.0 is the combination of the equations written in unicode and the values of the tensors which are arrays of floats.
+
+A better step would be to parse a complete set of equations such as:
+
+```go
+parse(`
+iₜ=σ(Wᵢ·xₜ+Uᵢ·hₜ₋₁+Bᵢ)
+fₜ=σ(Wf·xₜ+Uf·hₜ₋₁+Bf)
+oₜ=σ(Wₒ·xₜ+Uₒ·hₜ₋₁+Bₒ)
+ĉₜ=tanh(Wc·xₜ+Uc·hₜ₋₁+Bc)
+cₜ=fₜ*cₜ₋₁+iₜ*ĉ
+hₜ=oₜ*tanh(cₜ)
+`)
+```
+
+The software 2.0, once trained, can be backed up as a unicode text file and an couple of floating point numbers.
+This "sofware" would then be independant of the execution machine. A parser could transpile it into a gorgonia execution graph, or a tensorflow execution graph, or...
+
+True and independant software 2.0, sound promising!
