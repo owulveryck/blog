@@ -8,7 +8,7 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 <meta property="og:title" content="Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go" />
-<meta property="og:description" content="In my previous article, I described an implementation of a RNN from scratch in go. The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are. (for example to find the root-cause of an incident, or as a helper decision tool for capacity management).
+<meta property="og:description" content="In a previous article, I described an implementation of an RNN from scratch in go. The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are (for example to find the root-cause of an incident, or as a helper decision tool for capacity management).
 Note I stick to go, because I have in mind that someday this tool could act as a node of a processing network that would communicate via a tuple space." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html" />
@@ -33,13 +33,13 @@ Note I stick to go, because I have in mind that someday this tool could act as a
 
 
 <meta itemprop="name" content="Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go">
-<meta itemprop="description" content="In my previous article, I described an implementation of a RNN from scratch in go. The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are. (for example to find the root-cause of an incident, or as a helper decision tool for capacity management).
+<meta itemprop="description" content="In a previous article, I described an implementation of an RNN from scratch in go. The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are (for example to find the root-cause of an incident, or as a helper decision tool for capacity management).
 Note I stick to go, because I have in mind that someday this tool could act as a node of a processing network that would communicate via a tuple space.">
 
 
 <meta itemprop="datePublished" content="2017-12-18T16:47:27&#43;01:00" />
 <meta itemprop="dateModified" content="2017-12-18T16:47:27&#43;01:00" />
-<meta itemprop="wordCount" content="2309">
+<meta itemprop="wordCount" content="2340">
 
   <meta itemprop="image" content="https://blog.owulveryck.info/assets/lstm/LSTM-cell.png">
 
@@ -50,7 +50,7 @@ Note I stick to go, because I have in mind that someday this tool could act as a
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image:src" content="https://blog.owulveryck.info/assets/lstm/LSTM-cell.png"/>
 <meta name="twitter:title" content="Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go"/>
-<meta name="twitter:description" content="In my previous article, I described an implementation of a RNN from scratch in go. The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are. (for example to find the root-cause of an incident, or as a helper decision tool for capacity management).
+<meta name="twitter:description" content="In a previous article, I described an implementation of an RNN from scratch in go. The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are (for example to find the root-cause of an incident, or as a helper decision tool for capacity management).
 Note I stick to go, because I have in mind that someday this tool could act as a node of a processing network that would communicate via a tuple space."/>
 <meta name="twitter:site" content="@owulveryck"/>
 
@@ -154,8 +154,8 @@ ga('send', 'pageview');
 
   
 
-<p>In my previous article, I described an implementation of a RNN from scratch in go.
-The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are.
+<p>In a previous article, I described an implementation of an RNN from scratch in go.
+The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are
 (for example to find the root-cause of an incident, or as a helper decision tool for capacity management).</p>
 
 <p><em>Note</em> I stick to go, because I have in mind that someday this tool could act as a node of a processing network that would communicate via a tuple space.
@@ -175,7 +175,7 @@ Then I will describe a way to parse and execute this software 2.0 on a machine c
 
 <p>To build a software until now, a compiler is used. Its goal is to turn a &ldquo;human readable sequence of characters&rdquo;, called code, into the sequence of bytes.</p>
 
-<p>This sequence of bytes is evaluated and executed by a machine at runtime. Depending of the input, the execution produces (hopefully) the expected output.</p>
+<p>This sequence of bytes is evaluated and executed by a machine at run time. Depending on the input, the execution produces (hopefully) the expected output.</p>
 
 <p>The art of programming, is, in essence, the faculty for a human to describe the solution of a problem and to express it in a computer language.</p>
 
@@ -194,7 +194,7 @@ The idea is similar to any software: a compiler is used to turn a sequence of co
 
 <p>For example:</p>
 
-<p>A programmer <strong>cannot</strong> write an algorithm that will <strong>solve a specific problem</strong> (eg: I need to recognize a cat on any photo).</p>
+<p>A programmer <strong>cannot</strong> write an algorithm that will <strong>solve a specific problem</strong> (ex: I need to recognize a cat on any photo).</p>
 
 <p>So, the programmer will write a set of equations <strong>able to solve a kind of problem</strong> (recognize objects on any photo).</p>
 
@@ -365,15 +365,15 @@ For example, a LSTM with a forget gate is expressed like this:</p>
 
 <h2 id="good-ol-software-1-0">Good ol&rsquo; software 1.0</h2>
 
-<p>What I will do is to write a lexer and a parser to analyse the mathematical equations written in unicode and generate the corresponding gorgonia execution graph.</p>
+<p>What I will do is to write a lexer and a parser to analyze the mathematical equations written in unicode and generate the corresponding gorgonia execution graph.</p>
 
 <h3 id="lexer-parser">Lexer/Parser</h3>
 
 <p>My first attempt was to use a simple lexer and a simple parser. This is described in many posts over the internet all based on a talk by Rob Pike: <a href="https://talks.golang.org/2011/lex.slide#1">Lexical Scanning in GO</a>.
 I have been able to write the lexer easily.
-The parser was more difficult to write because of the mathematicals <a href="https://en.wikipedia.org/wiki/Order_of_operations">operator precedence</a>.</p>
+The parser was more difficult to write because of the mathematical <a href="https://en.wikipedia.org/wiki/Order_of_operations">operator precedence</a>.</p>
 
-<p>After a bunch of documentation about LALR parsers, I have deviced to call an old friend: <em>yacc</em></p>
+<p>After a bunch of documentation about LALR parser, I have decided to call an old friend: <em>yacc</em></p>
 
 <p><center><br />
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">dude you sound so quadragenarian!</p>&mdash; Pierre (@p_grandin) <a href="https://twitter.com/p_grandin/status/941817771863584768?ref_src=twsrc%5Etfw">December 15, 2017</a></blockquote>
@@ -462,7 +462,7 @@ For this purpose, I add a dictionary of elements. It is a map whose key is the r
 <p>The yacc tools actually generates a parser in go. I have chosen to declare it in its own package.
 The command <code>goyacc -o ../expr.go -p &quot;gorgonia&quot; expr.y</code> will generate the file <code>expr.go</code> which holds an implementation able to parse my unicode equations.</p>
 
-<p>I have also added a couple of helper function to avoid public methods. My API is therefore simple:</p>
+<p>I have also added a couple of helpers function to avoid public methods. My API is therefore simple:</p>
 
 <pre><code>type Parser
     func NewParser(g *G.ExprGraph) *Parser
@@ -503,7 +503,7 @@ Now I will be able to work deeply on the software 2.0 part.</p>
 
 <h1 id="conclusion">Conclusion</h1>
 
-<p>As Karpathy&rsquo;s explained: we will still need software 1.0 to build software 2.0.
+<p>As Karpathy&rsquo;s explained: we will still need software 1.0 to build software 2.0. I have used very old concepts to build some tools for writing and processing a software 2.0.
 In my example, the software 2.0 is the combination of the equations written in unicode and the values of the tensors which are arrays of floats.</p>
 
 <p>A better step would be to parse a complete set of equations such as:</p>
@@ -515,10 +515,14 @@ In my example, the software 2.0 is the combination of the equations written in u
 </span><span class="s">cₜ=fₜ*cₜ₋₁+iₜ*ĉ
 </span><span class="s">hₜ=oₜ*tanh(cₜ)
 </span><span class="s">`</span><span class="p">)</span></code></pre></div>
-<p>The software 2.0, once trained, can be backed up as a unicode text file and an couple of floating point numbers.
-This &ldquo;sofware&rdquo; would then be independant of the execution machine. A parser could transpile it into a gorgonia execution graph, or a tensorflow execution graph, or&hellip;</p>
+<p>The software 2.0, once trained, can be backed up as a unicode text file and a couple of floating point numbers.
+It would then be independent of the execution machine. A parser could transpile it into a gorgonia execution graph, or a tensorflow execution graph, &hellip;</p>
 
-<p>True and independant software 2.0, sound promising!</p>
+<p>A true and independent software 2.0.</p>
+
+<blockquote>
+<p><em>“A journey of a thousand miles must begin with a single step.”</em> – <em>Lao Tzu</em></p>
+</blockquote>
 
 
   

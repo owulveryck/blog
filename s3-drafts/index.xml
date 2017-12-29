@@ -18,7 +18,7 @@
       <pubDate>Mon, 18 Dec 2017 16:47:27 +0100</pubDate>
       
       <guid>https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html</guid>
-      <description>In my previous article, I described an implementation of a RNN from scratch in go. The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are. (for example to find the root-cause of an incident, or as a helper decision tool for capacity management).
+      <description>In a previous article, I described an implementation of an RNN from scratch in go. The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are (for example to find the root-cause of an incident, or as a helper decision tool for capacity management).
 Note I stick to go, because I have in mind that someday this tool could act as a node of a processing network that would communicate via a tuple space.</description>
     </item>
     
