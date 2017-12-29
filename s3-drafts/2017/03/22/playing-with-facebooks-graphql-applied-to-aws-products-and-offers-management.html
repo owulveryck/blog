@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="Playing with Facebook&#39;s GraphQL (applied to AWS products and offers management)" />
+<meta property="og:description" content="My first experience with GraphQL. I will try to see how it fits the pricing model of AWS as described in an earlier post." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html" />
+
+  <meta property="og:image" content="https://blog.owulveryck.info/assets/images/graphqllogo.png" />
+
+
+
+<meta property="article:published_time" content="2017-03-22T09:15:35&#43;01:00"/>
+
+<meta property="article:modified_time" content="2017-03-22T09:15:35&#43;01:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Playing with Facebook&#39;s GraphQL (applied to AWS products and offers management)">
+<meta itemprop="description" content="My first experience with GraphQL. I will try to see how it fits the pricing model of AWS as described in an earlier post.">
+
+
+<meta itemprop="datePublished" content="2017-03-22T09:15:35&#43;01:00" />
+<meta itemprop="dateModified" content="2017-03-22T09:15:35&#43;01:00" />
+<meta itemprop="wordCount" content="1797">
+
+  <meta itemprop="image" content="https://blog.owulveryck.info/assets/images/graphqllogo.png">
+
+
+
+<meta itemprop="keywords" content="golang,aws,graphql," />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image:src" content="https://blog.owulveryck.info/assets/images/graphqllogo.png"/>
+<meta name="twitter:title" content="Playing with Facebook&#39;s GraphQL (applied to AWS products and offers management)"/>
+<meta name="twitter:description" content="My first experience with GraphQL. I will try to see how it fits the pricing model of AWS as described in an earlier post."/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html">
+
+    <title>Playing with Facebook&rsquo;s GraphQL (applied to AWS products and offers management) | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html">Playing with Facebook&rsquo;s GraphQL (applied to AWS products and offers management)</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-03-22T09:15:35&#43;01:00">Wed Mar 22, 2017</time> by Olivier Wulveryck in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="/categories/category" rel="category tag">category</a>
+
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/golang" rel="tag">golang</a>, <a href="/tags/aws" rel="tag">aws</a>, <a href="/tags/graphql" rel="tag">graphql</a>
+
+</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html'>
+      
+        <div class="crop">
+      <img src="/assets/images/graphqllogo.png" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<h1 id="about-graphql">About GraphQL</h1>
+
+<p>GraphQL has been invented by Facebook for the purpose of refactoring their mobile application. Facebook had reached the limits of the standard REST API mainly because:</p>
+
+<ul>
+<li>Getting that much information was requiring a huge amount of API endpoints</li>
+<li>The versioning of the API was counter-productive regarding Facebook&rsquo;s frequents deployements.</li>
+</ul>
+
+<p>But graphql is not only a query language related to Facebook. GraphQL is not only applicable to social data.</p>
+
+<p>Of course it is about graphs and graphs represents relationships. But you can represent relationships in all of your business objects.</p>
+
+<p>Actually, GraphQL is all about your application data.</p>
+
+<p>In this post I will try to take a concrete use case. I will first describe the business objects as a graph, then I will try to implement a schema with GraphQL. At the very end I will develop a small GraphQL endpoint to test the use case.</p>
+
+<p><strong>Caution</strong> <em>I am discovering GraphQL on my own. This post reflects my own work and some stuff may be inaccurate or not idiomatic.</em></p>
+
+<h2 id="the-use-case-aws-billing">The use case: AWS billing</h2>
+
+<p>Let&rsquo;s take a concrete example of a graph representation. Let&rsquo;s imagine that we are selling products related to Infrastructre as a Service (<em>IaaS</em>).</p>
+
+<p>For the purpose of this post, I will use the AWS data model because it is publicly available and I have already blogged about it.
+We are dealing with products families, products, offers and prices.</p>
+
+<p>In (a relative) proper english, let&rsquo;s write down a description of the relationships:</p>
+
+<ul>
+<li>Products
+
+<ul>
+<li>A product family is composed of several products</li>
+<li>A product belongs to a product family</li>
+<li>A product owns a set of attributes (for example its location, its operating system type, its type&hellip;)</li>
+<li>A product and all its attributes are identified by a stock keeping unit (SKU)</li>
+<li>A SKU has a set of offers</li>
+</ul></li>
+<li>Offers
+
+<ul>
+<li>An offer represents a selling contract</li>
+<li>An offer is specific to a SKU</li>
+<li>An offer is characterized by the term of the offer</li>
+<li>A term is typed as either &ldquo;Reserved&rdquo; or &ldquo;OnDemand&rdquo;</li>
+<li>A term has attributes</li>
+</ul></li>
+<li>Prices
+
+<ul>
+<li>An offer has at least one price dimension</li>
+<li>A price dimension is characterized by its currency, its unit of measure, its price per unit, its description and eventually per a range of application (start and end)</li>
+</ul></li>
+</ul>
+
+<p>Regarding those elements, I have extracted and represented a &ldquo;t2.micro/linux in virginia&rdquo; with 3 of its offers and all the prices associated.</p>
+
+<p>Here is the graphical representation generated thanks to <a href="http://www.graphviz.org/">graphviz&rsquo; fdp</a>
+<img src="/assets/graphql/graph.svg" alt="Graph Representation" /></p>
+
+<p>The goal of GraphQL is to extract a subtree of this graph to get part or all information.
+As an example, here is a tree representation of the same graph:</p>
+
+<p><img src="/assets/graphql/graph_tree.svg" alt="Graph Representation" /></p>
+
+<p><em>Note</em>: I wrote a very quick&rsquo;n&rsquo;dirty parser to get the information which can be found <a href="https://gist.github.com/owulveryck/bac700e2f5e5b1af0fffda4e7adb9eed">here</a>. I wrote an idiomatic one but it is the property of the company I made it for.</p>
+
+<h1 id="defining-the-graphql-schema">Defining the GraphQL schema</h1>
+
+<p>The first thing that needs to be done is to write the <a href="http://graphql.org/learn/schema/">schema</a> that will define the <em>query</em> type.</p>
+
+<p>I will not go into deep details in here. I will simple refer to this excellent document which is a <em>résumé</em> of the language:
+<a href="https://github.com/sogko/graphql-schema-language-cheat-sheet/raw/master/graphql-shorthand-notation-cheat-sheet.png">Graphql shorthand notation cheat sheet</a></p>
+
+<p>We can define a product that must contains a list of offers this way and a product family like this:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-graphql" data-lang="graphql"># Product definition
+type Product {
+  offers: [Offer]!
+  location: String
+  instanceType: String
+  sku: String!
+  operatingSystem: String
+}
+
+# Definition of the product family
+type ProductFamily {
+  products: [Product]!
+}</code></pre></div>
+
+<p>One offer is composed of a mandatory price list. An offer must be of a pre-defined type: <em>OnDemand</em> or <em>Reserved</em>.
+Let&rsquo;s define this:
+<div class="highlight"><pre class="chroma"><code class="language-graphql" data-lang="graphql"># Definition of an offer
+type Offer {
+  type: OFFER_TYPE!
+  code: String!
+  LeaseContractLength: String
+  PurchaseOption: String
+  OfferingClass: String
+  prices: [Price]!
+}
+
+# All possible offer types
+enum OFFER_TYPE {
+  OnDemand
+  Reserved
+}
+
+# Definition of a price
+type Price {
+  description: String
+  unit: String
+  currency: String
+  price: Float
+}</code></pre></div></p>
+
+<p>At the very end we define the <em>queries</em>
+Let&rsquo;s start by defining a single query. To make it simple for the purpose of the post, Let&rsquo;s assume that we will try to get a whole <em>product family</em>.
+If we query the entire product family, we will be able to display all informations of all product in the family. But let&rsquo;s also consider that we want to limit the family and extract only a certain product identified by its SKU.</p>
+
+<p>The Query definition is therefore:
+<div class="highlight"><pre class="chroma"><code class="language-graphql" data-lang="graphql"># root Query type
+type Query {
+    products(sku: String): [Product]
+}</code></pre></div></p>
+
+<p>We will query products (<code>{products}</code>) and it will return a ProductFamily.</p>
+
+<h2 id="query">Query</h2>
+
+<p>Let&rsquo;s see now how a typical query would look like. To understand the structure of a query, I advise you to read this excellent blog post: <a href="https://dev-blog.apollodata.com/the-anatomy-of-a-graphql-query-6dffa9e9e747#.jbklz6h17">The Anatomy of a GraphQL Query</a>.</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-graphql" data-lang="graphql">{
+  ProductFamily {
+    products {
+      location
+      type
+    }
+  }
+}</code></pre></div>
+
+<p>This query should normally return all the products of the family and display their location and their type.
+Let&rsquo;s try to implement this</p>
+
+<h1 id="geek-time-let-s-go">Geek time: let&rsquo;s go!</h1>
+
+<p>I will use the <code>go</code> implementation of GraphQL which is a &ldquo;simple&rdquo; translation in go of the <a href="https://github.com/graphql/graphql-js">javascript&rsquo;s reference implementation</a>.</p>
+
+<p>To use it:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">import</span> <span class="s">&#34;github.com/graphql-go/graphql&#34;</span></code></pre></div>
+
+<p>To keep it simple, I will load all the products and offers in memory. In the real life, we should implement an access to whatever database. But that is a strength of the GraphQL model: The flexibility. The backend can be changed later without breaking the model or the API.</p>
+
+<h2 id="first-pass-only-the-products">First pass: Only the products</h2>
+
+<h3 id="defining-the-schema-and-the-query-in-go">Defining the schema and the query in go</h3>
+
+<p>Most of the work has already been done and documented in a series of blog posts <a href="http://mycodesmells.com/post/building-graphql-api-in-go">here</a></p>
+
+<p>First we must define a couple of things:</p>
+
+<ul>
+<li>A <em>Schema</em> as returned by the function <code>graphql.NewSchema</code> that takes as argument a <code>graphql.SchemaConfig</code></li>
+<li>The <code>graphql.SchemaConfig</code> is a structure composed of a <code>Query</code>, a <code>Mutation</code> and other alike fields which are pointers to <code>graphql.Object</code></li>
+<li>The rootQuery is created by the structure <code>graphql.ObjectConfig</code> in which we pass an object of type <code>graphql.Fields</code> (which is a <code>map[string]*Field</code>)</li>
+</ul>
+
+<p>The code to create the schema is the following:
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">fields</span> <span class="o">:=</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{}</span>
+<span class="nx">rootQuery</span> <span class="o">:=</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">ObjectConfig</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;RootQuery&#34;</span><span class="p">,</span> <span class="nx">Fields</span><span class="p">:</span> <span class="nx">fields</span><span class="p">}</span>
+<span class="nx">schemaConfig</span> <span class="o">:=</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">SchemaConfig</span><span class="p">{</span>
+       <span class="nx">Query</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">NewObject</span><span class="p">(</span><span class="nx">rootQuery</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="nx">schema</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">NewSchema</span><span class="p">(</span><span class="nx">schemaConfig</span><span class="p">)</span></code></pre></div></p>
+
+<h3 id="defining-the-fields">Defining the fields</h3>
+
+<p>Our shema is created but nearly empty because we did not filled the &ldquo;fields&rdquo; variable.
+the fields variable will contain what the user can request.</p>
+
+<p>As seen before, fields is a map of <code>*Field</code>. The key of the map is the root query. In our definition of the Query, we declared that the query would be &ldquo;products&rdquo;. So &ldquo;products&rdquo; is the key of the map.
+The graphql.Field that is returned is a list type composed of productTypes.</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">fields</span> <span class="o">:=</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+        <span class="s">&#34;products&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+             <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">NewList</span><span class="p">(</span><span class="nx">productType</span><span class="p">),</span>
+        <span class="o">...</span></code></pre></div>
+
+<p>We will see in a minute how to define the <em>productType</em>. Before, we must provide a way to seek for the product in the database.
+This is done by implementing the <code>Resolve</code> function:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">fields</span> <span class="o">:=</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+        <span class="s">&#34;products&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+             <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">NewList</span><span class="p">(</span><span class="nx">productType</span><span class="p">),</span>
+             <span class="nx">Resolve</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">p</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">ResolveParams</span><span class="p">)</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">...</span></code></pre></div>
+
+<p>The resolv function will return all the products in our database.</p>
+
+<p>But wait&hellip; In the Query definition, we said that we wanted to be able to limit the product by setting a sku in the query.</p>
+
+<p>To inform our schema that it can handle a we add the <code>Args</code> field to the <code>graphql.Field</code> structure:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">fields</span> <span class="o">:=</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+        <span class="s">&#34;products&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+              <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">NewList</span><span class="p">(</span><span class="nx">productType</span><span class="p">),</span>
+              <span class="nx">Args</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">FieldConfigArgument</span><span class="p">{</span>
+                      <span class="s">&#34;sku&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">ArgumentConfig</span><span class="p">{</span>
+                                <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                      <span class="p">},</span>
+              <span class="p">},</span>
+              <span class="nx">Resolve</span><span class="p">:</span> <span class="kd">func</span><span class="p">(</span><span class="nx">p</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">ResolveParams</span><span class="p">)</span> <span class="p">(</span><span class="kd">interface</span><span class="p">{},</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">...</span></code></pre></div>
+
+<p>as the argument is not mandatory, we will use an if statement in the Resolve function to check whether we have a sku or not:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="k">if</span> <span class="nx">sku</span><span class="p">,</span> <span class="nx">skuok</span> <span class="o">:=</span> <span class="nx">p</span><span class="p">.</span><span class="nx">Args</span><span class="p">[</span><span class="s">&#34;sku&#34;</span><span class="p">].(</span><span class="kt">string</span><span class="p">);</span> <span class="nx">skuok</span> <span class="p">{</span></code></pre></div>
+
+<h3 id="defining-the-producttype">Defining the <em>productType</em></h3>
+
+<p>To be able to query display the information of the product (and query the fields), we must define the productType as a graphql object.
+This is done like this:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">productType</span> <span class="p">=</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">NewObject</span><span class="p">(</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">ObjectConfig</span><span class="p">{</span>
+        <span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;Product&#34;</span><span class="p">,</span>
+        <span class="nx">Fields</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+                <span class="s">&#34;location&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s">&#34;sku&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s">&#34;operatingSystem&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s">&#34;instanceType&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+        <span class="p">},</span>
+<span class="p">})</span></code></pre></div>
+
+<p>A productType is a graphql object composed of the 4 fields. Those fields will be returned as string in the graphql.</p>
+
+<h3 id="querying">Querying</h3>
+
+<p>I will not implement a webservice to query my schema by now. This can easily be done with some handlers that are part of the project.
+I will use the same technique as found on internet: I will put the query as argument to my cli.</p>
+
+<p>Assuming that <code>query</code> actually holds my my graphql request, I can query my schema by doing:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">params</span> <span class="o">:=</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">Params</span><span class="p">{</span><span class="nx">Schema</span><span class="p">:</span> <span class="nx">schema</span><span class="p">,</span> <span class="nx">RequestString</span><span class="p">:</span> <span class="nx">query</span><span class="p">}</span>
+<span class="nx">r</span> <span class="o">:=</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">Do</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span>
+<span class="k">if</span> <span class="nx">r</span><span class="p">.</span><span class="nx">HasErrors</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&#34;Failed due to errors: %v\n&#34;</span><span class="p">,</span> <span class="nx">r</span><span class="p">.</span><span class="nx">Errors</span><span class="p">)</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="a-couple-of-tests">A couple of tests&hellip;</h3>
+
+<pre><code>./pricing -db bla -query &quot;{products(sku:\&quot;HZC9FAP4F9Y8JW67\&quot;){location}}&quot; | jq &quot;.&quot;
+</code></pre>
+
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;data&#34;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&#34;products&#34;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;US East (N. Virginia)&#34;</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<pre><code>./pricing -db bla -query &quot;{products(sku:\&quot;HZC9FAP4F9Y8JW67\&quot;){location,instanceType}}&quot; | jq &quot;.&quot;
+</code></pre>
+
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;data&#34;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&#34;products&#34;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;US East (N. Virginia)&#34;</span><span class="p">,</span>
+        <span class="nt">&#34;instanceType&#34;</span><span class="p">:</span> <span class="s2">&#34;t2.micro&#34;</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<pre><code>./pricing -db bla -query &quot;{products{location}}&quot; | jq &quot;.&quot; | head -15
+</code></pre>
+
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;data&#34;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&#34;products&#34;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;US East (Ohio)&#34;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;EU (Frankfurt)&#34;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;EU (Frankfurt)&#34;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;Asia Pacific (Sydney)&#34;</span>
+      <span class="p">},</span></code></pre></div>
+
+<pre><code>./pricing -db bla -query &quot;{products{location,operatingSystem}}&quot; | jq &quot;.&quot; | head -20
+</code></pre>
+
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;data&#34;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&#34;products&#34;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nt">&#34;operatingSystem&#34;</span><span class="p">:</span> <span class="s2">&#34;Windows&#34;</span><span class="p">,</span>
+        <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;Asia Pacific (Sydney)&#34;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nt">&#34;operatingSystem&#34;</span><span class="p">:</span> <span class="s2">&#34;Windows&#34;</span><span class="p">,</span>
+        <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;AWS GovCloud (US)&#34;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nt">&#34;operatingSystem&#34;</span><span class="p">:</span> <span class="s2">&#34;Windows&#34;</span><span class="p">,</span>
+        <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;Asia Pacific (Mumbai)&#34;</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="nt">&#34;operatingSystem&#34;</span><span class="p">:</span> <span class="s2">&#34;SUSE&#34;</span><span class="p">,</span>
+        <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;US East (N. Virginia)&#34;</span>
+      <span class="p">},</span></code></pre></div>
+
+<h2 id="adding-the-offers">Adding the Offers</h2>
+
+<p>To add the offer, we should first define a new offerType</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">offerType</span> <span class="p">=</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">NewObject</span><span class="p">(</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">ObjectConfig</span><span class="p">{</span>
+        <span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;Offer&#34;</span><span class="p">,</span>
+        <span class="nx">Fields</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+                <span class="s">&#34;type&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s">&#34;code&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s">&#34;LeaseContractLenght&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s">&#34;PurchaseOption&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s">&#34;OfferingClass&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+        <span class="p">},</span>
+<span class="p">})</span></code></pre></div>
+
+<p>And then make the productType aware of this new type:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">productType</span> <span class="p">=</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">NewObject</span><span class="p">(</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">ObjectConfig</span><span class="p">{</span>
+        <span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;Product&#34;</span><span class="p">,</span>
+        <span class="nx">Fields</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+                <span class="s">&#34;location&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s">&#34;sku&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s">&#34;operatingSystem&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s">&#34;instanceType&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">String</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="s">&#34;offers&#34;</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">graphql</span><span class="p">.</span><span class="nx">Field</span><span class="p">{</span>
+                        <span class="nx">Type</span><span class="p">:</span> <span class="nx">graphql</span><span class="p">.</span><span class="nx">NewList</span><span class="p">(</span><span class="nx">offerType</span><span class="p">),</span>
+                <span class="p">},</span>
+        <span class="p">},</span>
+<span class="p">})</span></code></pre></div>
+
+<p>Then, make sure that the resolv function is able to fill the structure of the product with the correct offer.</p>
+
+<h3 id="testing">Testing:</h3>
+
+<pre><code>./pricing -db bla -query &quot;{products(sku:\&quot;HZC9FAP4F9Y8JW67\&quot;){location,instanceType,offers{type,code}}}&quot; | jq &quot;.&quot;
+</code></pre>
+
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&#34;data&#34;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&#34;products&#34;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="nt">&#34;offers&#34;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;OnDemand&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;code&#34;</span><span class="p">:</span> <span class="s2">&#34;JRTCKXETXF&#34;</span>
+          <span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nt">&#34;location&#34;</span><span class="p">:</span> <span class="s2">&#34;US East (N. Virginia)&#34;</span><span class="p">,</span>
+        <span class="nt">&#34;instanceType&#34;</span><span class="p">:</span> <span class="s2">&#34;t2.micro&#34;</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<p>This is it!</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>I didn&rsquo;t document the prices, but it can be done following the same principles.</p>
+
+<p>Graphql seems really powerful. Now that I have this little utility, I may try (once more) to develop a little react frontend or a <em>GraphiQL</em> UI.
+What I like most is that it has forced me to think in graph instead of the traditional relational model.</p>
+
+<p>The piece of code is on <a href="https://github.com/owulveryck/graphql-test">github</a></p>
+
+<p><strong>edit</strong>: I have included a graphiql interpreter for testing. It works great. Everything is on github:</p>
+
+<p><img src="/assets/images/graphiql.png" alt="GraphiQL" /></p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2017%2f03%2f22%2fplaying-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f03%2f22%2fplaying-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f03%2f22%2fplaying-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2017%2f03%2f22%2fplaying-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

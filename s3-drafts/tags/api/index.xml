@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Api on Unladen swallow</title>
+    <link>https://blog.owulveryck.info/tags/api.html</link>
+    <description>Recent content in Api on Unladen swallow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>All rights reserved - 2015/2017</copyright>
+    <lastBuildDate>Fri, 13 Nov 2015 09:21:30 +0000</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/api/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Securing the API (in GO)</title>
+      <link>https://blog.owulveryck.info/2015/11/13/securing-the-api-in-go.html</link>
+      <pubDate>Fri, 13 Nov 2015 09:21:30 +0000</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2015/11/13/securing-the-api-in-go.html</guid>
+      <description>I&amp;rsquo;ve created a couple of posts about creating an API (mainly in GO). By now, the API is open. Now I will implement a basic authentication and accreditation mechanism with a little help from JWT
+What is a Json Web Token According to the RFC 7519, it is a
+ compact, URL-safe means of representing claims to be transferred between two parties. The claims in a JWT are encoded as a JSON object that is used as the payload of a JSON Web Signature (JWS) structure or as the plaintext of a JSON Web Encryption (JWE) structure, enabling the claims to be digitally signed or integrity protected with a Message Authentication Code (MAC) and/or encrypted.</description>
+    </item>
+    
+    <item>
+      <title>Simple IaaS API documentation with swagger</title>
+      <link>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html</link>
+      <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html</guid>
+      <description>In a previous post I have explained how to develop a very simple API server.
+Without the associated documentation, the API will be useless. Let&amp;rsquo;s see how we can use swagger-ui in this project to generate a beautiful documentation.
+Note I&amp;rsquo;m blogging and experimenting, of course, in the &amp;ldquo;real&amp;rdquo; life, it&amp;rsquo;s a lot better to code the API interface before implementing the middleware.
+About Swagger Swagger is a framework. On top of the swagger project is composed of several tools.</description>
+    </item>
+    
+    <item>
+      <title>IaaS-like RESTfull API based on microservices</title>
+      <link>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</link>
+      <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</guid>
+      <description>Abstracts Recently, I&amp;rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.
+I am reading more and more about the &amp;ldquo;API economy&amp;rdquo;
+I&amp;rsquo;ve also seen this excellent video made by Mat Ryer about how to code an API in GO and why go would be the perfect language to code such a portal.
+The problem I&amp;rsquo;m facing is that in the organization I&amp;rsquo;m working for, the developments are heterogeneous and therefore you can find ruby teams as well as python teams and myself as a go team (That will change in the future anyway) The key point is that I would like my middleware to serve as an entry point to the services provided by the department.</description>
+    </item>
+    
+  </channel>
+</rss>

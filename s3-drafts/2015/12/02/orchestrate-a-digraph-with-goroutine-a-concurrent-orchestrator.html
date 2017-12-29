@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="Orchestrate a digraph with goroutine, a concurrent orchestrator" />
+<meta property="og:description" content="A directed graph may be represented by its adjacency matrix.
+Considering each vertice as a runable element and any edge as a dependency,
+I will describe a method to &#34;run&#34; the graph in a concurrent way using goalang&#39;s goroutine
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html" />
+
+
+
+<meta property="article:published_time" content="2015-12-02T14:24:21&#43;00:00"/>
+
+<meta property="article:modified_time" content="2015-12-02T14:24:21&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Orchestrate a digraph with goroutine, a concurrent orchestrator">
+<meta itemprop="description" content="A directed graph may be represented by its adjacency matrix.
+Considering each vertice as a runable element and any edge as a dependency,
+I will describe a method to &#34;run&#34; the graph in a concurrent way using goalang&#39;s goroutine
+">
+
+
+<meta itemprop="datePublished" content="2015-12-02T14:24:21&#43;00:00" />
+<meta itemprop="dateModified" content="2015-12-02T14:24:21&#43;00:00" />
+<meta itemprop="wordCount" content="1227">
+
+
+
+<meta itemprop="keywords" content="golang,digraph," />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Orchestrate a digraph with goroutine, a concurrent orchestrator"/>
+<meta name="twitter:description" content="A directed graph may be represented by its adjacency matrix.
+Considering each vertice as a runable element and any edge as a dependency,
+I will describe a method to &#34;run&#34; the graph in a concurrent way using goalang&#39;s goroutine
+"/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html">
+
+    <title>Orchestrate a digraph with goroutine, a concurrent orchestrator | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html">Orchestrate a digraph with goroutine, a concurrent orchestrator</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-12-02T14:24:21Z">Wed Dec 2, 2015</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/golang" rel="tag">golang</a>, <a href="/tags/digraph" rel="tag">digraph</a>
+
+</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html'>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<p>I&rsquo;ve read a lot about graph theory recently.
+They have changed the world a lot. From the simple representation to Bayesian network via Markov chains, the applications are numerous.</p>
+
+<p>Today I would like to imagine a graph as a workflow of execution. Every node would be considered as runnable. And every  edge would be a dependency.</p>
+
+<p>It is an important framework that may be used to as an orchestrator for any model, and of course I am a lot thinkingabout <strong>TOSCA</strong></p>
+
+<h1 id="the-use-case">The use case</h1>
+
+<p>If we consider this very simple graph (example taken from the french wikipedia page)</p>
+
+<p><img class="img-responsive" src="/assets/images/digraph1.png" alt="digraph example"/></p>
+
+<p>its corresponding adjacency matrix is:</p>
+
+<p><img class="img-responsive" src="/assets/images/matrix1.png" alt="Adjacency matrix"/></p>
+
+<p>its dimension is 8x8</p>
+
+<p>For the lab, I will consider that each node has to do a simple task which is to wait for a random number of millisecond (such as Rob Pike&rsquo;s <em>boring</em> function, see references)</p>
+
+<h1 id="let-s-go">Let&rsquo;s GO</h1>
+
+<h2 id="how-will-it-work">How will it work</h2>
+
+<p>Every node will be run in a <code>goroutine</code>. That is a point. But how do I deal with concurrency ?</p>
+
+<p>Every single goroutine will be initially launched and then wait for an information.</p>
+
+<p>It will have an input communication channel, and a <em>conductor</em> will feed this channel with enough information for the goroutine to decides whether it should run or not.
+This information is simply the adjacency matrix up-to-date. That means that is a node is done, its value is set to zero.</p>
+
+<p>Every goroutine will then check in the adjacency matrix, whether it has predecessor (that means if the corresponding vector is null, or every digit in column N is 0) and therefore will execute the step or not.</p>
+
+<p>Once the execution of task is over, the goroutine will then feed another channel to tell the conductor that its job is done. and then the conductor will broadcast the information.</p>
+
+<h3 id="example">Example</h3>
+
+<p>In our example, nodes <em>3</em>, <em>5</em>, and <em>7</em> do not have any predecessor, so they will be able to run first.</p>
+
+<ul>
+<li><strong>(1)</strong> The conductors feed the nodes with the matrix</li>
+</ul>
+
+<p><a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step1.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step1.png" alt="digraph example"/></a></p>
+
+<ul>
+<li><strong>(2)</strong> Every node get the data and analyse the matrix</li>
+</ul>
+
+<p><a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step2.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step2.png" alt="digraph example"/> </a></p>
+
+<ul>
+<li><strong>(3)</strong> Nodes 3, 5 and 7 have no predecessor (their column in the matrix sums to zero): they can run</li>
+</ul>
+
+<p><a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step3.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step3.png" alt="digraph example"/> </a></p>
+
+<ul>
+<li><strong>(4)</strong> Nodes 3 and 5 are done, they informs the conductor</li>
+</ul>
+
+<p><a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step4.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step4.png" alt="digraph example"/> </a></p>
+
+<ul>
+<li><strong>(5)</strong> conductor update the matrix. It fills the rows 3 and 5 with zeros (actually rows 4 and 6, because our first node is 0)</li>
+</ul>
+
+<p><a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step5.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step5.png" alt="digraph example"/> </a></p>
+
+<ul>
+<li><strong>(6)</strong> The conductor feeds the nodes with the matrix</li>
+</ul>
+
+<p><a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step6.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step6.png" alt="digraph example"/> </a></p>
+
+<ul>
+<li><strong>(7)</strong> The nodes analyse the matrix</li>
+</ul>
+
+<p><a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step7.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step7.png" alt="digraph example"/> </a></p>
+
+<ul>
+<li><strong>(8)</strong> Node 2 can run&hellip;</li>
+</ul>
+
+<p><a href="/assets/orchestrate-a-digraph-with-goroutine/digraph_step8.dot"><img class="img-responsive img-thumbnail" src="/assets/images/digraph_step8.png" alt="digraph example"/> </a></p>
+
+<h2 id="the-representation-of-the-use-case-in-go">The representation of the use case in go</h2>
+
+<h3 id="data-representation">Data representation</h3>
+
+<p>to keep it simple, I won&rsquo;t use a <code>list</code> or a <code>slice</code> to represent the matrix, but instead I will rely on the <a href="https://godoc.org/github.com/gonum/matrix/mat64">package mat64</a>.</p>
+
+<p>A slice may be more efficient, but by now it is not an issue.</p>
+
+<p>On top of that, I may need later to transpose or look for eigenvalues, and this package does implement the correct method to do so.
+For clarity of the description, I didn&rsquo;t use a <code>float64</code> array to initialize the matrix.</p>
+<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="c1">// Allocate a zeroed array of size 8×8
+</span><span class="c1"></span><span class="nx">m</span> <span class="o">:=</span> <span class="nx">mat64</span><span class="p">.</span><span class="nx">NewDense</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="kc">nil</span><span class="p">)</span>
+<span class="nx">m</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// First row
+</span><span class="c1"></span><span class="nx">m</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// second row
+</span><span class="c1"></span><span class="nx">m</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// fourth row
+</span><span class="c1"></span><span class="nx">m</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="nx">m</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// fifth row
+</span><span class="c1"></span><span class="nx">m</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// seventh row
+</span><span class="c1"></span><span class="nx">fa</span> <span class="o">:=</span> <span class="nx">mat64</span><span class="p">.</span><span class="nx">Formatted</span><span class="p">(</span><span class="nx">m</span><span class="p">,</span> <span class="nx">mat64</span><span class="p">.</span><span class="nx">Prefix</span><span class="p">(</span><span class="s">&#34;    &#34;</span><span class="p">))</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;\nm = %v\n\n&#34;</span><span class="p">,</span> <span class="nx">fa</span><span class="p">)</span></code></pre></div>
+<h3 id="the-node-execution-function-run">The node execution function (<em>run</em>)</h3>
+
+<p>The node execution is performed by a <code>run</code> function that takes two arguments:</p>
+
+<ul>
+<li>The ID of the node</li>
+<li>The duration of the sleep it performs&hellip;</li>
+</ul>
+
+<p>This function returns a channel that will be used to exchange a <code>Message</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="kd">func</span> <span class="nx">run</span><span class="p">(</span><span class="nx">id</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">duration</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">)</span> <span class="o">&lt;-</span><span class="kd">chan</span> <span class="nx">Message</span> <span class="p">{</span> <span class="p">}</span></code></pre></div>
+<p>A <code>Message</code> is a structure that will holds:</p>
+
+<ul>
+<li>the id of the node who have issued the message</li>
+<li>a boolean which act as a flag that says whether it has already run</li>
+<li>a wait channel which take a matrix as argument. This channel acts as the communication back mechanism from the conductor to the node</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="kd">type</span> <span class="nx">Message</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">id</span>   <span class="kt">int</span>
+	<span class="nx">run</span>  <span class="kt">bool</span>
+	<span class="nx">wait</span> <span class="kd">chan</span> <span class="nx">mat64</span><span class="p">.</span><span class="nx">Dense</span>
+<span class="p">}</span></code></pre></div>
+<p>The run function will launch a goroutine which will remain active thanks to a loop.
+It allows the run function to finish an returns the channel as soon as possible to it can be used by the conductor.</p>
+
+<h3 id="the-conductor">The conductor</h3>
+
+<p>The conductor will be executed inside the main function in our example.</p>
+
+<p>The first step is to launch as many <code>run</code> function as needed.</p>
+
+<p>There is no need to launch them in separate goroutines, because, as explained before,
+the run function will returns the channel immediately because the intelligence is living in a goroutine already.</p>
+<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span> <span class="c1">// n is the dimension of the matrix
+</span><span class="c1"></span>    <span class="nx">cs</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="p">=</span> <span class="nx">run</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">(</span><span class="nx">rand</span><span class="p">.</span><span class="nx">Intn</span><span class="p">(</span><span class="mf">1e3</span><span class="p">))</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Millisecond</span><span class="p">)</span>
+    <span class="o">...</span></code></pre></div>
+<p>Then, as we have launched our workers, and as the communication channel exists, we should launch <code>n</code> &ldquo;angel&rdquo; goroutines, that will take care of
+sending back the matrix to all the workers.</p>
+<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang">    <span class="o">...</span>
+	<span class="nx">node</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">cs</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">{</span>
+			<span class="nx">node</span><span class="p">.</span><span class="nx">wait</span> <span class="o">&lt;-</span> <span class="o">*</span><span class="nx">m</span>
+		<span class="p">}</span>
+	<span class="p">}()</span>
+<span class="p">}</span></code></pre></div>
+<p>Then we shall collect all the messages sent back by the goroutines to treat them and update the matrix as soon as a goroutine has finished.
+I will use the <code>fanIn</code> function as described by <em>Rob Pike</em> in the IO Takl of 2012 (see references) and then go in a <code>for loop</code> to get the results
+as soon as they arrived:</p>
+<div class="highlight"><pre class="chroma"><code class="language-golang" data-lang="golang"><span class="nx">c</span> <span class="o">:=</span> <span class="nx">fanIn</span><span class="p">(</span><span class="nx">cs</span><span class="o">...</span><span class="p">)</span>
+<span class="nx">timeout</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nx">After</span><span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+<span class="k">for</span> <span class="p">{</span>
+    <span class="k">select</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nx">node</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">c</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nx">node</span><span class="p">.</span><span class="nx">run</span> <span class="o">==</span> <span class="kc">true</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;%v has finished\n&#34;</span><span class="p">,</span> <span class="nx">node</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
+            <span class="c1">// 0 its row in the matrix
+</span><span class="c1"></span>            <span class="k">for</span> <span class="nx">c</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">c</span> <span class="p">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">c</span><span class="o">++</span> <span class="p">{</span>
+                <span class="nx">m</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="k">case</span> <span class="o">&lt;-</span><span class="nx">timeout</span><span class="p">:</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;Timeout&#34;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">default</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nx">mat64</span><span class="p">.</span><span class="nx">Sum</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;All done!&#34;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;This is the end!&#34;</span><span class="p">)</span></code></pre></div>
+<p><strong>Note</strong> I have set up a timeout, just in case (<a href="https://talks.golang.org/2012/concurrency.slide#36">reference</a>)&hellip;
+<strong>Note2</strong> I do not talk about the fanIn funtion which is described <a href="https://talks.golang.org/2012/concurrency.slide#28">here</a></p>
+
+<h2 id="the-test">The test</h2>
+
+<p>Here is what I got when I launch the test:</p>
+
+<pre><code>go run orchestrator.go 
+I am 7, and I am running
+I am 3, and I am running
+I am 5, and I am running
+3 has finished
+5 has finished
+I am 2, and I am running
+I am 0, and I am running
+0 has finished
+I am 1, and I am running
+I am 4, and I am running
+4 has finished
+7 has finished
+2 has finished
+1 has finished
+All done!
+</code></pre>
+
+<p>Pretty cool</p>
+
+<p>The complete source can be found <a href="https://github.com/owulveryck/gorchestrator">here</a>.</p>
+
+<p>If you want to play: download go, setup a directory and a <code>$GOPATH</code> then simply</p>
+
+<pre><code>go get github.com/owulveryck/gorchestrator
+cd $GOPATH/src/github.com/owulveryck/gorchestrator
+go run orchestrator.go
+</code></pre>
+
+<h1 id="conclusions">Conclusions</h1>
+
+<p>I&rsquo;m really happy about this implementation. It is clear and concise, and no too far to be idiomatic go.</p>
+
+<p>What I would like to do now:</p>
+
+<ul>
+<li>Read a TOSCA file (again) and pass the adjacency matrix to the orchestrator. That would do a complete orchestrator for cheap.</li>
+<li>Re-use an old implemenation of the <a href="https://github.com/owulveryck/toscaviewer">toscaviewer</a>.
+The idea is to implement a web server that serves the matrix as a json stream. This json will be used to update the SVG (via jquery),
+and then we would be able to see the progession in a graphical way.</li>
+</ul>
+
+<p><strong>STAY TUNED!!!</strong></p>
+
+<h3 id="references">References</h3>
+
+<ul>
+<li><a href="https://talks.golang.org/2012/concurrency.slide">Go Concurrency Patterns (Rob Pike)</a></li>
+</ul>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2015%2f12%2f02%2forchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2015%2f12%2f02%2forchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2015%2f12%2f02%2forchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2015%2f12%2f02%2forchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

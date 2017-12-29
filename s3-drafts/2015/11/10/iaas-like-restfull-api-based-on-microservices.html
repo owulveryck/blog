@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="IaaS-like RESTfull API based on microservices" />
+<meta property="og:description" content="Abstracts Recently, I&rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.
+I am reading more and more about the &ldquo;API economy&rdquo;
+I&rsquo;ve also seen this excellent video made by Mat Ryer about how to code an API in GO and why go would be the perfect language to code such a portal.
+The problem I&rsquo;m facing is that in the organization I&rsquo;m working for, the developments are heterogeneous and therefore you can find ruby teams as well as python teams and myself as a go team (That will change in the future anyway) The key point is that I would like my middleware to serve as an entry point to the services provided by the department." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html" />
+
+
+
+<meta property="article:published_time" content="2015-11-10T08:56:36&#43;01:00"/>
+
+<meta property="article:modified_time" content="2015-11-10T08:56:36&#43;01:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="IaaS-like RESTfull API based on microservices">
+<meta itemprop="description" content="Abstracts Recently, I&rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.
+I am reading more and more about the &ldquo;API economy&rdquo;
+I&rsquo;ve also seen this excellent video made by Mat Ryer about how to code an API in GO and why go would be the perfect language to code such a portal.
+The problem I&rsquo;m facing is that in the organization I&rsquo;m working for, the developments are heterogeneous and therefore you can find ruby teams as well as python teams and myself as a go team (That will change in the future anyway) The key point is that I would like my middleware to serve as an entry point to the services provided by the department.">
+
+
+<meta itemprop="datePublished" content="2015-11-10T08:56:36&#43;01:00" />
+<meta itemprop="dateModified" content="2015-11-10T08:56:36&#43;01:00" />
+<meta itemprop="wordCount" content="1002">
+
+
+
+<meta itemprop="keywords" content="Development,ruby,go,API,REST,msgpack,simple-iaas," />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="IaaS-like RESTfull API based on microservices"/>
+<meta name="twitter:description" content="Abstracts Recently, I&rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.
+I am reading more and more about the &ldquo;API economy&rdquo;
+I&rsquo;ve also seen this excellent video made by Mat Ryer about how to code an API in GO and why go would be the perfect language to code such a portal.
+The problem I&rsquo;m facing is that in the organization I&rsquo;m working for, the developments are heterogeneous and therefore you can find ruby teams as well as python teams and myself as a go team (That will change in the future anyway) The key point is that I would like my middleware to serve as an entry point to the services provided by the department."/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html">
+
+    <title>IaaS-like RESTfull API based on microservices | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html">IaaS-like RESTfull API based on microservices</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-11-10T08:56:36&#43;01:00">Tue Nov 10, 2015</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/development" rel="tag">Development</a>, <a href="/tags/ruby" rel="tag">ruby</a>, <a href="/tags/go" rel="tag">go</a>, <a href="/tags/api" rel="tag">API</a>, <a href="/tags/rest" rel="tag">REST</a>, <a href="/tags/msgpack" rel="tag">msgpack</a>, <a href="/tags/simple-iaas" rel="tag">simple-iaas</a>
+
+</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html'>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<h1 id="abstracts">Abstracts</h1>
+
+<p>Recently, I&rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.</p>
+
+<p>I am reading more and more about the &ldquo;API economy&rdquo;</p>
+
+<p>I&rsquo;ve also seen this excellent video made by <a href="https://www.youtube.com/watch?v=tIm8UkSf6RA&amp;list=PLDWZ5uzn69ezRJYeWxYNRMYebvf8DerHd">Mat Ryer</a> about how to code an API in GO and why go would be the perfect language to code such a portal.</p>
+
+<p>The problem I&rsquo;m facing is that in the organization I&rsquo;m working for, the developments are heterogeneous and therefore you can find <em>ruby</em> teams as well as <em>python</em> teams and myself as a <em>go</em> team (That will change in the future anyway)
+The key point is that I would like my middleware to serve as an entry point to the services provided by the department.</p>
+
+<p>We (as an &ldquo;ops&rdquo; team) would then be able to present the interface via, for example, a <a href="http://swagger.io">swagger</a> like interface, take care of the API and do whatever RPC to any submodule.</p>
+
+<h1 id="an-example-a-iaas-like-interface">An example: a IAAS like interface</h1>
+
+<p>Let&rsquo;s consider a node compute lifecycle.</p>
+
+<p>What I&rsquo;d like to be able to do is:</p>
+
+<ul>
+<li>to create a node</li>
+<li>to update a node (maybe)</li>
+<li>to delete a node</li>
+<li>to get the status of the node</li>
+</ul>
+
+<h2 id="the-backend">The backend</h2>
+
+<p>The backend is whatever service, able to create a node, such as openstack, vmware vcac, juju, &hellip;
+Thoses services usually provide RESTfull API.</p>
+
+<p>I&rsquo;ve seen in my experience, that usually, the API are given with a library in a so called &ldquo;modern language&rdquo;.
+This aim to simplify the development of the clients.
+Sometimes this library may also be developed by an internal team that will take care of the maintenance.</p>
+
+<h2 id="the-library">The library</h2>
+
+<p>In my example, we will consider that the library is a simple <em>gem</em> file developed in ruby.
+Therefore, our service will be a simple server that will get RPC calls, call the good method in the <em>gemfile</em>
+and that will, <em>in fine</em> transfer it to the backend.</p>
+
+<h2 id="the-restfull-api">The RestFull API.</h2>
+
+<p>I will use the example described <a href="http://thenewstack.io/make-a-restful-json-api-go/">here</a> as a basis for this post.
+Of course there are many other examples and excellent go packages that may be used, but according to Mat Ryer, I will stick to the idiomatic approach.</p>
+
+<h2 id="the-glue-msgpack-rpc">The glue: MSGPACK-RPC</h2>
+
+<p>There are several methods for RPC-ing between different languages. Ages ago, there was xml-rpc; then there has been json-rpc;
+I will use <a href="https://github.com/msgpack-rpc/msgpack-rpc">msgpack-rpc</a> which is a binary, json base codec.
+The communication between the Go client and the ruby server will be done over TCP via HTTP for example.</p>
+
+<p>Later on, outside of the scope of this post, I may use ZMQ (as I have already blogged about 0MQ communication between those languages).</p>
+
+<h1 id="the-implementation-of-the-client-the-go-part">The implementation of the Client (the go part)</h1>
+
+<p>I will describe here the node creation via a POST method, and consider that the other methods could be implemented in a similar way.</p>
+
+<h2 id="the-signature-of-the-node-creation">The signature of the node creation</h2>
+
+<p>Here is the expected signature for creating a compute element:</p>
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+    <span class="nt">&#34;kind&#34;</span><span class="p">:</span><span class="s2">&#34;linux&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;size&#34;</span><span class="p">:</span><span class="s2">&#34;S&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;disksize&#34;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span>
+    <span class="nt">&#34;leasedays&#34;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span>
+    <span class="nt">&#34;environment_type&#34;</span><span class="p">:</span><span class="s2">&#34;dev&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;description&#34;</span><span class="p">:</span><span class="s2">&#34;my_description&#34;</span><span class="p">,</span>
+<span class="p">}</span></code></pre></div>
+<p>The corresponding GO structure is:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">NodeRequest</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">Kind</span> <span class="kt">string</span> <span class="s">`json:&#34;kind&#34;`</span> <span class="c1">// Node kind (eg linux)
+</span><span class="c1"></span>    <span class="nx">Size</span> <span class="kt">string</span> <span class="s">`json:&#34;size&#34;`</span> <span class="c1">// size
+</span><span class="c1"></span>    <span class="nx">Disksize</span>         <span class="kt">int</span>    <span class="s">`json:&#34;disksize&#34;`</span>
+    <span class="nx">Leasedays</span>        <span class="kt">int</span>    <span class="s">`json:&#34;leasedays&#34;`</span>
+    <span class="nx">EnvironmentType</span>  <span class="kt">string</span> <span class="s">`json:&#34;environment_type&#34;`</span>
+    <span class="nx">Description</span>      <span class="kt">string</span> <span class="s">`json:&#34;description&#34;`</span>
+<span class="p">}</span></code></pre></div>
+<h2 id="the-route">The route</h2>
+
+<p>The Middleware is using the <a href="http://www.gorillatoolkit.org/pkg/mux">gorilla mux package</a>.
+According the description, I will add an entry in the routes array (into the <em>routes.go</em> file):</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">Route</span><span class="p">{</span>
+    <span class="s">&#34;NodeCreate&#34;</span><span class="p">,</span>
+    <span class="s">&#34;POST&#34;</span><span class="p">,</span>
+    <span class="s">&#34;/v1/nodes&#34;</span><span class="p">,</span>
+    <span class="nx">NodeCreate</span><span class="p">,</span>
+<span class="p">},</span></code></pre></div>
+<p><em>Note</em> : I am using a prefix <code>/v1</code> for my API, for exploitation purpose.</p>
+
+<p>I will then create the corresponding handler in the file with this signature</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">NodeCreate</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">nodeRequest</span> <span class="nx">NodeRequest</span>
+    <span class="nx">body</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nx">ReadAll</span><span class="p">(</span><span class="nx">io</span><span class="p">.</span><span class="nx">LimitReader</span><span class="p">(</span><span class="nx">r</span><span class="p">.</span><span class="nx">Body</span><span class="p">,</span> <span class="mi">1048576</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">r</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">Close</span><span class="p">();</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">body</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">nodeRequest</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">w</span><span class="p">.</span><span class="nx">Header</span><span class="p">().</span><span class="nx">Set</span><span class="p">(</span><span class="s">&#34;Content-Type&#34;</span><span class="p">,</span> <span class="s">&#34;application/json; charset=UTF-8&#34;</span><span class="p">)</span>
+        <span class="nx">w</span><span class="p">.</span><span class="nx">WriteHeader</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">)</span> <span class="c1">// unprocessable entity
+</span><span class="c1"></span>        <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nx">NewEncoder</span><span class="p">(</span><span class="nx">w</span><span class="p">).</span><span class="nx">Encode</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>    
+<span class="p">}</span></code></pre></div>
+<p>That&rsquo;s in this function that will be implemented RPC (client part). To keep it simple at the beginning,
+I will instantiate a TCP connection on every call.
+Don&rsquo;t throw things at me, that will be changed later following the advice of Mat Ryer.</p>
+
+<h2 id="the-implementation-of-the-handler">The implementation of the handler</h2>
+
+<h3 id="the-effective-remote-procedure-call">The effective remote procedure call</h3>
+
+<p>To use <em>msgpack</em> I need to import the go implementation <code>github.com/msgpack-rpc/msgpack-rpc-go/rpc</code>.
+This library will take care of the encoding/decoding of the messages.</p>
+
+<p>Let&rsquo;s dial the RPC server and call the <code>NodeCreate</code> method with, as argument, the information we had from the JSON input</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go">    <span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Dial</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;127.0.0.1:18800&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;fail to connect to server.&#34;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">client</span> <span class="o">:=</span> <span class="nx">rpc</span><span class="p">.</span><span class="nx">NewSession</span><span class="p">(</span><span class="nx">conn</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+    <span class="nx">retval</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nx">Send</span><span class="p">(</span><span class="s">&#34;NodeCreate&#34;</span><span class="p">,</span> <span class="nx">nodeRequest</span><span class="p">.</span><span class="nx">Kind</span><span class="p">,</span> <span class="nx">nodeRequest</span><span class="p">.</span><span class="nx">Size</span><span class="p">,</span> <span class="nx">nodeRequest</span><span class="p">.</span><span class="nx">Disksize</span><span class="p">,</span> <span class="nx">nodeRequest</span><span class="p">.</span><span class="nx">Leasedays</span><span class="p">,</span> <span class="nx">nodeRequest</span><span class="p">.</span><span class="nx">EnvironmentType</span><span class="p">,</span> <span class="nx">nodeRequest</span><span class="p">.</span><span class="nx">Description</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">retval</span><span class="p">)</span></code></pre></div>
+<h1 id="the-rpc-server-the-ruby-part">The RPC server (the ruby part)</h1>
+
+<p>This part is written in ruby, and will take care of the effective node creation.
+At first, we should install the GEM file with the command <code>gem install msgpack-rpc</code>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-ruby" data-lang="ruby"><span class="nb">require</span> <span class="s1">&#39;msgpack/rpc&#39;</span>
+<span class="k">class</span> <span class="nc">MyHandler</span>
+    <span class="k">def</span> <span class="nc"></span><span class="o"></span><span class="nf">NodeCreate</span><span class="p">(</span><span class="n">kind</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">disksize</span><span class="p">,</span> <span class="n">leasedays</span><span class="p">,</span> <span class="n">environmenttype</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span> 
+        <span class="nb">print</span> <span class="s2">&#34;Creating the node with parameters: &#34;</span><span class="p">,</span><span class="n">kind</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">disksize</span><span class="p">,</span> <span class="n">leasedays</span><span class="p">,</span> <span class="n">environmenttype</span><span class="p">,</span> <span class="n">description</span>
+        <span class="k">return</span> <span class="s2">&#34;ok&#34;</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+<span class="n">svr</span> <span class="o">=</span> <span class="no">MessagePack</span><span class="o">::</span><span class="no">RPC</span><span class="o">::</span><span class="no">Server</span><span class="o">.</span><span class="n">new</span>
+<span class="n">svr</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span> <span class="mi">18800</span><span class="o"></span><span class="p">,</span> <span class="no">MyHandler</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+<span class="n">svr</span><span class="o">.</span><span class="n">run</span></code></pre></div>
+<h1 id="let-s-test-it">let&rsquo;s test it</h1>
+
+<p>Launch the RPC server:
+<code>ruby server.rb</code></p>
+
+<p>Then launch the API rest server</p>
+
+<p><code>go run *go</code></p>
+
+<p>Then perform a POST request</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">curl -X POST -H <span class="s1">&#39;Content-Type:application/json&#39;</span> -H <span class="s1">&#39;Accept:application/json&#39;</span> -d <span class="s1">&#39;{&#34;kind&#34;:&#34;linux&#34;,&#34;size&#34;:&#34;S&#34;,&#34;disksize&#34;:20,&#34;leasedays&#34;:1,&#34;environment_type&#34;:&#34;dev&#34;,&#34;description&#34;:&#34;my_description&#34;}&#39;</span> -k http://localhost:8080/v1/nodes</code></pre></div>
+<p>It should write something like this:</p>
+
+<pre><code>2015/11/10 13:56:51 POST        /v1/nodes       NodeCreate      2.520673ms
+ok
+</code></pre>
+
+<p>And something like this in the output of the ruby code:</p>
+
+<pre><code>Creating the node with parameters: linux S 20 1 dev my_description
+</code></pre>
+
+<p>That&rsquo;s all folks! What&rsquo;s left:</p>
+
+<ul>
+<li>To implement the other methods to be &ldquo;<a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a>&rdquo; compliant</li>
+<li>To implement an authentication and accreditation mechanism (JWT, Oauth, ?)</li>
+<li>To change the implementation of the RPC client to use a pool instead of a single connection</li>
+<li>To implement the swagger interface and documentation of the API</li>
+<li>Whatever fancy stuff you may want from a production ready interface.</li>
+</ul>
+
+<p>You can find all the codes in the github repository <a href="https://github.com/owulveryck/example-iaas">here</a> in the branch <code>iaas-like-restfull-api-based-on-microservices</code></p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2015%2f11%2f10%2fiaas-like-restfull-api-based-on-microservices.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2015%2f11%2f10%2fiaas-like-restfull-api-based-on-microservices.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2015%2f11%2f10%2fiaas-like-restfull-api-based-on-microservices.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2015%2f11%2f10%2fiaas-like-restfull-api-based-on-microservices.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

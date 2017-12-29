@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="Unladen swallow" />
+<meta property="og:description" content="Olivier Wulveryck&#39;s (tech) blog" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://blog.owulveryck.info/" />
+
+
+
+<meta property="og:updated_time" content="2015-11-30T13:17:41&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Unladen swallow">
+<meta itemprop="description" content="Olivier Wulveryck&#39;s (tech) blog">
+
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Unladen swallow"/>
+<meta name="twitter:description" content="Olivier Wulveryck&#39;s (tech) blog"/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/">
+
+    <title>Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+    <!-- RSS 2.0 feed -->
+    <link href="https://blog.owulveryck.info/index.xml" rel="alternate" type="application/rss+xml" title="Unladen swallow" />
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link active" href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting.html">KSH93 cool features for scripting</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-11-30T13:17:41Z">Mon Nov 30, 2015</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/ksh" rel="tag">ksh</a>, <a href="/tags/bash" rel="tag">bash</a>, <a href="/tags/shell" rel="tag">shell</a>, <a href="/tags/getopts" rel="tag">getopts</a>, <a href="/tags/man" rel="tag">man</a>
+
+</p>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting.html'>
+      
+    </a>
+    </div>
+    <div class="col-sm-10">
+      <h5>
+        Two reasons why I usually use KSH93 as script engine
+      </h5>
+    </div>
+    </div>
+  </div>
+      From time to time, I&rsquo;m involved into a trolling conversation when any linux kiddie tells me:
+Bash is really the superior shell
+I totally disagree, but as I&rsquo;m getting older, I don&rsquo;t argue anymore.
+Anyway, in this post I will expose two arguments, or I should say two reasons, why I usually use ksh93 to run my scripts.
+Note I&rsquo;m really talking about the engine of the script, (the shebang definition).
+
+  <a href='https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting.html'>Read more →</a>
+</article> 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html">TOSCA lifecycle as a digraph</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-11-20T10:09:30Z">Fri Nov 20, 2015</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/tosca" rel="tag">TOSCA</a>, <a href="/tags/digraph" rel="tag">Digraph</a>, <a href="/tags/graph-theory" rel="tag">Graph Theory</a>, <a href="/tags/golang" rel="tag">golang</a>
+
+</p>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html'>
+      
+    </a>
+    </div>
+    <div class="col-sm-10">
+      <h5>
+        A tosca lifecycle represented as a digraph
+      </h5>
+    </div>
+    </div>
+  </div>
+      About TOSCA The TOSCA acronym stands for Topology and Orchestration Specification for Cloud Applications. It&rsquo;s an OASIS standard.
+The purpose of the TOSCA project is to represent an application by its topology and formalize it using the TOSCA grammar.
+The [TOSCA-Simple-Profile-YAML-v1.0] current specification in YAML introduces the following concepts.
+  TOSCA YAML service template: A YAML document artifact containing a (TOSCA) service template that represents a Cloud application. TOSCA processor: An engine or tool that is capable of parsing and interpreting a TOSCA YAML service template for a particular purpose.
+
+  <a href='https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html'>Read more →</a>
+</article> 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone.html">Playing with (Openstack) Keystone</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-11-17T10:05:42Z">Tue Nov 17, 2015</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/openstack" rel="tag">openstack</a>, <a href="/tags/keystone" rel="tag">keystone</a>, <a href="/tags/authentication" rel="tag">authentication</a>, <a href="/tags/rest" rel="tag">REST</a>
+
+</p>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone.html'>
+      
+    </a>
+    </div>
+    <div class="col-sm-10">
+      <h5>
+        Playing with openstack keystone
+      </h5>
+    </div>
+    </div>
+  </div>
+      In the cloud computing, alongside of the hosting monsters such as amazon or google, there is the Openstack Platform.
+Openstack is not a single software, it is more a galaxy of components aim to control the infrastructure, such as hardware pools, storage, network. The management can then be done via a Web based interface or via a bunch of RESTful API.
+I would like to evaluate its identity service named keystone and use it as a AuthN and AuthZ backend for my simple_iaas example.
+
+  <a href='https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone.html'>Read more →</a>
+</article> 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2015/11/13/securing-the-api-in-go.html">Securing the API (in GO)</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-11-13T09:21:30Z">Fri Nov 13, 2015</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/go" rel="tag">go</a>, <a href="/tags/api" rel="tag">API</a>, <a href="/tags/simple_iaas" rel="tag">simple_iaas</a>
+
+</p>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2015/11/13/securing-the-api-in-go.html'>
+      
+    </a>
+    </div>
+    <div class="col-sm-10">
+      <h5>
+        Securing the API with JWT
+      </h5>
+    </div>
+    </div>
+  </div>
+      I&rsquo;ve created a couple of posts about creating an API (mainly in GO). By now, the API is open. Now I will implement a basic authentication and accreditation mechanism with a little help from JWT
+What is a Json Web Token According to the RFC 7519, it is a
+ compact, URL-safe means of representing claims to be transferred between two parties. The claims in a JWT are encoded as a JSON object that is used as the payload of a JSON Web Signature (JWS) structure or as the plaintext of a JSON Web Encryption (JWE) structure, enabling the claims to be digitally signed or integrity protected with a Message Authentication Code (MAC) and/or encrypted.
+
+  <a href='https://blog.owulveryck.info/2015/11/13/securing-the-api-in-go.html'>Read more →</a>
+</article> 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html">Simple IaaS API documentation with swagger</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-11-11T14:24:43&#43;01:00">Wed Nov 11, 2015</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/swagger" rel="tag">swagger</a>, <a href="/tags/api" rel="tag">api</a>, <a href="/tags/documentation" rel="tag">documentation</a>, <a href="/tags/json" rel="tag">JSON</a>, <a href="/tags/rest" rel="tag">REST</a>, <a href="/tags/simple-iaas" rel="tag">simple-iaas</a>
+
+</p>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html'>
+      
+    </a>
+    </div>
+    <div class="col-sm-10">
+      <h5>
+        Experience with swagger-ui as a documentation tool for the simple iaas api
+      </h5>
+    </div>
+    </div>
+  </div>
+      In a previous post I have explained how to develop a very simple API server.
+Without the associated documentation, the API will be useless. Let&rsquo;s see how we can use swagger-ui in this project to generate a beautiful documentation.
+Note I&rsquo;m blogging and experimenting, of course, in the &ldquo;real&rdquo; life, it&rsquo;s a lot better to code the API interface before implementing the middleware.
+About Swagger Swagger is a framework. On top of the swagger project is composed of several tools.
+
+  <a href='https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html'>Read more →</a>
+</article> 
+
+
+
+
+<nav class="blog-pagination">
+  
+  <a class="btn btn-outline-primary" href="/page/10.html" role="button">Previous page</a>
+  <a class="btn btn-outline-primary" href="/page/12.html" role="button">Next page</a>
+  
+  
+  
+</nav>
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

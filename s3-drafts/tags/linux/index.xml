@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on Unladen swallow</title>
+    <link>https://blog.owulveryck.info/tags/linux.html</link>
+    <description>Recent content in Linux on Unladen swallow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>All rights reserved - 2015/2017</copyright>
+    <lastBuildDate>Mon, 29 Aug 2016 21:58:17 +0200</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Getting weather data from the station to the raspberry</title>
+      <link>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</link>
+      <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</guid>
+      <description>Introduction A bunch of friends/colleagues offered me a raspberry pi 3. It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe the center of an alarm&amp;hellip;. Maybe a spotify player&amp;hellip;
+Anyway, I have installed raspbian and I&amp;rsquo;m now playing with it.
+Yesterday evening, as I was about to go to bed, I&amp;rsquo;ve had a very bad idea&amp;hellip; I&amp;rsquo;ve linked together my rpi and my Oregon Weather Station.</description>
+    </item>
+    
+  </channel>
+</rss>

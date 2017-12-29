@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Simple_iaas on Unladen swallow</title>
+    <link>https://blog.owulveryck.info/tags/simple_iaas.html</link>
+    <description>Recent content in Simple_iaas on Unladen swallow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>All rights reserved - 2015/2017</copyright>
+    <lastBuildDate>Fri, 13 Nov 2015 09:21:30 +0000</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/simple_iaas/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Securing the API (in GO)</title>
+      <link>https://blog.owulveryck.info/2015/11/13/securing-the-api-in-go.html</link>
+      <pubDate>Fri, 13 Nov 2015 09:21:30 +0000</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2015/11/13/securing-the-api-in-go.html</guid>
+      <description>I&amp;rsquo;ve created a couple of posts about creating an API (mainly in GO). By now, the API is open. Now I will implement a basic authentication and accreditation mechanism with a little help from JWT
+What is a Json Web Token According to the RFC 7519, it is a
+ compact, URL-safe means of representing claims to be transferred between two parties. The claims in a JWT are encoded as a JSON object that is used as the payload of a JSON Web Signature (JWS) structure or as the plaintext of a JSON Web Encryption (JWE) structure, enabling the claims to be digitally signed or integrity protected with a Message Authentication Code (MAC) and/or encrypted.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="Linda&#39;s evalc, a (tuple)space oddity" />
+<meta property="og:description" content="Third article about writing a distributed linda interpreter" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity.html" />
+
+  <meta property="og:image" content="https://blog.owulveryck.info/assets/images/the_stars_look_different.jpg" />
+
+
+
+<meta property="article:published_time" content="2017-03-13T20:54:27&#43;01:00"/>
+
+<meta property="article:modified_time" content="2017-03-13T20:54:27&#43;01:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Linda&#39;s evalc, a (tuple)space oddity">
+<meta itemprop="description" content="Third article about writing a distributed linda interpreter">
+
+
+<meta itemprop="datePublished" content="2017-03-13T20:54:27&#43;01:00" />
+<meta itemprop="dateModified" content="2017-03-13T20:54:27&#43;01:00" />
+<meta itemprop="wordCount" content="1103">
+
+  <meta itemprop="image" content="https://blog.owulveryck.info/assets/images/the_stars_look_different.jpg">
+
+
+
+<meta itemprop="keywords" content="zygomys,Linda,golang,etcd," />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image:src" content="https://blog.owulveryck.info/assets/images/the_stars_look_different.jpg"/>
+<meta name="twitter:title" content="Linda&#39;s evalc, a (tuple)space oddity"/>
+<meta name="twitter:description" content="Third article about writing a distributed linda interpreter"/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity.html">
+
+    <title>Linda&rsquo;s evalc, a (tuple)space oddity | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity.html">Linda&rsquo;s evalc, a (tuple)space oddity</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-03-13T20:54:27&#43;01:00">Mon Mar 13, 2017</time> by Olivier Wulveryck in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="/categories/coordination-language" rel="category tag">coordination language</a>
+
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/zygomys" rel="tag">zygomys</a>, <a href="/tags/linda" rel="tag">Linda</a>, <a href="/tags/golang" rel="tag">golang</a>, <a href="/tags/etcd" rel="tag">etcd</a>
+
+</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity.html'>
+      
+        <div class="crop">
+      <img src="/assets/images/the_stars_look_different.jpg" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<p>For a change, I will start with a good soundtrack</p>
+
+<iframe src="https://embed.spotify.com/?uri=spotify:track:72Z17vmmeQKAg8bptWvpVG&theme=white" width="220" height="80" frameborder="0" allowtransparency="true"></iframe>
+
+<p>(<a href="https://www.youtube.com/watch?v=iYYRH4apXDo">youtube version</a> for those who are spotify-less)</p>
+
+<hr />
+
+<p>This is my third article about the distributed coordination language Linda.</p>
+
+<p>The final target of the work is to use this coordination mechanism to deploy and maintain applications based on the description of their topology (using, for example, TOSCA as a DSL).</p>
+
+<p>Last time, I introduced a lisp based language (zygomys) as an embedded programing mechanism to describe the business logic.</p>
+
+<p>Today I will explain how I have implemented a new <em>action</em> in the linda language to achieve a new step: to distribute the work among different nodes.</p>
+
+<p>My test scenario remains the &ldquo;dining of the philosophers&rdquo;.</p>
+
+<h1 id="introducing-evalc">Introducing <em>evalc</em></h1>
+
+<p>Linda is a coordination language, but the language which is more than 30 years old, has not been designed with the idea of running on multiple hosts.
+The basic primitives of the language do not allow remote execution.</p>
+
+<p>What I need is a sort of <em>eval</em> function that would trigger the execution of the evaluation on another host instead of another goroutine.</p>
+
+<p>I do not care about catching the result of the execution as it will be posted to the tuple space.
+Indeed, if more coordination between the actors of this RPC is needed, it can be encoded using the in/out mechanism of linda.</p>
+
+<p>Therefore, I have decided to introduce a new primitive called <em>evalc</em> (for eval compute&hellip; Yeah I know, I have imagination)</p>
+
+<h1 id="implementing-evalc">Implementing <em>evalc</em></h1>
+
+<p>The evalc will not trigger a function on a new host.
+Instead, each participating host will run a sort of agent (actually a clone of the zygo interpreter) that will watch a certain type of event (tainted with the evalc) and will then execute a function.</p>
+
+<p>The tuple space acts like a communication channel and this implementation is like a kind of <a href="https://en.wikipedia.org/wiki/Communicating_sequential_processes">CSP</a> which I like a lot.</p>
+
+<p>The <em>evalc</em> will work exactly as its equivalent <em>eval</em>. Therefore the function declaration in go will look like this:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">l</span> <span class="o">*</span><span class="nx">Linda</span><span class="p">)</span> <span class="nx">EvalC</span><span class="p">(</span><span class="nx">env</span> <span class="o">*</span><span class="nx">zygo</span><span class="p">.</span><span class="nx">Glisp</span><span class="p">,</span> <span class="nx">name</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="nx">zygo</span><span class="p">.</span><span class="nx">Sexp</span><span class="p">)</span> <span class="p">(</span><span class="nx">zygo</span><span class="p">.</span><span class="nx">Sexp</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="nx">zygo</span><span class="p">.</span><span class="nx">SexpNull</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="p">}</span></code></pre></div>
+
+<h2 id="first-attempt">First attempt</h2>
+
+<p>At first I thought I could simply gob/encode the <code>args</code> which contains the <code>SexpFunction</code>, post it in the tuple space under a prefixed key. Then the worker would read an execute it in a newly created <code>glisp</code> env.</p>
+
+<p>That didn&rsquo;t work mainly because the <code>SexpFunction</code> does not have any exported fields, therefore I cannot easily encode/decode it.</p>
+
+<p>I though then that I could encode the <code>datastack</code> and post it in the tuple space. I could then decode it in the worker.</p>
+
+<p>I asked for some advice to the author of zygomys <a href="https://www.linkedin.com/in/jason-e-aten-ph-d-45a31318">Jason E. Aten</a> (aka <a href="https://github.com/glycerine">glycerine</a>)</p>
+
+<p>Here is what he told me (thank you Jason btw):</p>
+
+<p><em>Evaluating an arbitrary expression remotely will be challenging because an expression can refer to any variable in the environment, and so would theoretically require a copying of the whole environment&ndash;the heap as well as the datastack.</em></p>
+
+<p>And of course he is right!
+So I will keep the idea of encoding the whole environment and send it to the workers for a later implementation.
+It would need to change the zygomys implementation a lot so export and import both stack. That is too much for now.</p>
+
+<h2 id="second-attempt">Second attempt</h2>
+
+<p>What I did as a temporary solution is a lot simpler and not elegant at all: I have posted the function and the variables in the tuple space and then I am evaluating it in a newly created env.</p>
+
+<p>The main problem is that I cannot access to variables and user function defined outside of the scope of the function. But that will do the trick for now.</p>
+
+<p>Regarding the problem of the philosopher, I had to change the definition of <code>phil</code> within my lisp code so it do not call <code>(eat)</code> and <code>(think)</code> functions anymore.</p>
+
+<p>Here is what is posted in the tuple space when the evalc function is called:
+<div class="highlight"><pre class="chroma"><code class="language-lisp" data-lang="lisp"><span class="p">(</span><span class="nv">defn</span> <span class="nv">phil</span> <span class="nv">[i</span> <span class="nv">num]</span> <span class="p">((</span><span class="nv">begin</span> <span class="p">(</span><span class="nv">begin</span> <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v is thinking\n&#34;</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nv">sleep</span> <span class="mi">10000</span><span class="p">)</span> <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;/%v is thinking\n&#34;</span> <span class="nv">i</span><span class="p">))</span> <span class="p">(</span><span class="nv">in</span> <span class="s">&#34;room ticket&#34;</span><span class="p">)</span> <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v is in the room\n&#34;</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nv">in</span> <span class="s">&#34;chopstick&#34;</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v took the %v&#39;s chopstick\n&#34;</span> <span class="nv">i</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nv">in</span> <span class="s">&#34;chopstick&#34;</span> <span class="p">(</span><span class="nv">mod</span> <span class="p">(</span><span class="nv">+</span> <span class="nv">i</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">num</span><span class="p">))</span> <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v took the %v&#39;s chopstick\n&#34;</span> <span class="nv">i</span> <span class="p">(</span><span class="nv">mod</span> <span class="p">(</span><span class="nv">+</span> <span class="nv">i</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">num</span><span class="p">))</span> <span class="p">(</span><span class="nv">begin</span> <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v is eating\n&#34;</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nv">sleep</span> <span class="mi">10000</span><span class="p">)</span> <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;/%v is eating\n&#34;</span> <span class="nv">i</span><span class="p">))</span> <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v released the %v&#39;s chopstick\n&#34;</span> <span class="nv">i</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nv">out</span> <span class="s">&#34;chopstick&#34;</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v released the %v&#39;s chopstick\n&#34;</span> <span class="nv">i</span> <span class="p">(</span><span class="nv">mod</span> <span class="p">(</span><span class="nv">+</span> <span class="nv">i</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">num</span><span class="p">))</span> <span class="p">(</span><span class="nv">out</span> <span class="s">&#34;chopstick&#34;</span> <span class="p">(</span><span class="nv">mod</span> <span class="p">(</span><span class="nv">+</span> <span class="nv">i</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">num</span><span class="p">))</span> <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v left the room\n&#34;</span> <span class="nv">i</span><span class="p">)</span> <span class="p">(</span><span class="nv">out</span> <span class="s">&#34;room ticket&#34;</span><span class="p">)</span> <span class="p">(</span><span class="nv">phil</span> <span class="nv">i</span> <span class="nv">num</span><span class="p">))))</span> <span class="mi">0</span> <span class="nv">5</span></code></pre></div></p>
+
+<p>In the worker process, I am creating a new environment, loading the function (the <code>defn</code> part), and constructing an expression to be evaluated by the env.
+This is what the environment evalutates:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-lisp" data-lang="lisp"><span class="p">(</span><span class="nv">defn</span> <span class="nv">phil</span> <span class="nv">[i</span> <span class="nv">num]</span> <span class="p">(</span>
+   <span class="p">(</span><span class="nv">begin</span>
+    <span class="p">(</span><span class="nv">begin</span>
+     <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v is thinking\n&#34;</span> <span class="nv">i</span><span class="p">)</span>
+     <span class="p">(</span><span class="nv">sleep</span> <span class="mi">10000</span><span class="p">)</span>
+     <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;/%v is thinking\n&#34;</span> <span class="nv">i</span><span class="p">))</span>
+    <span class="p">(</span><span class="nv">in</span> <span class="s">&#34;room ticket&#34;</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v is in the room\n&#34;</span> <span class="nv">i</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">in</span> <span class="s">&#34;chopstick&#34;</span> <span class="nv">i</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v took the %v&#39;s chopstick\n&#34;</span> <span class="nv">i</span> <span class="nv">i</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">in</span> <span class="s">&#34;chopstick&#34;</span> <span class="p">(</span><span class="nv">mod</span> <span class="p">(</span><span class="nv">+</span> <span class="nv">i</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">num</span><span class="p">))</span>
+    <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v took the %v&#39;s chopstick\n&#34;</span> <span class="nv">i</span> <span class="p">(</span><span class="nv">mod</span> <span class="p">(</span><span class="nv">+</span> <span class="nv">i</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">num</span><span class="p">))</span>
+    <span class="p">(</span><span class="nv">begin</span>
+     <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v is eating\n&#34;</span> <span class="nv">i</span><span class="p">)</span>
+     <span class="p">(</span><span class="nv">sleep</span> <span class="mi">10000</span><span class="p">)</span>
+     <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;/%v is eating\n&#34;</span> <span class="nv">i</span><span class="p">))</span>
+    <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v released the %v&#39;s chopstick\n&#34;</span> <span class="nv">i</span> <span class="nv">i</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">out</span> <span class="s">&#34;chopstick&#34;</span> <span class="nv">i</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v released the %v&#39;s chopstick\n&#34;</span> <span class="nv">i</span> <span class="p">(</span><span class="nv">mod</span> <span class="p">(</span><span class="nv">+</span> <span class="nv">i</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">num</span><span class="p">))</span>
+    <span class="p">(</span><span class="nv">out</span> <span class="s">&#34;chopstick&#34;</span> <span class="p">(</span><span class="nv">mod</span> <span class="p">(</span><span class="nv">+</span> <span class="nv">i</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">num</span><span class="p">))</span>
+    <span class="p">(</span><span class="nv">printf</span> <span class="s">&#34;%v left the room\n&#34;</span> <span class="nv">i</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">out</span> <span class="s">&#34;room ticket&#34;</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">phil</span> <span class="nv">i</span> <span class="nv">num</span><span class="p">))))</span>
+<span class="p">(</span><span class="nv">phil</span> <span class="mi">0</span> <span class="mi">5</span><span class="p">)</span></code></pre></div>
+
+<h1 id="runtime">Runtime</h1>
+
+<h2 id="running-it-locally-one-etcd-and-several-workers">Running it locally: one etcd and several workers</h2>
+
+<p>To run it locally I need:</p>
+
+<ul>
+<li>a local instance of <code>etcd</code></li>
+<li>5 workers.</li>
+</ul>
+
+<p>Each worker will watch for a new event in the tuple space.
+Then I can trigger the execution of the logic with a sixth worker that will read the lisp code, and execute it.</p>
+
+<p>Here is a screenshot of the execution
+<img src="https://raw.githubusercontent.com/ditrit/go-linda/master/doc/v0.3.png" alt="Runtime screenshot" /></p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Jason E. Aten also told me about <em>sigils</em> as a way to discriminate the local variables from the variables present in the tuple space.
+I haven&rsquo;t worked on it yet, but I think that I will use those <em>sigils</em> to enhance my linda implementation. It can be usefull for the matching of templates and formals.</p>
+
+<p>By now, I have something that is able to run a basic theorical coordination problem.</p>
+
+<p>Now I think that I will go back to the application management task and see how I can encode the TOSCA workflow so it can be used by this mechanism.</p>
+
+<p>Meanwhile, I will try to test this setup on a worldwide cluster (maybe based on CoreOS).</p>
+
+<hr />
+
+<p>Credit:</p>
+
+<p>The illustration has been found <a href="https://www.flickr.com/photos/joebehr/23704122254">here</a></p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2017%2f03%2f13%2flindas-evalc-a-tuplespace-oddity.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f03%2f13%2flindas-evalc-a-tuplespace-oddity.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f03%2f13%2flindas-evalc-a-tuplespace-oddity.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2017%2f03%2f13%2flindas-evalc-a-tuplespace-oddity.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

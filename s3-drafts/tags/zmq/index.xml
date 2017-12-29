@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Zmq on Unladen swallow</title>
+    <link>https://blog.owulveryck.info/tags/zmq.html</link>
+    <description>Recent content in Zmq on Unladen swallow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>All rights reserved - 2015/2017</copyright>
+    <lastBuildDate>Thu, 22 Oct 2015 20:40:36 +0200</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/zmq/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Ruby / ZeroMQ / GO</title>
+      <link>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html</link>
+      <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html</guid>
+      <description>Abtract I really like go as a programming language. It is a good tool to develop web restful API service.
+On the other hand, ruby and its framework rails has also been wildly used to achieve the same goal.
+Therefore we may be facing a &amp;ldquo;legacy&amp;rdquo; ruby developpement that we would like to connect to our brand new go framework. 0MQ may be a perfect choice for intefacing the two languages.</description>
+    </item>
+    
+  </channel>
+</rss>

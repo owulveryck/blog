@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="tosca n quads" />
+<meta property="og:description" content="Tosca tosca_definitions_version:tosca_simple_yaml_1_0description:TemplatefordeployingMySQLanddatabasecontent.topology_template:inputs:# omitted here for brevitynode_templates:my_db:type:tosca.nodes.Database.MySQLproperties:name:{get_input:database_name}user:{get_input:database_user}password:{get_input:database_password}port:{get_input:database_port}artifacts:db_content:file:files/my_db_content.txttype:tosca.artifacts.Filerequirements:-host:mysqlinterfaces:Standard:create:implementation:db_create.shinputs:# Copy DB file artifact to server&#39;s staging areadb_data:{get_artifact:[SELF,db_content]}mysql:type:tosca.nodes.DBMS.MySQLproperties:root_password:{get_input:mysql_rootpw}port:{get_input:mysql_port}requirements:-host:db_serverdb_server:type:tosca.nodes.Computecapabilities:# omitted here for brevity n-quads &#34;topology_template&#34;&#34;input&#34;&#34;database_name&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_user&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_password&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_port&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;mysql_rootpw&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;mysql_port&#34;.&#34;my_db&#34;&#34;type&#34;&#34;tosca.nodes.Database.MySQL&#34;.&#34;my_db&#34;&#34;property&#34;&#34;name&#34;.&#34;name&#34;&#34;value&#34;&#34;database_name&#34;.&#34;my_db&#34;&#34;property&#34;&#34;user&#34;.&#34;user&#34;&#34;value&#34;&#34;database_user&#34;.&#34;my_db&#34;&#34;property&#34;&#34;password&#34;.&#34;password&#34;&#34;value&#34;&#34;database_password&#34;.&#34;my_db&#34;&#34;property&#34;&#34;dbport&#34;.&#34;dbport&#34;&#34;value&#34;&#34;database_port&#34;.&#34;my_db&#34;&#34;artifact&#34;&#34;db_content&#34;.&#34;db_content&#34;&#34;file&#34;&#34;files/my_db_content.txt&#34;.&#34;db_content&#34;&#34;type&#34;&#34;tosca.artifacts.File&#34;.&#34;my_db&#34;&#34;interface&#34;&#34;Standard&#34;.&#34;my_db&#34;&#34;interface_create&#34;&#34;create&#34;.&#34;my_db&#34;&#34;requires&#34;&#34;mysql&#34;.&#34;create&#34;&#34;implementation&#34;&#34;db_create.sh&#34;.&#34;create&#34;&#34;input&#34;&#34;db_data&#34;.&#34;db_data&#34;&#34;value&#34;&#34;db_content&#34;.&#34;mysql&#34;&#34;type&#34;&#34;tosca.nodes.DBMS.MySQL&#34;.&#34;mysql&#34;&#34;property&#34;&#34;root_password&#34;.&#34;root_password&#34;&#34;value&#34;&#34;mysql_rootpw&#34;.&#34;mysql&#34;&#34;property&#34;&#34;port&#34;.&#34;port&#34;&#34;value&#34;&#34;mysql_port&#34;.&#34;mysql&#34;&#34;requires&#34;&#34;db_server&#34;.&#34;db_server&#34;&#34;type&#34;&#34;tosca.nodes.Compute&#34;.
+Let&rsquo;s visualize that:
+#!/usr/bin/zsh ( echo &#34;digraph G {&#34; cat $1 | while read subject predicate object trash do echo &#34;$subject-&gt; $object[ label = &#34;$predicate&#34; ];&#34; done echo &#34;}&#34; ) | dot -Tsvg &gt; output.svg" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2017/04/30/tosca-n-quads.html" />
+
+  <meta property="og:image" content="http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.1/csprd02/TOSCA-Simple-Profile-YAML-v1.1-csprd02_files/image004.png" />
+
+
+
+<meta property="article:published_time" content="2017-04-30T21:16:38&#43;02:00"/>
+
+<meta property="article:modified_time" content="2017-04-30T21:16:38&#43;02:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="tosca n quads">
+<meta itemprop="description" content="Tosca tosca_definitions_version:tosca_simple_yaml_1_0description:TemplatefordeployingMySQLanddatabasecontent.topology_template:inputs:# omitted here for brevitynode_templates:my_db:type:tosca.nodes.Database.MySQLproperties:name:{get_input:database_name}user:{get_input:database_user}password:{get_input:database_password}port:{get_input:database_port}artifacts:db_content:file:files/my_db_content.txttype:tosca.artifacts.Filerequirements:-host:mysqlinterfaces:Standard:create:implementation:db_create.shinputs:# Copy DB file artifact to server&#39;s staging areadb_data:{get_artifact:[SELF,db_content]}mysql:type:tosca.nodes.DBMS.MySQLproperties:root_password:{get_input:mysql_rootpw}port:{get_input:mysql_port}requirements:-host:db_serverdb_server:type:tosca.nodes.Computecapabilities:# omitted here for brevity n-quads &#34;topology_template&#34;&#34;input&#34;&#34;database_name&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_user&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_password&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_port&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;mysql_rootpw&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;mysql_port&#34;.&#34;my_db&#34;&#34;type&#34;&#34;tosca.nodes.Database.MySQL&#34;.&#34;my_db&#34;&#34;property&#34;&#34;name&#34;.&#34;name&#34;&#34;value&#34;&#34;database_name&#34;.&#34;my_db&#34;&#34;property&#34;&#34;user&#34;.&#34;user&#34;&#34;value&#34;&#34;database_user&#34;.&#34;my_db&#34;&#34;property&#34;&#34;password&#34;.&#34;password&#34;&#34;value&#34;&#34;database_password&#34;.&#34;my_db&#34;&#34;property&#34;&#34;dbport&#34;.&#34;dbport&#34;&#34;value&#34;&#34;database_port&#34;.&#34;my_db&#34;&#34;artifact&#34;&#34;db_content&#34;.&#34;db_content&#34;&#34;file&#34;&#34;files/my_db_content.txt&#34;.&#34;db_content&#34;&#34;type&#34;&#34;tosca.artifacts.File&#34;.&#34;my_db&#34;&#34;interface&#34;&#34;Standard&#34;.&#34;my_db&#34;&#34;interface_create&#34;&#34;create&#34;.&#34;my_db&#34;&#34;requires&#34;&#34;mysql&#34;.&#34;create&#34;&#34;implementation&#34;&#34;db_create.sh&#34;.&#34;create&#34;&#34;input&#34;&#34;db_data&#34;.&#34;db_data&#34;&#34;value&#34;&#34;db_content&#34;.&#34;mysql&#34;&#34;type&#34;&#34;tosca.nodes.DBMS.MySQL&#34;.&#34;mysql&#34;&#34;property&#34;&#34;root_password&#34;.&#34;root_password&#34;&#34;value&#34;&#34;mysql_rootpw&#34;.&#34;mysql&#34;&#34;property&#34;&#34;port&#34;.&#34;port&#34;&#34;value&#34;&#34;mysql_port&#34;.&#34;mysql&#34;&#34;requires&#34;&#34;db_server&#34;.&#34;db_server&#34;&#34;type&#34;&#34;tosca.nodes.Compute&#34;.
+Let&rsquo;s visualize that:
+#!/usr/bin/zsh ( echo &#34;digraph G {&#34; cat $1 | while read subject predicate object trash do echo &#34;$subject-&gt; $object[ label = &#34;$predicate&#34; ];&#34; done echo &#34;}&#34; ) | dot -Tsvg &gt; output.svg">
+
+
+<meta itemprop="datePublished" content="2017-04-30T21:16:38&#43;02:00" />
+<meta itemprop="dateModified" content="2017-04-30T21:16:38&#43;02:00" />
+<meta itemprop="wordCount" content="55">
+
+  <meta itemprop="image" content="http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.1/csprd02/TOSCA-Simple-Profile-YAML-v1.1-csprd02_files/image004.png">
+
+
+
+<meta itemprop="keywords" content="tag1,tag2," />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image:src" content="http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.1/csprd02/TOSCA-Simple-Profile-YAML-v1.1-csprd02_files/image004.png"/>
+<meta name="twitter:title" content="tosca n quads"/>
+<meta name="twitter:description" content="Tosca tosca_definitions_version:tosca_simple_yaml_1_0description:TemplatefordeployingMySQLanddatabasecontent.topology_template:inputs:# omitted here for brevitynode_templates:my_db:type:tosca.nodes.Database.MySQLproperties:name:{get_input:database_name}user:{get_input:database_user}password:{get_input:database_password}port:{get_input:database_port}artifacts:db_content:file:files/my_db_content.txttype:tosca.artifacts.Filerequirements:-host:mysqlinterfaces:Standard:create:implementation:db_create.shinputs:# Copy DB file artifact to server&#39;s staging areadb_data:{get_artifact:[SELF,db_content]}mysql:type:tosca.nodes.DBMS.MySQLproperties:root_password:{get_input:mysql_rootpw}port:{get_input:mysql_port}requirements:-host:db_serverdb_server:type:tosca.nodes.Computecapabilities:# omitted here for brevity n-quads &#34;topology_template&#34;&#34;input&#34;&#34;database_name&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_user&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_password&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_port&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;mysql_rootpw&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;mysql_port&#34;.&#34;my_db&#34;&#34;type&#34;&#34;tosca.nodes.Database.MySQL&#34;.&#34;my_db&#34;&#34;property&#34;&#34;name&#34;.&#34;name&#34;&#34;value&#34;&#34;database_name&#34;.&#34;my_db&#34;&#34;property&#34;&#34;user&#34;.&#34;user&#34;&#34;value&#34;&#34;database_user&#34;.&#34;my_db&#34;&#34;property&#34;&#34;password&#34;.&#34;password&#34;&#34;value&#34;&#34;database_password&#34;.&#34;my_db&#34;&#34;property&#34;&#34;dbport&#34;.&#34;dbport&#34;&#34;value&#34;&#34;database_port&#34;.&#34;my_db&#34;&#34;artifact&#34;&#34;db_content&#34;.&#34;db_content&#34;&#34;file&#34;&#34;files/my_db_content.txt&#34;.&#34;db_content&#34;&#34;type&#34;&#34;tosca.artifacts.File&#34;.&#34;my_db&#34;&#34;interface&#34;&#34;Standard&#34;.&#34;my_db&#34;&#34;interface_create&#34;&#34;create&#34;.&#34;my_db&#34;&#34;requires&#34;&#34;mysql&#34;.&#34;create&#34;&#34;implementation&#34;&#34;db_create.sh&#34;.&#34;create&#34;&#34;input&#34;&#34;db_data&#34;.&#34;db_data&#34;&#34;value&#34;&#34;db_content&#34;.&#34;mysql&#34;&#34;type&#34;&#34;tosca.nodes.DBMS.MySQL&#34;.&#34;mysql&#34;&#34;property&#34;&#34;root_password&#34;.&#34;root_password&#34;&#34;value&#34;&#34;mysql_rootpw&#34;.&#34;mysql&#34;&#34;property&#34;&#34;port&#34;.&#34;port&#34;&#34;value&#34;&#34;mysql_port&#34;.&#34;mysql&#34;&#34;requires&#34;&#34;db_server&#34;.&#34;db_server&#34;&#34;type&#34;&#34;tosca.nodes.Compute&#34;.
+Let&rsquo;s visualize that:
+#!/usr/bin/zsh ( echo &#34;digraph G {&#34; cat $1 | while read subject predicate object trash do echo &#34;$subject-&gt; $object[ label = &#34;$predicate&#34; ];&#34; done echo &#34;}&#34; ) | dot -Tsvg &gt; output.svg"/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2017/04/30/tosca-n-quads.html">
+
+    <title>tosca n quads | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/04/30/tosca-n-quads.html">tosca n quads</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-04-30T21:16:38&#43;02:00">Sun Apr 30, 2017</time> by Olivier Wulveryck in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="/categories/category" rel="category tag">category</a>
+
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/tag1" rel="tag">tag1</a>, <a href="/tags/tag2" rel="tag">tag2</a>
+
+</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/04/30/tosca-n-quads.html'>
+      
+        <div class="crop">
+      <img src="http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.1/csprd02/TOSCA-Simple-Profile-YAML-v1.1-csprd02_files/image004.png" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<h1 id="tosca">Tosca</h1>
+
+<p><img src="http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.1/csprd02/TOSCA-Simple-Profile-YAML-v1.1-csprd02_files/image004.png" alt="http://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.1/csprd02/TOSCA-Simple-Profile-YAML-v1.1-csprd02_files/image004.png" /></p>
+
+<div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml">tosca_definitions_version<span class="p">:</span><span class="w"> </span>tosca_simple_yaml_1_<span class="m">0</span><span class="w">
+</span><span class="w"> 
+</span><span class="w"></span>description<span class="p">:</span><span class="w"> </span>Template<span class="w"> </span>for<span class="w"> </span>deploying<span class="w"> </span>MySQL<span class="w"> </span>and<span class="w"> </span>database<span class="w"> </span>content.<span class="w">
+</span><span class="w"> 
+</span><span class="w"></span>topology_template<span class="p">:</span><span class="w">
+</span><span class="w">  </span>inputs<span class="p">:</span><span class="w">
+</span><span class="w">    </span><span class="c"># omitted here for brevity</span><span class="w">
+</span><span class="w"> 
+</span><span class="w">  </span>node_templates<span class="p">:</span><span class="w">
+</span><span class="w">    </span>my_db<span class="p">:</span><span class="w">
+</span><span class="w">      </span>type<span class="p">:</span><span class="w"> </span>tosca.nodes.Database.MySQL<span class="w">
+</span><span class="w">      </span>properties<span class="p">:</span><span class="w">
+</span><span class="w">        </span>name<span class="p">:</span><span class="w"> </span>{<span class="w"> </span>get_input<span class="p">:</span><span class="w"> </span>database_name<span class="w"> </span>}<span class="w">
+</span><span class="w">        </span>user<span class="p">:</span><span class="w"> </span>{<span class="w"> </span>get_input<span class="p">:</span><span class="w"> </span>database_user<span class="w"> </span>}<span class="w">
+</span><span class="w">        </span>password<span class="p">:</span><span class="w"> </span>{<span class="w"> </span>get_input<span class="p">:</span><span class="w"> </span>database_password<span class="w"> </span>}<span class="w">
+</span><span class="w">        </span>port<span class="p">:</span><span class="w"> </span>{<span class="w"> </span>get_input<span class="p">:</span><span class="w"> </span>database_port<span class="w"> </span>}<span class="w">
+</span><span class="w">      </span>artifacts<span class="p">:</span><span class="w">
+</span><span class="w">        </span>db_content<span class="p">:</span><span class="w">
+</span><span class="w">          </span>file<span class="p">:</span><span class="w"> </span>files/my_db_content.txt<span class="w">
+</span><span class="w">          </span>type<span class="p">:</span><span class="w"> </span>tosca.artifacts.File<span class="w">
+</span><span class="w">      </span>requirements<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>host<span class="p">:</span><span class="w"> </span>mysql<span class="w">
+</span><span class="w">      </span>interfaces<span class="p">:</span><span class="w">
+</span><span class="w">        </span>Standard<span class="p">:</span><span class="w">
+</span><span class="w">          </span>create<span class="p">:</span><span class="w">
+</span><span class="w">            </span>implementation<span class="p">:</span><span class="w"> </span>db_create.sh<span class="w">
+</span><span class="w">            </span>inputs<span class="p">:</span><span class="w">
+</span><span class="w">              </span><span class="c"># Copy DB file artifact to server&#39;s staging area</span><span class="w">
+</span><span class="w">              </span>db_data<span class="p">:</span><span class="w"> </span>{<span class="w"> </span>get_artifact<span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span>SELF<span class="p">,</span><span class="w"> </span>db_content<span class="w"> </span><span class="p">]</span><span class="w"> </span>}<span class="w">
+</span><span class="w"> 
+</span><span class="w">    </span>mysql<span class="p">:</span><span class="w">
+</span><span class="w">      </span>type<span class="p">:</span><span class="w"> </span>tosca.nodes.DBMS.MySQL<span class="w">
+</span><span class="w">      </span>properties<span class="p">:</span><span class="w">
+</span><span class="w">        </span>root_password<span class="p">:</span><span class="w"> </span>{<span class="w"> </span>get_input<span class="p">:</span><span class="w"> </span>mysql_rootpw<span class="w"> </span>}<span class="w">
+</span><span class="w">        </span>port<span class="p">:</span><span class="w"> </span>{<span class="w"> </span>get_input<span class="p">:</span><span class="w"> </span>mysql_port<span class="w"> </span>}<span class="w">
+</span><span class="w">      </span>requirements<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>host<span class="p">:</span><span class="w"> </span>db_server<span class="w">
+</span><span class="w"> 
+</span><span class="w">    </span>db_server<span class="p">:</span><span class="w">
+</span><span class="w">      </span>type<span class="p">:</span><span class="w"> </span>tosca.nodes.Compute<span class="w">
+</span><span class="w">      </span>capabilities<span class="p">:</span><span class="w">
+</span><span class="w">        </span><span class="c"># omitted here for brevity</span></code></pre></div>
+
+<h1 id="n-quads">n-quads</h1>
+
+<p><div class="highlight"><pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="s2">&#34;topology_template&#34;</span><span class="w"> </span><span class="s2">&#34;input&#34;</span><span class="w"> </span><span class="s2">&#34;database_name&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;topology_template&#34;</span><span class="w"> </span><span class="s2">&#34;input&#34;</span><span class="w"> </span><span class="s2">&#34;database_user&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;topology_template&#34;</span><span class="w"> </span><span class="s2">&#34;input&#34;</span><span class="w"> </span><span class="s2">&#34;database_password&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;topology_template&#34;</span><span class="w"> </span><span class="s2">&#34;input&#34;</span><span class="w"> </span><span class="s2">&#34;database_port&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;topology_template&#34;</span><span class="w"> </span><span class="s2">&#34;input&#34;</span><span class="w"> </span><span class="s2">&#34;mysql_rootpw&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;topology_template&#34;</span><span class="w"> </span><span class="s2">&#34;input&#34;</span><span class="w"> </span><span class="s2">&#34;mysql_port&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;my_db&#34;</span><span class="w"> </span><span class="s2">&#34;type&#34;</span><span class="w"> </span><span class="s2">&#34;tosca.nodes.Database.MySQL&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;my_db&#34;</span><span class="w"> </span><span class="s2">&#34;property&#34;</span><span class="w"> </span><span class="s2">&#34;name&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;name&#34;</span><span class="w"> </span><span class="s2">&#34;value&#34;</span><span class="w"> </span><span class="s2">&#34;database_name&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;my_db&#34;</span><span class="w"> </span><span class="s2">&#34;property&#34;</span><span class="w"> </span><span class="s2">&#34;user&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;user&#34;</span><span class="w"> </span><span class="s2">&#34;value&#34;</span><span class="w"> </span><span class="s2">&#34;database_user&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;my_db&#34;</span><span class="w"> </span><span class="s2">&#34;property&#34;</span><span class="w"> </span><span class="s2">&#34;password&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;password&#34;</span><span class="w"> </span><span class="s2">&#34;value&#34;</span><span class="w"> </span><span class="s2">&#34;database_password&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;my_db&#34;</span><span class="w"> </span><span class="s2">&#34;property&#34;</span><span class="w"> </span><span class="s2">&#34;dbport&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;dbport&#34;</span><span class="w"> </span><span class="s2">&#34;value&#34;</span><span class="w"> </span><span class="s2">&#34;database_port&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;my_db&#34;</span><span class="w"> </span><span class="s2">&#34;artifact&#34;</span><span class="w"> </span><span class="s2">&#34;db_content&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;db_content&#34;</span><span class="w"> </span><span class="s2">&#34;file&#34;</span><span class="w"> </span><span class="s2">&#34;files/my_db_content.txt&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;db_content&#34;</span><span class="w"> </span><span class="s2">&#34;type&#34;</span><span class="w"> </span><span class="s2">&#34;tosca.artifacts.File&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;my_db&#34;</span><span class="w"> </span><span class="s2">&#34;interface&#34;</span><span class="w"> </span><span class="s2">&#34;Standard&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;my_db&#34;</span><span class="w"> </span><span class="s2">&#34;interface_create&#34;</span><span class="w"> </span><span class="s2">&#34;create&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;my_db&#34;</span><span class="w"> </span><span class="s2">&#34;requires&#34;</span><span class="w"> </span><span class="s2">&#34;mysql&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;create&#34;</span><span class="w"> </span><span class="s2">&#34;implementation&#34;</span><span class="w"> </span><span class="s2">&#34;db_create.sh&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;create&#34;</span><span class="w"> </span><span class="s2">&#34;input&#34;</span><span class="w"> </span><span class="s2">&#34;db_data&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;db_data&#34;</span><span class="w"> </span><span class="s2">&#34;value&#34;</span><span class="w"> </span><span class="s2">&#34;db_content&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;mysql&#34;</span><span class="w"> </span><span class="s2">&#34;type&#34;</span><span class="w"> </span><span class="s2">&#34;tosca.nodes.DBMS.MySQL&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;mysql&#34;</span><span class="w"> </span><span class="s2">&#34;property&#34;</span><span class="w"> </span><span class="s2">&#34;root_password&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;root_password&#34;</span><span class="w"> </span><span class="s2">&#34;value&#34;</span><span class="w"> </span><span class="s2">&#34;mysql_rootpw&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;mysql&#34;</span><span class="w"> </span><span class="s2">&#34;property&#34;</span><span class="w"> </span><span class="s2">&#34;port&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;port&#34;</span><span class="w"> </span><span class="s2">&#34;value&#34;</span><span class="w"> </span><span class="s2">&#34;mysql_port&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;mysql&#34;</span><span class="w"> </span><span class="s2">&#34;requires&#34;</span><span class="w"> </span><span class="s2">&#34;db_server&#34;</span><span class="w"> </span>.<span class="w">
+</span><span class="w"></span><span class="s2">&#34;db_server&#34;</span><span class="w"> </span><span class="s2">&#34;type&#34;</span><span class="w"> </span><span class="s2">&#34;tosca.nodes.Compute&#34;</span><span class="w"> </span>.</code></pre></div></p>
+
+<p>Let&rsquo;s visualize that:</p>
+
+<p><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/usr/bin/zsh
+</span><span class="cp"></span><span class="o">(</span>
+  <span class="nb">echo</span> <span class="s2">&#34;digraph G {&#34;</span>
+  cat <span class="nv">$1</span> <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> subject predicate object trash 
+  <span class="k">do</span> 
+      <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$subject</span><span class="s2"> -&gt; </span><span class="nv">$object</span><span class="s2"> [ label = &#34;</span><span class="nv">$predicate</span><span class="s2">&#34; ];&#34;</span>
+  <span class="k">done</span>
+  <span class="nb">echo</span> <span class="s2">&#34;}&#34;</span>
+<span class="o">)</span> <span class="p">|</span> dot -Tsvg &gt; output.svg</code></pre></div></p>
+
+<p><img src="/assets/images/tosca-n-quads.svg" alt="Output" /></p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2017%2f04%2f30%2ftosca-n-quads.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f04%2f30%2ftosca-n-quads.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f04%2f30%2ftosca-n-quads.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2017%2f04%2f30%2ftosca-n-quads.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

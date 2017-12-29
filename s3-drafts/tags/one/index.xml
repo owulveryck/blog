@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>One on Unladen swallow</title>
+    <link>https://blog.owulveryck.info/tags/one.html</link>
+    <description>Recent content in One on Unladen swallow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>All rights reserved - 2015/2017</copyright>
+    <lastBuildDate>Fri, 06 Jan 2017 11:06:06 +0100</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/one/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Accessing AWS deep learning services from iOS.</title>
+      <link>https://blog.owulveryck.info/2017/01/06/accessing-aws-deep-learning-services-from-ios..html</link>
+      <pubDate>Fri, 06 Jan 2017 11:06:06 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/01/06/accessing-aws-deep-learning-services-from-ios..html</guid>
+      <description> Only fools never change their minds - Talleyrand
+ </description>
+    </item>
+    
+    <item>
+      <title>sound fingerprint</title>
+      <link>https://blog.owulveryck.info/2016/11/19/sound-fingerprint.html</link>
+      <pubDate>Sat, 19 Nov 2016 15:11:59 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2016/11/19/sound-fingerprint.html</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ethereum</title>
+      <link>https://blog.owulveryck.info/2016/08/20/ethereum.html</link>
+      <pubDate>Sat, 20 Aug 2016 21:45:37 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2016/08/20/ethereum.html</guid>
+      <description>The greeter: https://www.ethereum.org/greeter
+Installation From sources:
+cd $GOPATH/src/github.com/ethereum git clone https://github.com/ethereum/go-ethereum.git installing the solidity compiler sudo add-apt-repository ppa:ethereum/ethereum sudo apt-get update sudo apt-get install solc which solc  Triggering the console and entering the network Triggering the console on the test network $GOPATH/src/github.com/ethereum/go-ethereum/build/bin/geth --testnet --fast --cache=512 console
+&amp;gt; eth.getCompilers() &amp;gt; I0820 21:59:11.083752 common/compiler/solidity.go:114] solc, the solidity compiler commandline interface &amp;gt; Version: 0.3.6-0/None-Linux/g++ &amp;gt; &amp;gt; path: /usr/bin/solc &amp;gt; [&amp;quot;Solidity&amp;quot;]²  The client is downloading the headers, I should wait until 512 Mb is filled:</description>
+    </item>
+    
+    <item>
+      <title>hmm explained</title>
+      <link>https://blog.owulveryck.info/2016/07/29/hmm-explained.html</link>
+      <pubDate>Fri, 29 Jul 2016 09:51:12 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2016/07/29/hmm-explained.html</guid>
+      <description>It&amp;rsquo;s been about a year that I started to read the tutorial on Hidden Markov Models and selected applications in speech recognition from Lawrence R. Rabiner.
+This paper is a reference in term of HMM application. The problem was that even with a lot of effort and concentration, I was lacking a bunch of skills to fully understand it. As I&amp;rsquo;ve now studied a bit, with the support of Coursera and the lectures of Andrew Ng, I will try to dig into it again.</description>
+    </item>
+    
+    <item>
+      <title>dotscale2016</title>
+      <link>https://blog.owulveryck.info/2016/04/25/dotscale2016.html</link>
+      <pubDate>Mon, 25 Apr 2016 10:06:01 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2016/04/25/dotscale2016.html</guid>
+      <description>I&amp;rsquo;ve had the opportunity to attend the dotScale conference in Paris.</description>
+    </item>
+    
+    <item>
+      <title>markov2</title>
+      <link>https://blog.owulveryck.info/2016/03/22/markov2.html</link>
+      <pubDate>Tue, 22 Mar 2016 07:33:42 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2016/03/22/markov2.html</guid>
+      <description>What we do here is online learning because it is not possible to provide a set of data. Actually, if the expectation is part of predetermined vector of states (${start, stop, confgure,&amp;hellip;}) for any topology, the way to achieve the goal and reach the state is different for every topology (the deployement plan is different).
+the definition of the universe We have to define the universe in which our machine evolve in order to bound the events that may interact with it.</description>
+    </item>
+    
+    <item>
+      <title>cfg mgm camp</title>
+      <link>https://blog.owulveryck.info/2016/02/01/cfg-mgm-camp.html</link>
+      <pubDate>Mon, 01 Feb 2016 09:42:15 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2016/02/01/cfg-mgm-camp.html</guid>
+      <description>To reach the next level we must stop doing configuration management from scarcity to abundance The problem is now:
+* How do we choose and manage software *  this is the age of big software Actually: knoledge scarce&amp;hellip;
+scarcity has shifted from code to ops the solution is reusable, onpensource ops encapsulation of a sofware deb, rpm, &amp;hellip; but encapsulation requires a model
+the modeling language the modeling language for applicatios * model the software, not the machines * model the software, not the configuration files</description>
+    </item>
+    
+    <item>
+      <title>cfg mgm camp</title>
+      <link>https://blog.owulveryck.info/2016/02/01/cfg-mgm-camp.html</link>
+      <pubDate>Mon, 01 Feb 2016 09:41:45 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2016/02/01/cfg-mgm-camp.html</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nas for macos on freebsd</title>
+      <link>https://blog.owulveryck.info/2016/01/30/nas-for-macos-on-freebsd.html</link>
+      <pubDate>Sat, 30 Jan 2016 11:35:36 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2016/01/30/nas-for-macos-on-freebsd.html</guid>
+      <description> Creating the jail:
+iocage create tag=nas resolver=&amp;#34;nameserver 192.168.1.1&amp;#34; hostname=&amp;#34;nas&amp;#34; ip4_addr=&amp;#34;lo1|192.168.1.100/24&amp;#34; mDNSresponder </description>
+    </item>
+    
+  </channel>
+</rss>

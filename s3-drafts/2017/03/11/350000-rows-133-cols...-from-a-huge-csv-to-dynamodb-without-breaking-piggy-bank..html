@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="350000 rows, 133 cols... From a huge CSV to DynamoDB (without breaking piggy-bank)." />
+<meta property="og:description" content="Using an exponential backoff algorithm to fill a dynamodb from a CSV file" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html" />
+
+  <meta property="og:image" content="https://blog.owulveryck.info/assets/images/default-post.png" />
+
+
+
+<meta property="article:published_time" content="2017-03-11T09:15:17&#43;01:00"/>
+
+<meta property="article:modified_time" content="2017-03-11T09:15:17&#43;01:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="350000 rows, 133 cols... From a huge CSV to DynamoDB (without breaking piggy-bank).">
+<meta itemprop="description" content="Using an exponential backoff algorithm to fill a dynamodb from a CSV file">
+
+
+<meta itemprop="datePublished" content="2017-03-11T09:15:17&#43;01:00" />
+<meta itemprop="dateModified" content="2017-03-11T09:15:17&#43;01:00" />
+<meta itemprop="wordCount" content="1085">
+
+  <meta itemprop="image" content="https://blog.owulveryck.info/assets/images/default-post.png">
+
+
+
+<meta itemprop="keywords" content="golang,reflection,dynamodb,exponentialBackoff," />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image:src" content="https://blog.owulveryck.info/assets/images/default-post.png"/>
+<meta name="twitter:title" content="350000 rows, 133 cols... From a huge CSV to DynamoDB (without breaking piggy-bank)."/>
+<meta name="twitter:description" content="Using an exponential backoff algorithm to fill a dynamodb from a CSV file"/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html">
+
+    <title>350000 rows, 133 cols&hellip; From a huge CSV to DynamoDB (without breaking piggy-bank). | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html">350000 rows, 133 cols&hellip; From a huge CSV to DynamoDB (without breaking piggy-bank).</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-03-11T09:15:17&#43;01:00">Sat Mar 11, 2017</time> by Olivier Wulveryck in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="/categories/dev" rel="category tag">dev</a>
+
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/golang" rel="tag">golang</a>, <a href="/tags/reflection" rel="tag">reflection</a>, <a href="/tags/dynamodb" rel="tag">dynamodb</a>, <a href="/tags/exponentialbackoff" rel="tag">exponentialBackoff</a>
+
+</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html'>
+      
+        <div class="crop">
+      <img src="/assets/images/default-post.png" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<p>In this post I will explain how to:</p>
+
+<ul>
+<li>Parse a CSV file and extract only certain columns</li>
+<li>Create a table in DynamoDB</li>
+<li>Insert all the data with an adaptive algorithm in order to use the provisioned capacity</li>
+<li>Reduce the capacity once the insertion is done.</li>
+</ul>
+
+<h1 id="exploring-the-problem-aws-billing">Exploring the problem: AWS Billing</h1>
+
+<p>In a <a href="/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data/">previous post</a> I explained how I was using dynamodb to store a lot of data about aws billing.</p>
+
+<p>On top of the API that deals with products and offers, AWS can provide a &ldquo;billing report&rdquo;. Those reports are delivered to am Amazon S3 bucket in CSV format at least once a day.</p>
+
+<p>The rows of the CSV are organized in <em>topics</em> as described <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/billing-reports.html#Topics">here</a>.</p>
+
+<p>Each line of the CSV represents an item that is billed. But every resource is made of several billable items. For example on EC2, you pay the &ldquo;compute&rdquo;, the bandwidth, the volume etc&hellip;</p>
+
+<p>I would like to use and understand this file to optimize the costs. A kind of BI.</p>
+
+<p>AWS says that you can import your file in Excel (or alike)&hellip; That could be a solution but:</p>
+
+<p><img src="https://imgs.xkcd.com/comics/algorithms.png" alt="Excel XKCD" /></p>
+
+<p>On top of that with a lot of resources the file is fat (more thant a 100000 lines several times a day for my client).
+I have decided to use dynamodb to store all the information so it will be easy to perform an extract and generate a dashboard.
+In this post, I will expose some go techniques I have used to achive that.</p>
+
+<h1 id="step-1-parsing-the-csv">Step 1: Parsing the CSV</h1>
+
+<p>As I explained, the CSV file is made of more than a hundreds cols. The columns are identified in the first row of the CSV.
+I will store each row in a go struct.</p>
+
+<p>To parse it easily, I an using custom fields <code>csv</code> in the struct. The field value corresponds to the header name for the seek value.</p>
+
+<p>For example:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">test</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">ID</span>   <span class="kt">string</span> <span class="s">`csv:&#34;myid&#34;`</span>
+    <span class="nx">Name</span> <span class="kt">string</span> <span class="s">`csv:&#34;prenom&#34;`</span>
+    <span class="nx">Last</span> <span class="kt">string</span> <span class="s">`csv:&#34;nom&#34;`</span>
+    <span class="nx">Test</span> <span class="kt">string</span> <span class="s">`csv:&#34;nonexitent&#34;`</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Then, I am reading the first row of the CSV file and then ranging the field names of the struct to fill a map with the field key as key and the col number as value. I set &lsquo;-1&rsquo; if the field is not found:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">var</span> <span class="nx">headers</span> <span class="p">=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">,</span> <span class="nx">et</span><span class="p">.</span><span class="nx">NumField</span><span class="p">())</span>
+<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">et</span><span class="p">.</span><span class="nx">NumField</span><span class="p">();</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+        <span class="nx">headers</span><span class="p">[</span><span class="nx">et</span><span class="p">.</span><span class="nx">Field</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nx">Name</span><span class="p">]</span> <span class="p">=</span> <span class="kd">func</span><span class="p">(</span><span class="nx">element</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">array</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="nx">k</span><span class="p">,</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">array</span> <span class="p">{</span>
+                        <span class="k">if</span> <span class="nx">v</span> <span class="o">==</span> <span class="nx">element</span> <span class="p">{</span>
+                                <span class="k">return</span> <span class="nx">k</span>
+                        <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="p">}(</span><span class="nx">et</span><span class="p">.</span><span class="nx">Field</span><span class="p">(</span><span class="nx">i</span><span class="p">).</span><span class="nx">Tag</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&#34;csv&#34;</span><span class="p">),</span> <span class="nx">header</span><span class="p">)</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Then I can parse the CSV file and fill a channel with one object by row&hellip;
+See the full example <a href="https://gist.github.com/owulveryck/0fc68c90fa4875647b54f62e2066707d">here</a></p>
+
+<h1 id="step-2-creating-the-table-in-dynamodb">Step 2: Creating the table in DynamoDB</h1>
+
+<p>This step is &ldquo;easy&rdquo;. I will create a table with one index and a sort key.
+For the example the index is a string named <code>Key</code>. The sort key is also a string named <code>SortKey</code>.</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">AttributeDefinitions</span><span class="p">:</span> <span class="p">[]</span><span class="o">*</span><span class="nx">dynamodb</span><span class="p">.</span><span class="nx">AttributeDefinition</span><span class="p">{</span>
+        <span class="p">{</span>
+                <span class="nx">AttributeName</span><span class="p">:</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&#34;Key&#34;</span><span class="p">),</span>
+                <span class="nx">AttributeType</span><span class="p">:</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&#34;S&#34;</span><span class="p">),</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+                <span class="nx">AttributeName</span><span class="p">:</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&#34;SortKey&#34;</span><span class="p">),</span>
+                <span class="nx">AttributeType</span><span class="p">:</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&#34;S&#34;</span><span class="p">),</span>
+        <span class="p">},</span>
+<span class="p">},</span>
+<span class="nx">KeySchema</span><span class="p">:</span> <span class="p">[]</span><span class="o">*</span><span class="nx">dynamodb</span><span class="p">.</span><span class="nx">KeySchemaElement</span><span class="p">{</span>
+        <span class="p">{</span>
+                <span class="nx">AttributeName</span><span class="p">:</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&#34;Key&#34;</span><span class="p">),</span>
+                <span class="nx">KeyType</span><span class="p">:</span>       <span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&#34;HASH&#34;</span><span class="p">),</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+                <span class="nx">AttributeName</span><span class="p">:</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&#34;SortKey&#34;</span><span class="p">),</span>
+                <span class="nx">KeyType</span><span class="p">:</span>       <span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="s">&#34;RANGE&#34;</span><span class="p">),</span>
+        <span class="p">},</span>
+<span class="p">},</span></code></pre></div>
+
+<p>I will set an initial provisioning of 600. This would cost a lot of money but I will reduce it later to spare. The high provisioning rate is needed otherwise it would take me hours to integrate the CSV.</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">ProvisionedThroughput</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">dynamodb</span><span class="p">.</span><span class="nx">ProvisionedThroughput</span><span class="p">{</span>
+        <span class="nx">ReadCapacityUnits</span><span class="p">:</span>  <span class="nx">aws</span><span class="p">.</span><span class="nx">Int64</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span>
+        <span class="nx">WriteCapacityUnits</span><span class="p">:</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">Int64</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
+<span class="p">},</span></code></pre></div>
+
+<p>The code for creating the table is <a href="https://gist.github.com/owulveryck/6663983b41c669617704558a030a3392#file-dynamodbcreatetable-go">here</a></p>
+
+<h1 id="step-3-inserting-the-data">Step 3: Inserting the data</h1>
+
+<p>The structure is read through the channel I have created previously.
+The object is encoded to a dynamodb compatible one thanks the <code>marshal</code> function of this helper library <code>github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute</code></p>
+
+<p>To make the structure ID match the <code>Key</code> attribute of the table, I am using the <code>dynamodbav</code> fields.
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">test</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">ID</span>   <span class="kt">string</span> <span class="s">`csv:&#34;myid&#34; dynamodbav:&#34;Key&#34;`</span>
+    <span class="nx">Name</span> <span class="kt">string</span> <span class="s">`csv:&#34;prenom&#34; dynamodbav:&#34;SortKey&#34;`</span>
+    <span class="nx">Last</span> <span class="kt">string</span> <span class="s">`csv:&#34;nom&#34; dynamodbav:&#34;Last,omitempty&#34;`</span>
+    <span class="nx">Test</span> <span class="kt">string</span> <span class="s">`csv:&#34;nonexitent&#34;`</span>
+<span class="p">}</span>
+<span class="o">...</span>
+<span class="k">for</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">c</span> <span class="p">{</span>
+    <span class="nx">item</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">dynamodbattribute</span><span class="p">.</span><span class="nx">MarshalMap</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+    <span class="nx">params</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">dynamodb</span><span class="p">.</span><span class="nx">PutItemInput</span><span class="p">{</span>
+        <span class="nx">Item</span><span class="p">:</span>      <span class="nx">item</span><span class="p">,</span>
+        <span class="nx">TableName</span><span class="p">:</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="nx">tableName</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="nx">svc</span><span class="p">.</span><span class="nx">PutItem</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span>
+<span class="p">}</span></code></pre></div></p>
+
+<h2 id="going-concurrent">Going concurrent</h2>
+
+<p>I will add a touch of concurrency. I will use a maximum of 20 goroutines simultaneously to send items to the dynamodb.
+This is an empiric decision.</p>
+
+<p>I am using a &ldquo;guard&rdquo; channel. This channel has a buffer of 20. The buffed is filled with am empty struct whenever an item is received in the main communication channel.
+I am then launching a gorouting that will insert the event into dynamodb and consume one event from the guard channel when done.</p>
+
+<p>The guard channel is blocking when it is full. Therefore I am sure that 20 goroutines will run at maximum:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">guard</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kd">struct</span><span class="p">{},</span> <span class="mi">20</span><span class="p">)</span>
+<span class="k">for</span> <span class="nx">v</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">c</span> <span class="p">{</span>
+    <span class="nx">guard</span> <span class="o">&lt;-</span> <span class="kd">struct</span><span class="p">{}{}</span>
+    <span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">v</span> <span class="o">*</span><span class="nx">test</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">item</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">dynamodbattribute</span><span class="p">.</span><span class="nx">MarshalMap</span><span class="p">(</span><span class="nx">v</span><span class="p">)</span>
+        <span class="nx">params</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">dynamodb</span><span class="p">.</span><span class="nx">PutItemInput</span><span class="p">{</span>
+            <span class="nx">Item</span><span class="p">:</span>      <span class="nx">item</span><span class="p">,</span>
+            <span class="nx">TableName</span><span class="p">:</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="nx">tableName</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="nx">svc</span><span class="p">.</span><span class="nx">PutItem</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span>
+        <span class="o">&lt;-</span><span class="nx">guard</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<h2 id="using-a-backoff-algorithm">Using a backoff algorithm</h2>
+
+<p>The problem with this implementation is that it can overload the capacity.
+Therefore the rejected event must be resent. Of course I can simply check for the error <code>dynamodb.ErrCodeProvisionedThroughputExceededException</code> an immediately resend the failed event.</p>
+
+<p>But this may lead to dramatic performances.
+The AWS documentation point an Exponential Backoff algorithm as an advice to optimize the writing: <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Cf AWS documentation)</a></p>
+
+<p>Wikipedia gives a good <a href="https://en.wikipedia.org/wiki/Exponential_backoff">explanation of the exponential backoff</a> but to make it simple the idea is to decrease the ration of insertion of the DB in order to get a good performance.</p>
+
+<p>I am using a go implenenation found on <a href="http://github.com/cenkalti/backoff">github</a> made by <a href="https://github.com/cenkalti">Cenkalti</a>.</p>
+
+<p>I return the error only in case of <code>dynamodb.ErrCodeProvisionedThroughputExceededException</code> by now:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">backoff</span><span class="p">.</span><span class="nx">Retry</span><span class="p">(</span><span class="kd">func</span><span class="p">()</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="c1">// Now put the item, discarding the result
+</span><span class="c1"></span>    <span class="nx">_</span> <span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">svcDB</span><span class="p">.</span><span class="nx">PutItem</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="nx">err</span><span class="p">.(</span><span class="nx">awserr</span><span class="p">.</span><span class="nx">Error</span><span class="p">).</span><span class="nx">Code</span><span class="p">()</span> <span class="o">==</span> <span class="nx">dynamodb</span><span class="p">.</span><span class="nx">ErrCodeProvisionedThroughputExceededException</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nx">err</span>
+        <span class="p">}</span>
+        <span class="c1">// TODO: Special case...
+</span><span class="c1"></span>        <span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;Error inserting %v (%v)&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="c1">// Do the insert here
+</span><span class="c1"></span>    <span class="k">return</span> <span class="kc">nil</span>
+<span class="p">},</span> <span class="nx">backoff</span><span class="p">.</span><span class="nx">NewExponentialBackOff</span><span class="p">())</span></code></pre></div>
+
+<h1 id="step-4-updating-the-table-and-reducing-the-write-capacity">Step 4: Updating the table and reducing the write capacity</h1>
+
+<p>Once the insert is done, to avoid a huge bill, I am reducing the Provisioned capacity of the table.
+This is done with an <code>update</code> request:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">params</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">dynamodb</span><span class="p">.</span><span class="nx">UpdateTableInput</span><span class="p">{</span>
+    <span class="nx">TableName</span><span class="p">:</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">String</span><span class="p">(</span><span class="nx">tableName</span><span class="p">),</span> <span class="c1">// Required
+</span><span class="c1"></span>    <span class="nx">ProvisionedThroughput</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">dynamodb</span><span class="p">.</span><span class="nx">ProvisionedThroughput</span><span class="p">{</span>
+        <span class="nx">ReadCapacityUnits</span><span class="p">:</span>  <span class="nx">aws</span><span class="p">.</span><span class="nx">Int64</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="c1">// Required
+</span><span class="c1"></span>        <span class="nx">WriteCapacityUnits</span><span class="p">:</span> <span class="nx">aws</span><span class="p">.</span><span class="nx">Int64</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>  <span class="c1">// Required
+</span><span class="c1"></span>    <span class="p">},</span>
+<span class="p">}</span>
+<span class="nx">resp</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">svc</span><span class="p">.</span><span class="nx">UpdateTable</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span></code></pre></div>
+
+<h1 id="conclusion-it-works">Conclusion: it works</h1>
+
+<p>It took me half an hour to process and insert 350000 lines (with 133 cols each) into the dynamodb from my laptop.</p>
+
+<p>I can see that the adaptative algorithm works on the graphs:</p>
+
+<p><img src="/assets/images/dynamodb/dynamodb_write_capacity.png" alt="It works" /></p>
+
+<p>Now I can analyse the data to find a proper way to optimize the aws bill for my client.</p>
+
+<p>The full example is on <a href="https://gist.github.com/owulveryck/6663983b41c669617704558a030a3392">gist</a></p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2017%2f03%2f11%2f350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f03%2f11%2f350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f03%2f11%2f350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2017%2f03%2f11%2f350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

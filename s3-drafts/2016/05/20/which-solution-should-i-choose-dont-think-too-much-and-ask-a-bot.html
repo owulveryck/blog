@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="Which solution should I choose? Don&#39;t think too much and ask a bot!" />
+<meta property="og:description" content="A post about machine learning and an application on a simple case I&#39;ve met in my job. Here is the use case \:regarding four different technical solutions, after the evaluation by group of human of different features, can a Bot &#34;think&#34; on its own and evaluate which one offers then best ratio cost/features. And therefore, can it tell any manager which solution to choose." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html" />
+
+
+
+<meta property="article:published_time" content="2016-05-20T12:50:59&#43;02:00"/>
+
+<meta property="article:modified_time" content="2016-05-20T12:50:59&#43;02:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Which solution should I choose? Don&#39;t think too much and ask a bot!">
+<meta itemprop="description" content="A post about machine learning and an application on a simple case I&#39;ve met in my job. Here is the use case \:regarding four different technical solutions, after the evaluation by group of human of different features, can a Bot &#34;think&#34; on its own and evaluate which one offers then best ratio cost/features. And therefore, can it tell any manager which solution to choose.">
+
+
+<meta itemprop="datePublished" content="2016-05-20T12:50:59&#43;02:00" />
+<meta itemprop="dateModified" content="2016-05-20T12:50:59&#43;02:00" />
+<meta itemprop="wordCount" content="1570">
+
+
+
+<meta itemprop="keywords" content="machine learning,octave,linear regression," />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Which solution should I choose? Don&#39;t think too much and ask a bot!"/>
+<meta name="twitter:description" content="A post about machine learning and an application on a simple case I&#39;ve met in my job. Here is the use case \:regarding four different technical solutions, after the evaluation by group of human of different features, can a Bot &#34;think&#34; on its own and evaluate which one offers then best ratio cost/features. And therefore, can it tell any manager which solution to choose."/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html">
+
+    <title>Which solution should I choose? Don&rsquo;t think too much and ask a bot! | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html">Which solution should I choose? Don&rsquo;t think too much and ask a bot!</a></h2>
+    <p class="blog-post-meta"><time datetime="2016-05-20T12:50:59&#43;02:00">Fri May 20, 2016</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/machine-learning" rel="tag">machine learning</a>, <a href="/tags/octave" rel="tag">octave</a>, <a href="/tags/linear-regression" rel="tag">linear regression</a>
+
+</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html'>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<h1 id="let-me-tell-you-a-story-the-why">Let me tell you a story: the why!</h1>
+
+<p>A year ago, one of those Sunday morning where spring starts to warm up the souls, I went, as usual to my favorite bakery.
+The family tradition is to come back with a bunch of &ldquo;Pains au Chocolat&rdquo; (which, are, you can trust me, simply excellent).</p>
+
+<ul>
+<li><em>hello sir, I&rsquo;d like 4 of your excellent &ldquo;pains au chocolat&rdquo; please</em></li>
+<li><em>I&rsquo;m sorry, I don&rsquo;t have any &ldquo;pains au chocolat&rdquo; nor any &ldquo;croissant&rdquo; anymore</em></li>
+<li><em>what? How is it possible ?</em></li>
+<li><em>everything has been sold.</em></li>
+<li><em>too bad&hellip;</em></li>
+</ul>
+
+<p>I think to myself: <em>why didn&rsquo;t you made more?</em>. He may have read my thought and told me</p>
+
+<ul>
+<li><em>I wish I could have foreseen</em></li>
+</ul>
+
+<p>When I left his shop, his words were echoing&hellip; I wish I could have foreseen&hellip; We have self-driving cars, we have the Internet,
+we are a civilization that is technology advanced.
+Facebook recognize your face among billions as soon as you post a photo&hellip; It must be possible to foresee&hellip;</p>
+
+<p>This is how I started to gain interest in machine learning</p>
+
+<p>At first I started to read some papers, then I learn (a very little bit) about graph theory, Bayesian networks, Markov chains.
+But I was not accurate and I felt I was missing some basic theory.</p>
+
+<p>That&rsquo;s the main reason why, 8 weeks ago, I signed in a course about <a href="https://www.coursera.org/learn/machine-learning">&ldquo;Machine learning&rdquo; on Coursera</a>.
+This course is given by <a href="http://www.andrewng.org/">Andrew Ng</a> from <a href="https://www.stanford.edu/">Stanford University</a>.</p>
+
+<p>It is an excellent introduction that gives me all the tools I need to go deeper in this science. The course is based on real examples
+and uses powerful mathematics without going too deeply in the proofs.</p>
+
+<h1 id="so-what">So what?</h1>
+
+<p>The course is not finished yet, but after about 8 weeks, I&rsquo;ve learned a lot about what we call &ldquo;machine learning&rdquo;.</p>
+
+<p>The main idea of the machine learning is:</p>
+
+<ul>
+<li>to feed some code with a bunch of data (who said big data was useless)</li>
+<li>to code or encode some mathematical formulas that could represent the data</li>
+<li>to implement any algorithm that optimize the formulas by minimizing the error made by the machine on the evolving data sets.</li>
+</ul>
+
+<p>To make it simple: machine learning is feeding a &ldquo;robot&rdquo; with data and teach him how to analyse the errors so it can make decisions on its own.</p>
+
+<p>Scary isn&rsquo;t it? But so exciting&hellip; As usual I won&rsquo;t go into ethical debate on this blog, and I will stick to science and on the benefit
+of the science.</p>
+
+<p>But indeed, always remind François Rabelais:</p>
+
+<blockquote>
+<p>Science sans conscience n&rsquo;est que ruine de l&rsquo;&acirc;me (<em>Science without conscience is but the ruin of the soul</em>)</p>
+</blockquote>
+
+<h2 id="a-use-case">A use case</h2>
+
+<h3 id="defining-the-problem">Defining the problem</h3>
+
+<p>I have 4 technical solutions providing a similar goal: deliver cloud services.
+Actually, none of them is fulfilling all the requirements of my business.
+As usual, one is good in a certain area, while another one is weak, etc.</p>
+
+<p>A team of people has evaluated more than 100 criteria, and gave two quotations per criteria and per product:</p>
+
+<ul>
+<li>the first quotation is in the range 0/3 and indicated whether the product is fulfilling the current feature</li>
+<li>the second quotation may be {0,1,3,9} and points the effort needed to reach a 3 for the feature</li>
+</ul>
+
+<p>Therefore, for each solution, I have a table looking like this :</p>
+
+<table>
+<thead>
+<tr>
+<th>feature  name</th>
+<th>feature evaluation</th>
+<th>effort</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>feature 1</td>
+<td>0</td>
+<td>9</td>
+</tr>
+
+<tr>
+<td>feature 2</td>
+<td>3</td>
+<td>0</td>
+</tr>
+
+<tr>
+<td>feature 3</td>
+<td>2</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>feature 4</td>
+<td>0</td>
+<td>3</td>
+</tr>
+
+<tr>
+<td>&hellip;&hellip;.</td>
+<td>&hellip;</td>
+<td>&hellip;</td>
+</tr>
+
+<tr>
+<td>feature 100</td>
+<td>2</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+
+<p>I&rsquo;ve been asked to evaluate the product and to produce a comparison.</p>
+
+<p>To do an analytic, I must look for an element of comparison. So I&rsquo;ve turned the problem into this :</p>
+
+<p><strong>I would like to know which product is the cheapest to fulfill my requirement.</strong></p>
+
+<p>(I&rsquo;ve uploaded my samples here):</p>
+
+<ul>
+<li><a href="/assets/ml/solution1.csv">solution 1</a></li>
+<li><a href="/assets/ml/solution2.csv">solution 2</a></li>
+<li><a href="/assets/ml/solution3.csv">solution 3</a></li>
+<li><a href="/assets/ml/solution4.csv">solution 4</a></li>
+</ul>
+
+<h3 id="finding-a-solution">Finding a solution</h3>
+
+<p>In the machine learning, we notice two different fields of application:</p>
+
+<ul>
+<li>regression</li>
+<li>classification</li>
+</ul>
+
+<p>The classification mechanism would be used to answer a yes/no question; for example: <em>should I keep solution 1</em> ?
+The regression mechanism helps us for &ldquo;predicting&rdquo;. Actually, the goal is to <em>automatically</em> find a mathematical formulae that turns
+a set of feature into a result.</p>
+
+<p>what is a feature, and what&rsquo;s the result?
+Let&rsquo;s go back to my <em>petits pains</em> example.</p>
+
+<p>Consider that the baker has made statistics on its production for sunday, and it has taken some events into consideration:</p>
+
+<ul>
+<li>sunday the 1st: it was raining, I sold only 100 petits Pains</li>
+<li>sunday the 8th: it was sunny, I sold 250 petits Pains</li>
+<li>sunday the 16th: it was sunny, and it was a special day (eg: mother&rsquo;s day): 300 petits Pains</li>
+<li>sunday the 24th: it was cloudy: 150 petits Pains</li>
+</ul>
+
+<p>Here, the baker thinks that its production must be a function of the weather and the calendar; therefore those are the two features.
+What ML propose is to tell the baker how many &ldquo;petits pains&rdquo; he should make <strong>knowing</strong> that it is a special day (father&rsquo;s day) and that it
+is partially sunny&hellip;</p>
+
+<p>Back in the context of this post, the goal of the regression would be to find a mathematical function that will tell me the effort needed
+for any value, and doing this on the simple basis of the training set I have.</p>
+
+<h4 id="the-actual-score-of-all-the-solutions">The actual score of all the solutions</h4>
+
+<p>The first thing to find it the total score of all the 4 solutions.
+If I consider $m$ features, the total score of the solution is defined by:</p>
+
+<p>$ score = \frac{1}{m} . \sum_{k=1}^{m} feature_k $</p>
+
+<p>What I need now, is to evaluate the effort needed to reach a score of 3 for each solution.
+Let&rsquo;s do that.</p>
+
+<h4 id="representing-the-training-set">Representing the training set</h4>
+
+<p>First, let&rsquo;s plot the training set.
+<center>
+<img class="img-responsive" src="/assets/images/ml/trainingset.jpg" alt="Training set"/>
+</center></p>
+
+<p><strong>note</strong> the representation is not accurate because there may be several bunk points</p>
+
+<p>I will use in this post what&rsquo;s called &ldquo;supervised learning&rdquo;. That means that I will express a skeleton of function and let the machine
+adjust it. (actually this is a very basic and week implementation; a lot more complex examples may be implemented but that&rsquo;s not the purpose of this post)</p>
+
+<p>When I look at the training set representation, I can imagine a line passing by the middle of the plots.
+This line may look like this:</p>
+
+<p><center>
+<img class="img-responsive" src="/assets/images/ml/x-1_5.jpg" alt="x^(-1/5)"/>
+</center></p>
+
+<p>This is actually a representation of the function $ x^{\frac{1}{5}} $</p>
+
+<p>Let&rsquo;s assume that this function may basically fit my example, my goal will be to adapt the function.
+assume this equation with two parameters $\theta_0$ and $\theta_1$ that will influence the curve:</p>
+
+<p>$ f(x) = \theta_0 + \theta_1 . x^{\frac{1}{5}} $</p>
+
+<p>Therefore, my goal will be to code something so that the machine will figure out what $\theta_0$ and $\theta_1$  are.</p>
+
+<p>I will use an implementation of an algorithm called <a href="https://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a> for linear regression.
+I won&rsquo;t go into the details of this algorithm, as it takes a complete course to be explained.</p>
+
+<p>The implementation is made with <a href="https://www.gnu.org/software/octave/">GNU octave</a> and the code is available on my <a href="https://github.com/owulveryck/linear-regression-example">github</a></p>
+
+<h2 id="the-computation-and-the-result">The computation and the result</h2>
+
+<p>Here is a figure representing the function for one particular solution:
+<center>
+<img class="img-responsive" src="/assets/images/ml/trainingset_plot.jpg" alt="Training set with the function"/>
+</center></p>
+
+<p>We can see that the curve is &ldquo;under fitting&rdquo; the data.
+Anyway, let&rsquo;s continue and get the result I want (I will explain later how to perform better):</p>
+
+<p>Here are the computational results:
+<pre>
+octave:10&gt; compute
+Analysing solution1.csv:0.<sup>67</sup>&frasl;<sub>3</sub>
+Running gradient descent&hellip;
+Theta found by gradient descent: 5.397050 -4.315835
+Prediction for x=0.669291 ; 1.414256
+Prediction for x=3 ; 0.020681
+Effort (scaled to 10): 2.582105</p>
+
+<p>Analysing solution2.csv:0.<sup>96</sup>&frasl;<sub>3</sub>
+Running gradient descent&hellip;
+Theta found by gradient descent: 3.178478 -2.451611
+Prediction for x=0.960630 ; 0.746482
+Prediction for x=3 ; 0.124430
+Effort (scaled to 10): 1.957075</p>
+
+<p>Analysing solution3.csv:0.<sup>67</sup>&frasl;<sub>3</sub>
+Running gradient descent&hellip;
+Theta found by gradient descent: 2.557847 -2.015334
+Prediction for x=0.669291 ; 0.698031
+Prediction for x=3 ; 0.047283
+Effort (scaled to 10): 2.544122</p>
+
+<p>Analysing solution4.csv:0.<sup>86</sup>&frasl;<sub>3</sub>
+Running gradient descent&hellip;
+Theta found by gradient descent: 3.104868 -2.422627
+Prediction for x=0.858268 ; 0.755175
+Prediction for x=3 ; 0.086926
+Effort (scaled to 10): 2.152261
+</pre></p>
+
+<p>For each solution, I have:</p>
+
+<ul>
+<li>the score (the first line /3)</li>
+<li>the parameters $\theta$</li>
+<li>a prediction for the actual score, and for a score of 3</li>
+<li>the effort (scale on 10) needed to pass from the actual score to 3</li>
+</ul>
+
+<h4 id="final-result">Final result</h4>
+
+<p>Here is the final classification of my four solutions:</p>
+
+<table>
+<thead>
+<tr>
+<th>Solution</th>
+<th>score</th>
+<th>effort</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Solution 2</td>
+<td>0.96</td>
+<td>1.95</td>
+</tr>
+
+<tr>
+<td>Solution 4</td>
+<td>0.86</td>
+<td>2.15</td>
+</tr>
+
+<tr>
+<td>Solution 3</td>
+<td>0.67</td>
+<td>2.54</td>
+</tr>
+
+<tr>
+<td>Solution 1</td>
+<td>0.67</td>
+<td>2.58</td>
+</tr>
+</tbody>
+</table>
+
+<p>Solution 2 is the cheapest. It&rsquo;s possible to go into further analysis to determine why it&rsquo;s the cheapest, and how the other ones
+may catch up and go back in the race, but again, that is not the purpose of my post.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>This is a simple approach.
+Some axis of optimization could be to use a more complex polynomial (eg: $\theta_0+\theta_1.x^\frac{1}{3}+\theta_2.x^\frac{1}{5}$)
+or to use a <a href="https://en.wikipedia.org/wiki/Support_vector_machine">support vector machine</a> with a gaussian kernel for example.</p>
+
+<p>One other optimization would be to add some more features, such as, for example, a score on the importance of a feature (a functional feature).</p>
+
+<p>Machine learning is a wide mathematical and IT area. It is now in everyone&rsquo;s life.
+Nowadays we are talking about plateform fully automated, self-healing applications, smart deployements, smart monitoring.
+There are already some good implementations of algorithms on the market, but there is a huge place for integration of those tools into
+the life of the IT specialist.</p>
+
+<p>Automation has already helped and took the boring job of the IT specialist. Smart automation will go a step further.</p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2016%2f05%2f20%2fwhich-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2016%2f05%2f20%2fwhich-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2016%2f05%2f20%2fwhich-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2016%2f05%2f20%2fwhich-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

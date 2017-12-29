@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cfgmgmtcamp on Unladen swallow</title>
+    <link>https://blog.owulveryck.info/tags/cfgmgmtcamp.html</link>
+    <description>Recent content in Cfgmgmtcamp on Unladen swallow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>All rights reserved - 2015/2017</copyright>
+    <lastBuildDate>Tue, 21 Feb 2017 15:26:22 +0100</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/cfgmgmtcamp/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Configuration management is a solved problem!</title>
+      <link>https://blog.owulveryck.info/2017/02/21/configuration-management-is-a-solved-problem.html</link>
+      <pubDate>Tue, 21 Feb 2017 15:26:22 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/02/21/configuration-management-is-a-solved-problem.html</guid>
+      <description>This year, I have attended to the configuration management camp in gent thanks to Techsys. It is the second year I attend to those conferences. Last year, as I mentionned in my review the main topic was about orchestration and choreography.
+This year&amp;rsquo;s edition was more about the maturity of the configuration management.
+Actually, the title of this blog post is the same as the keynote given by John Vincent.</description>
+    </item>
+    
+  </channel>
+</rss>

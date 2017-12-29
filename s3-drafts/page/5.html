@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="Unladen swallow" />
+<meta property="og:description" content="Olivier Wulveryck&#39;s (tech) blog" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://blog.owulveryck.info/" />
+
+
+
+<meta property="og:updated_time" content="2017-02-14T10:17:15&#43;01:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Unladen swallow">
+<meta itemprop="description" content="Olivier Wulveryck&#39;s (tech) blog">
+
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Unladen swallow"/>
+<meta name="twitter:description" content="Olivier Wulveryck&#39;s (tech) blog"/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/">
+
+    <title>Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+    <!-- RSS 2.0 feed -->
+    <link href="https://blog.owulveryck.info/index.xml" rel="alternate" type="application/rss+xml" title="Unladen swallow" />
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link active" href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/02/14/zfs_cloud_ubuntu16.04.html">zfs_cloud_ubuntu16.04</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-02-14T10:17:15&#43;01:00">Tue Feb 14, 2017</time> by Olivier Wulveryck in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="/categories/category" rel="category tag">category</a>
+
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/tag1" rel="tag">tag1</a>, <a href="/tags/tag2" rel="tag">tag2</a>
+
+</p>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/02/14/zfs_cloud_ubuntu16.04.html'>
+      
+        <div class="crop">
+      <img src="/assets/images/default-post.png" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+    <div class="col-sm-10">
+      <h5>
+        
+      </h5>
+    </div>
+    </div>
+  </div>
+      I am using the device entries /dev/xvd* for testing purpose. Other choices may be best suitable for production. Please refer to ZFS on linux wiki for more options.
+sudo apt-get install zfsutils-linux parted /dev/xvdb mklabel GPT parted /dev/xvdc mklabel GPT parted /dev/xvdd mklabel GPT zpool create -m none -o ashift=12 tank raidz /dev/xvdc /dev/xvdb /dev/xvdd RAIDZ is a little like RAID-5. I&rsquo;m using RAID-Z1, meaning that from a 3-disk pool, I can lose one disk while maintaining the data access.
+
+  <a href='https://blog.owulveryck.info/2017/02/14/zfs_cloud_ubuntu16.04.html'>Read more →</a>
+</article> 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers....html">Linda, 31yo, with 5 starving philosophers&hellip;</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-02-03T20:57:30&#43;01:00">Fri Feb 3, 2017</time> by Olivier Wulveryck in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="/categories/ideas" rel="category tag">Ideas</a>
+
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/tuplespace" rel="tag">tupleSpace</a>, <a href="/tags/topology" rel="tag">topology</a>, <a href="/tags/linda" rel="tag">linda</a>
+
+</p>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers....html'>
+      
+        <div class="crop">
+      <img src="/assets/images/default-post.png" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+    <div class="col-sm-10">
+      <h5>
+        A non geek article (for now) to talk about the dinner of the philosophers in the cloud
+      </h5>
+    </div>
+    </div>
+  </div>
+      The hand is the tool of tools - Aristotle.
+ It ain&rsquo;t no secret to anyone actually knowing me: I am a fan of automation. Automation and configuration management have come a long way since Mark Burgess wrote the first version of cfengine.
+But even if the landscape has changed, operators are still scripting (only the DSL has changed), and the area targeted by those scripts remains technical.
+
+  <a href='https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers....html'>Read more →</a>
+</article> 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data.html">A foot in NoSQL and a toe in big data</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-01-13T22:22:46&#43;01:00">Fri Jan 13, 2017</time> by Olivier Wulveryck in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="/categories/aws" rel="category tag">aws</a>
+
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/dynamodb" rel="tag">dynamodb</a>, <a href="/tags/aws" rel="tag">aws</a>, <a href="/tags/golang" rel="tag">golang</a>
+
+</p>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data.html'>
+      
+        <div class="crop">
+      <img src="/assets/images/bigdata/stones-483138_640.png" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+    <div class="col-sm-10">
+      <h5>
+        In this post, I will explain how to extract, process and store informations from a webservice to a NoSQL database (DynamoDB)
+      </h5>
+    </div>
+    </div>
+  </div>
+      The more I work with AWS, the more I understand their models. This goes far beyond the technical principles of micro service. As an example I recently had an opportunity to dig a bit into the billing process. I had an explanation given by a colleague whose understanding was more advanced than mine. In his explanation, he mentioned this blog post: New price list API.
+Understanding the model By reading this post and this explanation, I understand that the offers are categorized in families (eg AmazonS3) and that an offer is composed of a set of products.
+
+  <a href='https://blog.owulveryck.info/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data.html'>Read more →</a>
+</article> 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/01/06/lambda-inter-s3.html">lambda inter s3</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-01-06T21:59:25&#43;01:00">Fri Jan 6, 2017</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/aws" rel="tag">aws</a>, <a href="/tags/lambda" rel="tag">lambda</a>, <a href="/tags/s3" rel="tag">s3</a>, <a href="/tags/golang" rel="tag">golang</a>
+
+</p>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/01/06/lambda-inter-s3.html'>
+      
+        <div class="crop">
+      <img src="/assets/images/default-post.png" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+    <div class="col-sm-10">
+      <h5>
+        In this post I will explain how to setup a lambda function written in go that will be triggered when an object is dropped on a bucket on s3. The function will read the object and copy it into another bucket iin another location. It will use AWS&#39; golang sdk.
+      </h5>
+    </div>
+    </div>
+  </div>
+      In this post I will explain how to setup a lambda function written in go that will be triggered when an object is dropped on a bucket on s3. The function will read the object and copy it into another bucket iin another location. It will use AWS&rsquo; golang sdk.
+The Lambda skeleton AWS Lambda does not support the go programming language natively. Anyway, it as a go program is compiled and packed as a simgle static binary, it it easy to execute a go program whitin a wrapper (node.
+
+  <a href='https://blog.owulveryck.info/2017/01/06/lambda-inter-s3.html'>Read more →</a>
+</article> 
+
+
+
+
+<article class="blog-post">
+  <header>
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/01/06/accessing-aws-deep-learning-services-from-ios..html">Accessing AWS deep learning services from iOS.</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-01-06T11:06:06&#43;01:00">Fri Jan 6, 2017</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/one" rel="tag">one</a>, <a href="/tags/two" rel="tag">two</a>
+
+</p>
+  </header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/01/06/accessing-aws-deep-learning-services-from-ios..html'>
+      
+    </a>
+    </div>
+    <div class="col-sm-10">
+      <h5>
+        It ain&#39;t no secret to anyone I do not like Javascript.
+      </h5>
+    </div>
+    </div>
+  </div>
+       Only fools never change their minds - Talleyrand
+ 
+
+  <a href='https://blog.owulveryck.info/2017/01/06/accessing-aws-deep-learning-services-from-ios..html'>Read more →</a>
+</article> 
+
+
+
+
+<nav class="blog-pagination">
+  
+  <a class="btn btn-outline-primary" href="/page/4.html" role="button">Previous page</a>
+  <a class="btn btn-outline-primary" href="/page/6.html" role="button">Next page</a>
+  
+  
+  
+</nav>
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

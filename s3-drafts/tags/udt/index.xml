@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Udt on Unladen swallow</title>
+    <link>https://blog.owulveryck.info/tags/udt.html</link>
+    <description>Recent content in Udt on Unladen swallow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>All rights reserved - 2015/2017</copyright>
+    <lastBuildDate>Mon, 17 Oct 2016 20:50:18 +0200</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/udt/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>HTTP over UDT for inter-region file transfer</title>
+      <link>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer.html</link>
+      <pubDate>Mon, 17 Oct 2016 20:50:18 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer.html</guid>
+      <description>Introduction Transferring files between server is no big deal with nowadays network equipments. You use rsync, scp or even http to get a file from A to B.
+Of course, you rely on the TCP stack so you have a decent reliability in the transport.
+But TCP has its drawback, especially when it needs to go through a lot of equipments. Typically in the cloud, or over a VPN.</description>
+    </item>
+    
+  </channel>
+</rss>

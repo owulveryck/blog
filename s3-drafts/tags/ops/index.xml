@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ops on Unladen swallow</title>
+    <link>https://blog.owulveryck.info/tags/ops.html</link>
+    <description>Recent content in Ops on Unladen swallow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>All rights reserved - 2015/2017</copyright>
+    <lastBuildDate>Fri, 14 Apr 2017 23:00:59 +0200</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/ops/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>I have tried Extreme Programming within a sprint and I think it is an excellent agile method for the Ops!</title>
+      <link>https://blog.owulveryck.info/2017/04/14/i-have-tried-extreme-programming-within-a-sprint-and-i-think-it-is-an-excellent-agile-method-for-the-ops.html</link>
+      <pubDate>Fri, 14 Apr 2017 23:00:59 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/04/14/i-have-tried-extreme-programming-within-a-sprint-and-i-think-it-is-an-excellent-agile-method-for-the-ops.html</guid>
+      <description>Part I: Agility 2003 I have discovered the notion of extreme programming more than 15 years ago. My job was to integrate and to develop pieces of code in Java for the IBM Websphere Business Integration server. We were a small team with light programming skills. A part of our job was to operate the software, the other part was to develop. It was in 2003.
+We were trying hard to stick to the specific framework we developed.</description>
+    </item>
+    
+  </channel>
+</rss>

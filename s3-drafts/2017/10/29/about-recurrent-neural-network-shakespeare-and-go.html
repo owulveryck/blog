@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="About Recurrent Neural Network, Shakespeare and GO" />
+<meta property="og:description" content="You may know how enthusiast I am about machine learning. A while ago I discovered recurrent neural networks. I have read that this &#39;tool&#39; allow to predict the future! Is this a kind of magic? I have read a lot of stuffs about the &#39;unreasonable effectiveness&#39; of this mechanism. The litteracy that gives deep explanation exists and is excellent. There is also plehtora of examples, but most of them are using python and a calcul framework. To fully undestand how things work (as I am not a data-scientist), I needed to write my own tool &#39;from scratch&#39;. This is what this post is about: a more-or-less &#39;from scratch&#39; implementation of a RNN in go that can be used to applied to a lot of examples" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html" />
+
+  <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/en/6/63/Queen_A_Kind_Of_Magic.png" />
+
+
+
+<meta property="article:published_time" content="2017-10-29T07:17:33&#43;01:00"/>
+
+<meta property="article:modified_time" content="2017-10-29T07:17:33&#43;01:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="About Recurrent Neural Network, Shakespeare and GO">
+<meta itemprop="description" content="You may know how enthusiast I am about machine learning. A while ago I discovered recurrent neural networks. I have read that this &#39;tool&#39; allow to predict the future! Is this a kind of magic? I have read a lot of stuffs about the &#39;unreasonable effectiveness&#39; of this mechanism. The litteracy that gives deep explanation exists and is excellent. There is also plehtora of examples, but most of them are using python and a calcul framework. To fully undestand how things work (as I am not a data-scientist), I needed to write my own tool &#39;from scratch&#39;. This is what this post is about: a more-or-less &#39;from scratch&#39; implementation of a RNN in go that can be used to applied to a lot of examples">
+
+
+<meta itemprop="datePublished" content="2017-10-29T07:17:33&#43;01:00" />
+<meta itemprop="dateModified" content="2017-10-29T07:17:33&#43;01:00" />
+<meta itemprop="wordCount" content="2982">
+
+  <meta itemprop="image" content="https://upload.wikimedia.org/wikipedia/en/6/63/Queen_A_Kind_Of_Magic.png">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image:src" content="https://upload.wikimedia.org/wikipedia/en/6/63/Queen_A_Kind_Of_Magic.png"/>
+<meta name="twitter:title" content="About Recurrent Neural Network, Shakespeare and GO"/>
+<meta name="twitter:description" content="You may know how enthusiast I am about machine learning. A while ago I discovered recurrent neural networks. I have read that this &#39;tool&#39; allow to predict the future! Is this a kind of magic? I have read a lot of stuffs about the &#39;unreasonable effectiveness&#39; of this mechanism. The litteracy that gives deep explanation exists and is excellent. There is also plehtora of examples, but most of them are using python and a calcul framework. To fully undestand how things work (as I am not a data-scientist), I needed to write my own tool &#39;from scratch&#39;. This is what this post is about: a more-or-less &#39;from scratch&#39; implementation of a RNN in go that can be used to applied to a lot of examples"/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">
+
+    <title>About Recurrent Neural Network, Shakespeare and GO | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-10-29T07:17:33&#43;01:00">Sun Oct 29, 2017</time> by Olivier Wulveryck</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html'>
+      
+        <div class="crop">
+      <img src="https://upload.wikimedia.org/wikipedia/en/6/63/Queen_A_Kind_Of_Magic.png" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<h1 id="shakespeare-and-i-encounter-of-the-third-type">Shakespeare and I, encounter of the third type</h1>
+
+<p>A couple of months ago, I attended the Google Cloud Next 17 event in London.
+Among the talks about SRE, and keynotes, I had the chance to listen to Martin Gorner&rsquo;s excellent introduction: <a href="https://www.youtube.com/watch?v=fTUwdXUFfI8">TensorFlow and Deep Learning without a PhD, Part 2</a>. If you don&rsquo;t want to look at the video, here is a quick summary:</p>
+
+<p><em>a 100 of lines of python are reading all Shakespeare&rsquo;s plays; it learns his style, and then generates a brand new play from scratch.</em></p>
+
+<p>Of course, when you are not a data-scientist (and I am not), this looks pretty amazing (and a bit magical).</p>
+
+<p>Back home, I told my friends how amazing it was. I downloaded the code from <a href="https://github.com/martin-gorner/tensorflow-rnn-shakespeare">github</a>, installed tensorflow, and played my Shakespeare to show them.
+In essence, here is what they told me:</p>
+
+<ul>
+<li><em>&ldquo;Amazing, and you know how this works?</em></li>
+<li><em>Well&hellip;&rdquo;</em> let&rsquo;s be honest, I had only a vague idea.</li>
+</ul>
+
+<p>It was about something called &ldquo;Recurrent Neural Networks&rdquo; (aka <em>RNN</em>).
+I dived into the internet&hellip; 100 lines of python shouldn&rsquo;t be hard to understand. And to reproduce ?
+Where they?</p>
+
+<p>Actually, it took me months to be able to write this post, without any previous knowledge, it was not that easy.</p>
+
+<p>This is the reason why I finally wrote this article. I want to be sure that I have understood the structure and the possibilities offered by recurrent neural networks.
+I also wanted to see whether building a RNN powered tool was doable easily.</p>
+
+<p>This document is divided into two parts:</p>
+
+<ul>
+<li>the first part is about recurrent neural networks in general;</li>
+<li>the second part is about a toy I made in GO to play with RNNs.</li>
+</ul>
+
+<p>The goal of this text is not to talk about the mathematics behind the neural networks.
+Of course, I may talk about vectors, but I will not talk about non-linearity or hyperbolic functions.</p>
+
+<p>I hope you will be enthusiastic, as much as I am.</p>
+
+<p>Anyway, do not hesitate to give me any feedback or suggestion that may improve my work.</p>
+
+<h1 id="first-part-the-rnn-and-i-first-episode-of-a-time-serie">First part: The RNN and I, first episode of a time-serie</h1>
+
+<p>The Web is full of resources about machine learning. You can easily find great articles, very well illustrated about neural networks.
+I&rsquo;ve read a lot&hellip;</p>
+
+<p>The more I learn, the more excited I get.</p>
+
+<p>For example, I&rsquo;ve discovered that RNN could, by nature, predict time series
+(cf <a href="http://dataconomy.com/2017/05/how-to-do-time-series-prediction-using-rnns-tensorflow-and-cloud-ml-engine/">how to do time series prediction using RNNs, Tensorflow and Cloud ML engine</a>).</p>
+
+<ul>
+<li><em>&ldquo;Wait, does it mean that it can predict the future?</em></li>
+<li>Well, kind of&hellip;&rdquo;</li>
+</ul>
+
+<p>It is still in the area of &ldquo;supervised learning&rdquo;.</p>
+
+<p>Therefore, the algorithm learns events. Based on this, the algorithm can predict what may come next; but only if it is something it has already seen.
+Let&rsquo;s take an example. Consider a lottery game (everybody ask me about this):</p>
+
+<p>To win, your ticket&rsquo;s sequence of numbers must be identical to the one that will be chosen, randomly, at the next draw.
+If RNN can predict the future, it should, basically, be able to predict it.</p>
+
+<p>The RNN must learn about the sequences to apply its knowledge (and become a fortune-teller). So If every week the draw is made of &ldquo;1 2 3 4 5 6&rdquo;, the RNN will learn, and tell that the next draw will be: &ldquo;1 2 3 4 5 6&rdquo;.</p>
+
+<p>Obviously this is useless; now let&rsquo;s consider a more complex sequence:</p>
+
+<table>
+<thead>
+<tr>
+<th>Week</th>
+<th>sequence</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td>1 2 3 4 5 6</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>2 3 4 5 6 1</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>3 4 5 6 1 2</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>4 5 6 1 2 3</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>5 6 1 2 3 4</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>6 1 2 3 4 5</td>
+</tr>
+
+<tr>
+<td>7</td>
+<td>1 2 3 4 5 6</td>
+</tr>
+
+<tr>
+<td>8</td>
+<td>? ? ? ? ? ?</td>
+</tr>
+</tbody>
+</table>
+
+<p>Question: What will be the winning sequence of week 8?</p>
+
+<p>&ldquo;2 3 4 5 6 1&rdquo;. Cool, you are rich!
+How did you do it? You memorized the sequence.</p>
+
+<p>RNN does exactly the same.</p>
+
+<ul>
+<li>&ldquo;So, it <strong>can</strong> predict the next lottery?</li>
+<li>No, because there is no sequence in the lottery, it is pure randomness&rdquo;.</li>
+</ul>
+
+<p>In other word, there is no &ldquo;<em>recurrence</em>&rdquo; in the drawing. Therefore, &ldquo;<em>recurrent</em>&rdquo; neural networks cannot be applied.</p>
+
+<p>Anyway, beside the lottery, a lot of events are, in essence, recurrents.
+The point is that the recurrency model is usually not obvious and not that easy to detect. This is the famous &ldquo;feeling&rdquo; of the experts.</p>
+
+<p>For example, you may have already heard:</p>
+
+<ul>
+<li>&ldquo;Will the system crash?</li>
+<li>Based of what I see and what I know, I [don&rsquo;t] think so&rdquo;.</li>
+</ul>
+
+<p>or,</p>
+
+<ul>
+<li>&ldquo;Will the sales increase on Sunday?</li>
+<li>Regarding the current market situation and on my experience, it may&rdquo;.</li>
+</ul>
+
+<p>This is where a RNN could shine and enhance our professional lives.</p>
+
+<p>In a pure IT context, for example, you have failures &ldquo;every now-and-then&rdquo;. Even if you don&rsquo;t find the root cause, it could be useful to predict the next failure.
+If you have enough data about the past failures, the RNN could learn the pattern, and tell you when the next failure will occur.</p>
+
+<hr />
+
+<p><center>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Gartner&#39;s <a href="https://twitter.com/CarlieIdoine?ref_src=twsrc%5Etfw">@CarlieIdoine</a> explains how &#39;citizen&#39; <a href="https://twitter.com/hashtag/data?src=hash&amp;ref_src=twsrc%5Etfw">#data</a> scientists in your organization can make pervasive <a href="https://twitter.com/hashtag/analytics?src=hash&amp;ref_src=twsrc%5Etfw">#analytics</a> a reality <a href="https://twitter.com/hashtag/GartnerDA?src=hash&amp;ref_src=twsrc%5Etfw">#GartnerDA</a> <a href="https://t.co/iRdm2vNsuJ">pic.twitter.com/iRdm2vNsuJ</a></p>&mdash; Gartner Events (@Gartner_Events) <a href="https://twitter.com/Gartner_Events/status/844561153229541376?ref_src=twsrc%5Etfw">March 22, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+</center></p>
+
+<hr />
+
+<h3 id="experimenting-with-rnn">Experimenting with RNN</h3>
+
+<p>I needed a simple tool to do experimentations.
+A huge majority of articles about machine learning are using Python and a framework (such as Tensorflow).
+To me, it has two major drawbacks:</p>
+
+<ul>
+<li>I need to fully understand how to use the framework;</li>
+<li>as it is Python related (and I am not fluent in Python), building <strong>and deploying</strong> efficient tools could take some time.</li>
+</ul>
+
+<p>Let&rsquo;s be more specific about the second point.</p>
+
+<p>I have seen a lot of samples that could do very beautiful stuffs based on fake data.
+Playing with everyday data usually implies to rewrite the tool, from scratch&hellip;</p>
+
+<p>Therefore, I have decided to implement a RNN engine from scratch, in GO (I am &ldquo;fluent&rdquo; in go, that have save me days of debugging).
+The goal is simple: to understand how RNN works.</p>
+
+<p><em>&ldquo;Whatever is well conceived is clearly said, and the words to say it flow with ease&rdquo;.</em></p>
+
+<p><em>&ldquo;Ce que l&rsquo;on conçoit bien s&rsquo;énonce clairement, et les mots pour le dire arrivent aisément&rdquo;.</em></p>
+
+<p align="right"><i>Nicolas Boileau</i></p>
+
+<h3 id="the-initial-example">The initial example</h3>
+
+<p>The following example is basically an adaptation of Andrej Karpathy&rsquo;s post: <a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/">The Unreasonable Effectiveness of Recurrent Neural Networks</a>. I strongly encourage you to read it.</p>
+
+<p>Anyway, I will give you a couple of explanations of the principle.
+The goal is to write and train a RNN with a certain amount of text data.</p>
+
+<p>Then, once the RNN is trained, we ask the tool to generate a new text based on what it has learned, character by character.</p>
+
+<h3 id="how-does-it-work">How does it work?</h3>
+
+<p>Consider the &ldquo;HELLO&rdquo; example as described in Karpathy&rsquo;s post.
+The vocabulary of the example is composed of 4 letters: <code>H</code>, <code>E</code>, <code>L</code> and <code>O</code>.</p>
+
+<p>The principle is to train the RNN in order to make prediction for the next letter.</p>
+
+<p>Therefore, if I give an <code>H</code> as input the fully trained RNN, it will return an <code>E</code>,</p>
+
+<p>Then, the <code>E</code> will become the input, and the output will be an <code>L</code>.</p>
+
+<p>This <code>L</code> will become the new input. Here is a difficulty: after an <code>L</code>, there can be:</p>
+
+<ul>
+<li>another <code>L</code>,</li>
+<li>or an <code>O</code>.</li>
+</ul>
+
+<p>This is what make RNN suitable for this case: RNN have a memory!
+Then, it will most probably choose a second <code>L</code>, based, not only on the last letter, but also on the previous <code>H</code> and <code>E</code> it has seen.</p>
+
+<p>Correctly trained, the RNN should be able to produce an <code>O</code>.</p>
+
+<h3 id="a-classification-problem">A classification problem</h3>
+
+<p>In practice, this is a <a href="https://en.wikipedia.org/wiki/Statistical_classification">classification problem</a>; every letter in the alphabet is a class.</p>
+
+<p>Given a sequence of letters as input, the mechanism should predict which class it belongs to. This class represents the next letter to be displayed.</p>
+
+<p>For example:</p>
+
+<ul>
+<li><code>h</code> belongs to class <code>e</code></li>
+<li><code>h e</code> belongs to class <code>l</code></li>
+<li><code>h e l</code> also belongs to classe <code>l</code></li>
+<li><code>h e l l</code> belongs to class <code>o</code></li>
+</ul>
+
+<p>The network will compute, for each class, a probability based on the input and the context.
+So, every letter will be assigned a value between 0 and 1 by the algorithm.</p>
+
+<p>If we formalize that in an array, the ideal situation would be:</p>
+
+<p><html>
+<table border=1 align=center>
+<tr>
+<th>context</th><th>input</th>
+<th>Probability of class H</th>
+<th>Probability of class E</th>
+<th>Probability of class L</th>
+<th>Probability of class O</th>
+</tr>
+<tr><td></td><td>H</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>H</td><td>E</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>H e</td><td>L</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>H E L</td><td>L</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+</table>
+</html></p>
+
+<p>In practice, we may have something slightly different (this is an example, do not try to interpret the values):</p>
+
+<p><html>
+<table border=1 align=center>
+<tr>
+<th>context</th><th>input</th>
+<th>Probability of class H</th>
+<th>Probability of class E</th>
+<th>Probability of class L</th>
+<th>Probability of class O</th>
+</tr>
+<tr><td></td><td>H</td><td>0.1</td><td>0.8</td><td>0.05</td><td>0.05</td></tr>
+<tr><td>H</td><td>E</td><td>0.1</td><td>0.07</td><td>0.8</td><td>0.03</td></tr>
+<tr><td>H E</td><td>L</td><td>0.05</td><td>0.05</td><td>0.5</td><td>0.4</td></tr>
+<tr><td>H E L</td><td>L</td><td>0.05</td><td>0.05</td><td>0.4</td><td>0.5</td></tr>
+</table>
+</html></p>
+
+<p>We have encoded the output into an array. In mathematics, such array is called a vector.</p>
+
+<p>On the same principle, we can encode the input letters into a <em>1-of-k</em> vector (1 in the cell corresponding to character, 0 elsewhere).</p>
+
+<pre> 
+<code>  
+    h e l o
+h = 1 0 0 0
+e = 0 1 0 0
+l = 0 0 1 0
+o = 0 0 0 1
+</code>
+</pre>
+
+<p>The purpose of the prediction is to apply a mathematical function to an input vector in order to produce an output vector (composed of probabilities).
+The next character should be chosen accordingly.</p>
+
+<p>The RNN does not know natively an equation able to predict the correct values but a mathematical model (a composition of mathematical function). This model contains a lot of parameters or variables.</p>
+
+<p>With proper values, those parameters applied to the mathematical model should allow to compute the correct vector.</p>
+
+<p>Finding the correct parameters is called <em>the training process</em>.</p>
+
+<p>The RNN, fed with a lot of data and their expected output, will adjust its internal parameters.</p>
+
+<p>At each step, the difference between the output and the expected result is evaluated; it is call <em>the loss</em>.</p>
+
+<p>The purpose of the adaptation is to reduce the loss at every step.</p>
+
+<h1 id="second-part-let-s-geek">Second part: Let&rsquo;s geek</h1>
+
+<p>From now on, let&rsquo;s talk about the implementation; feel free to skip this part and jump straight to the conclusion if your are not interested in coding.</p>
+
+<p>I want to create a tool able to generate a Shakespeare play as described in Karpathy&rsquo;s blog post.
+His implementation in Python is <a href="https://gist.github.com/karpathy/d4dee566867f8291f086">here</a>; you can find mine <a href="https://github.com/owulveryck/min-char-rnn">here</a>.</p>
+
+<p><strong>edit</strong> At first, it was a simple transcript from Python to GO, but the tool has been enhanced. It is now a more generic tool able to use RNN as a processing unit. It&rsquo;s pluggable to any code able to encode and decode a sequence of bytes into a vector.</p>
+
+<h2 id="the-rnn-package">The rnn package</h2>
+
+<p>I have created a separate package for two reasons:</p>
+
+<ul>
+<li>to fully understand what is related to the RNN;</li>
+<li>to see what is related to the example about character recognition.</li>
+</ul>
+
+<p>For the same reasons, I have tried to keep parameters as private as possible within the objects.</p>
+
+<p>I am using the <a href="https://godoc.org/github.com/gonum/matrix/mat64"><code>mat64.Dense</code></a> structure to represent the matrices and simple <code>[]float64</code> elements for column vectors
+(for more info: <a href="https://blog.golang.org/go-slices-usage-and-internals#clices">Go Slices: usage and internals</a>).</p>
+
+<h3 id="the-rnn-object">The RNN object</h3>
+
+<p>The RNN structure holds the three matrices representing the weights to be adapted:</p>
+
+<ul>
+<li>Wxh</li>
+<li>Whh</li>
+<li>Why</li>
+</ul>
+
+<p>On top of that, the RNN stores two &ldquo;vectors&rdquo; for the <a href="https://stackoverflow.com/questions/2480650/role-of-bias-in-neural-networks">bias</a>. One for the hidden layer, the other for the output layer.</p>
+
+<p>The hidden vector is not stored within the structure. Only the last hidden vector evaluated in the process of feedforward/backpropagation is stored.</p>
+
+<p>Not storing the hidden vector within the structure allows to use the same &ldquo;step&rdquo; function in the sampling process as well as the training process.</p>
+
+<h3 id="rnn-s-step">RNN&rsquo;s step</h3>
+
+<p>RNN&rsquo;s step method is the proper implementation of the neural network as described by <em>Karpathy</em>.
+As explained before, the hidden state is not part of the RNN structure. It is an output of the step function:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">rnn</span> <span class="o">*</span><span class="nx">RNN</span><span class="p">)</span> <span class="nx">step</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">hprev</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">)</span> <span class="p">(</span><span class="nx">y</span><span class="p">,</span> <span class="nx">h</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">h</span> <span class="p">=</span> <span class="nx">tanh</span><span class="p">(</span>
+		<span class="nx">add</span><span class="p">(</span>
+			<span class="nx">dot</span><span class="p">(</span><span class="nx">rnn</span><span class="p">.</span><span class="nx">wxh</span><span class="p">,</span> <span class="nx">x</span><span class="p">),</span>
+			<span class="nx">dot</span><span class="p">(</span><span class="nx">rnn</span><span class="p">.</span><span class="nx">whh</span><span class="p">,</span> <span class="nx">hprev</span><span class="p">),</span>
+			<span class="nx">rnn</span><span class="p">.</span><span class="nx">bh</span><span class="p">,</span>
+		<span class="p">))</span>
+	<span class="nx">y</span> <span class="p">=</span> <span class="nx">add</span><span class="p">(</span>
+		<span class="nx">dot</span><span class="p">(</span><span class="nx">rnn</span><span class="p">.</span><span class="nx">why</span><span class="p">,</span> <span class="nx">h</span><span class="p">),</span>
+		<span class="nx">rnn</span><span class="p">.</span><span class="nx">by</span><span class="p">)</span>
+	<span class="k">return</span>
+<span class="p">}</span></code></pre></div>
+<p>You see here that the step function of my RNN takes two vectors as input:</p>
+
+<ul>
+<li>a vector representing the currently evaluated item (remember, it is the representation of the <code>H</code>, <code>E</code>, <code>L</code> and <code>O</code> in the previous example),</li>
+<li>a hidden vector that is the memory of the passed elements.</li>
+</ul>
+
+<p>It returns two vectors:</p>
+
+<ul>
+<li>the evaluated output in term of vector (again it is the representation of the  <code>H</code>, <code>E</code>, <code>L</code> and <code>O</code>),</li>
+<li>a new and updated hidden vector.</li>
+</ul>
+
+<p><em>Note</em> : For clarity, I have declared a couple of math helpers such as <code>dot</code>, <code>tanh</code> and <code>add</code> that are out of the scope of the explanation.</p>
+
+<h3 id="the-train-method">The Train method</h3>
+
+<p>This method is returning two channels and triggers a goroutine that does the job of training.</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">rnn</span> <span class="o">*</span><span class="nx">RNN</span><span class="p">)</span> <span class="nx">Train</span><span class="p">()</span> <span class="p">(</span><span class="kd">chan</span><span class="o">&lt;-</span> <span class="nx">TrainingSet</span><span class="p">,</span> <span class="kd">chan</span> <span class="kt">float64</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">...</span>
+<span class="p">}</span></code></pre></div>
+<p>The first channel is a feeding channel for the RNN. It receives a <code>TrainingSet</code> that is composed of:</p>
+
+<ul>
+<li>an input vector</li>
+<li>a target vector</li>
+</ul>
+
+<p>The goroutine will read the channel, and get all the training data.
+It will evaluates the input of the training set and use the target to adapt the parameters.</p>
+
+<p>The second channel is a non blocking channel. It is used to transfer the loss evaluated at each pass for information purpose.</p>
+
+<h3 id="forward-processing">Forward processing</h3>
+
+<p>The forward processing takes a batch of inputs (an array of array) and a sequence of outputs.
+It runs the step as many times as needed and stores the hidden vectors in a temporary array. Then the values are used for the back propagation.</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">rnn</span> <span class="o">*</span><span class="nx">RNN</span><span class="p">)</span> <span class="nx">forwardPass</span><span class="p">(</span><span class="nx">xs</span> <span class="p">[][]</span><span class="kt">float64</span><span class="p">,</span> <span class="nx">hprev</span> <span class="p">[]</span><span class="kt">float64</span><span class="p">)</span> <span class="p">(</span><span class="nx">ys</span><span class="p">,</span> <span class="nx">hs</span> <span class="p">[][]</span><span class="kt">float64</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">...</span>
+<span class="p">}</span></code></pre></div>
+<h3 id="back-propagation-through-time">Back propagation through time</h3>
+
+<p>The back propagation is evaluating the gradient. Once the evaluation is done, parameters can be adapted according to the computed gradients.</p>
+
+<h3 id="adapting-the-parameters-via-adagrad">Adapting the parameters via &ldquo;AdaGrad&rdquo;</h3>
+
+<p>The method used by Karpathy is the Adaptive gradient.
+This one needs a memory; therefore I have declared a new object for the adagrad with a simple Apply method.
+The <code>apply</code> method  of the <code>adagrad</code> object takes the neural network as a parameter and the previously evaluated gradients.</p>
+
+<p>Once this process is done, the RNN is trained and usable.</p>
+
+<h3 id="prediction">Prediction</h3>
+
+<p>I have implemented a <code>Predict</code> method that applies the same method. It starts with an empty memory (the hidden vector is zeroed), takes a sample text as input and generate the output without evaluating the gradient nor adapting the parameters.</p>
+
+<p>This RNN implementation is enough to generate the Shakespeare.</p>
+
+<h2 id="enhancement-of-the-tool-implementing-codecs">Enhancement of the tool: implementing codecs</h2>
+
+<p>In order to work with any character (= any symbol), the best way to <em>GO</em> is to use the concept of <a href="https://blog.golang.org/strings">rune</a>.
+The first implementation of the min-char-rnn I made was using this package. It was simply implementing and a couple of functions to 1-of-k encode and decode the rune, one at a time.</p>
+
+<p>It was working as expected, but I was stuck within the character based neural network.</p>
+
+<p>As explained before, the RNN package is working with vectors, and have no knowledge of characters, pictures, bytes or whatever.</p>
+
+<p>So to continue with this level of abstraction, I have declared a codec interface.</p>
+
+<p>Therefore, the character based example is simply an implementation that fulfills this interface.</p>
+
+<h3 id="the-codec-interface">The codec interface</h3>
+
+<p>The codec interface describes the required methods any object must implement in order to use the RNN.</p>
+
+<p>It allows any implementation to use the RNN (imagine a log parser, an image encoder/decoder, a webservice [<em>insert whatever fancy idea here</em>]&hellip;)</p>
+
+<p>The most important methods of the interface are:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">Decode</span><span class="p">([][]</span><span class="kt">float64</span><span class="p">)</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span>
+<span class="nx">Encode</span><span class="p">(</span><span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="p">[][]</span><span class="kt">float64</span></code></pre></div>
+<p>Those methods are dealing with arrays of vectors on one side, and with <code>io.Reader</code> on the other side.
+Therefore, it can use any input type, from a text representation to a data flow over the network (and if you are <em>gopher</em>, you know how cool <code>io.Reader</code> are!)</p>
+
+<p>The other methods are simply helper functions useful to train the network. I have also chosen to add a post processing method:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">ApplyDist</span><span class="p">([]</span><span class="kt">float64</span><span class="p">)</span> <span class="p">[]</span><span class="kt">float64</span></code></pre></div>
+<p>This method is a post processing of the output vector. Actually, the returned vector is made of normalized probabilities.
+In a classification mechanism, one element must be chosen.
+Obviously, the algorithm should choose the one with the best probability.</p>
+
+<p>But, in the case of the char example, we can add some randomness by selecting the output class according to a certain distribution.
+I have implemented a <a href="https://godoc.org/github.com/gonum/stat/distuv#Categorical">Bernouilli distribution</a> for the char codec. It is selectable by setting <code>CHAR_CODEC_CHOICE=soft</code> in the environment).</p>
+
+<p>This function also let the possibility to get the raw normalized probabilities by implementing a no-ops func.</p>
+
+<p><em>Note</em> : This interface should be reworked, because <em>Pike</em> loves the one-function-interfaces, and <em>Pike</em> knows!</p>
+
+<h3 id="the-char-implementation-of-the-codec-interface">The char implementation of the codec interface</h3>
+
+<p>As explained before, the char implementation consists of a couple of methods that reads a file and encode it.
+It can also decode a generated output.</p>
+
+<p>It is that simple. It also serve as an example for whatever new codec implementation.</p>
+
+<h2 id="the-main-tool">The main tool</h2>
+
+<p>The main tool is just the glue between all the packages.
+It can be used to train the network or to generate an output. The parameters are tweakable via environment variables (actually each package deals with their own environment variables).</p>
+
+<p>you can find all the code on my <a href="https://github.com/owulveryck/min-char-rnn">gitHub</a>. It needs tweaking and deep testing though.
+I have also uploaded a binary distribution and a pre-trained model (I have implemented a backup and restore mechanism in order to use a pre-trained model).</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>I have now understood the principle of RNN. It offers me a lot of opportunities for future work.</p>
+
+<p>I would like to develop some sample tools that could be useful in my everyday life.</p>
+
+<p>Why not writing a codec that can parse the log files of an application. The output would be an encoded status of the health of the application (red, orange or green).</p>
+
+<p>With the correct data about when warnings or failures occurred, it should able to predict the next failure&hellip; before it happens.</p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2017%2f10%2f29%2fabout-recurrent-neural-network-shakespeare-and-go.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f10%2f29%2fabout-recurrent-neural-network-shakespeare-and-go.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f10%2f29%2fabout-recurrent-neural-network-shakespeare-and-go.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2017%2f10%2f29%2fabout-recurrent-neural-network-shakespeare-and-go.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

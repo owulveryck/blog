@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="Ruby / ZeroMQ / GO" />
+<meta property="og:description" content="My attempt to make a go program talk to a ruby script via a 0MQ message" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html" />
+
+
+
+<meta property="article:published_time" content="2015-10-22T20:40:36&#43;02:00"/>
+
+<meta property="article:modified_time" content="2015-10-22T20:40:36&#43;02:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Ruby / ZeroMQ / GO">
+<meta itemprop="description" content="My attempt to make a go program talk to a ruby script via a 0MQ message">
+
+
+<meta itemprop="datePublished" content="2015-10-22T20:40:36&#43;02:00" />
+<meta itemprop="dateModified" content="2015-10-22T20:40:36&#43;02:00" />
+<meta itemprop="wordCount" content="770">
+
+
+
+<meta itemprop="keywords" content="Development,go,ruby,zmq," />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Ruby / ZeroMQ / GO"/>
+<meta name="twitter:description" content="My attempt to make a go program talk to a ruby script via a 0MQ message"/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html">
+
+    <title>Ruby / ZeroMQ / GO | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html">Ruby / ZeroMQ / GO</a></h2>
+    <p class="blog-post-meta"><time datetime="2015-10-22T20:40:36&#43;02:00">Thu Oct 22, 2015</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/development" rel="tag">Development</a>, <a href="/tags/go" rel="tag">go</a>, <a href="/tags/ruby" rel="tag">ruby</a>, <a href="/tags/zmq" rel="tag">zmq</a>
+
+</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html'>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<h1 id="abtract">Abtract</h1>
+
+<p>I really like go as a programming language. It is a good tool to develop web restful API service.</p>
+
+<p>On the other hand, ruby and its framework rails has also been wildly used to achieve the same goal.</p>
+
+<p>Therefore we may be facing a &ldquo;legacy&rdquo; ruby developpement that we would like to connect to our brand new go framework.
+0MQ may be a perfect choice for intefacing the two languages.</p>
+
+<p>Anyway, it is, at least, a good experience to do a little bit of code to make them communicate.</p>
+
+<h1 id="zeromq">ZeroMQ</h1>
+
+<p>I will use the ZeroMQ version 4 as it is the latest available one.
+On top of that, I can see in the <a href="http://zeromq.org/docs:changes-4-0-0">release notes</a> that there is an implementation of a strong encryption, and I may use it later on</p>
+
+<h1 id="go">Go</h1>
+
+<h2 id="installation-of-the-library">Installation of the library</h2>
+
+<p>As written in the README file, I try a <code>go get</code> installation on my chromebook.</p>
+
+<pre><code>~ go get github.com/pebbe/zmq4
+# pkg-config --cflags libzmq
+Package libzmq was not found in the pkg-config search path.
+Perhaps you should add the directory containing `libzmq.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'libzmq' found
+pkg-config: exit status 1
+</code></pre>
+
+<p>The go binding is not a pure go implementation, and it still needs the C library of zmq.</p>
+
+<p>Let&rsquo;s <em>brew installing</em> it:</p>
+
+<pre><code>~  brew install zmq
+==&gt; Downloading http://download.zeromq.org/zeromq-4.1.3.tar.gz
+######################################################################## 100.0%
+==&gt; ./configure --prefix=/usr/local/linuxbrew/Cellar/zeromq/4.1.3 --without-libsodium
+==&gt; make
+==&gt; make install
+/usr/local/linuxbrew/Cellar/zeromq/4.1.3: 63 files, 3.5M, built in 73 seconds
+</code></pre>
+
+<p>Let&rsquo;s do the go-get again:</p>
+
+<pre><code>~ go get github.com/pebbe/zmq4
+</code></pre>
+
+<p>so far so good. Now let&rsquo;s test the installation with a &ldquo;hello world&rdquo; example.</p>
+
+<p><em>Note</em>: the <a href="https://github.com/pebbe/zmq4/blob/master/examples">examples directory</a> contains a go implementation of all the example of the ZMQ book
+I will use the <a href="https://github.com/pebbe/zmq4/blob/master/examples/hwclient.go">hello world client</a> and the <a href="https://github.com/pebbe/zmq4/blob/master/examples/hwserver.go">hello world server</a> for my tests</p>
+
+<p>The hello world client/server is implementing a Request-Reply patternt and are communicating via a TCP socket.</p>
+
+<ul>
+<li>The server is the <em>replier</em> and is listening on the TCP port 5555
+<code>go
+...
+func main() {
+//  Socket to talk to clients
+responder, _ := zmq.NewSocket(zmq.REP)
+defer responder.Close()
+responder.Bind(&quot;tcp://*:5555&quot;)
+...
+}
+</code></li>
+<li>The client is the <em>requester</em> and is dialing the same TCP port
+<code>go
+...
+func main() {
+//  Socket to talk to server
+fmt.Println(&quot;Connecting to hello world server...&quot;)
+requester, _ := zmq.NewSocket(zmq.REQ)
+defer requester.Close()
+requester.Connect(&quot;tcp://localhost:5555&quot;)
+...
+}
+</code></li>
+</ul>
+
+<p>Then, the client is sending (requesting) a <em>hello</em> message, and the server is replying a <em>world</em> message.</p>
+
+<h2 id="running-the-example">Running the example</h2>
+
+<p>First, start the server:</p>
+
+<pre><code>~ cd $GOPATH/src/github.com/pebbe/zmq4/examples
+~ go run hwserver.go
+</code></pre>
+
+<p>Then the client</p>
+
+<pre><code>~ cd $GOPATH/src/github.com/pebbe/zmq4/examples
+~ go run hwclient.go
+Connecting to hello world server...
+Sending  Hello 0
+Received  World
+Sending  Hello 1
+Received  World
+Sending  Hello 2
+...
+</code></pre>
+
+<h1 id="ruby">Ruby</h1>
+
+<p>Now let&rsquo;s implement a Ruby client.</p>
+
+<h2 id="installation-of-the-library-1">Installation of the library</h2>
+
+<p>a <em>gem install</em> is supposed to do the trick:</p>
+
+<pre><code>~ gem install zmq
+Building native extensions.  This could take a while...
+ERROR:  Error installing zmq:
+ERROR: Failed to build gem native extension.
+
+/usr/local/linuxbrew/opt/ruby/bin/ruby -r ./siteconf20151022-23021-1ehwusq.rb extconf.rb
+    checking for zmq.h... yes
+    checking for zmq_init() in -lzmq... yes
+    Cool, I found your zmq install...
+    creating Makefile
+
+    make &quot;DESTDIR=&quot; clean
+
+    make &quot;DESTDIR=&quot;
+    compiling rbzmq.c
+    rbzmq.c: In function 'socket_getsockopt':
+    rbzmq.c:968:7: error: 'ZMQ_RECOVERY_IVL_MSEC' undeclared (first use in this function)
+        case ZMQ_RECOVERY_IVL_MSEC:
+        ...
+</code></pre>
+
+<p>Arg!, something went wrong. It looks like there is a version mismatch between th libzmq brew installed and the version expected by the gem
+The <em>zmq</em> gem seems a bit old and there is a <em>FFI</em> ruby extension with a more active developement.</p>
+
+<p>Moreover, I have found []the perfect website for the ruby-and-zmq-ignorant(<a href="https://github.com/andrewvc/learn-ruby-zeromq">https://github.com/andrewvc/learn-ruby-zeromq</a>)</p>
+
+<p>As written in the doc, let&rsquo;s install the needed gems via <code>gem install ffi ffi-rzmq zmqmachine</code></p>
+
+<h2 id="let-s-try-the-lib">Let&rsquo;s try the lib</h2>
+
+<p>Ok, it is now time to run an example</p>
+
+<pre><code>require 'rubygems'
+require 'ffi-rzmq'
+def error_check(rc)
+    if ZMQ::Util.resultcode_ok?(rc)
+        false
+    else
+        STDERR.puts &quot;Operation failed, errno [#{ZMQ::Util.errno}] description [#{ZMQ::Util.error_string}]&quot;
+        caller(1).each { |callstack| STDERR.puts(callstack)  }
+        true
+    end
+end
+
+ctx = ZMQ::Context.create(1)
+STDERR.puts &quot;Failed to create a Context&quot; unless ctx
+
+req_sock = ctx.socket(ZMQ::REQ)
+rc = req_sock.connect('tcp://127.0.0.1:5555')
+STDERR.puts &quot;Failed to connect REQ socket&quot; unless ZMQ::Util.resultcode_ok?(rc)
+
+2.times do
+    rc = req_sock.send_string('Ruby says Hello')
+    break if error_check(rc)
+
+    rep = ''
+    rc = req_sock.recv_string(rep)
+    break if error_check(rc)
+    puts &quot;Received reply '#{rep}'&quot;
+end
+error_check(req_sock.close)
+
+ctx.terminate
+</code></pre>
+
+<p>Running this example with a simple <code>ruby client.rb</code> command leads to the following errors:</p>
+
+<pre><code>ruby client.rb
+Assertion failed: check () (src/msg.cpp:248)
+</code></pre>
+
+<p>But, my GO server is receiving the messages:</p>
+
+<pre><code>~ go run hwserver.go
+Received  Ruby says Hello
+Received  Ruby says Hello
+</code></pre>
+
+<h1 id="end-of-show">End of show</h1>
+
+<p>That&rsquo;s it for now. I think I&rsquo;m facing a bug in the ruby implementation of the libzmq I&rsquo;m using.
+Indeed, I&rsquo;ve found an <a href="https://github.com/chuckremes/ffi-rzmq/issues/118">issue</a>&hellip;</p>
+
+<p>I will check again later, or I will try on another environement but the essential is here.</p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2015%2f10%2f22%2fruby-%2f-zeromq-%2f-go.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2015%2f10%2f22%2fruby-%2f-zeromq-%2f-go.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2015%2f10%2f22%2fruby-%2f-zeromq-%2f-go.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2015%2f10%2f22%2fruby-%2f-zeromq-%2f-go.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

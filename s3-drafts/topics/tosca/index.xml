@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tosca on Unladen swallow</title>
+    <link>https://blog.owulveryck.info/topics/tosca.html</link>
+    <description>Recent content in Tosca on Unladen swallow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>All rights reserved - 2015/2017</copyright>
+    <lastBuildDate>Fri, 20 Nov 2015 10:09:30 +0000</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/topics/tosca/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>TOSCA lifecycle as a digraph</title>
+      <link>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html</link>
+      <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html</guid>
+      <description>About TOSCA The TOSCA acronym stands for Topology and Orchestration Specification for Cloud Applications. It&amp;rsquo;s an OASIS standard.
+The purpose of the TOSCA project is to represent an application by its topology and formalize it using the TOSCA grammar.
+The [TOSCA-Simple-Profile-YAML-v1.0] current specification in YAML introduces the following concepts.
+  TOSCA YAML service template: A YAML document artifact containing a (TOSCA) service template that represents a Cloud application. TOSCA processor: An engine or tool that is capable of parsing and interpreting a TOSCA YAML service template for a particular purpose.</description>
+    </item>
+    
+  </channel>
+</rss>

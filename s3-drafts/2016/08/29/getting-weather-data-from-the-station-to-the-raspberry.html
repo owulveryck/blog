@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="Getting weather data from the station to the raspberry" />
+<meta property="og:description" content="A first geek interaction between my  raspberry pi 3 and my weather station" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html" />
+
+
+
+<meta property="article:published_time" content="2016-08-29T21:58:17&#43;02:00"/>
+
+<meta property="article:modified_time" content="2016-08-29T21:58:17&#43;02:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Getting weather data from the station to the raspberry">
+<meta itemprop="description" content="A first geek interaction between my  raspberry pi 3 and my weather station">
+
+
+<meta itemprop="datePublished" content="2016-08-29T21:58:17&#43;02:00" />
+<meta itemprop="dateModified" content="2016-08-29T21:58:17&#43;02:00" />
+<meta itemprop="wordCount" content="1682">
+
+
+
+<meta itemprop="keywords" content="libusb,udev,linux,weather station,oregon RMS300,golang,raspberry pi," />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Getting weather data from the station to the raspberry"/>
+<meta name="twitter:description" content="A first geek interaction between my  raspberry pi 3 and my weather station"/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html">
+
+    <title>Getting weather data from the station to the raspberry | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html">Getting weather data from the station to the raspberry</a></h2>
+    <p class="blog-post-meta"><time datetime="2016-08-29T21:58:17&#43;02:00">Mon Aug 29, 2016</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/libusb" rel="tag">libusb</a>, <a href="/tags/udev" rel="tag">udev</a>, <a href="/tags/linux" rel="tag">linux</a>, <a href="/tags/weather-station" rel="tag">weather station</a>, <a href="/tags/oregon-rms300" rel="tag">oregon RMS300</a>, <a href="/tags/golang" rel="tag">golang</a>, <a href="/tags/raspberry-pi" rel="tag">raspberry pi</a>
+
+</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html'>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<h1 id="introduction">Introduction</h1>
+
+<p>A bunch of friends/colleagues offered me a <a type=amzn>raspberry pi 3</a>.
+It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe the center of an alarm&hellip;. Maybe a spotify player&hellip;</p>
+
+<p>Anyway, I have installed raspbian and I&rsquo;m now playing with it.</p>
+
+<p>Yesterday evening, as I was about to go to bed, I&rsquo;ve had a very bad idea&hellip; I&rsquo;ve linked together my <a type=amzn>rpi</a> and my <a type="amzn">Oregon</a> Weather Station.
+3 hours later, I was still geeking&hellip;</p>
+
+<p>As usual in the blog I will explain what I did, what did work, and what did not.</p>
+
+<h1 id="attaching-the-devices">Attaching the devices</h1>
+
+<p>I&rsquo;ve plugged the device, ok! Now what does the system tells me about it:</p>
+
+<p>What <code>dmesg</code> tells me is simply</p>
+
+<pre>
+[ 2256.877522] usb 1-1.4: new low-speed USB device number 5 using dwc_otg
+[ 2256.984860] usb 1-1.4: New USB device found, idVendor=0fde, idProduct=ca01
+[ 2256.984881] usb 1-1.4: New USB device strings: Mfr=0, Product=1, SerialNumber=0
+[ 2256.984894] usb 1-1.4: Product:  
+[ 2256.992719] hid-generic 0003:0FDE:CA01.0002: hiddev0,hidraw0: USB HID v1.10 Device [ ] on usb-3f980000.usb-1.4/input0
+</pre>
+
+<h2 id="finding-the-device">Finding the device</h2>
+
+<p><code>lsusb</code> gives me the list of the usb devices on my <a type=amzn>rpi</a>:</p>
+
+<pre>
+# lsusb 
+Bus 001 Device 004: ID 0fde:ca01  
+Bus 001 Device 003: ID 0424:ec00 Standard Microsystems Corp. SMSC9512/9514 Fast Ethernet Adapter
+Bus 001 Device 002: ID 0424:9514 Standard Microsystems Corp. 
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+</pre>
+
+<p>The first one correspond to my weather station but it belongs to root:</p>
+
+<pre>
+# ls -lrt /dev/bus/usb/001/004
+crw------- 1 root root 189, 3 Aug 30 12:45 /dev/bus/usb/001/004
+</pre>
+
+<h2 id="giving-access-udev">Giving access: <code>udev</code></h2>
+
+<p>The first thing to do is to allow access to my usb device so I won&rsquo;t need to run any program as root.
+By default the <code>pi</code> user belongs to a bunch of groups. One of those is called <code>plugdev</code>.
+It is the one I will use for my experiment.</p>
+
+<h3 id="get-information-about-my-device">Get information about my Device</h3>
+
+<pre>
+# udevadm info /dev/bus/usb/001/004
+
+P: /devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3
+N: bus/usb/001/012
+E: BUSNUM=001
+E: DEVNAME=/dev/bus/usb/001/012
+E: DEVNUM=012
+E: DEVPATH=/devices/platform/soc/3f980000.usb/usb1/1-1/1-1.3
+E: DEVTYPE=usb_device
+E: DRIVER=usb
+E: ID_BUS=usb
+E: ID_MODEL_ENC=\x20
+E: ID_MODEL_FROM_DATABASE=WMRS200 weather station
+E: ID_MODEL_ID=ca01
+E: ID_REVISION=0302
+E: ID_SERIAL=0fde_
+E: ID_USB_INTERFACES=:030000:
+E: ID_VENDOR=0fde
+E: ID_VENDOR_ENC=0fde
+E: ID_VENDOR_FROM_DATABASE=Oregon Scientific
+E: ID_VENDOR_ID=0fde
+E: MAJOR=189
+E: MINOR=11
+E: PRODUCT=fde/ca01/302
+E: SUBSYSTEM=__usb__
+E: TYPE=0/0/0
+E: USEC_INITIALIZED=5929384
+</pre>
+
+<p>I will note the vendor ID and the product ID.
+Funny stuff is that it presents itself as a WMRS200 and the model I have is a RMS300, but never mind.</p>
+
+<p>Let&rsquo;s create the udev rule file using the previous informations about the idVendor and the idProduct and create a special file <code>/dev/weather-station</code>.
+This will make the code more easy as I will be able to hard code the name, and leave the boring task of finding the device aside.</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">cat <span class="s">&lt;&lt; EOF &gt; /etc/udev/rules.d/50-weather-station.rules
+</span><span class="s"># Weather Station
+</span><span class="s">SUBSYSTEM==&#34;usb&#34;, ATTRS{idVendor}==&#34;0fde&#34;, ATTRS{idProduct}==&#34;ca01&#34;, MODE=&#34;0660&#34;, GROUP=&#34;plugdev&#34;, SYMLINK+=&#34;weather-station&#34;
+</span><span class="s">EOF</span></code></pre></div>
+<p>Once done, I can restart udev with <code>sudo /etc/init.d/udev restart</code> or reload and trigger the rules with <code>udevadm</code></p>
+
+<p>IF something goes wrong, you can check the logs by turning the log level to info, reload the rules and look into the syslog file</p>
+
+<pre><code># udevadm control -l info
+# udevadm control -R
+# # grep -i udev /var/log/syslog 
+# 
+</code></pre>
+
+<pre><code># ls -lrt /dev/weather-station                                                                                                               
+lrwxrwxrwx 1 root root 15 Aug 29 21:32 /dev/weather-station -&gt; bus/usb/001/007
+# ls -lrt /dev/bus/usb/001/007                                                                                                   
+crw-rw-r-- 1 root plugdev 189, 6 Aug 29 21:32 /dev/bus/usb/001/007
+</code></pre>
+
+<p>So far so good&hellip;</p>
+
+<h1 id="accessing-the-data">Accessing the data</h1>
+
+<h2 id="the-libusb">The libusb</h2>
+
+<p>Linux has a low level library &ldquo;libusb&rdquo; that make the development of modules easy: <a href="http://www.libusb.org/wiki/libusb-1.0">libusb-1.0</a>.
+On my <a type=amzn>rpi</a>, I can install the development version with a simple <code>sudo apt-get install libusb-1.0-0-dev</code>.</p>
+
+<h2 id="using-go-the-gousb-library">Using GO: The <code>gousb</code> library</h2>
+
+<p>A binding for the libusb is available through the <a href="https://github.com/truveris/gousb">gousb</a></p>
+
+<p>There is also a <strong>lsusb</strong> version that is available as an example.
+Let&rsquo;s grab it with a simple
+<code>go get -v github.com/kylelemons/gousb/lsusb</code></p>
+
+<p>and test it</p>
+
+<pre><code># ~GOPATH/bin/lsusb
+
+001.004 0fde:ca01 WMRS200 weather station (Oregon Scientific)
+  Protocol: (Defined at Interface level)
+  Config 01:
+    --------------
+    Interface 00 Setup 00
+      Human Interface Device (No Subclass) None
+      Endpoint 1 IN  interrupt - unsynchronized data [8 0]
+    --------------
+001.003 0424:ec00 SMSC9512/9514 Fast Ethernet Adapter (Standard Microsystems Corp.)
+  Protocol: Vendor Specific Class
+  Config 01:
+    --------------
+    Interface 00 Setup 00
+      Vendor Specific Class
+      Endpoint 1 IN  bulk - unsynchronized data [512 0]
+      Endpoint 2 OUT bulk - unsynchronized data [512 0]
+      Endpoint 3 IN  interrupt - unsynchronized data [16 0]
+    --------------
+001.002 0424:9514 SMC9514 Hub (Standard Microsystems Corp.)
+  Protocol: Hub (Unused) TT per port
+  Config 01:
+    --------------
+    Interface 00 Setup 00
+      Hub (Unused) Single TT
+      Endpoint 1 IN  interrupt - unsynchronized data [1 0]
+    Interface 00 Setup 01
+      Hub (Unused) TT per port
+      Endpoint 1 IN  interrupt - unsynchronized data [1 0]
+    --------------
+001.001 1d6b:0002 2.0 root hub (Linux Foundation)
+  Protocol: Hub (Unused) Single TT
+  Config 01:
+    --------------
+    Interface 00 Setup 00
+      Hub (Unused) Full speed (or root) hub
+      Endpoint 1 IN  interrupt - unsynchronized data [4 0]
+  --------------
+</code></pre>
+
+<h2 id="rawread">Rawread</h2>
+
+<p>I want to read the raw data from the device.
+The gousb package comes along with an example named &ldquo;rawread&rdquo;. I&rsquo;m using it:</p>
+
+<pre>
+# rawread git:(master) # go run main.go -device "0fde:ca01"
+2016/08/30 14:00:01 Scanning for device "0fde:ca01"...
+  Protocol: (Defined at Interface level)
+  Config 01:
+    --------------
+    Interface 00 Setup 00
+      Human Interface Device (No Subclass) None
+      Endpoint 1 IN  interrupt - unsynchronized data [8 0]
+    --------------
+2016/08/30 14:00:01 Connecting to endpoint...
+2016/08/30 14:00:01 - &usb.Descriptor{Bus:0x1, Address:0x4, Spec:0x110, Device:0x302, Vendor:0xfde, Product:0xca01, Class:0x0, SubClass:0x0, Protocol:0x0, Configs:[]usb.ConfigInfo{usb.ConfigInfo{Config:0x1, Attributes:0x80, MaxPower:0x32, Interfaces:[]usb.InterfaceInfo{usb.InterfaceInfo{Number:0x0, Setups:[]usb.InterfaceSetup{usb.InterfaceSetup{Number:0x0, Alternate:0x0, IfClass:0x3, IfSubClass:0x0, IfProtocol:0x0, Endpoints:[]usb.EndpointInfo{usb.EndpointInfo{Address:0x81, Attributes:0x3, MaxPacketSize:0x8, MaxIsoPacket:0x0, PollInterval:0xa, RefreshRate:0x0, SynchAddress:0x0}}}}}}}}}
+2016/08/30 14:00:01 open: usb: claim: libusb: device or resource busy [code -6]
+</pre>
+
+<p>After digging into the documentation and forums about the libusb, it looks like the device is locked by a generic kernel driver.
+So I need to detach it first.</p>
+
+<p>The API call used to detach a kernel driver is <code>libusb_detach_kernel_driver</code>. Sadly it has not be bound to the golang&rsquo;s library.
+Indeed <a href="https://github.com/jpoirier">Joseph Poirier</a> maintain an active fork from the gousb library and he does implement the call.
+It&rsquo;s a private method that is called implicitly by another call, so no need to modify the code from rawread to use it.</p>
+
+<p>I&rsquo;ve switched to his version:</p>
+
+<pre>
+# go get github.com/jpoirier/gousb/rawread
+./main -device "0fde:ca01"
+2016/08/30 14:12:28 Scanning for device "0fde:ca01"...
+  Protocol: (Defined at Interface level)
+  Config 01:
+    --------------
+    Interface 00 Setup 00
+      Human Interface Device (No Subclass) None
+      Endpoint 1 IN  interrupt - unsynchronized data [8 0]
+    --------------
+2016/08/30 14:12:28 Connecting to endpoint...
+2016/08/30 14:12:28 - &usb.Descriptor{Bus:0x1, Address:0x4, Spec:0x110, Device:0x302, Vendor:0xfde, Product:0xca01, Class:0x0, SubClass:0x0, Protocol:0x0, Configs:[]usb.ConfigInfo{usb.ConfigInfo{Config:0x1, Attributes:0x80, MaxPower:0x32, Interfaces:[]usb.InterfaceInfo{usb.InterfaceInfo{Number:0x0, Setups:[]usb.InterfaceSetup{usb.InterfaceSetup{Number:0x0, Alternate:0x0, IfClass:0x3, IfSubClass:0x0, IfProtocol:0x0, Endpoints:[]usb.EndpointInfo{usb.EndpointInfo{Address:0x81, Attributes:0x3, MaxPacketSize:0x8, MaxIsoPacket:0x0, PollInterval:0xa, RefreshRate:0x0, SynchAddress:0x0}}}}}}}}}
+</pre>
+
+<p>Nothing more because the code ends by</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go">  <span class="nx">ep</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">dev</span><span class="p">.</span><span class="nx">OpenEndpoint</span><span class="p">(</span><span class="nb">uint8</span><span class="p">(</span><span class="o">*</span><span class="nx">config</span><span class="p">),</span> <span class="nb">uint8</span><span class="p">(</span><span class="o">*</span><span class="nx">iface</span><span class="p">),</span> <span class="nb">uint8</span><span class="p">(</span><span class="o">*</span><span class="nx">setup</span><span class="p">),</span> <span class="nb">uint8</span><span class="p">(</span><span class="o">*</span><span class="nx">endpoint</span><span class="p">)|</span><span class="nb">uint8</span><span class="p">(</span><span class="nx">usb</span><span class="p">.</span><span class="nx">ENDPOINT_DIR_IN</span><span class="p">))</span>
+  <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&#34;open: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="nx">_</span> <span class="p">=</span> <span class="nx">ep</span> </code></pre></div>
+<p>Cool&hellip; Now let&rsquo;s add some code to read from the endpoint (which is an interface and that implements a Read method as described <a href="https://godoc.org/github.com/jpoirier/gousb/usb#Endpoint">here</a>)</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go">  <span class="nx">b</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+  <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ep</span><span class="p">.</span><span class="nx">Read</span><span class="p">(</span><span class="nx">b</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&#34;read: %s&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="nx">log</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&#34;%v&#34;</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+  <span class="nx">_</span> <span class="p">=</span> <span class="nx">ep</span> </code></pre></div>
+<p>And run the code:</p>
+
+<pre>
+go run main.go -device "0fde:ca01"
+2016/08/30 14:25:58 Scanning for device "0fde:ca01"...
+  Protocol: (Defined at Interface level)
+    Config 01:
+    --------------
+    Interface 00 Setup 00
+      Human Interface Device (No Subclass) None
+      Endpoint 1 IN  interrupt - unsynchronized data [8 0]
+    --------------
+2016/08/30 14:25:58 Connecting to endpoint...
+2016/08/30 14:25:58 - &usb.Descriptor{Bus:0x1, Address:0x4, Spec:0x110, Device:0x302, Vendor:0xfde, Product:0xca01, Class:0x0, SubClass:0x0, Protocol:0x0, Configs:[]usb.ConfigInfo{usb.ConfigInfo{Config:0x1, Attributes:0x80, MaxPower:0x32, Interfaces:[]usb.InterfaceInfo{usb.InterfaceInfo{Number:0x0, Setups:[]usb.InterfaceSetup{usb.InterfaceSetup{Number:0x0, Alternate:0x0, IfClass:0x3, IfSubClass:0x0, IfProtocol:0x0, Endpoints:[]usb.EndpointInfo{usb.EndpointInfo{Address:0x81, Attributes:0x3, MaxPacketSize:0x8, MaxIsoPacket:0x0, PollInterval:0xa, RefreshRate:0x0, SynchAddress:0x0}}}}}}}}}
+2016/08/30 14:25:59 [7 0 48 0 48 53 1 255 7 255 0 66 129 239 0 32]
+</pre>
+
+<p>OK! Here are the data, now what I need to figure out, is how to interpret them!</p>
+
+<h2 id="decoding-the-protocol">Decoding the Protocol</h2>
+
+<p>Internet is a great tool: I&rsquo;ve found a description of the protocol <a href="http://www.bashewa.com/wmr200-protocol.php">here</a></p>
+
+<p>I&rsquo;ve read that it was mandatory to send a heartbeat sequence every 30 seconds.
+I will implement the heartbeat later. For now I will send it initially to request data from the station:</p>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// This is a hearbeat request (9 bytes array)
+</span><span class="c1"></span><span class="nx">h</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">{</span><span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x01</span><span class="p">,</span> <span class="mh">0xd0</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">,</span> <span class="mh">0x00</span><span class="p">}</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;Sending heartbeat&#34;</span><span class="p">)</span>
+<span class="nx">i</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ep</span><span class="p">.</span><span class="nx">Write</span><span class="p">(</span><span class="nx">h</span><span class="p">)</span>
+<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+    <span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="s">&#34;Cannot send heartbeat&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;%v bytes sent&#34;</span><span class="p">,</span><span class="nx">i</span><span class="p">)</span></code></pre></div>
+<p>And then read the stream back. Every data payload is separate from the others by a 0xffff sequence.</p>
+
+<h3 id="testing-the-sequence-initialization-request">Testing the sequence initialization request</h3>
+
+<pre>
+ go run main.go -device "0fde:ca01"
+2016/08/30 20:02:19 Scanning for device "0fde:ca01"...
+Protocol: (Defined at Interface level)
+  Config 01:
+  --------------
+  Interface 00 Setup 00
+    Human Interface Device (No Subclass) None
+    Endpoint 1 IN  interrupt - unsynchronized data [8 0]
+  --------------
+  2016/08/30 20:02:19 Connecting to endpoint...
+2016/08/30 20:02:19 Sending heartbeat
+2016/08/30 20:02:19 heartbeat failed: usb: write: not an OUT endpoint
+</pre>
+
+<p><strong>What did² I do wrong?</strong>
+<center>
+<img src="http://imgs.xkcd.com/comics/debugging.png" alt="XKCD" />
+</center></p>
+
+<p>Easy, I didn&rsquo;t RTFM&hellip;
+Actually, I didn&rsquo;t read the specification of the USB.</p>
+
+<p>As described <a href="http://events.linuxfoundation.org/sites/events/files/slides/elc_2014_usb_0.pdf">here</a> the USB is a <strong>host-controlled</strong> bus which means that:</p>
+
+<ul>
+<li>Nothing on the bus happens without the host first initiating it.</li>
+<li>Devices cannot initiate a transaction.</li>
+<li>The USB is a Polled Bus</li>
+<li>The Host polls each device, requesting data or sending data</li>
+</ul>
+
+<p>The possibles transaction are:</p>
+
+<ul>
+<li>IN : Device to Host</li>
+<li>OUT: Host to Device</li>
+</ul>
+
+<p>On top of that, a device may handle 1 to N configuration which handles 1 to N endpoints which may be considered IN or OUT.</p>
+
+<p>My weather station has only one endpoint which is IN.
+Therefore I will not be able to send information to the station from the host. What I will be able to send is a IN token to get data on the bus.</p>
+
+<pre>
+# lsusb -v
+...
+Endpoint Descriptor:
+  bLength                 7
+  bDescriptorType         5
+  bEndpointAddress     0x81  EP 1 IN
+  bmAttributes            3
+    Transfer Type            Interrupt
+    Synch Type               None
+    Usage Type               Data
+  wMaxPacketSize     0x0008  1x 8 bytes
+  bInterval              10
+</pre>
+
+<p><strong>Note</strong> I also see that the endpoint is an interrupt</p>
+
+<h1 id="to-be-continued">To be continued&hellip;</h1>
+
+<p>This blog post is quiet long, and I haven&rsquo;t finished my research yet. Indeed I think that there is enough information for the post to go live.
+I will post a part II as soon as I will have time to continue my experiments with the USB device and the <a type=amzn>rpi</a>.</p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2016%2f08%2f29%2fgetting-weather-data-from-the-station-to-the-raspberry.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2016%2f08%2f29%2fgetting-weather-data-from-the-station-to-the-raspberry.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2016%2f08%2f29%2fgetting-weather-data-from-the-station-to-the-raspberry.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2016%2f08%2f29%2fgetting-weather-data-from-the-station-to-the-raspberry.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

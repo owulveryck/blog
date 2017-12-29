@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM" />
+<meta property="og:description" content="Is this post about Machine Learning? Well, not really, but it is highly related. In this post I will explain how to use a web browser to get information about the environment (pictures and sound). Then, I will present a simple way to process and interact with this information. Why do I do that? At first, simply because I am (trying) to play with tensorflow, chatbots etc, and I need a simple way to grab information to create a training set... But with the evolution of my code, I am now using it alongside with the cloud API of AWS. Welcome to my world." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html" />
+
+  <meta property="og:image" content="https://lh3.googleusercontent.com/nYhPnY2I-e9rpqnid9u9aAODz4C04OycEGxqHG5vxFnA35OGmLMrrUmhM9eaHKJ7liB-=w300" />
+
+
+
+<meta property="article:published_time" content="2017-05-16T21:43:46&#43;02:00"/>
+
+<meta property="article:modified_time" content="2017-05-16T21:43:46&#43;02:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM">
+<meta itemprop="description" content="Is this post about Machine Learning? Well, not really, but it is highly related. In this post I will explain how to use a web browser to get information about the environment (pictures and sound). Then, I will present a simple way to process and interact with this information. Why do I do that? At first, simply because I am (trying) to play with tensorflow, chatbots etc, and I need a simple way to grab information to create a training set... But with the evolution of my code, I am now using it alongside with the cloud API of AWS. Welcome to my world.">
+
+
+<meta itemprop="datePublished" content="2017-05-16T21:43:46&#43;02:00" />
+<meta itemprop="dateModified" content="2017-05-16T21:43:46&#43;02:00" />
+<meta itemprop="wordCount" content="2300">
+
+  <meta itemprop="image" content="https://lh3.googleusercontent.com/nYhPnY2I-e9rpqnid9u9aAODz4C04OycEGxqHG5vxFnA35OGmLMrrUmhM9eaHKJ7liB-=w300">
+
+
+
+<meta itemprop="keywords" content="ML,Chrome," />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image:src" content="https://lh3.googleusercontent.com/nYhPnY2I-e9rpqnid9u9aAODz4C04OycEGxqHG5vxFnA35OGmLMrrUmhM9eaHKJ7liB-=w300"/>
+<meta name="twitter:title" content="Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM"/>
+<meta name="twitter:description" content="Is this post about Machine Learning? Well, not really, but it is highly related. In this post I will explain how to use a web browser to get information about the environment (pictures and sound). Then, I will present a simple way to process and interact with this information. Why do I do that? At first, simply because I am (trying) to play with tensorflow, chatbots etc, and I need a simple way to grab information to create a training set... But with the evolution of my code, I am now using it alongside with the cloud API of AWS. Welcome to my world."/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html">
+
+    <title>Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html">Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-05-16T21:43:46&#43;02:00">Tue May 16, 2017</time> by Olivier Wulveryck in 
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/ml" rel="tag">ML</a>, <a href="/tags/chrome" rel="tag">Chrome</a>
+
+</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html'>
+      
+        <div class="crop">
+      <img src="https://lh3.googleusercontent.com/nYhPnY2I-e9rpqnid9u9aAODz4C04OycEGxqHG5vxFnA35OGmLMrrUmhM9eaHKJ7liB-=w300" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<p><strong>TL;DR:</strong> Thank you for passing by. This article is, as usual, geek oriented. However, if you are not a geek, and/or you are in a hurry, you can jump to the conclusion: <em><a href="#any-real-application">Any real application?</a></em></p>
+
+<p>During the month of may, I have had the chance to attend to the Google Next event in London and the dotAI in Paris. In both conferences I learned a lot about machine learning.</p>
+
+<p>What those great speakers have taught me is that you should not reinvent the wheel in AI. Actually a lot of research is done and there are very good implementation of the latest efficient algorithm.</p>
+
+<p><em>The tool</em> that every engineer that wants to try AI must know is <a href="https://www.tensorflow.org/">tensorflow</a>. Tensorflow is a generic framework that has been developed by Google&rsquo;s Machine Intelligence research organization. The tool has been open-sourced last year and has reached the v1.0 earlier this year.</p>
+
+<h2 id="so-what-makes-tensorflow-so-great">So what makes tensorflow so great?</h2>
+
+<h3 id="bindings">Bindings</h3>
+
+<p>First of all, it has bindings so it can be used within various programming languages such as:</p>
+
+<ul>
+<li>python</li>
+<li>c++</li>
+<li>java</li>
+<li>go</li>
+</ul>
+
+<p>However, to be honest, mainly python and c++ are described in the documentation. And to be even more honest I think that python is the language that you should use to prototype applications.</p>
+
+<h3 id="ml-and-neuron-network-examples">ML and neuron network examples</h3>
+
+<p>Tensorflow is easy to use for machine learning, and a lot of deep-learning implementation are available.
+Actually it is very easy to download a trained model and use it to recognize some pictures for example.</p>
+
+<h3 id="built-in-computation-at-scale">Built-in computation at scale</h3>
+
+<p>Tensorflow&rsquo;s model has a built-in way to perform distributed computation. It is really important as machine learning is usually a very intensive task in term of computation.</p>
+
+<h3 id="gcp-s-ml-engine">GCP&rsquo;s ML engine</h3>
+
+<p>Tensorflow is the engine used by Google for their service called ML engine.
+That means that you can write your function locally and run them serverless on the cloud.
+You only pay for what you have effectively consumed.
+That means for example that you can train a neuron network on GCP (so you don&rsquo;t need GPU. TPU, or whatever computing power) and transfer your model locally.</p>
+
+<p>For example, this is how the mobile app &ldquo;google translate&rdquo; works. A pre-trained model is downloaded on your phone, and the live translation is done locally.</p>
+
+<p><img src="http://technews.wpengine.netdna-cdn.com/wp-content/uploads/2015/01/www.lanacion.com_.ar_.jpg" alt="Image" /></p>
+
+<p><em>Note</em> Other ML services from GCP such as cloud vision, translate, or image search, are &ldquo;just&rdquo; API that query a neuron network with a model trained by google.</p>
+
+<h1 id="so-what">So What?</h1>
+
+<p>I want to play with image recognition. Actually I already did a test with AWS&rsquo;s rekognition service (<a href="/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html">See this post</a>).  However, the problems were:</p>
+
+<ul>
+<li>I relied on a low-level webcam implementation. Therefore, the code was not portable;</li>
+<li>I had no preview of what my computer was looking at;</li>
+<li>I could not execute it on any mobile app for a demo;</li>
+</ul>
+
+<p>As I am using a Chromebook for a while, I found a solution: Using a Javascript API and the Chrome browser to access the camera. Then, the pictures can be transfered to a backend via a websocket. The backend would do the ML and reply with whatever information via the websocket. I can then display the result or even use the voice api of Chrome to tell the result loud.</p>
+
+<h1 id="chrome-as-the-eye-of-the-computer">Chrome as the eye of the computer</h1>
+
+<p>The idea is to get a video stream and grab pictures from this stream in order to activate a neural network.</p>
+
+<p>I will present different objects in front of my webcam, and their name will be displayed on the screen.</p>
+
+<p>The architecture is client server: The Chrome is the eye of my bot, it communicates with the brain (a webservice in go that is running a pre-trained tensorflow neural network) via a websocket.</p>
+
+<p><strong>The rest of this paragraph is geek/javascript, if you&rsquo;re not interested you can jump to the next paragraph about the brain implementation called <em><a href="#the-brain-cortical">Cortical</a></em></strong></p>
+
+<h2 id="getusermedia">getUserMedia</h2>
+
+<p>I am using the Web API <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia">MediaDevices.getUserMedia()</a> to open the webcam and get the stream.</p>
+
+<p>This API is compatible with chrome on desktop <em>and</em> mobile on Android phone (but not on iOS). This means that I will be able to use a mobile phone as an &ldquo;eye&rdquo; of my bot.</p>
+
+<p>See the <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia#Browser_compatibility">compatibility matrix here</a></p>
+
+<p>Here is the code to get access to the camera and display the video stream:</p>
+
+<p><em>html</em>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">body</span><span class="p"></span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">video</span> <span class="na">autoplay</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;webcam&#34;</span><span class="p"></span><span class="p">&gt;&lt;</span><span class="p">/</span><span class="nt">video</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="p">/</span><span class="nt">body</span><span class="p">&gt;</span></code></pre></div></p>
+
+<p><em>Javascript</em>
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// use MediaDevices API
+</span><span class="c1">// docs: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+</span><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">mediaDevices</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// access the web cam
+</span><span class="c1"></span>    <span class="nx">navigator</span><span class="p">.</span><span class="nx">mediaDevices</span><span class="p">.</span><span class="nx">getUserMedia</span><span class="p">({</span><span class="nx">video</span><span class="o">:</span> <span class="kc">true</span><span class="p">})</span>
+      <span class="c1">// permission granted:
+</span><span class="c1"></span>      <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">video</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">stream</span><span class="p">);</span>
+      <span class="p">})</span>
+      <span class="c1">// permission denied:
+</span><span class="c1"></span>      <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s1">&#39;Could not access the camera. Error: &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+      <span class="p">});</span>
+<span class="p">}</span></code></pre></div></p>
+
+<h2 id="websockets">Websockets</h2>
+
+<p>According to Wikipedia&rsquo;s definition, Websocket is <em>a computer communications protocol, providing full-duplex communication channels over a single TCP connection</em>.
+The full duplex mode is important in my architecture.</p>
+
+<p>Let me explain why with a simple use case:</p>
+
+<p>Imagine that your eye captures a scene and sends it to the brain for analysis. In a classic RESTfull architecture, the browser (the eye) would perform a POST request.
+The brain would reply with a process ID, and the eye would poll the endpoint every x seconds to get the processing status.</p>
+
+<p>This can be tedious in case of multiple stimuli.</p>
+
+<p>Thanks to the websocket, the server can send the query, and the server will send an event back once the processing is done.
+Of course this is stateless in a sort, as the query is lost once the browser is closed.</p>
+
+<p>Another use case would be to get a stimulus from another &ldquo;sense&rdquo;. For example, imagine that you want to &ldquo;warn&rdquo; the end user that he has been mentioned in a tweet. The brain can be in charge of polling
+twitter, and it would send a message through the websocket in case of event.</p>
+
+<h3 id="connecting-to-the-websocket">Connecting to the websocket</h3>
+
+<p>A websocket URI is prefixed by <code>ws</code> or <code>wss</code> if the communication is encrypted (aka https).
+This code allows a connection through ws(s).</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">ws</span>
+<span class="c1">// Connecting the websocket
+</span><span class="c1"></span><span class="kd">var</span> <span class="nx">loc</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">,</span> <span class="nx">new_uri</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">loc</span><span class="p">.</span><span class="nx">protocol</span> <span class="o">===</span> <span class="s2">&#34;https:&#34;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">new_uri</span> <span class="o">=</span> <span class="s2">&#34;wss:&#34;</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="nx">new_uri</span> <span class="o">=</span> <span class="s2">&#34;ws:&#34;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">new_uri</span> <span class="o">+=</span> <span class="s2">&#34;//&#34;</span> <span class="o">+</span> <span class="nx">loc</span><span class="p">.</span><span class="nx">host</span> <span class="o">+</span> <span class="s2">&#34;/ws&#34;</span><span class="p">;</span>
+<span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="nx">new_uri</span><span class="p">);</span></code></pre></div>
+
+<h3 id="messages">Messages</h3>
+
+<p>Web socket communication is message oriented. A message can be sent simply by calling the function <code>ws.send(message)</code>. Websockets are supporting texts and binary messages.
+But for this test only text messages will be used (images will be encoded in base64).</p>
+
+<p>The browser implementation of a websocket in javascript is event based.
+When the server sends a message, an interruption is fired and the <code>ws.onmessage</code> call is triggered.</p>
+
+<p>This code will display the message received on the console:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;Received:&#34;</span> <span class="o">+</span> <span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span></code></pre></div>
+
+<h3 id="sending-pictures-to-the-websocket-actually-seeing">Sending pictures to the websocket: actually seeing</h3>
+
+<p>I didn&rsquo;t find a way to send the video stream to the brain via the websocket. Therefore, I will do what everybody does: create a canvas and &ldquo;take&rdquo; a picture from the video:</p>
+
+<p>The method <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL">toDataURL()</a> will take care of encoding the picture in a well-known format (png or jpeg).</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">takeSnapshot</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">context</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="nx">video</span><span class="p">.</span><span class="nx">offsetWidth</span>
+  <span class="p">,</span> <span class="nx">height</span> <span class="o">=</span> <span class="nx">video</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">;</span>
+
+  <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">canvas</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">);</span>
+  <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">width</span><span class="p">;</span>
+  <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">height</span><span class="p">;</span>
+
+  <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+
+  <span class="kd">var</span> <span class="nx">dataURI</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">(</span><span class="s1">&#39;image/jpeg&#39;</span><span class="p">)</span>
+  <span class="c1">//...
+</span><span class="c1"></span><span class="p">};</span></code></pre></div>
+
+<p>To make the processing in the brain easier, I will serialize the video into a json object and sending it via the websocket:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&#34;dataURI&#34;</span><span class="o">:</span><span class="p">{}};</span>
+<span class="nx">message</span><span class="p">.</span><span class="nx">dataURI</span><span class="p">.</span><span class="nx">content</span> <span class="o">=</span> <span class="nx">dataURI</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+<span class="nx">message</span><span class="p">.</span><span class="nx">dataURI</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="nx">dataURI</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">].</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="kd">var</span> <span class="nx">json</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">json</span><span class="p">);</span></code></pre></div>
+
+<h2 id="bonus-ear-and-voice">Bonus: ear and voice</h2>
+
+<p>It is relatively easy to make chrome speak out loud the message received. This snippet will speak out loud the message Received:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="kd">function</span> <span class="nx">talk</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">utterance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SpeechSynthesisUtterance</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">speechSynthesis</span><span class="p">.</span><span class="nx">speak</span><span class="p">(</span><span class="nx">utterance</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Therefore, simply adding a call to this function in the &ldquo;onmessage&rdquo; event of the websocket will trigger the voice of Chrome.</p>
+
+<p>Listening is a bit trickier. It is done by a call to the <code>webkitSpeechRecognition();</code> method. This <a href="https://developers.google.com/web/updates/2013/01/Voice-Driven-Web-Apps-Introduction-to-the-Web-Speech-API">blog post</a> explains in detail how this works.</p>
+
+<p>The call is also event based. What&rsquo;s important is that, in chrome, by default, it will use an API call to the Google&rsquo;s engine. Therefore the recognition won&rsquo;t work offline.</p>
+
+<p>When the language processing is done by chrome, five potential sentences are stored in a json array.
+The following snippet will take the most relevant one and send it to the brain via the websocket:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">recognition</span><span class="p">.</span><span class="nx">onresult</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span> 
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">resultIndex</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">event</span><span class="p">.</span><span class="nx">results</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">isFinal</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">final_transcript</span> <span class="o">+=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">results</span><span class="p">[</span><span class="nx">i</span><span class="p">][</span><span class="mi">0</span><span class="p">].</span><span class="nx">transcript</span><span class="p">;</span>
+      <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">final_transcript</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">};</span></code></pre></div>
+
+<p><em>Now that we have set up the senses, let&rsquo;s make a &ldquo;brain&rdquo;</em></p>
+
+<h1 id="the-brain-cortical">The <em>brain</em>: <strong>Cortical</strong></h1>
+
+<p><img src="https://github.com/owulveryck/cortical/raw/master/doc/cortical.png" alt="Picture" /></p>
+
+<p>Now, let me explain what is, according to me, the <strong>most interesting part</strong> of this post. By now, all that I have done is a bit of javascript to grab a picture. This is not a big deal, and there is no machine learning yet (besides the speech recognition built-in in chrome).
+What I need now is to actually process the messages so the computer can tell what it sees.</p>
+
+<p>For this purpose I have developed a message dispatcher. This dispatcher, called <em>Cortical</em>  is available on <a href="https://github.com/owulveryck/cortical">github</a></p>
+
+<p>Here is an extract from the README of the project:</p>
+
+<hr />
+
+<p><strong>What is Cortical?</strong></p>
+
+<p>Cortical is a go <del>framework</del> <del>middleware</del> piece of code that acts as a message dispatcher. The messages are transmitted in full duplex over a websocket.
+Cortical is therefore a very convenient way to distribute messages to &ldquo;processing units&rdquo; (other go functions) and to get the responses back in a <strong>concurrent</strong> and <strong>asynchronous</strong> way.</p>
+
+<p>The &ldquo;processing units&rdquo; are called <em>Cortexes</em> and do not need to be aware of any web mechanism.</p>
+
+<hr />
+
+<p>So far, so good, I can simply create a handler to receive the messages sent by the chrome browser in go:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">brain</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">cortical</span><span class="p">.</span><span class="nx">Cortical</span><span class="p">{</span>
+    <span class="nx">Upgrader</span><span class="p">:</span> <span class="nx">websocket</span><span class="p">.</span><span class="nx">Upgrader</span><span class="p">{},</span>
+    <span class="nx">Cortexes</span><span class="p">:</span>  <span class="p">[]</span><span class="nx">cortical</span><span class="p">.</span><span class="nx">Cortex</span><span class="p">{</span>
+                    <span class="o">&amp;</span><span class="nx">sampleTensorflowCortex</span><span class="p">{},</span> <span class="c1">// cortex?
+</span><span class="c1"></span>               <span class="p">},</span> 
+<span class="p">}</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&#34;/ws&#34;</span><span class="p">,</span> <span class="nx">brain</span><span class="p">.</span><span class="nx">ServeWS</span><span class="p">)</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&#34;:8080&#34;</span><span class="p">,</span> <span class="kc">nil</span><span class="p">))</span></code></pre></div>
+
+<p><em>Note</em>: <strong>Concurrency</strong> and <strong>asynchronicity</strong> are really built in <em>Cortical</em>, this is what makes this code so helpful actually.</p>
+
+<h2 id="cortexes"><em>Cortexes</em></h2>
+
+<p>Cortexes are processing units. That is the place where messages are analyzed and where the ML magic happens.</p>
+
+<p>From the readme, I quote:</p>
+
+<hr />
+
+<p>A cortex is any go code that provides two functions:</p>
+
+<ul>
+<li>A &ldquo;send&rdquo; function that returns a channel of <code>[]byte</code>. The content of the channel is sent to the websocket once available (cf <a href="https://godoc.org/github.com/owulveryck/cortical#GetInfoFromCortexFunc"><code>GetInfoFromCortexFunc</code></a>)</li>
+<li>A &ldquo;receive&rdquo; method that take a pointer of <code>[]byte</code>. This function is called each time a message is received (cf <a href="https://godoc.org/github.com/owulveryck/cortical#SendInfoToCortex"><code>SendInfoToCortex</code></a>)</li>
+</ul>
+
+<p>A cortex object must therefore be compatible with the <code>cortical.Cortex</code> interface:</p>
+
+<hr />
+
+<p>Ok, let&rsquo;s build Cortexes!</p>
+
+<h3 id="a-tensorflow-cortex-runnig-locally">A tensorflow cortex runnig locally</h3>
+
+<p>The tensorflow go package is a binding to the <code>libtensorflow.so</code>. It has a very nice example described in the <a href="https://godoc.org/github.com/tensorflow/tensorflow/tensorflow/go#ex-package">godoc here</a>.
+This example is using a pre-trained inception model (<a href="http://arxiv.org/abs/1512.00567">http://arxiv.org/abs/1512.00567</a>).
+The program starts by downloading the pre-trained model, creates a graph, and try to guess labels on a given image.</p>
+
+<p>I will simply add the expected interface to transform this example into a Cortex compatible with my previous declaration (<em>some error check and some code has been omited for clarity</em>):</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">sampleTensorflowCortex</span> <span class="kd">struct</span><span class="p">{}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">sampleTensorflowCortex</span><span class="p">)</span> <span class="nx">NewCortex</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="p">(</span><span class="nx">cortical</span><span class="p">.</span><span class="nx">GetInfoFromCortexFunc</span><span class="p">,</span> <span class="nx">cortical</span><span class="p">.</span><span class="nx">SendInfoToCortex</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">c</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span>
+        <span class="nx">class</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">classifier</span><span class="p">{</span>
+                <span class="nx">c</span><span class="p">:</span> <span class="nx">c</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">class</span><span class="p">.</span><span class="nx">Send</span><span class="p">,</span> <span class="nx">class</span><span class="p">.</span><span class="nx">Receive</span>
+<span class="p">}</span>
+
+<span class="kd">type</span> <span class="nx">classifier</span> <span class="kd">struct</span> <span class="p">{</span>
+        <span class="nx">c</span> <span class="kd">chan</span> <span class="p">[]</span><span class="kt">byte</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">classifier</span><span class="p">)</span> <span class="nx">Receive</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">b</span> <span class="o">*</span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">m</span> <span class="nx">message</span>
+        <span class="c1">// omited for brievety 
+</span><span class="c1"></span>        <span class="nx">tensor</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">makeTensorFromImage</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">DataURI</span><span class="p">.</span><span class="nx">Content</span><span class="p">)</span>
+        <span class="nx">output</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">session</span><span class="p">.</span><span class="nx">Run</span><span class="p">(</span>
+                <span class="kd">map</span><span class="p">[</span><span class="nx">tf</span><span class="p">.</span><span class="nx">Output</span><span class="p">]</span><span class="o">*</span><span class="nx">tf</span><span class="p">.</span><span class="nx">Tensor</span><span class="p">{</span>
+                        <span class="nx">graph</span><span class="p">.</span><span class="nx">Operation</span><span class="p">(</span><span class="s">&#34;input&#34;</span><span class="p">).</span><span class="nx">Output</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span> <span class="nx">tensor</span><span class="p">,</span>
+                <span class="p">},</span>
+                <span class="p">[]</span><span class="nx">tf</span><span class="p">.</span><span class="nx">Output</span><span class="p">{</span> <span class="nx">graph</span><span class="p">.</span><span class="nx">Operation</span><span class="p">(</span><span class="s">&#34;output&#34;</span><span class="p">).</span><span class="nx">Output</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                <span class="p">},</span> <span class="kc">nil</span><span class="p">)</span>
+        <span class="nx">probabilities</span> <span class="o">:=</span> <span class="nx">output</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">Value</span><span class="p">().([][]</span><span class="kt">float32</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="nx">label</span> <span class="o">:=</span> <span class="nx">printBestLabel</span><span class="p">(</span><span class="nx">probabilities</span><span class="p">,</span> <span class="nx">labelsfile</span><span class="p">)</span>
+        <span class="nx">t</span><span class="p">.</span><span class="nx">c</span> <span class="o">&lt;-</span> <span class="p">[]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&#34;%v (%2.0f%%)&#34;</span><span class="p">,</span> <span class="nx">label</span><span class="p">.</span><span class="nx">Label</span><span class="p">,</span> <span class="nx">label</span><span class="p">.</span><span class="nx">Probability</span><span class="o">*</span><span class="mf">100.0</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">classifier</span><span class="p">)</span> <span class="nx">Send</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span> <span class="kd">chan</span> <span class="p">[]</span><span class="kt">byte</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">t</span><span class="p">.</span><span class="nx">c</span>
+<span class="p">}</span></code></pre></div>
+
+<h4 id="demo">Demo</h4>
+
+<p>This demo has been made with my Chromebook that has only 2 Gb or RAM. The tensorflow library is compiled without any optimization.
+It works!</p>
+
+
+<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
+  <iframe src="//www.youtube.com/embed/psb9r_YhwiY" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" allowfullscreen frameborder="0" title="YouTube Video"></iframe>
+ </div>
+
+
+<p>The code is <a href="https://github.com/owulveryck/socketcam">here</a>.</p>
+
+<h3 id="in-the-cloud-with-aws">In the cloud with AWS</h3>
+
+<p>Now that I have seen that it works on my Chromebook, I can maybe use the cloud API to recognize some faces for example.
+Let&rsquo;s try with AWS&rsquo; rekognition service.</p>
+
+<p>I will use the face compare API to check whether the person in front of the webcam is me.
+I will provide a sample picture of me to the cortex.</p>
+
+<p>I took the sample picture at work, to make the task a little bit trickier for the engine because the environment will not match what it will see.</p>
+
+<p>I won&rsquo;t dig into the code that can be found <a href="https://github.com/owulveryck/socketcam/blob/master/processors/rekognition/main.go">here</a>.</p>
+
+<p>And does it work?</p>
+
+
+<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden;">
+  <iframe src="//www.youtube.com/embed/KbvRr7XXoyE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" allowfullscreen frameborder="0" title="YouTube Video"></iframe>
+ </div>
+
+
+<p>Cool!</p>
+
+<h1 id="any-real-application">Any real application?</h1>
+
+<p>This is really fun and exciting.Now I will be able to code a memory cortex to fetch a training set. Then I will play with tensorflow. And do not think that everything has already been done, this area is full of surprises to come (<a href="https://en.wikipedia.org/wiki/Moravec%27s_paradox">This is the Moravec&rsquo;s paradox</a>).</p>
+
+<p>However, on top of that, we can imagine a lot of application. Actually, this service is working out-of-the box on Android (and it will on iOS as soon as Apple supports the getUSerMedia interface).
+I imagine a simple web app (no need for an APK), that would warn you when it sees someone he knows.</p>
+
+<p>I also imagine a web gallery, and the webcam would watch your reaction in front of different items and then tells you which one has been your favorite.</p>
+
+<p>Indeed, there may be a lot of great application for e-commerce.</p>
+
+<p>You can turn your laptop into a CCTV system so it can warn you when an unknown person is in the room. We would do a preprocessing to detect humans before actually sending the info to the cloud. That would be cheaper and a lot more efficient than the crappy CV implemented in the webcam.</p>
+
+<p>And finally, combined with react.js, this can be used to do magic keynotes&hellip; But I will keep that for another story.</p>
+
+<p>As a conclusion, I will put this XKCD of September 2014. It is only three years old, and yet, so many things have already changed:</p>
+
+<p><img src="https://imgs.xkcd.com/comics/tasks.png" alt="XKCD" /></p>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2017%2f05%2f16%2fchrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f05%2f16%2fchrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f05%2f16%2fchrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2017%2f05%2f16%2fchrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

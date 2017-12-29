@@ -7,8 +7,8 @@ date = 2017-12-18T16:47:27+01:00
 author = "Olivier Wulveryck"
 +++
 
-In my previous article, I described an implementation of a RNN from scratch in go.
-The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are.
+In a previous article, I described an implementation of an RNN from scratch in go.
+The target is to use the RNN as a processing unit. It can become a portable tool usable on any platform and able to grab and process data where they are
 (for example to find the root-cause of an incident, or as a helper decision tool for capacity management).
 
 _Note_ I stick to go, because I have in mind that someday this tool could act as a node of a processing network that would communicate via a tuple space.
@@ -28,7 +28,7 @@ It is sequence of bits and bytes that can be computed, and that produces a resul
 
 To build a software until now, a compiler is used. Its goal is to turn a "human readable sequence of characters", called code, into the sequence of bytes. 
 
-This sequence of bytes is evaluated and executed by a machine at runtime. Depending of the input, the execution produces (hopefully) the expected output.
+This sequence of bytes is evaluated and executed by a machine at run time. Depending on the input, the execution produces (hopefully) the expected output.
 
 The art of programming, is, in essence, the faculty for a human to describe the solution of a problem and to express it in a computer language. 
 
@@ -47,7 +47,7 @@ No, the major difference is in the art of programming and the use case.
 
 For example:
 
-A programmer __cannot__ write an algorithm that will __solve a specific problem__ (eg: I need to recognize a cat on any photo).
+A programmer __cannot__ write an algorithm that will __solve a specific problem__ (ex: I need to recognize a cat on any photo).
 
 So, the programmer will write a set of equations __able to solve a kind of problem__ (recognize objects on any photo). 
 
@@ -226,15 +226,15 @@ _Note_ If you don't have the correct font to display the unicode character click
 
 ## Good ol' software 1.0
 
-What I will do is to write a lexer and a parser to analyse the mathematical equations written in unicode and generate the corresponding gorgonia execution graph.
+What I will do is to write a lexer and a parser to analyze the mathematical equations written in unicode and generate the corresponding gorgonia execution graph.
 
 ### Lexer/Parser
 
 My first attempt was to use a simple lexer and a simple parser. This is described in many posts over the internet all based on a talk by Rob Pike: [Lexical Scanning in GO](https://talks.golang.org/2011/lex.slide#1).
 I have been able to write the lexer easily. 
-The parser was more difficult to write because of the mathematicals [operator precedence](https://en.wikipedia.org/wiki/Order_of_operations).
+The parser was more difficult to write because of the mathematical [operator precedence](https://en.wikipedia.org/wiki/Order_of_operations).
 
-After a bunch of documentation about LALR parsers, I have deviced to call an old friend: _yacc_
+After a bunch of documentation about LALR parser, I have decided to call an old friend: _yacc_
 
 <center>  
 {{< tweet 941817771863584768 >}}
@@ -335,7 +335,7 @@ I will not describe the rest of the file because the implementation is straightf
 The yacc tools actually generates a parser in go. I have chosen to declare it in its own package.
 The command `goyacc -o ../expr.go -p "gorgonia" expr.y` will generate the file `expr.go` which holds an implementation able to parse my unicode equations.
 
-I have also added a couple of helper function to avoid public methods. My API is therefore simple:
+I have also added a couple of helpers function to avoid public methods. My API is therefore simple:
 
 ```
 type Parser
@@ -381,7 +381,7 @@ Now I will be able to work deeply on the software 2.0 part.
 
 # Conclusion
 
-As Karpathy's explained: we will still need software 1.0 to build software 2.0. 
+As Karpathy's explained: we will still need software 1.0 to build software 2.0. I have used very old concepts to build some tools for writing and processing a software 2.0. 
 In my example, the software 2.0 is the combination of the equations written in unicode and the values of the tensors which are arrays of floats.
 
 A better step would be to parse a complete set of equations such as:
@@ -397,7 +397,9 @@ hₜ=oₜ*tanh(cₜ)
 `)
 ```
 
-The software 2.0, once trained, can be backed up as a unicode text file and an couple of floating point numbers.
-This "sofware" would then be independant of the execution machine. A parser could transpile it into a gorgonia execution graph, or a tensorflow execution graph, or...
+The software 2.0, once trained, can be backed up as a unicode text file and a couple of floating point numbers.
+It would then be independent of the execution machine. A parser could transpile it into a gorgonia execution graph, or a tensorflow execution graph, ...
 
-True and independant software 2.0, sound promising!
+A true and independent software 2.0. 
+
+> _“A journey of a thousand miles must begin with a single step.”_ – _Lao Tzu_

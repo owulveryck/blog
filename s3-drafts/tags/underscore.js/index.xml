@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Underscore.js on Unladen swallow</title>
+    <link>https://blog.owulveryck.info/tags/underscore.js.html</link>
+    <description>Recent content in Underscore.js on Unladen swallow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>All rights reserved - 2015/2017</copyright>
+    <lastBuildDate>Thu, 09 Jun 2016 14:54:26 +0200</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/underscore.js/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>A skeleton to display and web-format data got from web service (in JSON)</title>
+      <link>https://blog.owulveryck.info/2016/06/09/a-skeleton-to-display-and-web-format-data-got-from-web-service-in-json.html</link>
+      <pubDate>Thu, 09 Jun 2016 14:54:26 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2016/06/09/a-skeleton-to-display-and-web-format-data-got-from-web-service-in-json.html</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Go on Unladen swallow</title>
+    <link>https://blog.owulveryck.info/tags/go.html</link>
+    <description>Recent content in Go on Unladen swallow</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>All rights reserved - 2015/2017</copyright>
+    <lastBuildDate>Tue, 28 Feb 2017 20:57:38 +0100</lastBuildDate>
+    
+	<atom:link href="https://blog.owulveryck.info/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>To go and touch Linda&#39;s Lisp</title>
+      <link>https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp.html</link>
+      <pubDate>Tue, 28 Feb 2017 20:57:38 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp.html</guid>
+      <description>The title is not a typo nor dyslexia. I will really talk about Lisp.
+In a previous post I explained my will to implement the dining of the philosophers with Linda in GO.
+The ultimate goal is to use a distributed and abstract language to go straight from the design to the runtime of an application.
+The problem I&amp;rsquo;ve faced I want to use a GO implementation for the Linda language because a go binary is a container by itself.</description>
+    </item>
+    
+    <item>
+      <title>Configuration management, choreography and self-aware applications</title>
+      <link>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications.html</link>
+      <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications.html</guid>
+      <description>Thanks to the company I&amp;rsquo;m working for (Techsys) I&amp;rsquo;ve had the opportunity to attend the configuration management camp in Gent (be) for its 2016 edition.
+I really enjoyed those two days of talks, watching people present different ideas of a possible future for the infrastructure and deployment engineering. Beyond the technical demonstrations and the experience sharing, I&amp;rsquo;ve spotted a bunch of ideas
+Among all, those that comes to me spontaneously are:</description>
+    </item>
+    
+    <item>
+      <title>Securing the API (in GO)</title>
+      <link>https://blog.owulveryck.info/2015/11/13/securing-the-api-in-go.html</link>
+      <pubDate>Fri, 13 Nov 2015 09:21:30 +0000</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2015/11/13/securing-the-api-in-go.html</guid>
+      <description>I&amp;rsquo;ve created a couple of posts about creating an API (mainly in GO). By now, the API is open. Now I will implement a basic authentication and accreditation mechanism with a little help from JWT
+What is a Json Web Token According to the RFC 7519, it is a
+ compact, URL-safe means of representing claims to be transferred between two parties. The claims in a JWT are encoded as a JSON object that is used as the payload of a JSON Web Signature (JWS) structure or as the plaintext of a JSON Web Encryption (JWE) structure, enabling the claims to be digitally signed or integrity protected with a Message Authentication Code (MAC) and/or encrypted.</description>
+    </item>
+    
+    <item>
+      <title>IaaS-like RESTfull API based on microservices</title>
+      <link>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</link>
+      <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</guid>
+      <description>Abstracts Recently, I&amp;rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.
+I am reading more and more about the &amp;ldquo;API economy&amp;rdquo;
+I&amp;rsquo;ve also seen this excellent video made by Mat Ryer about how to code an API in GO and why go would be the perfect language to code such a portal.
+The problem I&amp;rsquo;m facing is that in the organization I&amp;rsquo;m working for, the developments are heterogeneous and therefore you can find ruby teams as well as python teams and myself as a go team (That will change in the future anyway) The key point is that I would like my middleware to serve as an entry point to the services provided by the department.</description>
+    </item>
+    
+    <item>
+      <title>Ruby / ZeroMQ / GO</title>
+      <link>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html</link>
+      <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html</guid>
+      <description>Abtract I really like go as a programming language. It is a good tool to develop web restful API service.
+On the other hand, ruby and its framework rails has also been wildly used to achieve the same goal.
+Therefore we may be facing a &amp;ldquo;legacy&amp;rdquo; ruby developpement that we would like to connect to our brand new go framework. 0MQ may be a perfect choice for intefacing the two languages.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC" />
+<meta property="og:description" content="This article explains how to turn a golang utility into a webservice using gRPC (and protobuf). I take the example of Hashicorp tools because they are often used as a leverage for the DevOps transformation. Often, the Ops use the tools for themselves, but when comes the time to provide a service around them, they are usually scared to open the engine. They prefer to make a factory around the service, which is often less reliable than a little piece of code fully tested." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html" />
+
+  <meta property="og:image" content="https://blog.owulveryck.info/assets/images/terraformcli.png" />
+
+
+
+<meta property="article:published_time" content="2017-09-02T13:28:36&#43;02:00"/>
+
+<meta property="article:modified_time" content="2017-09-02T13:28:36&#43;02:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC">
+<meta itemprop="description" content="This article explains how to turn a golang utility into a webservice using gRPC (and protobuf). I take the example of Hashicorp tools because they are often used as a leverage for the DevOps transformation. Often, the Ops use the tools for themselves, but when comes the time to provide a service around them, they are usually scared to open the engine. They prefer to make a factory around the service, which is often less reliable than a little piece of code fully tested.">
+
+
+<meta itemprop="datePublished" content="2017-09-02T13:28:36&#43;02:00" />
+<meta itemprop="dateModified" content="2017-09-02T13:28:36&#43;02:00" />
+<meta itemprop="wordCount" content="3951">
+
+  <meta itemprop="image" content="https://blog.owulveryck.info/assets/images/terraformcli.png">
+
+
+
+<meta itemprop="keywords" content="" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image:src" content="https://blog.owulveryck.info/assets/images/terraformcli.png"/>
+<meta name="twitter:title" content="From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC"/>
+<meta name="twitter:description" content="This article explains how to turn a golang utility into a webservice using gRPC (and protobuf). I take the example of Hashicorp tools because they are often used as a leverage for the DevOps transformation. Often, the Ops use the tools for themselves, but when comes the time to provide a service around them, they are usually scared to open the engine. They prefer to make a factory around the service, which is often less reliable than a little piece of code fully tested."/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">
+
+    <title>From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-09-02T13:28:36&#43;02:00">Sat Sep 2, 2017</time> by Olivier Wulveryck</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html'>
+      
+        <div class="crop">
+      <img src="/assets/images/terraformcli.png" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<p>This post is a little different from the last ones. As usual, the introduction tries to be open, but it quickly goes deeper into a go implementation.
+Some explanations may be tricky from time to times and therefore not very clear. As usual, do not hesitate to send me any comment via this blog or via twitter <a href="https://twitter.com/owulveryck">@owulveryck</a>.</p>
+
+<p><strong>TL;DR</strong>: This is a step-by-step example that turns a golang cli utility into a webservice powered by gRPC and protobuf. The code can be found <a href="https://github.com/owulveryck/cli-grpc-example">here</a>.</p>
+
+<h1 id="about-the-cli-utilities">About the cli utilities</h1>
+
+<p>I come from the sysadmin world&hellip; Precisely the Unix world (I have been a BSD user for years). Therefore, I have learned to use and love &ldquo;<em>the cli utilities</em>&rdquo;. Cli utilities are all those tools that make Unix sexy and &ldquo;user-friendly&rdquo;.</p>
+
+<p><center>
+Because, yes, Unix <strong>is user-friendly</strong> (it&rsquo;s just picky about its friends<sup class="footnote-ref" id="fnref:1"><a rel="footnote" href="#fn:1">1</a></sup>).
+</center></p>
+
+<p>From a user perspective, cli tools remains a must nowadays because:</p>
+
+<ul>
+<li>there are usually developed in the pure Unix philosophy: simple enough to use for what they were made for;</li>
+<li>they can be easily wrapped into scripts. Therefore, it is easy to automate cli actions.</li>
+</ul>
+
+<p>The point with cli application is that they are mainly developed for an end-user that we call &ldquo;an operator&rdquo;. As Unix is a multi-user operating system, several operators can use the same tool, but they have to be logged onto the same host.</p>
+
+<p>In case of a remote execution, it&rsquo;s possible to execute the cli via <code>ssh</code>, but dealing with automation, network interruption and resuming starts to be tricky.
+For remote and concurrent execution web-services are more suitable.</p>
+
+<p>Let&rsquo;s see if turning a cli tool into a webservice without re-coding the whole logic is easy in go?</p>
+
+<h2 id="hashicorp-s-cli">Hashicorp&rsquo;s cli</h2>
+
+<p>For the purpose of this post, and because I am using Hashicorp tools at work, I will take <a href="https://twitter.com/mitchellh">@mitchellh</a>&rsquo;s framework for developing command line utilities.
+This package is used in all of the Hashicorp tools and is called&hellip;&hellip;&hellip;&hellip;&hellip;. &ldquo;<a href="https://github.com/mitchellh/cli">cli</a>&rdquo;!</p>
+
+<p>This library provides a <a href="https://godoc.org/github.com/mitchellh/cli#Command"><code>Command</code></a> type that represents any action that the cli will execute.
+<code>Command</code> is a go <code>interface</code> composed of three methods:</p>
+
+<ul>
+<li><code>Help()</code> that returns a string describing how to use the command;</li>
+<li><code>Run(args []string)</code> that takes an array of string as arguments (all cli parameters of the command) and returns an integer (the exit code);</li>
+<li><code>Synopsis()</code> that returns a string describing what the command is about.</li>
+</ul>
+
+<p><em>Note</em>: I assume that you know what an interface is (especially in go). If you don&rsquo;t, just google, or even better, buy the book <a href="https://www.amazon.com/Programming-Language-Addison-Wesley-Professional-Computing/dp/0134190440">The Go Programming Language</a> and read the <em>chapter 7</em> :).</p>
+
+<p>The main object that holds the business logic of the cli package is an implementation of <a href="https://godoc.org/github.com/mitchellh/cli#CLI"><code>Cli</code></a>.
+One of the elements of the Cli structure is <code>Commands</code> which is a <code>map</code> that takes the name of the action as key. The name passed is a string and is the one that will be used on the command line. The value of the <code>map</code> is a function that returns a <code>Command</code>. This function is named <a href="https://godoc.org/github.com/mitchellh/cli#CommandFactory"><code>CommandFactory</code></a>. According to the documentation, the factory is needed because <em>we may need to setup some state on the struct that implements the command itself</em>. Good idea!</p>
+
+<h2 id="example">Example</h2>
+
+<p>First, let&rsquo;s create a very simple tool using the &ldquo;cli&rdquo; package.
+The tool will have two &ldquo;commands&rdquo;:</p>
+
+<ul>
+<li>hello: will display <em>hello args&hellip;.</em>  on <code>stdout</code></li>
+<li>goodbye: will display <em>goodbye args&hellip;</em> on <code>stderr</code></li>
+</ul>
+
+<p><div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">c</span> <span class="o">:=</span> <span class="nx">cli</span><span class="p">.</span><span class="nx">NewCLI</span><span class="p">(</span><span class="s">&#34;server&#34;</span><span class="p">,</span> <span class="s">&#34;1.0.0&#34;</span><span class="p">)</span>
+      <span class="nx">c</span><span class="p">.</span><span class="nx">Args</span> <span class="p">=</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+      <span class="nx">c</span><span class="p">.</span><span class="nx">Commands</span> <span class="p">=</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">cli</span><span class="p">.</span><span class="nx">CommandFactory</span><span class="p">{</span>
+            <span class="s">&#34;hello&#34;</span><span class="p">:</span> <span class="kd">func</span><span class="p">()</span> <span class="p">(</span><span class="nx">cli</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+                      <span class="k">return</span> <span class="o">&amp;</span><span class="nx">HelloCommand</span><span class="p">{},</span> <span class="kc">nil</span>
+            <span class="p">},</span>
+            <span class="s">&#34;goodbye&#34;</span><span class="p">:</span> <span class="kd">func</span><span class="p">()</span> <span class="p">(</span><span class="nx">cli</span><span class="p">.</span><span class="nx">Command</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+                      <span class="k">return</span> <span class="o">&amp;</span><span class="nx">GoodbyeCommand</span><span class="p">{},</span> <span class="kc">nil</span>
+            <span class="p">},</span>
+      <span class="p">}</span>
+      <span class="nx">exitStatus</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">Run</span><span class="p">()</span>
+      <span class="o">...</span> 
+<span class="p">}</span></code></pre></div>
+As seen before, the first object created is a <code>Cli</code>. Then the <code>Commands</code> field is filled with the two commands &ldquo;hello&rdquo; and &ldquo;goodbye&rdquo; as keys, and an anonymous function that simply returns two structures that will implement the <code>Command</code> interface.</p>
+
+<p>Now, let&rsquo;s create the <code>HelloCommand</code> structure that will fulfill the <a href="https://godoc.org/github.com/mitchellh/cli#Command"><code>cli.Command</code></a> interface:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">HelloCommand</span> <span class="kd">struct</span><span class="p">{}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">HelloCommand</span><span class="p">)</span> <span class="nx">Help</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="s">&#34;hello [arg0] [arg1] ... says hello to everyone&#34;</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">HelloCommand</span><span class="p">)</span> <span class="nx">Run</span><span class="p">(</span><span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="kt">int</span> <span class="p">{</span>
+      <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;hello&#34;</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span>
+      <span class="k">return</span> <span class="mi">0</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">HelloCommand</span><span class="p">)</span> <span class="nx">Synopsis</span><span class="p">()</span> <span class="kt">string</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="s">&#34;A sample command that says hello on stdout&#34;</span>
+<span class="p">}</span></code></pre></div>
+
+<p>The <code>GoodbyeCommand</code> is similar, and I omit it for brevity.</p>
+
+<p>After a simple <code>go build</code>, here is the behavior of our new cli tool:
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">~ ./server <span class="nb">help</span>
+Usage: server <span class="o">[</span>--version<span class="o">]</span> <span class="o">[</span>--help<span class="o">]</span> &lt;command&gt; <span class="o">[</span>&lt;args&gt;<span class="o">]</span>
+
+Available commands are:
+    goodbye    synopsis...
+    hello      A sample <span class="nb">command</span> that says hello on stdout
+
+~ ./server hello -help
+hello <span class="o">[</span>arg0<span class="o">]</span> <span class="o">[</span>arg1<span class="o">]</span> ... says hello to everyone
+
+~ ./server/server hello a b c
+hello <span class="o">[</span>a b c<span class="o">]</span></code></pre></div></p>
+
+<p>So far, so good!
+Now, let&rsquo;s see if we can turn this into a webservice.</p>
+
+<h1 id="micro-services">Micro-services</h1>
+
+<p><center><em>The biggest issue in changing a monolith into microservices lies in changing the communication pattern. - Martin Fowler</em><sup class="footnote-ref" id="fnref:2"><a rel="footnote" href="#fn:2">2</a></sup></center></p>
+
+<p>There is, according to me, two options to consider turning our application into a webservice:</p>
+
+<ul>
+<li>a RESTish communication and interface;</li>
+<li>an RPC based communication.</li>
+</ul>
+
+<p>SOAP is not an option anymore because it does not provide any advantage over the REST and RPC methods.</p>
+
+<h2 id="rest">Rest?</h2>
+
+<p>I&rsquo;ve always been a big fan of the REST &ldquo;protocol&rdquo;. It is easy to understand and to write. On top of that, it is verbose and allows a good description of &ldquo;business objects&rdquo;.
+But, its verbosity, that is a strength, quickly become a weakness when applied to machine-to-machine communication.
+The &ldquo;contract&rdquo; between the client and the server have to be documented manually (via something like swagger for example). And, as you only transfer objects and states, the server must handle the request, understand it, and apply it to any business logic before returning a result.
+Don&rsquo;t get me wrong, REST remains a very good thing. But it is very good when you think about it from the beginning of your conception (and with a user experience in mind).</p>
+
+<p>Indeed, it may not be a good choice for easily turning a cli into a webservice.</p>
+
+<h2 id="rpc">RPC!</h2>
+
+<p>RPC, on the other hand, may be a good fit because there would be a very little modification of the code.
+Actually, the principle would be to:</p>
+
+<ol>
+<li>trigger a network listener</li>
+<li>receive a <em>procedure call with arguments</em>,</li>
+<li>execute the function</li>
+<li>send back the result</li>
+</ol>
+
+<p>The function that holds the business logic does not need any change at all.</p>
+
+<p>The drawbacks of RPCs are:</p>
+
+<ul>
+<li>the development language need a library that supports RPC,</li>
+<li>the client and the server must use the same communication protocol.</li>
+</ul>
+
+<p>Those drawbacks have been addressed by Google. They gave to the community a polyglot RPC implementation called gRPC.</p>
+
+<p>Let me quote this from the chapter &ldquo;<a href="https://landing.google.com/sre/book/chapters/production-environment.html#our-software-infrastructure-XQs4iw">The Production Environment at Google, from the Viewpoint of an SRE</a>&rdquo; of the SRE book:</p>
+
+<blockquote>
+<p><em>All of Google&rsquo;s services communicate using a Remote Procedure Call (RPC) infrastructure named Stubby; an open source version, gRPC, is available. Often, an RPC call is made even when a call to a subroutine in the local program needs to be performed. This makes it easier to refactor the call into a different server if more modularity is needed, or when a server&rsquo;s codebase grows. GSLB can load balance RPCs in the same way it load balances externally visible services.</em></p>
+</blockquote>
+
+<p>Sounds cool! Let&rsquo;s dig into gRPC!</p>
+
+<h3 id="grpc">gRPC</h3>
+
+<p>We will now implement a gRPC server that will trigger the <code>cli.Commands</code>.</p>
+
+<p>It will receive &ldquo;orders&rdquo;, and depending on the expected call, it will:</p>
+
+<ul>
+<li>Implements a <code>HelloCommand</code> and trigger its <code>Run()</code> function;</li>
+<li>Implements a <code>GoodbyeCommand</code> and trigger its <code>Run()</code> function</li>
+</ul>
+
+<p>We will also implement a gRPC client.</p>
+
+<p>For the server and the client to communicate, they have to share the same protocol and understand each other with a contract.
+<em>Protocol Buffers (a.k.a., protobuf) are Google&rsquo;s language-neutral, platform-neutral, extensible mechanism for serializing structured data</em>
+Even if it&rsquo;s not mandatory, gRPC is usually used with the <em>Protocol Buffer</em>.</p>
+
+<p>So, first, let&rsquo;s implement the <em>contract</em> with/in <em>protobuf</em>!</p>
+
+<h3 id="the-protobuf-contract">The protobuf contract</h3>
+
+<p>The protocol is described in a simple text file and a specific DSL. Then there is a compiler that serializess the description and turns it into a contract that can be understood by the targeted language.</p>
+
+<p>Here is a simple definition that matches our need:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="na">syntax</span> <span class="o">=</span> <span class="s">&#34;proto3&#34;</span><span class="p">;</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="kn">package</span> <span class="nn">myservice</span><span class="p">;</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="kd">service</span> <span class="n">MyService</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="k">rpc</span> <span class="n">Hello</span> <span class="p">(</span><span class="n">Arg</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">Output</span><span class="p">)</span> <span class="p">{}</span><span class="err">
+</span><span class="err"></span>    <span class="k">rpc</span> <span class="n">Goodbye</span> <span class="p">(</span><span class="n">Arg</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">Output</span><span class="p">)</span> <span class="p">{}</span><span class="err">
+</span><span class="err"></span><span class="p">}</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="kd">message</span> <span class="nc">Arg</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="k">repeated</span> <span class="kt">string</span> <span class="na">args</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
+</span><span class="err"></span><span class="p">}</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="kd">message</span> <span class="nc">Output</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="kt">int32</span> <span class="na">retcode</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
+</span><span class="err"></span><span class="p">}</span></code></pre></div>
+
+<p>Here is the English description of the contract:</p>
+
+<hr />
+
+<p>Let&rsquo;s take a service called <em>MyService</em>. This service provides to actions (commands) remotely:</p>
+
+<ul>
+<li><em>Hello</em></li>
+<li><em>Goodbye</em></li>
+</ul>
+
+<p>Both takes as argument an object called <em>Arg</em> that contains an infinite number of <em>string</em> (this array is stored in a field called <em>args</em>).</p>
+
+<p>Both actions return an object called <em>Output</em> that returns an integer.</p>
+
+<hr />
+
+<p>The specification is clear enough to code a server and a client. But the string implementation may differ from a language to another.
+You may now understand why we need to &ldquo;compile&rdquo; the file.
+Let&rsquo;s generate a definition suitable for the go language:</p>
+
+<p><code>protoc --go_out=plugins=grpc:. myservice/myservice.proto</code></p>
+
+<p><em>Note</em> the definition file has been placed into a subdirectory <code>myservice</code></p>
+
+<p>This command generates a <code>myservice/myservice.pb.go</code> file. This file is part of the <code>myservice</code> package, <strong>as specified in the myservice.proto</strong>.</p>
+
+<p>The package myservice holds the &ldquo;contract&rdquo; translated in <code>go</code>. It is full of interfaces and holds helpers function to easily create a server and/or a client.
+Let&rsquo;s see how.</p>
+
+<h3 id="the-implementation-of-the-contract-into-the-server">The implementation of the &ldquo;contract&rdquo; into the server</h3>
+
+<p>Let&rsquo;s go back to the roots and read the doc of gRPC. In the <a href="https://grpc.io/docs/tutorials/basic/go.html">gRPC basics -  go</a> tutorial is written:</p>
+
+<p><em>To build and start a server, we:</em></p>
+
+<ol>
+<li><em>Specify the port we want to use to listen for client requests&hellip;</em></li>
+<li><em>Create an instance of the gRPC server using grpc.NewServer().</em></li>
+<li><em><strong>Register our service implementation with the gRPC server.</strong></em></li>
+<li><em>Call Serve() on the server with our port details to do a blocking wait until the process is killed or Stop() is called.</em></li>
+</ol>
+
+<p>Let&rsquo;s decompose the third step.</p>
+
+<h4 id="service-implementation">&ldquo;service implementation&rdquo;</h4>
+
+<p>The <code>myservice/myservice.pb.go</code> file has defined an interface for our service.</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">MyServiceServer</span> <span class="kd">interface</span> <span class="p">{</span>
+      <span class="c1">// Sends a greeting
+</span><span class="c1"></span>      <span class="nx">Hello</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="o">*</span><span class="nx">Arg</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">Output</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+      <span class="nx">Goodbye</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="o">*</span><span class="nx">Arg</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">Output</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span>
+<span class="p">}</span></code></pre></div>
+
+<p>To create a &ldquo;service implementation&rdquo; in our &ldquo;cli&rdquo; utility, we need to create any structure that implements the Hello(&hellip;) and Goodbye(&hellip;) methods.
+Let&rsquo;s call our structure <code>grpcCommands</code>:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="o">...</span>
+<span class="kn">import</span> <span class="s">&#34;myservice&#34;</span>
+<span class="o">...</span>
+
+<span class="kd">type</span> <span class="nx">grpcCommands</span> <span class="kd">struct</span> <span class="p">{}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">g</span> <span class="o">*</span><span class="nx">grpcCommands</span><span class="p">)</span> <span class="nx">Hello</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">in</span> <span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Arg</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">{</span><span class="nb">int32</span><span class="p">(</span><span class="mi">0</span><span class="p">)},</span> <span class="nx">err</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">g</span> <span class="o">*</span><span class="nx">grpcCommands</span><span class="p">)</span> <span class="nx">Goodbye</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">in</span> <span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Arg</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">{</span><span class="nb">int32</span><span class="p">(</span><span class="mi">0</span><span class="p">)},</span> <span class="nx">err</span>
+<span class="p">}</span></code></pre></div>
+
+<p><em>Note</em>: *myservice.Arg is a structure that holds an array of string named Args. It corresponds to the <code>proto</code> definition exposed before.</p>
+
+<h4 id="service-registration">&ldquo;service registration&rdquo;</h4>
+
+<p>As written in the doc, we need to register the implementation.
+In the generated file <code>myservice.pb.go</code>, there is a <code>RegisterMyServiceServer</code> function.
+This function is simply an autogenerated wrapper around the <a href="https://godoc.org/google.golang.org/grpc#Server.RegisterService"><code>RegisterService</code></a> method of the gRPC <a href="https://godoc.org/google.golang.org/grpc#Server"><code>Server</code></a> type.</p>
+
+<p>This method takes two arguments:</p>
+
+<ul>
+<li>An instance of the gRPC server</li>
+<li>the implementation of the contract.</li>
+</ul>
+
+<p>The 4 steps of the documentation can be implemented like this:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">listener</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;127.0.0.1:1234&#34;</span><span class="p">)</span>
+<span class="nx">grpcServer</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nx">NewServer</span><span class="p">()</span>
+<span class="nx">myservice</span><span class="p">.</span><span class="nx">RegisterMyServiceServer</span><span class="p">(</span><span class="nx">grpcServer</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">grpcCommands</span><span class="p">{})</span>
+<span class="nx">grpcServer</span><span class="p">.</span><span class="nx">Serve</span><span class="p">(</span><span class="nx">listener</span><span class="p">)</span></code></pre></div>
+
+<p>So far so good&hellip; The code compiles, but does not perform any action and always return 0.</p>
+
+<h4 id="actually-calling-the-run-method">Actually calling the <code>Run()</code> method</h4>
+
+<p>Now, let&rsquo;s use the <code>grpcCommands</code> structure as a bridge between the <code>cli.Command</code> and the grpc service.</p>
+
+<p>What we will do is to embed the <code>c.Commands</code> object inside the structure and trigger the appropriate objects&rsquo; <code>Run()</code> method from the corresponding gRPC procedures.</p>
+
+<p>So first, let&rsquo;s embed the <code>c.Commands</code> object.</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">grpcCommands</span> <span class="kd">struct</span> <span class="p">{</span>
+      <span class="nx">commands</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">cli</span><span class="p">.</span><span class="nx">CommandFactory</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Then change the <code>Hello</code> and <code>Goodbye</code> methods of <code>grpcCommands</code> so they trigger respectively:</p>
+
+<ul>
+<li><code>HelloCommand.Run(args)</code></li>
+<li><code>GoodbyeCommand.Run(args)</code></li>
+</ul>
+
+<p>with <code>args</code> being the array of string passed via the <code>in</code> argument of the protobuf.</p>
+
+<p>as defined in <code>myservice.Arg.Args</code> (the protobuf compiler has transcribed the <code>repeated string args</code> argument into a filed <code>Args []string</code> of the type <code>Arg</code>.</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">g</span> <span class="o">*</span><span class="nx">grpcCommands</span><span class="p">)</span> <span class="nx">Hello</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">in</span> <span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Arg</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">runner</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">g</span><span class="p">.</span><span class="nx">commands</span><span class="p">[</span><span class="s">&#34;hello&#34;</span><span class="p">]()</span>
+      <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">int32</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="nx">err</span>
+      <span class="p">}</span>
+      <span class="nx">ret</span> <span class="p">=</span> <span class="nb">int32</span><span class="p">(</span><span class="nx">runner</span><span class="p">.</span><span class="nx">Run</span><span class="p">(</span><span class="nx">in</span><span class="p">.</span><span class="nx">Args</span><span class="p">))</span>
+      <span class="k">return</span> <span class="o">&amp;</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">{</span><span class="nb">int32</span><span class="p">(</span><span class="nx">ret</span><span class="p">)},</span> <span class="nx">err</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">g</span> <span class="o">*</span><span class="nx">grpcCommands</span><span class="p">)</span> <span class="nx">Goodbye</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">in</span> <span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Arg</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">runner</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">g</span><span class="p">.</span><span class="nx">commands</span><span class="p">[</span><span class="s">&#34;goodbye&#34;</span><span class="p">]()</span>
+      <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">int32</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="nx">err</span>
+      <span class="p">}</span>
+      <span class="nx">ret</span> <span class="p">=</span> <span class="nb">int32</span><span class="p">(</span><span class="nx">runner</span><span class="p">.</span><span class="nx">Run</span><span class="p">(</span><span class="nx">in</span><span class="p">.</span><span class="nx">Args</span><span class="p">))</span>
+      <span class="k">return</span> <span class="o">&amp;</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">{</span><span class="nb">int32</span><span class="p">(</span><span class="nx">ret</span><span class="p">)},</span> <span class="nx">err</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Let&rsquo;s factorize a bit and create a wrapper (that will be useful in the next section):</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">wrapper</span><span class="p">(</span><span class="nx">cf</span> <span class="nx">cli</span><span class="p">.</span><span class="nx">CommandFactory</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kt">int32</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">runner</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">cf</span><span class="p">()</span>
+      <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="nb">int32</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="nx">err</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nb">int32</span><span class="p">(</span><span class="nx">runner</span><span class="p">.</span><span class="nx">Run</span><span class="p">(</span><span class="nx">in</span><span class="p">.</span><span class="nx">Args</span><span class="p">)),</span> <span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">g</span> <span class="o">*</span><span class="nx">grpcCommands</span><span class="p">)</span> <span class="nx">Hello</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">in</span> <span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Arg</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">ret</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">wrapper</span><span class="p">(</span><span class="nx">g</span><span class="p">.</span><span class="nx">commands</span><span class="p">[</span><span class="s">&#34;hello&#34;</span><span class="p">])</span>
+      <span class="k">return</span> <span class="o">&amp;</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">{</span><span class="nb">int32</span><span class="p">(</span><span class="nx">ret</span><span class="p">)},</span> <span class="nx">err</span>
+<span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">g</span> <span class="o">*</span><span class="nx">grpcCommands</span><span class="p">)</span> <span class="nx">Goodbye</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">in</span> <span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Arg</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">ret</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">wrapper</span><span class="p">(</span><span class="nx">g</span><span class="p">.</span><span class="nx">commands</span><span class="p">[</span><span class="s">&#34;goodbye&#34;</span><span class="p">])</span>
+      <span class="k">return</span> <span class="o">&amp;</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">{</span><span class="nb">int32</span><span class="p">(</span><span class="nx">ret</span><span class="p">)},</span> <span class="nx">err</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Now we have everything needed to turn our cli into a gRPC service. With a bit of plumbing, the code compiles and the service runs.
+The full implementation of the service can be found <a href="https://github.com/owulveryck/cli-grpc-example/blob/master/server/main.go">here</a>.</p>
+
+<h2 id="a-very-quick-client">A very quick client</h2>
+
+<p>The principle is the same for the client. All the needed methods are auto-generated and wrapped by the <code>protoc</code> command.</p>
+
+<p>The steps are:</p>
+
+<ol>
+<li>create a network connection to the gRPC server (with TLS)</li>
+<li>create a new instance of myservice&rsquo;client</li>
+<li>call a function and get a result</li>
+</ol>
+
+<p>for example:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">conn</span><span class="p">,</span> <span class="nx">_</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nx">Dial</span><span class="p">(</span><span class="s">&#34;127.0.0.1:1234&#34;</span><span class="p">,</span> <span class="nx">grpc</span><span class="p">.</span><span class="nx">WithInsecure</span><span class="p">())</span>
+<span class="k">defer</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+<span class="nx">client</span> <span class="o">:=</span> <span class="nx">myservice</span><span class="p">.</span><span class="nx">NewMyServiceClient</span><span class="p">(</span><span class="nx">conn</span><span class="p">)</span>
+<span class="nx">output</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nx">Hello</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">(),</span> <span class="o">&amp;</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Arg</span><span class="p">{</span><span class="nx">os</span><span class="p">.</span><span class="nx">Args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]})</span></code></pre></div>
+
+<p><em>Note</em>: By default, gRPC requires some TLS. I have specified the <code>WithInsecure</code> option because I am running on the local loop and it is just an example. Don&rsquo;t do that in production.</p>
+
+<h1 id="going-further">Going further</h1>
+
+<p>Normally, Unix tools should respect a <a href="http://www.faqs.org/docs/artu/ch01s06.html">certain philosophy</a> such as:</p>
+
+<p><center><strong>Rule of Silence: When a program has nothing surprising to say, it should say nothing.</strong></center></p>
+
+<p>Anyway, we all know that tools are verbose, so let&rsquo;s add a feature that sends the content of stdout and stderr back to the client. (And anyway, we are implementing a service greeting. It would be useless if it was silent :))</p>
+
+<h2 id="stdout-stderr">stdout / stderr</h2>
+
+<p>What we want to do is to change the output of the commands.
+Therefore, we simply add two more fields to the <code>Output</code> object in the protobuf definition:
+<div class="highlight"><pre class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="kd">message</span> <span class="nc">Output</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="kt">int32</span> <span class="na">retcode</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="kt">bytes</span> <span class="na">stdout</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="kt">bytes</span> <span class="na">stderr</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
+</span><span class="err"></span><span class="p">}</span></code></pre></div></p>
+
+<p>The generated file contains the following definition for <code>Output</code>:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">Output</span> <span class="kd">struct</span> <span class="p">{</span>
+      <span class="nx">Retcode</span> <span class="kt">int32</span>  <span class="s">`protobuf:&#34;varint,1,opt,name=retcode&#34; json:&#34;retcode,omitempty&#34;`</span>
+      <span class="nx">Stdout</span>  <span class="p">[]</span><span class="kt">byte</span> <span class="s">`protobuf:&#34;bytes,2,opt,name=stdout,proto3&#34; json:&#34;stdout,omitempty&#34;`</span>
+      <span class="nx">Stderr</span>  <span class="p">[]</span><span class="kt">byte</span> <span class="s">`protobuf:&#34;bytes,3,opt,name=stderr,proto3&#34; json:&#34;stderr,omitempty&#34;`</span>
+<span class="p">}</span></code></pre></div>
+
+<p>We have changed the Output type, but as all the fields are embedded within the structure, the &ldquo;service implementation&rdquo; interface (<code>grpcCommand</code>) has not changed.
+We only need to change a little bit the implementation in order to return a completed <code>Output</code> object:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">g</span> <span class="o">*</span><span class="nx">grpcCommands</span><span class="p">)</span> <span class="nx">Hello</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">in</span> <span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Arg</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span> <span class="p">[]</span><span class="kt">byte</span>
+    <span class="c1">// ...
+</span><span class="c1"></span>    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">{</span><span class="nx">ret</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">},</span> <span class="nx">err</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Now we have to change the <code>wrapper</code> function that has been defined previously to return the content of stdout and stderr:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">wrapper</span><span class="p">(</span><span class="nx">cf</span> <span class="nx">cli</span><span class="p">.</span><span class="nx">CommandFactory</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kt">int32</span><span class="p">,</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">,</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// ...
+</span><span class="c1"></span><span class="p">}</span>
+<span class="kd">func</span> <span class="p">(</span><span class="nx">g</span> <span class="o">*</span><span class="nx">grpcCommands</span><span class="p">)</span> <span class="nx">Hello</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">in</span> <span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Arg</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span> <span class="p">[]</span><span class="kt">byte</span>
+    <span class="nx">ret</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">wrapper</span><span class="p">(</span><span class="nx">g</span><span class="p">.</span><span class="nx">commands</span><span class="p">[</span><span class="s">&#34;hello&#34;</span><span class="p">],</span> <span class="nx">in</span><span class="p">.</span><span class="nx">Args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">myservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">{</span><span class="nx">ret</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">},</span> <span class="nx">err</span>
+<span class="p">}</span></code></pre></div>
+
+<p>All the job of capturing stdout and stderr is done within the wrapper function (This solution has been found on <a href="https://stackoverflow.com/questions/10473800/in-go-how-do-i-capture-stdout-of-a-function-into-a-string">StackOverflow</a>:</p>
+
+<ul>
+<li>first, we backup the standard <code>stdout</code> and <code>stderr</code></li>
+<li>then, we create two times, two file descriptors linked with a pipe (one for stdout and one for stderr)</li>
+<li>we assign the standard <code>stdout</code> and <code>stderr</code> to the input of the pipe. From now on, every interaction will be written to the pipe and will be received into the variable declared as output of the pipe</li>
+<li>then, we actually execute the function (the business logic)</li>
+<li>we get the content of the output and save it to variable</li>
+<li>and then we restore stdout and stderr</li>
+</ul>
+
+<p>Here is the implementation of the <code>wrapper</code>:
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">wrapper</span><span class="p">(</span><span class="nx">cf</span> <span class="nx">cli</span><span class="p">.</span><span class="nx">CommandFactory</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="kt">int32</span><span class="p">,</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">,</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="kd">var</span> <span class="nx">ret</span> <span class="kt">int32</span>
+	<span class="nx">oldStdout</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span> <span class="c1">// keep backup of the real stdout
+</span><span class="c1"></span>	<span class="nx">oldStderr</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Stderr</span>
+
+	<span class="c1">// Backup the stdout
+</span><span class="c1"></span>	<span class="nx">r</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Pipe</span><span class="p">()</span>
+        <span class="c1">// ...
+</span><span class="c1"></span>	<span class="nx">re</span><span class="p">,</span> <span class="nx">we</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nx">Pipe</span><span class="p">()</span>
+        <span class="c1">//...
+</span><span class="c1"></span>	<span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span> <span class="p">=</span> <span class="nx">w</span>
+	<span class="nx">os</span><span class="p">.</span><span class="nx">Stderr</span> <span class="p">=</span> <span class="nx">we</span>
+
+	<span class="nx">runner</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">cf</span><span class="p">()</span>
+        <span class="c1">// ...
+</span><span class="c1"></span>	<span class="nx">ret</span> <span class="p">=</span> <span class="nb">int32</span><span class="p">(</span><span class="nx">runner</span><span class="p">.</span><span class="nx">Run</span><span class="p">(</span><span class="nx">args</span><span class="p">))</span>
+
+	<span class="nx">outC</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span>
+	<span class="nx">errC</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span>
+	<span class="c1">// copy the output in a separate goroutine so printing can&#39;t block indefinitely
+</span><span class="c1"></span>	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">buf</span> <span class="nx">bytes</span><span class="p">.</span><span class="nx">Buffer</span>
+		<span class="nx">io</span><span class="p">.</span><span class="nx">Copy</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">buf</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+		<span class="nx">outC</span> <span class="o">&lt;-</span> <span class="nx">buf</span><span class="p">.</span><span class="nx">Bytes</span><span class="p">()</span>
+	<span class="p">}()</span>
+	<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">buf</span> <span class="nx">bytes</span><span class="p">.</span><span class="nx">Buffer</span>
+		<span class="nx">io</span><span class="p">.</span><span class="nx">Copy</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">buf</span><span class="p">,</span> <span class="nx">re</span><span class="p">)</span>
+		<span class="nx">errC</span> <span class="o">&lt;-</span> <span class="nx">buf</span><span class="p">.</span><span class="nx">Bytes</span><span class="p">()</span>
+	<span class="p">}()</span>
+
+	<span class="c1">// back to normal state
+</span><span class="c1"></span>	<span class="nx">w</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+	<span class="nx">we</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+	<span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span> <span class="p">=</span> <span class="nx">oldStdout</span> <span class="c1">// restoring the real stdout
+</span><span class="c1"></span>	<span class="nx">os</span><span class="p">.</span><span class="nx">Stderr</span> <span class="p">=</span> <span class="nx">oldStderr</span>
+	<span class="nx">stdout</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">outC</span>
+	<span class="nx">stderr</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">errC</span>
+	<span class="k">return</span> <span class="nx">ret</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="p">}</span></code></pre></div></p>
+
+<p><strong>Et voilà</strong>, the cli has been transformed into a grpc webservice. The full code is available on <a href="https://github.com/owulveryck/cli-grpc-example">GitHub</a>.</p>
+
+<h3 id="side-note-about-race-conditions">Side note about race conditions</h3>
+
+<p>The map used for cli.Command is not concurrent safe. But there is no goroutine that actually writes it so it should be ok.
+Anyway, I have written a little benchmark of our function and passed it to the race detector. And it did not find any problem:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">go <span class="nb">test</span> -race -bench<span class="o">=</span>.      
+goos: linux
+goarch: amd64
+pkg: github.com/owulveryck/cli-grpc-example/server
+BenchmarkHello-2             <span class="m">200</span>          <span class="m">10483400</span> ns/op
+PASS
+ok      github.com/owulveryck/cli-grpc-example/server   <span class="m">4</span>.130s</code></pre></div>
+<p>The benchmark shows good result on my little chromebook, gRPC seems very efficient, but actually testing it is beyond the scope of this article.</p>
+
+<h3 id="interactivity">Interactivity</h3>
+
+<p>Sometimes, cli tools ask questions. Another good point with gRPC is that it is bidirectional. Therefore, it would be possible to send the question from the server to the client and get the response back. I let that for another experiment.</p>
+
+<h2 id="terraform">Terraform ?</h2>
+
+<p>At the beginning of this article, I have explained that I was using this specific cli in order to derivate Hashicorp tools and turned them into webservices.
+Let&rsquo;s take an example with the excellent terraform.</p>
+
+<p>We are going to derivate terraform by changing only its cli interface, add some gRPC powered by protobuf&hellip;</p>
+
+<p>$$\frac{\partial terraform}{\partial cli} + grpc^{protobuf} = \mu service(terraform)$$ <sup class="footnote-ref" id="fnref:3"><a rel="footnote" href="#fn:3">3</a></sup></p>
+
+<h3 id="about-concurrency">About concurrency</h3>
+
+<p>Terraform uses <a href="https://www.terraform.io/docs/backends/index.html">backends</a> to store its states.
+By default, it relies on the local filesystem, which is, obviously, not concurrent safe. It does not scale and cannot be used when dealing with webservices.
+For the purpose of my article, I won&rsquo;t dig into the backend principle and stick to the local one.
+Hence, this will only work with one and only one client. If you plan to do more work around terraform-as-a-service, changing the backend is a must!</p>
+
+<h3 id="what-will-i-test">What will I test?</h3>
+
+<p>In order to narrow the exercise, I will partially implement the <code>plan</code> command.</p>
+
+<p>My test case is the creation of an <code>EC2</code> instance on AWS. This example is a copy/paste of the example <a href="https://github.com/terraform-providers/terraform-provider-aws/tree/master/examples/two-tier">Basic Two-Tier AWS Architecture</a>.</p>
+
+<p>I will not implement any kind of interactivity. Therefore, I have added some default values for the ssh key name and path.</p>
+
+<p>Let&rsquo;s check that the basic cli is working:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">localhost two-tier <span class="o">[</span>master*<span class="o">]</span> terraform plan <span class="p">|</span> tail
+      enable_classiclink_dns_support:   <span class="s2">&#34;&lt;computed&gt;&#34;</span>
+      enable_dns_hostnames:             <span class="s2">&#34;&lt;computed&gt;&#34;</span>
+      enable_dns_support:               <span class="s2">&#34;true&#34;</span>
+      instance_tenancy:                 <span class="s2">&#34;&lt;computed&gt;&#34;</span>
+      ipv6_association_id:              <span class="s2">&#34;&lt;computed&gt;&#34;</span>
+      ipv6_cidr_block:                  <span class="s2">&#34;&lt;computed&gt;&#34;</span>
+      main_route_table_id:              <span class="s2">&#34;&lt;computed&gt;&#34;</span>
+
+Plan: <span class="m">9</span> to add, <span class="m">0</span> to change, <span class="m">0</span> to destroy.</code></pre></div>
+
+<p>Ok, let&rsquo;s &ldquo;hack&rdquo; terraform!</p>
+
+<h3 id="hacking-terraform">hacking Terraform</h3>
+
+<h4 id="creating-the-protobuf-contract">Creating the protobuf contract</h4>
+
+<p>The contract will be placed in a <code>terraformservice</code> package.
+I am using a similar approach as the one used for the greeting example described before:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-protobuf" data-lang="protobuf"><span class="na">syntax</span> <span class="o">=</span> <span class="s">&#34;proto3&#34;</span><span class="p">;</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="kn">package</span> <span class="nn">terraformservice</span><span class="p">;</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="kd">service</span> <span class="n">Terraform</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="k">rpc</span> <span class="n">Plan</span> <span class="p">(</span><span class="n">Arg</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">Output</span><span class="p">)</span> <span class="p">{}</span><span class="err">
+</span><span class="err"></span><span class="p">}</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="kd">message</span> <span class="nc">Arg</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="k">repeated</span> <span class="kt">string</span> <span class="na">args</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
+</span><span class="err"></span><span class="p">}</span><span class="err">
+</span><span class="err">
+</span><span class="err"></span><span class="kd">message</span> <span class="nc">Output</span> <span class="p">{</span><span class="err">
+</span><span class="err"></span>    <span class="kt">int32</span> <span class="na">retcode</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="kt">bytes</span> <span class="na">stdout</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span><span class="err">
+</span><span class="err"></span>    <span class="kt">bytes</span> <span class="na">stderr</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span><span class="err">
+</span><span class="err"></span><span class="p">}</span></code></pre></div>
+
+<p>Then I generate the <code>go</code> version of the contract with:</p>
+
+<p><code>protoc --go_out=plugins=grpc:. terraformservice/terraform.proto</code></p>
+
+<h3 id="the-go-implementation-of-the-interface">The go implementation of the interface</h3>
+
+<p>I am using a similar structure as the one defined in the previous example.
+I only change the methods to match the new ones:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">type</span> <span class="nx">grpcCommands</span> <span class="kd">struct</span> <span class="p">{</span>
+      <span class="nx">commands</span> <span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">cli</span><span class="p">.</span><span class="nx">CommandFactory</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="p">(</span><span class="nx">g</span> <span class="o">*</span><span class="nx">grpcCommands</span><span class="p">)</span> <span class="nx">Plan</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">in</span> <span class="o">*</span><span class="nx">terraformservice</span><span class="p">.</span><span class="nx">Arg</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">terraformservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">ret</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">wrapper</span><span class="p">(</span><span class="nx">g</span><span class="p">.</span><span class="nx">commands</span><span class="p">[</span><span class="s">&#34;plan&#34;</span><span class="p">],</span> <span class="nx">in</span><span class="p">.</span><span class="nx">Args</span><span class="p">)</span>
+      <span class="k">return</span> <span class="o">&amp;</span><span class="nx">terraformservice</span><span class="p">.</span><span class="nx">Output</span><span class="p">{</span><span class="nx">ret</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">},</span> <span class="nx">err</span>
+<span class="p">}</span></code></pre></div>
+
+<p>The wrapper function remains exactly the same as the one defined before because I didn&rsquo;t change the Output format.</p>
+
+<h3 id="setting-a-grpc-server-in-the-main-function">Setting a gRPC server in the main function</h3>
+
+<p>The only modification that has to be done is to create a listener for the grpc like the one we did before.
+We place it in the main code, just before the execution of the <code>Cli.Run()</code> call:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">cliRunner</span><span class="p">.</span><span class="nx">Args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="nx">log</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&#34;Listening on 127.0.0.1:1234&#34;</span><span class="p">)</span>
+        <span class="nx">listener</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">net</span><span class="p">.</span><span class="nx">Listen</span><span class="p">(</span><span class="s">&#34;tcp&#34;</span><span class="p">,</span> <span class="s">&#34;127.0.0.1:1234&#34;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+                <span class="nx">log</span><span class="p">.</span><span class="nx">Fatalf</span><span class="p">(</span><span class="s">&#34;failed to listen: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="nx">grpcServer</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nx">NewServer</span><span class="p">()</span>
+        <span class="nx">terraformservice</span><span class="p">.</span><span class="nx">RegisterTerraformServer</span><span class="p">(</span><span class="nx">grpcServer</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">grpcCommands</span><span class="p">{</span><span class="nx">cliRunner</span><span class="p">.</span><span class="nx">Commands</span><span class="p">})</span>
+        <span class="c1">// determine whether to use TLS
+</span><span class="c1"></span>        <span class="nx">grpcServer</span><span class="p">.</span><span class="nx">Serve</span><span class="p">(</span><span class="nx">listener</span><span class="p">)</span>
+<span class="p">}</span></code></pre></div>
+
+<h3 id="testing-it">Testing it</h3>
+
+<p>The code compiles without any problem.
+I have triggered the <code>terraform init</code> and I have a listening process waiting for a call:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shelli" data-lang="shelli">~ netstat -lntp | grep 1234
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 127.0.0.1:1234          0.0.0.0:*               LISTEN      9053/tfoliv     </code></pre></div>
+<p>Let&rsquo;s launch a client:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">conn</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">grpc</span><span class="p">.</span><span class="nx">Dial</span><span class="p">(</span><span class="s">&#34;127.0.0.1:1234&#34;</span><span class="p">,</span> <span class="nx">grpc</span><span class="p">.</span><span class="nx">WithInsecure</span><span class="p">())</span>
+      <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+            <span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="s">&#34;Cannot reach grpc server&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+      <span class="p">}</span>
+      <span class="k">defer</span> <span class="nx">conn</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+      <span class="nx">client</span> <span class="o">:=</span> <span class="nx">terraformservice</span><span class="p">.</span><span class="nx">NewTerraformClient</span><span class="p">(</span><span class="nx">conn</span><span class="p">)</span>
+      <span class="nx">output</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">client</span><span class="p">.</span><span class="nx">Plan</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">(),</span> <span class="o">&amp;</span><span class="nx">terraformservice</span><span class="p">.</span><span class="nx">Arg</span><span class="p">{</span><span class="nx">os</span><span class="p">.</span><span class="nx">Args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]})</span>
+      <span class="nx">stdout</span> <span class="o">:=</span> <span class="nx">bytes</span><span class="p">.</span><span class="nx">NewBuffer</span><span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">)</span>
+      <span class="nx">stderr</span> <span class="o">:=</span> <span class="nx">bytes</span><span class="p">.</span><span class="nx">NewBuffer</span><span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">Stderr</span><span class="p">)</span>
+      <span class="nx">io</span><span class="p">.</span><span class="nx">Copy</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stdout</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">)</span>
+      <span class="nx">io</span><span class="p">.</span><span class="nx">Copy</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stderr</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">)</span>
+      <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">Retcode</span><span class="p">)</span>
+      <span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">Retcode</span><span class="p">)</span>
+<span class="p">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">~ ./grpcclient
+~ <span class="nb">echo</span> <span class="nv">$?</span>
+~ <span class="m">0</span></code></pre></div>
+<p>Too bad, the proper function has been called, the return code is ok, but all the output went to the console of the server&hellip; Anyway, the RPC has worked.</p>
+
+<p>I can even remove the default parameters and pass them as an argument of my client:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">~ ./grpcclient -var <span class="s1">&#39;key_name=terraform&#39;</span> -var <span class="s1">&#39;public_key_path=~/.ssh/terraform.pub&#39;</span>
+~ <span class="nb">echo</span> <span class="nv">$?</span>
+~ <span class="m">0</span></code></pre></div>
+<p>And let&rsquo;s see if I give a non existent path:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">~ ./grpcclient -var <span class="s1">&#39;key_name=terraform&#39;</span> -var <span class="s1">&#39;public_key_path=~/.ssh/nonexistent&#39;</span>
+~ <span class="nb">echo</span> <span class="nv">$?</span>
+~ <span class="m">1</span></code></pre></div>
+<p><em>about the output</em>: I have been a little optimistic about the stdout and stderr.
+Actually, to make it work, the best option would be to implement a custom <code>UI</code> (it should not be difficult because <a href="https://godoc.org/github.com/mitchellh/cli#Ui"><code>Ui is also an interface</code></a>).
+I will try an implementation as soon as I will have enough time to do so. But for now, I have reached my first goal, and this post is long enough :)</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Transforming terraform into a webservice has required a very little modification of the terraform code itself which is very good for maintenance purpose:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-diff" data-lang="diff"><span class="gh">diff --git a/main.go b/main.go
+</span><span class="gh">index ca4ec7c..da5215b 100644
+</span><span class="gh"></span><span class="gd">--- a/main.go
+</span><span class="gd"></span><span class="gi">+++ b/main.go
+</span><span class="gi"></span><span class="gu">@@ -5,14 +5,18 @@ import (
+</span><span class="gu"></span>        &#34;io&#34;
+        &#34;io/ioutil&#34;
+        &#34;log&#34;
+<span class="gi">+       &#34;net&#34;
+</span><span class="gi"></span>        &#34;os&#34;
+        &#34;runtime&#34;
+        &#34;strings&#34;
+        &#34;sync&#34;
+ 
+<span class="gi">+       &#34;google.golang.org/grpc&#34;
+</span><span class="gi">+
+</span><span class="gi"></span>        &#34;github.com/hashicorp/go-plugin&#34;
+        &#34;github.com/hashicorp/terraform/helper/logging&#34;
+        &#34;github.com/hashicorp/terraform/terraform&#34;
+<span class="gi">+       &#34;github.com/hashicorp/terraform/terraformservice&#34;
+</span><span class="gi"></span>        &#34;github.com/mattn/go-colorable&#34;
+        &#34;github.com/mattn/go-shellwords&#34;
+        &#34;github.com/mitchellh/cli&#34;
+<span class="gu">@@ -185,6 +189,18 @@ func wrappedMain() int {
+</span><span class="gu"></span>        PluginOverrides.Providers = config.Providers
+        PluginOverrides.Provisioners = config.Provisioners
+ 
+<span class="gi">+       if len(cliRunner.Args) == 0 {
+</span><span class="gi">+               log.Println(&#34;Listening on 127.0.0.1:1234&#34;)
+</span><span class="gi">+               listener, err := net.Listen(&#34;tcp&#34;, &#34;127.0.0.1:1234&#34;)
+</span><span class="gi">+               if err != nil {
+</span><span class="gi">+                       log.Fatalf(&#34;failed to listen: %v&#34;, err)
+</span><span class="gi">+               }
+</span><span class="gi">+               grpcServer := grpc.NewServer()
+</span><span class="gi">+               terraformservice.RegisterTerraformServer(grpcServer, &amp;grpcCommands{cliRunner.Commands})
+</span><span class="gi">+               // determine whether to use TLS
+</span><span class="gi">+               grpcServer.Serve(listener)
+</span><span class="gi">+       }
+</span><span class="gi">+
+</span><span class="gi"></span>        exitCode, err := cliRunner.Run()
+        if err != nil {
+<span class="err">                Ui.Error(fmt.Sprintf(&#34;Error executing CLI: %s&#34;, err.Error()))</span></code></pre></div>
+
+<p>Of course, there is a bit of work to setup a complete terraform-as-a-service architecture, but it looks promising.</p>
+
+<p>Regarding grpc and protobuf:
+gRPC is a very nice protocol, I am really looking forward an implementation in javascript to target the browser
+(Meanwhile it is possible and easy to set up a grpc-to-json proxy if any web client is needed).</p>
+
+<p>But it reminds us that the main target of RPC is machine-to-machine communication. This is something that the ease-of-use-and-read of json has shadowed&hellip;</p>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">This sentence is not from me. I read it once, somewhere, on the Internet. I cannot find anybody to give the credit to.
+ <a class="footnote-return" href="#fnref:1"><sup>[return]</sup></a></li>
+<li id="fn:2">from <a href="https://martinfowler.com/articles/microservices.html#SmartEndpointsAndDumbPipes">Martin Fowler&rsquo;s Microservices definition</a>.
+ <a class="footnote-return" href="#fnref:2"><sup>[return]</sup></a></li>
+<li id="fn:3">I know, this mathematical equation come from nowhere. But I simply like the beautifulness of this language. (I would have been damned by my math teachers because I have used the mathematical language to describe something that is not mathematical. Would you please forgive me, gentlemen :)
+ <a class="footnote-return" href="#fnref:3"><sup>[return]</sup></a></li>
+</ol>
+</div>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2017%2f09%2f02%2ffrom-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f09%2f02%2ffrom-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f09%2f02%2ffrom-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2017%2f09%2f02%2ffrom-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>

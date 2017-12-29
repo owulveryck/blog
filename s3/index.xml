@@ -18,7 +18,7 @@
       <pubDate>Sun, 29 Oct 2017 07:17:33 +0100</pubDate>
       
       <guid>https://blog.owulveryck.info/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html</guid>
-      <description>Shakespeare and I, encounter of the third type A couple of months ago, I have attended the Google Cloud Next 17 event in London. Among the talks about SRE, and keynotes, I&amp;rsquo;ve had the chance to listen to Martin Gorner&amp;rsquo;s excellent introduction: TensorFlow and Deep Learning without a PhD, Part 2. If you don&amp;rsquo;t want to look at the video, here is a quick summary:
+      <description>Shakespeare and I, encounter of the third type A couple of months ago, I attended the Google Cloud Next 17 event in London. Among the talks about SRE, and keynotes, I had the chance to listen to Martin Gorner&amp;rsquo;s excellent introduction: TensorFlow and Deep Learning without a PhD, Part 2. If you don&amp;rsquo;t want to look at the video, here is a quick summary:
 a 100 of lines of python are reading all Shakespeare&amp;rsquo;s plays; it learns his style, and then generates a brand new play from scratch.</description>
     </item>
     

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+<meta property="og:title" content="To go and touch Linda&#39;s Lisp" />
+<meta property="og:description" content="This is the second part of a series on my attempt to build a deployement language on a cloud scale" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp.html" />
+
+  <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/9/9d/SICP_cover.jpg" />
+
+
+
+<meta property="article:published_time" content="2017-02-28T20:57:38&#43;01:00"/>
+
+<meta property="article:modified_time" content="2017-02-28T20:57:38&#43;01:00"/>
+
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="To go and touch Linda&#39;s Lisp">
+<meta itemprop="description" content="This is the second part of a series on my attempt to build a deployement language on a cloud scale">
+
+
+<meta itemprop="datePublished" content="2017-02-28T20:57:38&#43;01:00" />
+<meta itemprop="dateModified" content="2017-02-28T20:57:38&#43;01:00" />
+<meta itemprop="wordCount" content="1232">
+
+  <meta itemprop="image" content="https://upload.wikimedia.org/wikipedia/commons/9/9d/SICP_cover.jpg">
+
+
+
+<meta itemprop="keywords" content="go,zygomys,Lisp,linda," />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image:src" content="https://upload.wikimedia.org/wikipedia/commons/9/9d/SICP_cover.jpg"/>
+<meta name="twitter:title" content="To go and touch Linda&#39;s Lisp"/>
+<meta name="twitter:description" content="This is the second part of a series on my attempt to build a deployement language on a cloud scale"/>
+<meta name="twitter:site" content="@owulveryck"/>
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.31.1" />
+
+
+    <link rel="canonical" href="https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp.html">
+
+    <title>To go and touch Linda&rsquo;s Lisp | Unladen swallow</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+    <!-- combined, minified CSS -->
+    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
+    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
+
+    
+
+    
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+    
+
+    
+<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+
+
+  </head>
+
+  <body>
+
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="nav blog-nav">
+          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
+          
+          
+          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
+          
+          
+        </nav>
+      </div>
+    </div>
+
+    <header class="blog-header">
+      <div class="container">
+        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
+        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 blog-main">
+
+          
+
+
+<article class="blog-post">
+  <header>
+  <div class="container">
+  <div class="row">
+    <div class="col-sm-10">
+    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp.html">To go and touch Linda&rsquo;s Lisp</a></h2>
+    <p class="blog-post-meta"><time datetime="2017-02-28T20:57:38&#43;01:00">Tue Feb 28, 2017</time> by Olivier Wulveryck in 
+<i class="fa fa-folder" aria-hidden="true"></i>&nbsp;<a href="/categories/cloud" rel="category tag">cloud</a>, <a href="/categories/distributed-systems" rel="category tag">distributed systems</a>
+
+
+<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/go" rel="tag">go</a>, <a href="/tags/zygomys" rel="tag">zygomys</a>, <a href="/tags/lisp" rel="tag">Lisp</a>, <a href="/tags/linda" rel="tag">linda</a>
+
+</p>
+    </div>
+    <div class="col-sm-2 frame-round">
+  <a href='https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp.html'>
+      
+        <div class="crop">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/9/9d/SICP_cover.jpg" alt=""></img>
+    </div>
+      
+    </a>
+    </div>
+
+    </div>
+  </div>
+
+  </header>
+
+  
+
+<p>The title is not a typo nor dyslexia. I will really talk about Lisp.</p>
+
+<p>In a <a href="/2017/02/03/linda-31yo-with-5-starving-philosophers.../index.html">previous post</a> I explained my will to implement the dining of the philosophers with Linda in GO.</p>
+
+<p>The ultimate goal is to use a distributed and abstract language to go straight from the design to the runtime of an application.</p>
+
+<h1 id="the-problem-i-ve-faced">The problem I&rsquo;ve faced</h1>
+
+<p>I want to use a GO implementation for the Linda language because a go binary is a container by itself. Therefore if I build my linda language within go, I will be able to run it easily across the computes nodes without any more dependencies.
+The point is that the Linda implementation may be seen as a go package. Therefore every implementation of every algorithm must be coded in go. Therefore I will lack a lot of flexibility as I will need one agent per host <strong>and</strong> per algorithm. For example the binary that will solve the problem of the dining of the philosophers will only be useful for this specific problem.</p>
+
+<p>What would be nice it to use an embedded scripting language. This language would implement the Linda primitives (<em>in, rd, eval, out</em>). And the go binary would be in charge to communicate with the tuple space.</p>
+
+<h2 id="tuple-space-i-want-your-sexp">Tuple space: <em>I want your Sexp</em></h2>
+
+<p>I have thought a lot about a way to encode my tuples for the tuple space.
+Of course go as a lot of encoding available:</p>
+
+<ul>
+<li>json</li>
+<li>xml</li>
+<li>protobuf</li>
+<li>gob</li>
+</ul>
+
+<p>None of them gave me entire satisfaction. The reason is that go is strongly typed. A tuple must be internally represented by an empty <em>interface{}</em> to remain flexible.
+Obviously I would need to use a lot of reflexion in my code. And reflexion is not always easy. And a bad implementation leads to an unpredictable code.</p>
+
+<p>To keep it simple (and idiomatic) I took a little refresh about the principles of the reflection. So I took my <a href="https://books.google.fr/books/about/The_Go_Programming_Language.html?id=SJHvCgAAQBAJ">book</a> about go (I bought it when I started learning the language).</p>
+
+<p>In this book there is a full example about encoding and decoding <a href="https://en.wikipedia.org/wiki/S-expression">s-expression</a>. And what is an s-expression? A tuple!</p>
+
+<p><strong>Eureka</strong>!</p>
+
+<h2 id="lisp-zygomys">Lisp/zygomys</h2>
+
+<p>I started working on s-expression&hellip; I could have used the parser described in my book and that would be enough for the purpose of my test.
+I could have created a package <em>encoding/sexpr</em> and that would do the job.</p>
+
+<p>But the more I was reading about s-expression, the more I was digging in list processing.</p>
+
+<p>List processing, s-expression, embedded language, functional programming&hellip;. That was it: I really needed a lisp based embedded language to implement my linda solution.</p>
+
+<p><img src="https://imgs.xkcd.com/comics/lisp_cycles.png" alt="xkcd 297" /></p>
+
+<p>I found <a href="https://github.com/glycerine/zygomys">Zygomys</a>. This project was a perfect fit for my needs because it seemed stable enough and easily extensible.
+The main drawback is that its author decided not to use the godoc format. That is a bit annoying but the documentation exists and is in a wiki. On the other hand the author has replied to all of my solicitations. So I gave it a go.</p>
+
+<h1 id="the-poc">The POC</h1>
+
+<h2 id="implementing-the-linda-primitives-in-the-repl">Implementing the linda primitives in the REPL</h2>
+
+<p>The linda primitives are implemented as GO functions. I will more or less use the same structure as the one I have already used in my first attempt.
+The go functions will be exported into the repl as documented in the <a href="https://github.com/glycerine/zygomys/wiki/Go-API">wiki of zygomys</a></p>
+
+<p>For example the Out function is implemented with this signature:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">l</span> <span class="o">*</span><span class="nx">Linda</span><span class="p">)</span> <span class="nx">Out</span><span class="p">(</span><span class="nx">env</span> <span class="o">*</span><span class="nx">zygo</span><span class="p">.</span><span class="nx">Glisp</span><span class="p">,</span> <span class="nx">name</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">args</span> <span class="p">[]</span><span class="nx">zygo</span><span class="p">.</span><span class="nx">Sexp</span><span class="p">)</span> <span class="p">(</span><span class="nx">zygo</span><span class="p">.</span><span class="nx">Sexp</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">...</span>
+<span class="p">}</span></code></pre></div>
+
+<p>and it will be presented to the repl by this command:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">lda</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">linda</span><span class="p">.</span><span class="nx">Linda</span><span class="p">{}</span>
+<span class="nx">env</span> <span class="o">:=</span> <span class="nx">zygo</span><span class="p">.</span><span class="nx">NewGlisp</span><span class="p">()</span>
+<span class="nx">env</span><span class="p">.</span><span class="nx">AddFunction</span><span class="p">(</span><span class="s">&#34;out&#34;</span><span class="p">,</span> <span class="nx">lda</span><span class="p">.</span><span class="nx">Out</span><span class="p">)</span></code></pre></div>
+
+<p>I have decided to let the linda implementation in a separate package and to implement the repl ad a separate command.</p>
+
+<h2 id="etcd-as-a-tuple-space"><em>etcd</em> as a tuple space</h2>
+
+<p>My trivial implementation of tuple space based on channels was inaccurate. So I need to implement something more robust.
+In the future the tuple space will be distributed at the scale of the cloud.</p>
+
+<p>A raft-based key value store is nowadays a good choice.
+I have chosen to play with etcd by now (but I will try consul later on).</p>
+
+<p>For the moment I will run a single instance locally.</p>
+
+<h3 id="linda-and-etcd">Linda and etcd</h3>
+
+<p>The <em>out</em> and <em>eval</em> statements will write the tuple as the value of a key prefixed by something fixed per session and suffixed by a uuid.</p>
+
+<p>The <em>In</em> statement is a bit trickier:</p>
+
+<p>It will read all the tuples prefixed by the constant defined and try to match the tuple passed as argument.
+If it succeeds it will try to delete it.
+If it succeeds it will return the tuple. This is needed to avoid a race condition on a single tuple.</p>
+
+<p>If no matching tuple is present in the tuple space, the function watch any PUT event. If the value associated to the event matches the arguments, it tries to delete the tuple from the kv store and returns it.</p>
+
+<h2 id="implementing-the-algorithm-in-zygomys">Implementing the algorithm in <em>zygomys</em></h2>
+
+<p>This tasks gave me a lot of pain.
+To be honest I started (once more) to read the book <a href="https://mitpress.mit.edu/sicp/full-text/book/book.html">structure and interpretation of computer program</a>.</p>
+
+<p>There is a beautiful and functional way to implement the algorithm in lisp. I am sure about that.</p>
+
+<p>But I will figure it out later.</p>
+
+<p>By now, what I did was simply to transpile the algorithm in the lisp syntax thanks to the <code>begin</code> statement of <em>zygo</em> (see the <a href="https://github.com/glycerine/zygomys/wiki/Language">section Sequencing in the wiki of zygomys</a>).</p>
+
+<p>This is how it looks like:</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-lisp" data-lang="lisp"><span class="p">(</span><span class="nv">defn</span> <span class="nv">phil</span> <span class="nv">[i</span> <span class="nv">num]</span> <span class="p">(</span>
+  <span class="p">(</span><span class="nv">begin</span>
+    <span class="p">(</span><span class="nv">think</span> <span class="nv">i</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">in</span> <span class="s">&#34;room ticket&#34;</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">in</span> <span class="s">&#34;chopstick&#34;</span> <span class="nv">i</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">in</span> <span class="s">&#34;chopstick&#34;</span> <span class="p">(</span><span class="nv">mod</span> <span class="p">(</span><span class="nv">+</span> <span class="nv">i</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">num</span><span class="p">))</span>
+    <span class="p">(</span><span class="nv">eat</span> <span class="nv">i</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">out</span> <span class="s">&#34;chopstick&#34;</span> <span class="nv">i</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">out</span> <span class="s">&#34;chopstick&#34;</span> <span class="p">(</span><span class="nv">mod</span> <span class="p">(</span><span class="nv">+</span> <span class="nv">i</span> <span class="mi">1</span><span class="p">)</span> <span class="nv">num</span><span class="p">))</span>
+    <span class="p">(</span><span class="nv">out</span> <span class="s">&#34;room ticket&#34;</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">phil</span> <span class="nv">i</span> <span class="nv">num</span><span class="p">))))</span></code></pre></div>
+
+<h2 id="execution">Execution</h2>
+
+<p><em>etcd</em> daemon needs to be launched first. And by now it needs a clean database to avoid any side effect (I still have a lot of TODO in my code).</p>
+
+<p>Then launch the linda repl with the example:</p>
+
+<pre>
+=> localhost cmd git:(master) # ./cmd ../example/dinner/dinner.zy
+Creating chopstick 0
+Creating philosopher 0
+Creating room ticket
+0 is thinking
+Creating chopstick 1
+Creating philosopher 1
+Creating room ticket
+1 is thinking
+Creating chopstick 2
+Creating philosopher 2
+Creating room ticket
+2 is thinking
+Creating chopstick 3
+Creating philosopher 3
+Creating room ticket
+3 is thinking
+Creating chopstick 4
+Creating philosopher 4
+4 is thinking
+/4 is thinking
+4 is in the room
+4 took the 4's chopstick
+4 took the 0's chopstick
+4 is eating
+/0 is thinking
+0 is in the room
+/3 is thinking
+3 is in the room
+/2 is thinking
+2 is in the room
+3 took the 3's chopstick
+2 took the 2's chopstick
+...
+</pre>
+
+<h1 id="conclusion-and-future-work">Conclusion and future work</h1>
+
+<p>This implementation is a start. The code needs a lot of tweaking though. The linda implementation is still far to be complete.</p>
+
+<p>But by now I won&rsquo;t pass much time in implementing some more feature because I have enough to play with my philosophers.
+What I would like to do next is to distribute my philosophers and use the real power of etcd.</p>
+
+<p>I would like to start the REPL on 5 different hosts all linked by etcd.
+Then I will inject my lisp code in the tuple space and wait for the philosophers to think and eat.</p>
+
+<p>If you are curious, the code is on <a href="https://github.com/ditrit/go-linda">the github of the ditrit project</a></p>
+
+<p>Meanwhile, let&rsquo;s have a drink and relax with a good sound:</p>
+
+<iframe src="https://embed.spotify.com/?uri=spotify:track:4QwzVlAJSkcLeCNQ6Ug30P&theme=white" width="280" height="80" frameborder="0" allowtransparency="true"></iframe>
+
+
+  
+  
+  <hr>
+<footer>
+  <header>
+    <h4>Share</h4>
+  </header>
+  <nav class="nav nav-inline">
+    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2017%2f02%2f28%2fto-go-and-touch-lindas-lisp.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f02%2f28%2fto-go-and-touch-lindas-lisp.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2017%2f02%2f28%2fto-go-and-touch-lindas-lisp.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
+    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2017%2f02%2f28%2fto-go-and-touch-lindas-lisp.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
+  </nav>
+</footer>
+
+  
+</article> 
+
+
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+  
+  
+  if (window.location.hostname == "localhost")
+    return;
+
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  var disqus_shortname = 'owulveryck';
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+
+
+
+        </div> <!-- /.blog-main -->
+
+        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
+  
+  <section class="sidebar-module sidebar-module-inset">
+    <h4>About</h4>
+    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
+  </section>
+  
+
+  
+
+  <section class="sidebar-module">
+    <h4>Recent Posts</h4>
+    <ol class="list-unstyled">
+      
+      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
+      <hr>
+      
+      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
+      <hr>
+      
+      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
+      <hr>
+      
+      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
+      <hr>
+      
+    </ol>
+  </section>
+
+  
+</aside>
+
+
+      </div> <!-- /.row -->
+    </div> <!-- /.container -->
+
+    <footer class="blog-footer">
+      <p>
+      
+      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
+      
+      </p>
+      <p>
+      <a href="#">Back to top</a>
+      </p>
+    </footer>
+
+  </body>
+
+</html>
