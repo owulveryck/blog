@@ -1,7 +1,7 @@
 +++
 images = ["/assets/lstm/LSTM-cell.png"]
-description = ""
-draft = true
+description = "From sfotware 1.0 to software 2.0. A little story of why I made a parser in go"
+draft = false
 title = "Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go"
 date = 2017-12-18T16:47:27+01:00
 author = "Olivier Wulveryck"
@@ -313,7 +313,7 @@ type yyLexer interface {
 
 The Lexer will read elements such as `Wₜ`, but will not know how to associate it with the variable that points to Gorgonia.Node.
 My lexer must be aware of a correspondence between a unicode representation and the actual `*Gorgonia.Node`.
-For this purpose, I add a dictionary of elements. It is a map whose key is the representation and the value is the pointer to the rNnode:
+For this purpose, I add a dictionary of elements. It is a map whose key is the representation and the value is the pointer to the Node:
 
 ```go
 type exprLex struct {

@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>All rights reserved - 2015/2017</copyright>
-    <lastBuildDate>Sun, 29 Oct 2017 07:17:33 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 18 Dec 2017 16:47:27 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</title>
+      <link>https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html</link>
+      <pubDate>Mon, 18 Dec 2017 16:47:27 +0100</pubDate>
+      
+      <guid>https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html</guid>
+      <description>In a previous article, I described an implementation of an RNN from scratch in go. The target is to use the RNN as a processing unit. The ultimate goal is to create a portable tool cross platform and able to grab and process data where they are. I have many applications in mind such as finding the root-cause of an incident or managing the capacity of an infrastructure.
+Note I stick to the go language for many reasons: Some of them a personnal and not opposable (I simply like it).</description>
+    </item>
     
     <item>
       <title>About Recurrent Neural Network, Shakespeare and GO</title>
