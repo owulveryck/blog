@@ -80,3 +80,9 @@ This is the pattern that technology follows over time.
 
 
 ![triangle](https://lh3.googleusercontent.com/VItsArD8gE7_hhXZ-nXOAITzAMNltdewZY9fZ9oeRUxTvClv5nz2cqJCCfYSRboTxHHE_JT4VEDF6lUw_SOfUZ53h8FNOCnqnlmYU7BhvqSs91PAo3M9Bt2QL-KCQAfh-3vgi9oNra_wWcb9-APC4aNW-ARo5j_UCTp3XzFTiuCsDKWod3jiAh6lIsuqKaeG6dAWanYziNrYUfCJotvSZxLPdx6oQAXSZZin5ttRxhafHj0Qozc8kCiLl2Hb66Vsi2xRn6hzOvQCn9eXFA0BwJmTWuUpa5rohUeSG4WQyJ_WkArutVss9bKw1H0SRy0xS605yr-rdWe_Rfv-4A4TNeEGKr3D4kFNsSeC49d6g9w_x74exEW5T_ExD__tmRNRBkQG12fGRNojXWDUgWYrVw6xB1zXcz8yEC1H5QHrGv8lcYI-vNxnpN5S95DuWKj1ZsG4hyToOhSCulQoQfDZrRECiJu-6jVKNFNfcVtVGLoZzsVAR3rDmw6xpPnigWVBMPr-UB6l686x5lUsJJNlcRRoNBPYMY1Lt0MN43RK4xqO4ygPap9_ECfnjSgkC3niyMkiFh7bMNFU7vUd4bMMw7HyUyJMWmu2krB911PQJCUP4KNExkqSTWf_6afGOHl02JxM9Smi7d3ZdTqOOp5GYVmjLZOPnqEr6A=w2390-h1446-no) 
+
+* Context: the circumstances in which you are operating (business circumstances)
+* semantics: what is means, the value proposition behind that
+* dynamics: what things are changing and how
+
+The dynamics is always the fundamental thing: if you can't control how things change, you certainly can't associate any *meaning* with it and you can't adapt things to a *context* 
