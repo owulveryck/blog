@@ -26,7 +26,7 @@ Then I will describe a way to parse and execute this software 2.0 on a machine c
 
 ## What is a software?
 
-It is sequence of bits and bytes that can be computed, and that produces a result (the solution of a problem for example). 
+It is a sequence of bits and bytes that can be computed, and that produces a result (the solution of a problem for example). 
 
 To build a software until now, a compiler is used. Its goal is to turn a "human readable sequence of characters", called code, into the sequence of bytes. 
 
@@ -49,7 +49,7 @@ No, the major difference is in the art of programming and the use case.
 
 For example:
 
-A programmer __cannot__ write an algorithm that will __solve a specific problem__ (ex: I need to recognize a cat on any photo).
+A programmer __cannot__ write an algorithm that will __solve a specific problem__ (ex: I need to recognize a cat in photo).
 
 So, the programmer will write a set of equations __able to solve a kind of problem__ (recognize objects on any photo). 
 
