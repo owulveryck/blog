@@ -6,7 +6,9 @@
     <description>Recent content in S3 on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Fri, 06 Jan 2017 21:59:25 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/s3/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>lambda inter s3</title>
       <link>https://blog.owulveryck.info/2017/01/06/lambda-inter-s3.html</link>
       <pubDate>Fri, 06 Jan 2017 21:59:25 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/01/06/lambda-inter-s3.html</guid>
       <description>In this post I will explain how to setup a lambda function written in go that will be triggered when an object is dropped on a bucket on s3. The function will read the object and copy it into another bucket iin another location. It will use AWS&amp;rsquo; golang sdk.
 The Lambda skeleton AWS Lambda does not support the go programming language natively. Anyway, it as a go program is compiled and packed as a simgle static binary, it it easy to execute a go program whitin a wrapper (node.</description>

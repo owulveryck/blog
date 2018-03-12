@@ -6,7 +6,9 @@
     <description>Recent content in Chrome on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Tue, 16 May 2017 21:43:46 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/chrome/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM</title>
       <link>https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html</link>
       <pubDate>Tue, 16 May 2017 21:43:46 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html</guid>
       <description>TL;DR: Thank you for passing by. This article is, as usual, geek oriented. However, if you are not a geek, and/or you are in a hurry, you can jump to the conclusion: Any real application?
 During the month of may, I have had the chance to attend to the Google Next event in London and the dotAI in Paris. In both conferences I learned a lot about machine learning.</description>
@@ -26,7 +28,7 @@ During the month of may, I have had the chance to attend to the Google Next even
       <title>Being a better public speaker with a little help of Speech Recognition, Javascript and Chrome</title>
       <link>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</link>
       <pubDate>Fri, 09 Sep 2016 13:39:50 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</guid>
       <description>Introduction I usually don&amp;rsquo;t like slidewares.
 Actually as IT engineer working, by now, exclusively in France, I&amp;rsquo;m facing the PowerPoint problem:

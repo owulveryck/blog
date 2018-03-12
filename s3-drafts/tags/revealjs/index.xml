@@ -6,7 +6,9 @@
     <description>Recent content in Revealjs on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Fri, 09 Sep 2016 13:39:50 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/revealjs/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Being a better public speaker with a little help of Speech Recognition, Javascript and Chrome</title>
       <link>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</link>
       <pubDate>Fri, 09 Sep 2016 13:39:50 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</guid>
       <description>Introduction I usually don&amp;rsquo;t like slidewares.
 Actually as IT engineer working, by now, exclusively in France, I&amp;rsquo;m facing the PowerPoint problem:
@@ -28,7 +30,7 @@ I won&amp;rsquo;t redo the introduction I already did in a previous post but ind
       <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote</title>
       <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</link>
       <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</guid>
       <description>the goal As all my peers, I have the opportunity to talk about different technological aspects. As all my peers, I&amp;rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).
 In this post I won&amp;rsquo;t dig into what&amp;rsquo;s good or not to put in a presentation, and if that&amp;rsquo;s what interest you, I recommend you to take a look at Garr Reynold&amp;rsquo;s tips and tricks.

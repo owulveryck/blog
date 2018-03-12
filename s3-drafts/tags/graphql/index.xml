@@ -6,7 +6,9 @@
     <description>Recent content in Graphql on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Tue, 28 Mar 2017 21:03:52 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/graphql/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>From GraphQL to a table view with React and Apollo</title>
       <link>https://blog.owulveryck.info/2017/03/28/from-graphql-to-a-table-view-with-react-and-apollo.html</link>
       <pubDate>Tue, 28 Mar 2017 21:03:52 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/03/28/from-graphql-to-a-table-view-with-react-and-apollo.html</guid>
       <description>In the last post I have played with GraphQL. The next step is to actually query the data and display it.
 In this post I will use react (from Facebook) and the Apollo GraphQL client.
@@ -27,7 +29,7 @@ Tooling React I won&amp;rsquo;t give in here an introduction of the language bec
       <title>Playing with Facebook&#39;s GraphQL (applied to AWS products and offers management)</title>
       <link>https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html</link>
       <pubDate>Wed, 22 Mar 2017 09:15:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html</guid>
       <description>About GraphQL GraphQL has been invented by Facebook for the purpose of refactoring their mobile application. Facebook had reached the limits of the standard REST API mainly because:
  Getting that much information was requiring a huge amount of API endpoints The versioning of the API was counter-productive regarding Facebook&amp;rsquo;s frequents deployements.  But graphql is not only a query language related to Facebook. GraphQL is not only applicable to social data.</description>

@@ -1,7 +1,7 @@
 baseurl = "https://blog.owulveryck.info/"
 languageCode = "en-us"
 title = "Unladen swallow"
-Copyright = "All rights reserved - 2015/2017"
+Copyright = "All rights reserved"
 #canonifyurls = true
 
 # Metadata format
@@ -17,13 +17,16 @@ pygmentsCodeFences=true
 
 # Theme to use (located in /themes/THEMENAME/)
 # theme = "hugo-bootstrap"
-theme = "hugo-theme-bootstrap4-blog"
+#theme = "hugo-theme-bootstrap4-blog"
+theme = "jane"
 #
 # Pagination
 paginate = 5
 paginatePath = "page"
 
 # Enable Disqus integration
+
+googleAnalytics = "UA-69673850-1"
 disqusShortname = "owulveryck"
 
 uglyURLs = true
@@ -53,7 +56,9 @@ uglyURLs = true
     # Select a syntax highight.
 # Check the static/css/highlight directory for options.
     highlight = "default"
+    since = "2015"
 
+  moreMeta = true
 # Google Analytics.
     googleAnalytics = "UA-69673850-1"
 
@@ -67,10 +72,31 @@ uglyURLs = true
     #youtube = ""  # Your Youtube channel ID
     flattr = "owulveryck"  # populate with your flattr uid
 
+    rssFullContent = false     # if false, Rss feed instead of the summary
+    toc = true                                                                            # 是否开启目录
+    fancybox = true           # see https://github.com/fancyapps/fancybox                 # 是否启用fancybox（图片可点击）
+    bootcdn = false           # In china. @Deprecated: use [params.publicCDN]             # 是否使用bootcdn(@Deprecated: 请使用[params.publicCDN])
+    mathjax = true           # see https://www.mathjax.org/                              # 是否使用mathjax（数学公式）
+
+[[menu.main]]             # config your menu              # 配置目录
+  name = "Home"
+  weight = 10
+  identifier = "home"
+  url = "/"
+[[menu.main]]             # config your menu              # 配置目录
+  name = "About the Author"
+  weight = 10
+  identifier = "about"
+  url = "https://about.me/owulveryck"
+
+
+
+
 [params.social]
     # Optional, used for attribution in Twitter cards
     # See: https://dev.twitter.com/cards/types/summary-large-image
     twitter = "owulveryck"
+    c-twitter = "https://twitter.com/owulveryck"
 
 [params.sharingicons]
     # Hide the sharing icons on posts? (Default: false)
@@ -92,3 +118,11 @@ uglyURLs = true
     # How many posts to show on the sidebar (Default: 5)
     
 #num_recent_posts = 2
+  [params.publicCDN]        # load these files from public cdn                          # 启用公共CDN，需自行定义
+    enable = true
+    jquery = '<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>'
+    slideout = '<script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>'
+    fancyboxJs = '<script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>'
+    fancyboxCss = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">'
+
+

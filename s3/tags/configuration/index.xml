@@ -6,7 +6,9 @@
     <description>Recent content in Configuration on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Mon, 26 Oct 2015 10:41:57 +0000</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/configuration/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Developping &#34;Google Apps&#34; on my Chromebook</title>
       <link>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook.html</link>
       <pubDate>Mon, 26 Oct 2015 10:41:57 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook.html</guid>
       <description>It is a week now that I&amp;rsquo;m playing with my chromebook. I really enjoy this little internet Terminal.
 I &amp;ldquo;geeked&amp;rdquo; it a little bit and I installed my favorites dev tools eg:

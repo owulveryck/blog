@@ -1,11 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>TOSCA lifecycle as a digraph - Unladen swallow</title>
+  <link rel="alternate" hreflang="en-us" href="https://blog.owulveryck.info/" />
 
-  <head>
-    <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Olivier Wulveryck" /><meta name="description" content="A tosca lifecycle represented as a digraph" />
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.37.1" />
+
+
+<link rel="canonical" href="https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html" />
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+
 
 <meta property="og:title" content="TOSCA lifecycle as a digraph" />
 <meta property="og:description" content="A tosca lifecycle represented as a digraph" />
@@ -28,7 +68,6 @@
 
 
 
-
 <meta itemprop="name" content="TOSCA lifecycle as a digraph">
 <meta itemprop="description" content="A tosca lifecycle represented as a digraph">
 
@@ -40,40 +79,20 @@
 
 
 <meta itemprop="keywords" content="TOSCA,Digraph,Graph Theory,golang," />
-
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="TOSCA lifecycle as a digraph"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="TOSCA lifecycle as a digraph"/>
 <meta name="twitter:description" content="A tosca lifecycle represented as a digraph"/>
-<meta name="twitter:site" content="@owulveryck"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
 
 
-
-
-
-
-
-
-<meta name="generator" content="Hugo 0.31.1" />
-
-
-    <link rel="canonical" href="https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html">
-
-    <title>TOSCA lifecycle as a digraph | Unladen swallow</title>
-    <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-
-
-    <!-- combined, minified CSS -->
-    <link href="https://blog.owulveryck.info/css/syntax.css" rel="stylesheet">
-    <link href="https://blog.owulveryck.info/css/style.css" rel="stylesheet">
-    <link href="https://blog.owulveryck.info/css/custom.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Pacifico|Cormorant+Garamond|Open+Sans" rel="stylesheet">
-
-    
-
-    
 <script>
 window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
 ga('create', 'UA-69673850-1', 'auto');
@@ -81,69 +100,91 @@ ga('send', 'pageview');
 </script>
 <script async src='//www.google-analytics.com/analytics.js'></script>
 
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Unladen swallow</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="https://about.me/owulveryck">
+        <li class="mobile-menu-item">About the Author</li>
+      </a><a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a>
+  </ul>
+</nav>
 
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">Unladen swallow</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="https://about.me/owulveryck">About the Author</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li>
+  </ul>
+</nav>
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
     
+    <header class="post-header">
+      <h1 class="post-title">TOSCA lifecycle as a digraph</h1>
 
-    
-<script src='//cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
-<script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
-
-
-  </head>
-
-  <body>
-
-    <div class="blog-masthead">
-      <div class="container">
-        <nav class="nav blog-nav">
-          <a class="nav-link " href="https://blog.owulveryck.info/">Home</a>
-          
-          
-          <a class="nav-link" href="https://blog.owulveryck.info/about.html">About me</a>
-          
-          
-        </nav>
-      </div>
-    </div>
-
-    <header class="blog-header">
-      <div class="container">
-        <h1 class="blog-title"><a href="https://blog.owulveryck.info/" rel="home">Unladen swallow</a></h1>
-        <p class="lead blog-description">Olivier Wulveryck&rsquo;s (tech) blog</p>
+      <div class="post-meta">
+        <span class="post-time"> 2015-11-20 </span>
+        
+        <span class="more-meta"> 1103 words </span>
+        <span class="more-meta"> 6 min read </span>
       </div>
     </header>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-8 blog-main">
-
-          
-
-
-<article class="blog-post">
-  <header>
-  <div class="container">
-  <div class="row">
-    <div class="col-sm-10">
-    <h2 class="blog-post-title"><a href="https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html">TOSCA lifecycle as a digraph</a></h2>
-    <p class="blog-post-meta"><time datetime="2015-11-20T10:09:30Z">Fri Nov 20, 2015</time> by Olivier Wulveryck in 
-
-<i class="fa fa-tag" aria-hidden="true"></i>&nbsp;<a href="/tags/tosca" rel="tag">TOSCA</a>, <a href="/tags/digraph" rel="tag">Digraph</a>, <a href="/tags/graph-theory" rel="tag">Graph Theory</a>, <a href="/tags/golang" rel="tag">golang</a>
-
-</p>
-    </div>
-    <div class="col-sm-2 frame-round">
-  <a href='https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html'>
-      
-    </a>
-    </div>
-
-    </div>
-  </div>
-
-  </header>
-
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Table of Contents</h2>
   
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#about-tosca">About TOSCA</a>
+<ul>
+<li><a href="#my-work-with-tosca">My work with TOSCA</a></li>
+<li><a href="#the-digraph-go-code">The digraph go code</a></li>
+<li><a href="#from-tosca-to-digraph">From TOSCA to digraph</a></li>
+</ul></li>
+<li><a href="#let-s-go">Let&rsquo;s go</a>
+<ul>
+<li><a href="#principle">Principle</a></li>
+</ul></li>
+<li><a href="#the-final-function">The final function</a></li>
+<li><a href="#grab-the-source-and-compile-it">Grab the source and compile it</a></li>
+<li><a href="#example">Example</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
 
 <h1 id="about-tosca">About TOSCA</h1>
 
@@ -355,101 +396,121 @@ wordpress:Start
 
 <p>And of course validate any other TOSCA definition to go through a bug hunting party</p>
 
+    </div>
 
-  
-  
-  <hr>
-<footer>
-  <header>
-    <h4>Share</h4>
-  </header>
-  <nav class="nav nav-inline">
-    <a class="nav-item" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.owulveryck.info%2f2015%2f11%2f20%2ftosca-lifecycle-as-a-digraph.html" title="Share on Facebook"><span class="fa fa-facebook fa-2x" aria-hidden="true"></span></a>
-    <a class="nav-item" href="https://plus.google.com/share?url=https%3a%2f%2fblog.owulveryck.info%2f2015%2f11%2f20%2ftosca-lifecycle-as-a-digraph.html" title="Share on Google+"><span class="fa fa-google-plus fa-2x" aria-hidden="true"></span></a>
-    <a class="nav-item" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fblog.owulveryck.info%2f2015%2f11%2f20%2ftosca-lifecycle-as-a-digraph.html" title="Share on LinkedIn"><span class="fa fa-linkedin fa-2x" aria-hidden="true"></span></a>
-    <a class="nav-item" href="https://twitter.com/home?status=https%3a%2f%2fblog.owulveryck.info%2f2015%2f11%2f20%2ftosca-lifecycle-as-a-digraph.html" title="Tweet this"><span class="fa fa-twitter fa-2x"></span></a>
-  </nav>
-</footer>
+    
+    
 
-  
-</article> 
+    
+    
 
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/tosca/">TOSCA</a>
+          
+          <a href="/tags/digraph/">Digraph</a>
+          
+          <a href="/tags/graph-theory/">Graph Theory</a>
+          
+          <a href="/tags/golang/">golang</a>
+          
+        </div>
 
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-
-(function() {
-  
-  
-  if (window.location.hostname == "localhost")
-    return;
-
-  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-  var disqus_shortname = 'owulveryck';
-  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-
-
-
-
-
-        </div> <!-- /.blog-main -->
-
-        <aside class="col-sm-3 offset-sm-1 blog-sidebar">
-  
-  <section class="sidebar-module sidebar-module-inset">
-    <h4>About</h4>
-    <p>This is a place where I share my technical experiences alongside my life of IT professional<br> Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> <strong>Sir Bedevere</strong>: <em>How do know so much about swallows?</em><br><strong>King Arthur</strong>: <em>Well, you have to know these things when you&rsquo;re a king, you know.</em><br><br><em>Monty Python and the Holy Grail</em></p>
-  </section>
-  
-
-  
-
-  <section class="sidebar-module">
-    <h4>Recent Posts</h4>
-    <ol class="list-unstyled">
       
-      <li><a href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</a></li>
-      <hr>
-      
-      <li><a href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">About Recurrent Neural Network, Shakespeare and GO</a></li>
-      <hr>
-      
-      <li><a href="/2017/09/12/terraform-is-hip...-introducing-nhite.html">Terraform is hip&hellip; Introducing Nhite</a></li>
-      <hr>
-      
-      <li><a href="/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html">From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</a></li>
-      <hr>
-      
-      <li><a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></li>
-      <hr>
-      
-    </ol>
-  </section>
+      <nav class="post-nav">
+        
+          <a class="prev" href="/2015/11/30/ksh93-cool-features-for-scripting.html">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">KSH93 cool features for scripting</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/2015/11/17/playing-with-openstack-keystone.html">
+            <span class="next-text nav-default">Playing with (Openstack) Keystone</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+    
+  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
+      Show Disqus Comments
+    </div>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    function load_disqus() {
+        
+        
+        if (window.location.hostname === 'localhost') return;
+
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        var disqus_shortname = 'owulveryck';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+        $('#load_disqus').remove();
+    };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
 
   
-</aside>
+  </article>
+        </div>
+      </div>
+    </main>
 
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://twitter.com/owulveryck" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="owulveryck" class="iconfont icon-itter" title="itter"></a>
+  <a href="https://blog.owulveryck.info/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
 
-      </div> <!-- /.row -->
-    </div> <!-- /.container -->
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
 
-    <footer class="blog-footer">
-      <p>
-      
-      All rights reserved - <sup>2015</sup>&frasl;<sub>2017</sub>
-      
-      </p>
-      <p>
-      <a href="#">Back to top</a>
-      </p>
+  <span class="copyright-year">
+    &copy; 
+    
+      2015 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">All rights reserved</span>
+  </span>
+</div>
     </footer>
 
-  </body>
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
 
+
+
+
+
+</body>
 </html>

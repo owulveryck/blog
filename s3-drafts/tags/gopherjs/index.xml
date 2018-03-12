@@ -6,7 +6,9 @@
     <description>Recent content in Gopherjs on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Wed, 19 Oct 2016 07:24:51 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/gopherjs/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>SPA with Gopherjs</title>
       <link>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs.html</link>
       <pubDate>Wed, 19 Oct 2016 07:24:51 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs.html</guid>
       <description>Introduction Single page application (SPA) are a standard when dealing with mobile apps. Unfortunately, by now, JavaScript is the only programming language supported by a browser.
 Therefore, to code web UI it remains a must.

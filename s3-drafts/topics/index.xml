@@ -6,7 +6,9 @@
     <description>Recent content in Topics on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Wed, 10 Feb 2016 17:19:47 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/topics/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Application Deployment</title>
       <link>https://blog.owulveryck.info/topics/application-deployment.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/topics/application-deployment.html</guid>
       <description></description>
     </item>
@@ -25,7 +27,7 @@
       <title>Bdd</title>
       <link>https://blog.owulveryck.info/topics/bdd.html</link>
       <pubDate>Thu, 31 Mar 2016 23:39:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/topics/bdd.html</guid>
       <description></description>
     </item>
@@ -34,7 +36,7 @@
       <title>Oaas</title>
       <link>https://blog.owulveryck.info/topics/oaas.html</link>
       <pubDate>Mon, 07 Dec 2015 08:48:20 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/topics/oaas.html</guid>
       <description></description>
     </item>
@@ -43,7 +45,7 @@
       <title>Topic 1</title>
       <link>https://blog.owulveryck.info/topics/topic-1.html</link>
       <pubDate>Fri, 06 Jan 2017 11:06:06 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/topics/topic-1.html</guid>
       <description></description>
     </item>
@@ -52,7 +54,7 @@
       <title>Tosca</title>
       <link>https://blog.owulveryck.info/topics/tosca.html</link>
       <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/topics/tosca.html</guid>
       <description></description>
     </item>
@@ -61,7 +63,7 @@
       <title>Udt</title>
       <link>https://blog.owulveryck.info/topics/udt.html</link>
       <pubDate>Mon, 17 Oct 2016 20:50:18 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/topics/udt.html</guid>
       <description></description>
     </item>
@@ -70,7 +72,7 @@
       <title>Wed Ui</title>
       <link>https://blog.owulveryck.info/topics/wed-ui.html</link>
       <pubDate>Wed, 19 Oct 2016 07:24:51 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/topics/wed-ui.html</guid>
       <description></description>
     </item>

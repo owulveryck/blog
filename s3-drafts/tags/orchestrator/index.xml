@@ -6,7 +6,9 @@
     <description>Recent content in Orchestrator on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Mon, 07 Dec 2015 08:48:20 +0000</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/orchestrator/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>OaaS orchestrator as a service - part 1</title>
       <link>https://blog.owulveryck.info/2015/12/07/oaas-orchestrator-as-a-service---part-1.html</link>
       <pubDate>Mon, 07 Dec 2015 08:48:20 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/12/07/oaas-orchestrator-as-a-service---part-1.html</guid>
       <description> In a previous post I have setup and orchestrator that takes a digraph as input (via its adjacency matrix).
 In this post I will implement an API, so the orchestrator will be transformed into a web service.

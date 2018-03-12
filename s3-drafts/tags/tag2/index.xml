@@ -6,7 +6,9 @@
     <description>Recent content in Tag2 on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Thu, 04 May 2017 19:15:12 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/tag2/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>What I learned at the Google Next 2017 in London</title>
       <link>https://blog.owulveryck.info/2017/05/04/what-i-learned-at-the-google-next-2017-in-london.html</link>
       <pubDate>Thu, 04 May 2017 19:15:12 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/05/04/what-i-learned-at-the-google-next-2017-in-london.html</guid>
       <description> I have rencetly attended the google Next event in London.
 The infrastructure level Compute engine: a pure IaaS Solution App engine: Severless before it was cool Traditional app-engine Flex app-engine Cloud functions The machine learning The tools provided Tensorflow The Shakespear demo The ML services and APIs Computer vision Translate NLP Why machine learning About databases Methods at Google Mindset SRE Change management Conclusion </description>
@@ -26,7 +28,7 @@ The infrastructure level Compute engine: a pure IaaS Solution App engine: Severl
       <title>tosca n quads</title>
       <link>https://blog.owulveryck.info/2017/04/30/tosca-n-quads.html</link>
       <pubDate>Sun, 30 Apr 2017 21:16:38 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/04/30/tosca-n-quads.html</guid>
       <description>Tosca tosca_definitions_version:tosca_simple_yaml_1_0description:TemplatefordeployingMySQLanddatabasecontent.topology_template:inputs:# omitted here for brevitynode_templates:my_db:type:tosca.nodes.Database.MySQLproperties:name:{get_input:database_name}user:{get_input:database_user}password:{get_input:database_password}port:{get_input:database_port}artifacts:db_content:file:files/my_db_content.txttype:tosca.artifacts.Filerequirements:-host:mysqlinterfaces:Standard:create:implementation:db_create.shinputs:# Copy DB file artifact to server&amp;#39;s staging areadb_data:{get_artifact:[SELF,db_content]}mysql:type:tosca.nodes.DBMS.MySQLproperties:root_password:{get_input:mysql_rootpw}port:{get_input:mysql_port}requirements:-host:db_serverdb_server:type:tosca.nodes.Computecapabilities:# omitted here for brevity n-quads &amp;#34;topology_template&amp;#34;&amp;#34;input&amp;#34;&amp;#34;database_name&amp;#34;.&amp;#34;topology_template&amp;#34;&amp;#34;input&amp;#34;&amp;#34;database_user&amp;#34;.&amp;#34;topology_template&amp;#34;&amp;#34;input&amp;#34;&amp;#34;database_password&amp;#34;.&amp;#34;topology_template&amp;#34;&amp;#34;input&amp;#34;&amp;#34;database_port&amp;#34;.&amp;#34;topology_template&amp;#34;&amp;#34;input&amp;#34;&amp;#34;mysql_rootpw&amp;#34;.&amp;#34;topology_template&amp;#34;&amp;#34;input&amp;#34;&amp;#34;mysql_port&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;type&amp;#34;&amp;#34;tosca.nodes.Database.MySQL&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;property&amp;#34;&amp;#34;name&amp;#34;.&amp;#34;name&amp;#34;&amp;#34;value&amp;#34;&amp;#34;database_name&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;property&amp;#34;&amp;#34;user&amp;#34;.&amp;#34;user&amp;#34;&amp;#34;value&amp;#34;&amp;#34;database_user&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;property&amp;#34;&amp;#34;password&amp;#34;.&amp;#34;password&amp;#34;&amp;#34;value&amp;#34;&amp;#34;database_password&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;property&amp;#34;&amp;#34;dbport&amp;#34;.&amp;#34;dbport&amp;#34;&amp;#34;value&amp;#34;&amp;#34;database_port&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;artifact&amp;#34;&amp;#34;db_content&amp;#34;.&amp;#34;db_content&amp;#34;&amp;#34;file&amp;#34;&amp;#34;files/my_db_content.txt&amp;#34;.&amp;#34;db_content&amp;#34;&amp;#34;type&amp;#34;&amp;#34;tosca.artifacts.File&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;interface&amp;#34;&amp;#34;Standard&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;interface_create&amp;#34;&amp;#34;create&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;requires&amp;#34;&amp;#34;mysql&amp;#34;.&amp;#34;create&amp;#34;&amp;#34;implementation&amp;#34;&amp;#34;db_create.sh&amp;#34;.&amp;#34;create&amp;#34;&amp;#34;input&amp;#34;&amp;#34;db_data&amp;#34;.&amp;#34;db_data&amp;#34;&amp;#34;value&amp;#34;&amp;#34;db_content&amp;#34;.&amp;#34;mysql&amp;#34;&amp;#34;type&amp;#34;&amp;#34;tosca.nodes.DBMS.MySQL&amp;#34;.&amp;#34;mysql&amp;#34;&amp;#34;property&amp;#34;&amp;#34;root_password&amp;#34;.&amp;#34;root_password&amp;#34;&amp;#34;value&amp;#34;&amp;#34;mysql_rootpw&amp;#34;.&amp;#34;mysql&amp;#34;&amp;#34;property&amp;#34;&amp;#34;port&amp;#34;.&amp;#34;port&amp;#34;&amp;#34;value&amp;#34;&amp;#34;mysql_port&amp;#34;.&amp;#34;mysql&amp;#34;&amp;#34;requires&amp;#34;&amp;#34;db_server&amp;#34;.&amp;#34;db_server&amp;#34;&amp;#34;type&amp;#34;&amp;#34;tosca.nodes.Compute&amp;#34;.
 Let&amp;rsquo;s visualize that:
@@ -37,7 +39,7 @@ Let&amp;rsquo;s visualize that:
       <title>distributed linda</title>
       <link>https://blog.owulveryck.info/2017/03/13/distributed-linda.html</link>
       <pubDate>Mon, 13 Mar 2017 15:05:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/03/13/distributed-linda.html</guid>
       <description>D3JS tutorial</description>
     </item>
@@ -46,7 +48,7 @@ Let&amp;rsquo;s visualize that:
       <title>testalex</title>
       <link>https://blog.owulveryck.info/2017/03/02/testalex.html</link>
       <pubDate>Thu, 02 Mar 2017 17:19:20 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/03/02/testalex.html</guid>
       <description> icoucouc
 part I je veux mettre du code
@@ -57,7 +59,7 @@ curl http://</description>
       <title>zfs_cloud_ubuntu16.04</title>
       <link>https://blog.owulveryck.info/2017/02/14/zfs_cloud_ubuntu16.04.html</link>
       <pubDate>Tue, 14 Feb 2017 10:17:15 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/02/14/zfs_cloud_ubuntu16.04.html</guid>
       <description>I am using the device entries /dev/xvd* for testing purpose. Other choices may be best suitable for production. Please refer to ZFS on linux wiki for more options.
 sudo apt-get install zfsutils-linux parted /dev/xvdb mklabel GPT parted /dev/xvdc mklabel GPT parted /dev/xvdd mklabel GPT zpool create -m none -o ashift=12 tank raidz /dev/xvdc /dev/xvdb /dev/xvdd RAIDZ is a little like RAID-5. I&amp;rsquo;m using RAID-Z1, meaning that from a 3-disk pool, I can lose one disk while maintaining the data access.</description>
@@ -67,7 +69,7 @@ sudo apt-get install zfsutils-linux parted /dev/xvdb mklabel GPT parted /dev/xvd
       <title></title>
       <link>https://blog.owulveryck.info/1/01/01.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/1/01/01.html</guid>
       <description></description>
     </item>

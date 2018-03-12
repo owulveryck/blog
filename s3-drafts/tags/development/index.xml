@@ -6,7 +6,9 @@
     <description>Recent content in Development on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Tue, 10 Nov 2015 08:56:36 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/development/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>IaaS-like RESTfull API based on microservices</title>
       <link>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</link>
       <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</guid>
       <description>Abstracts Recently, I&amp;rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.
 I am reading more and more about the &amp;ldquo;API economy&amp;rdquo;
@@ -28,7 +30,7 @@ The problem I&amp;rsquo;m facing is that in the organization I&amp;rsquo;m worki
       <title>Ruby / ZeroMQ / GO</title>
       <link>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html</link>
       <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html</guid>
       <description>Abtract I really like go as a programming language. It is a good tool to develop web restful API service.
 On the other hand, ruby and its framework rails has also been wildly used to achieve the same goal.

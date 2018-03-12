@@ -6,7 +6,9 @@
     <description>Recent content in Webcam on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Fri, 16 Dec 2016 14:51:18 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/webcam/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Image reKognition with a webcam, go and AWS.</title>
       <link>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html</link>
       <pubDate>Fri, 16 Dec 2016 14:51:18 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html</guid>
       <description>It&amp;rsquo;s been a while since I last posted something. I will fill the gap with a quick post about rekognition.
 rekognition is a service from AWS that is described as:

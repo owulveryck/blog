@@ -1,0 +1,104 @@
+baseurl = "https://blog.owulveryck.info/"
+languageCode = "en-us"
+title = "Unladen swallow"
+Copyright = "All rights reserved - 2015/2017"
+#canonifyurls = true
+
+# Metadata format
+# "yaml", "toml", "json"
+metaDataFormat = "yaml"
+
+# filesystem path to write files to
+publishdir = "public"
+# # color-codes for highlighting derived from this style
+# # true: use pygments-css or false: color-codes directly
+pygmentsUseClasses =true
+pygmentsCodeFences=true
+
+# Theme to use (located in /themes/THEMENAME/)
+# theme = "hugo-bootstrap"
+theme = "hugo-theme-bootstrap4-blog"
+#
+# Pagination
+paginate = 5
+paginatePath = "page"
+
+# Enable Disqus integration
+disqusShortname = "owulveryck"
+
+uglyURLs = true
+
+[permalinks]
+    #post = "/:year/:month/:day/:slug/index.html"
+    post = "/:year/:month/:day/:slug"
+    #code = "/:slug/index.html"
+    code = "/:slug"
+
+[taxonomies]
+    tag = "tags"
+    topic = "topics"
+
+[author]
+    name = "Olivier Wulveryck"
+    email = "olivier.wulveryck@gmail.com"
+
+[params]
+    author = "Olivier Wulveryck"
+    description = "Olivier Wulveryck's (tech) blog"
+    #footline = "code with <i class='fa fa-heart'></i>"
+
+    # Text for the top menu link, which goes the root URL for the site.
+    # Default (if omitted) is "Home"
+
+    # Select a syntax highight.
+# Check the static/css/highlight directory for options.
+    highlight = "default"
+
+# Google Analytics.
+    googleAnalytics = "UA-69673850-1"
+
+# Sidebar social links.
+    github = "owulveryck" # Your Github profile ID
+    #bitbucket = "" # Your Bitbucket profile ID
+    linkedin = "olivierwulveryck" # Your LinkedIn profile ID (from public URL)
+    googleplus = "olivier.wulveryck" # Your Google+ profile ID
+    #facebook = "" # Your Facebook profile ID
+    twitter = "owulveryck" # Your Twitter profile ID
+    #youtube = ""  # Your Youtube channel ID
+    flattr = "owulveryck"  # populate with your flattr uid
+
+  rssFullContent = false     # if false, Rss feed instead of the summary
+
+[[menu.main]]             # config your menu              # 配置目录
+  name = "Home"
+  weight = 10
+  identifier = "home"
+  url = "/"
+
+
+
+[params.social]
+    # Optional, used for attribution in Twitter cards
+    # See: https://dev.twitter.com/cards/types/summary-large-image
+    twitter = "owulveryck"
+
+[params.sharingicons]
+    # Hide the sharing icons on posts? (Default: false)
+    hide = false
+
+    # Optionally, set any of these to false to hide them:
+    #facebook = true
+    #googleplus = true
+    #linkedin = true
+    #twitter = true
+
+[params.sidebar]
+    # Optional about block for sidebar (can be Markdown)
+    about = "This is a place where I share my technical experiences alongside my life of IT professional<br> \
+             Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> \
+            __Sir Bedevere__: _How do know so much about swallows?_<br>\
+           __King Arthur__: _Well, you have to know these things when you're a king, you know._<br><br>_Monty Python and the Holy Grail_"
+
+    # How many posts to show on the sidebar (Default: 5)
+    
+#num_recent_posts = 2

@@ -6,7 +6,9 @@
     <description>Recent content in Tags on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Fri, 14 Apr 2017 23:00:59 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Agile</title>
       <link>https://blog.owulveryck.info/tags/agile.html</link>
       <pubDate>Fri, 14 Apr 2017 23:00:59 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/agile.html</guid>
       <description></description>
     </item>
@@ -25,7 +27,7 @@
       <title>Api</title>
       <link>https://blog.owulveryck.info/tags/api.html</link>
       <pubDate>Fri, 13 Nov 2015 09:21:30 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/api.html</guid>
       <description></description>
     </item>
@@ -34,7 +36,7 @@
       <title>Authentication</title>
       <link>https://blog.owulveryck.info/tags/authentication.html</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/authentication.html</guid>
       <description></description>
     </item>
@@ -43,7 +45,7 @@
       <title>Aws</title>
       <link>https://blog.owulveryck.info/tags/aws.html</link>
       <pubDate>Wed, 22 Mar 2017 09:15:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/aws.html</guid>
       <description></description>
     </item>
@@ -52,7 +54,7 @@
       <title>Bash</title>
       <link>https://blog.owulveryck.info/tags/bash.html</link>
       <pubDate>Mon, 30 Nov 2015 13:17:41 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/bash.html</guid>
       <description></description>
     </item>
@@ -61,7 +63,7 @@
       <title>Bdd</title>
       <link>https://blog.owulveryck.info/tags/bdd.html</link>
       <pubDate>Thu, 31 Mar 2016 23:39:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/bdd.html</guid>
       <description></description>
     </item>
@@ -70,7 +72,7 @@
       <title>Bootstrap</title>
       <link>https://blog.owulveryck.info/tags/bootstrap.html</link>
       <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/bootstrap.html</guid>
       <description></description>
     </item>
@@ -79,7 +81,7 @@
       <title>Bundler</title>
       <link>https://blog.owulveryck.info/tags/bundler.html</link>
       <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/bundler.html</guid>
       <description></description>
     </item>
@@ -88,7 +90,7 @@
       <title>Cfgmgmtcamp</title>
       <link>https://blog.owulveryck.info/tags/cfgmgmtcamp.html</link>
       <pubDate>Tue, 21 Feb 2017 15:26:22 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/cfgmgmtcamp.html</guid>
       <description></description>
     </item>
@@ -97,7 +99,7 @@
       <title>Choreography</title>
       <link>https://blog.owulveryck.info/tags/choreography.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/choreography.html</guid>
       <description></description>
     </item>
@@ -106,7 +108,7 @@
       <title>Chrome</title>
       <link>https://blog.owulveryck.info/tags/chrome.html</link>
       <pubDate>Tue, 16 May 2017 21:43:46 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/chrome.html</guid>
       <description></description>
     </item>
@@ -115,7 +117,7 @@
       <title>Chromebook</title>
       <link>https://blog.owulveryck.info/tags/chromebook.html</link>
       <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/chromebook.html</guid>
       <description></description>
     </item>
@@ -124,7 +126,7 @@
       <title>Config Management</title>
       <link>https://blog.owulveryck.info/tags/config-management.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/config-management.html</guid>
       <description></description>
     </item>
@@ -133,7 +135,7 @@
       <title>Configuration</title>
       <link>https://blog.owulveryck.info/tags/configuration.html</link>
       <pubDate>Mon, 26 Oct 2015 10:41:57 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/configuration.html</guid>
       <description></description>
     </item>
@@ -142,7 +144,7 @@
       <title>Cordova</title>
       <link>https://blog.owulveryck.info/tags/cordova.html</link>
       <pubDate>Wed, 19 Oct 2016 07:24:51 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/cordova.html</guid>
       <description></description>
     </item>
@@ -151,7 +153,7 @@
       <title>Cucumber</title>
       <link>https://blog.owulveryck.info/tags/cucumber.html</link>
       <pubDate>Thu, 31 Mar 2016 23:39:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/cucumber.html</guid>
       <description></description>
     </item>
@@ -160,7 +162,7 @@
       <title>D3js</title>
       <link>https://blog.owulveryck.info/tags/d3js.html</link>
       <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/d3js.html</guid>
       <description></description>
     </item>
@@ -169,7 +171,7 @@
       <title>Dev</title>
       <link>https://blog.owulveryck.info/tags/dev.html</link>
       <pubDate>Fri, 14 Apr 2017 23:00:59 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/dev.html</guid>
       <description></description>
     </item>
@@ -178,7 +180,7 @@
       <title>Development</title>
       <link>https://blog.owulveryck.info/tags/development.html</link>
       <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/development.html</guid>
       <description></description>
     </item>
@@ -187,7 +189,7 @@
       <title>Digraph</title>
       <link>https://blog.owulveryck.info/tags/digraph.html</link>
       <pubDate>Wed, 02 Dec 2015 14:24:21 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/digraph.html</guid>
       <description></description>
     </item>
@@ -196,7 +198,7 @@
       <title>Documentation</title>
       <link>https://blog.owulveryck.info/tags/documentation.html</link>
       <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/documentation.html</guid>
       <description></description>
     </item>
@@ -205,7 +207,7 @@
       <title>Dynamodb</title>
       <link>https://blog.owulveryck.info/tags/dynamodb.html</link>
       <pubDate>Sat, 11 Mar 2017 09:15:17 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/dynamodb.html</guid>
       <description></description>
     </item>
@@ -214,7 +216,7 @@
       <title>Ec2</title>
       <link>https://blog.owulveryck.info/tags/ec2.html</link>
       <pubDate>Thu, 31 Mar 2016 23:39:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/ec2.html</guid>
       <description></description>
     </item>
@@ -223,7 +225,7 @@
       <title>Eigenvectors</title>
       <link>https://blog.owulveryck.info/tags/eigenvectors.html</link>
       <pubDate>Mon, 29 Feb 2016 20:55:01 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/eigenvectors.html</guid>
       <description></description>
     </item>
@@ -232,7 +234,7 @@
       <title>Etcd</title>
       <link>https://blog.owulveryck.info/tags/etcd.html</link>
       <pubDate>Mon, 13 Mar 2017 20:54:27 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/etcd.html</guid>
       <description></description>
     </item>
@@ -241,7 +243,7 @@
       <title>Exponentialbackoff</title>
       <link>https://blog.owulveryck.info/tags/exponentialbackoff.html</link>
       <pubDate>Sat, 11 Mar 2017 09:15:17 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/exponentialbackoff.html</guid>
       <description></description>
     </item>
@@ -250,7 +252,7 @@
       <title>Getopts</title>
       <link>https://blog.owulveryck.info/tags/getopts.html</link>
       <pubDate>Mon, 30 Nov 2015 13:17:41 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/getopts.html</guid>
       <description></description>
     </item>
@@ -259,7 +261,7 @@
       <title>Gherkin</title>
       <link>https://blog.owulveryck.info/tags/gherkin.html</link>
       <pubDate>Thu, 31 Mar 2016 23:39:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/gherkin.html</guid>
       <description></description>
     </item>
@@ -268,7 +270,7 @@
       <title>Go</title>
       <link>https://blog.owulveryck.info/tags/go.html</link>
       <pubDate>Tue, 28 Feb 2017 20:57:38 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/go.html</guid>
       <description></description>
     </item>
@@ -277,7 +279,7 @@
       <title>Golang</title>
       <link>https://blog.owulveryck.info/tags/golang.html</link>
       <pubDate>Wed, 22 Mar 2017 09:15:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/golang.html</guid>
       <description></description>
     </item>
@@ -286,7 +288,7 @@
       <title>Gopherjs</title>
       <link>https://blog.owulveryck.info/tags/gopherjs.html</link>
       <pubDate>Wed, 19 Oct 2016 07:24:51 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/gopherjs.html</guid>
       <description></description>
     </item>
@@ -295,7 +297,7 @@
       <title>Graph Theory</title>
       <link>https://blog.owulveryck.info/tags/graph-theory.html</link>
       <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/graph-theory.html</guid>
       <description></description>
     </item>
@@ -304,7 +306,7 @@
       <title>Graphql</title>
       <link>https://blog.owulveryck.info/tags/graphql.html</link>
       <pubDate>Tue, 28 Mar 2017 21:03:52 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/graphql.html</guid>
       <description></description>
     </item>
@@ -313,7 +315,7 @@
       <title>Http</title>
       <link>https://blog.owulveryck.info/tags/http.html</link>
       <pubDate>Mon, 17 Oct 2016 20:50:18 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/http.html</guid>
       <description></description>
     </item>
@@ -322,7 +324,7 @@
       <title>Ia</title>
       <link>https://blog.owulveryck.info/tags/ia.html</link>
       <pubDate>Mon, 29 Feb 2016 20:55:01 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/ia.html</guid>
       <description></description>
     </item>
@@ -331,7 +333,7 @@
       <title>Javascript</title>
       <link>https://blog.owulveryck.info/tags/javascript.html</link>
       <pubDate>Wed, 19 Oct 2016 07:24:51 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/javascript.html</guid>
       <description></description>
     </item>
@@ -340,7 +342,7 @@
       <title>Jquery</title>
       <link>https://blog.owulveryck.info/tags/jquery.html</link>
       <pubDate>Wed, 19 Oct 2016 07:24:51 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/jquery.html</guid>
       <description></description>
     </item>
@@ -349,7 +351,7 @@
       <title>Json</title>
       <link>https://blog.owulveryck.info/tags/json.html</link>
       <pubDate>Thu, 09 Jun 2016 14:54:26 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/json.html</guid>
       <description></description>
     </item>
@@ -358,7 +360,7 @@
       <title>Jsquery</title>
       <link>https://blog.owulveryck.info/tags/jsquery.html</link>
       <pubDate>Thu, 09 Jun 2016 14:54:26 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/jsquery.html</guid>
       <description></description>
     </item>
@@ -367,7 +369,7 @@
       <title>Keystone</title>
       <link>https://blog.owulveryck.info/tags/keystone.html</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/keystone.html</guid>
       <description></description>
     </item>
@@ -376,7 +378,7 @@
       <title>Khoreia</title>
       <link>https://blog.owulveryck.info/tags/khoreia.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/khoreia.html</guid>
       <description></description>
     </item>
@@ -385,7 +387,7 @@
       <title>Ksh</title>
       <link>https://blog.owulveryck.info/tags/ksh.html</link>
       <pubDate>Mon, 30 Nov 2015 13:17:41 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/ksh.html</guid>
       <description></description>
     </item>
@@ -394,7 +396,7 @@
       <title>Lambda</title>
       <link>https://blog.owulveryck.info/tags/lambda.html</link>
       <pubDate>Fri, 06 Jan 2017 21:59:25 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/lambda.html</guid>
       <description></description>
     </item>
@@ -403,7 +405,7 @@
       <title>Libusb</title>
       <link>https://blog.owulveryck.info/tags/libusb.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/libusb.html</guid>
       <description></description>
     </item>
@@ -412,7 +414,7 @@
       <title>Linda</title>
       <link>https://blog.owulveryck.info/tags/linda.html</link>
       <pubDate>Mon, 13 Mar 2017 20:54:27 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/linda.html</guid>
       <description></description>
     </item>
@@ -421,7 +423,7 @@
       <title>Linear Regression</title>
       <link>https://blog.owulveryck.info/tags/linear-regression.html</link>
       <pubDate>Fri, 20 May 2016 12:50:59 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/linear-regression.html</guid>
       <description></description>
     </item>
@@ -430,7 +432,7 @@
       <title>Linux</title>
       <link>https://blog.owulveryck.info/tags/linux.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/linux.html</guid>
       <description></description>
     </item>
@@ -439,7 +441,7 @@
       <title>Lisp</title>
       <link>https://blog.owulveryck.info/tags/lisp.html</link>
       <pubDate>Tue, 28 Feb 2017 20:57:38 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/lisp.html</guid>
       <description></description>
     </item>
@@ -448,7 +450,7 @@
       <title>Machine Learning</title>
       <link>https://blog.owulveryck.info/tags/machine-learning.html</link>
       <pubDate>Fri, 20 May 2016 12:50:59 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/machine-learning.html</guid>
       <description></description>
     </item>
@@ -457,7 +459,7 @@
       <title>Man</title>
       <link>https://blog.owulveryck.info/tags/man.html</link>
       <pubDate>Mon, 30 Nov 2015 13:17:41 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/man.html</guid>
       <description></description>
     </item>
@@ -466,7 +468,7 @@
       <title>Markov Model</title>
       <link>https://blog.owulveryck.info/tags/markov-model.html</link>
       <pubDate>Mon, 29 Feb 2016 20:55:01 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/markov-model.html</guid>
       <description></description>
     </item>
@@ -475,7 +477,7 @@
       <title>Ml</title>
       <link>https://blog.owulveryck.info/tags/ml.html</link>
       <pubDate>Tue, 16 May 2017 21:43:46 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/ml.html</guid>
       <description></description>
     </item>
@@ -484,7 +486,7 @@
       <title>Msgpack</title>
       <link>https://blog.owulveryck.info/tags/msgpack.html</link>
       <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/msgpack.html</guid>
       <description></description>
     </item>
@@ -493,7 +495,7 @@
       <title>Octave</title>
       <link>https://blog.owulveryck.info/tags/octave.html</link>
       <pubDate>Fri, 20 May 2016 12:50:59 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/octave.html</guid>
       <description></description>
     </item>
@@ -502,7 +504,7 @@
       <title>One</title>
       <link>https://blog.owulveryck.info/tags/one.html</link>
       <pubDate>Fri, 06 Jan 2017 11:06:06 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/one.html</guid>
       <description></description>
     </item>
@@ -511,7 +513,7 @@
       <title>Openstack</title>
       <link>https://blog.owulveryck.info/tags/openstack.html</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/openstack.html</guid>
       <description></description>
     </item>
@@ -520,7 +522,7 @@
       <title>Ops</title>
       <link>https://blog.owulveryck.info/tags/ops.html</link>
       <pubDate>Fri, 14 Apr 2017 23:00:59 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/ops.html</guid>
       <description></description>
     </item>
@@ -529,7 +531,7 @@
       <title>Orchestration</title>
       <link>https://blog.owulveryck.info/tags/orchestration.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/orchestration.html</guid>
       <description></description>
     </item>
@@ -538,7 +540,7 @@
       <title>Orchestrator</title>
       <link>https://blog.owulveryck.info/tags/orchestrator.html</link>
       <pubDate>Mon, 07 Dec 2015 08:48:20 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/orchestrator.html</guid>
       <description></description>
     </item>
@@ -547,7 +549,7 @@
       <title>Oregon Rms300</title>
       <link>https://blog.owulveryck.info/tags/oregon-rms300.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/oregon-rms300.html</guid>
       <description></description>
     </item>
@@ -556,7 +558,7 @@
       <title>R</title>
       <link>https://blog.owulveryck.info/tags/r.html</link>
       <pubDate>Mon, 29 Feb 2016 20:55:01 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/r.html</guid>
       <description></description>
     </item>
@@ -565,7 +567,7 @@
       <title>Raspberry Pi</title>
       <link>https://blog.owulveryck.info/tags/raspberry-pi.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/raspberry-pi.html</guid>
       <description></description>
     </item>
@@ -574,7 +576,7 @@
       <title>React</title>
       <link>https://blog.owulveryck.info/tags/react.html</link>
       <pubDate>Tue, 28 Mar 2017 21:03:52 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/react.html</guid>
       <description></description>
     </item>
@@ -583,7 +585,7 @@
       <title>Reflection</title>
       <link>https://blog.owulveryck.info/tags/reflection.html</link>
       <pubDate>Sat, 11 Mar 2017 09:15:17 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/reflection.html</guid>
       <description></description>
     </item>
@@ -592,7 +594,7 @@
       <title>Rest</title>
       <link>https://blog.owulveryck.info/tags/rest.html</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/rest.html</guid>
       <description></description>
     </item>
@@ -601,7 +603,7 @@
       <title>Revealjs</title>
       <link>https://blog.owulveryck.info/tags/revealjs.html</link>
       <pubDate>Fri, 09 Sep 2016 13:39:50 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/revealjs.html</guid>
       <description></description>
     </item>
@@ -610,7 +612,7 @@
       <title>Ruby</title>
       <link>https://blog.owulveryck.info/tags/ruby.html</link>
       <pubDate>Thu, 31 Mar 2016 23:39:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/ruby.html</guid>
       <description></description>
     </item>
@@ -619,7 +621,7 @@
       <title>Rvm</title>
       <link>https://blog.owulveryck.info/tags/rvm.html</link>
       <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/rvm.html</guid>
       <description></description>
     </item>
@@ -628,7 +630,7 @@
       <title>S3</title>
       <link>https://blog.owulveryck.info/tags/s3.html</link>
       <pubDate>Fri, 06 Jan 2017 21:59:25 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/s3.html</guid>
       <description></description>
     </item>
@@ -637,7 +639,7 @@
       <title>Shell</title>
       <link>https://blog.owulveryck.info/tags/shell.html</link>
       <pubDate>Mon, 30 Nov 2015 13:17:41 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/shell.html</guid>
       <description></description>
     </item>
@@ -646,7 +648,7 @@
       <title>Simple Iaas</title>
       <link>https://blog.owulveryck.info/tags/simple-iaas.html</link>
       <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/simple-iaas.html</guid>
       <description></description>
     </item>
@@ -655,7 +657,7 @@
       <title>Simple_iaas</title>
       <link>https://blog.owulveryck.info/tags/simple_iaas.html</link>
       <pubDate>Fri, 13 Nov 2015 09:21:30 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/simple_iaas.html</guid>
       <description></description>
     </item>
@@ -664,7 +666,7 @@
       <title>Slides</title>
       <link>https://blog.owulveryck.info/tags/slides.html</link>
       <pubDate>Fri, 09 Sep 2016 13:39:50 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/slides.html</guid>
       <description></description>
     </item>
@@ -673,7 +675,7 @@
       <title>Spa</title>
       <link>https://blog.owulveryck.info/tags/spa.html</link>
       <pubDate>Wed, 19 Oct 2016 07:24:51 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/spa.html</guid>
       <description></description>
     </item>
@@ -682,7 +684,7 @@
       <title>Speech Recognition</title>
       <link>https://blog.owulveryck.info/tags/speech-recognition.html</link>
       <pubDate>Fri, 09 Sep 2016 13:39:50 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/speech-recognition.html</guid>
       <description></description>
     </item>
@@ -691,7 +693,7 @@
       <title>Swagger</title>
       <link>https://blog.owulveryck.info/tags/swagger.html</link>
       <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/swagger.html</guid>
       <description></description>
     </item>
@@ -700,7 +702,7 @@
       <title>Tag1</title>
       <link>https://blog.owulveryck.info/tags/tag1.html</link>
       <pubDate>Thu, 04 May 2017 19:15:12 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/tag1.html</guid>
       <description></description>
     </item>
@@ -709,7 +711,7 @@
       <title>Tag2</title>
       <link>https://blog.owulveryck.info/tags/tag2.html</link>
       <pubDate>Thu, 04 May 2017 19:15:12 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/tag2.html</guid>
       <description></description>
     </item>
@@ -718,7 +720,7 @@
       <title>Topology</title>
       <link>https://blog.owulveryck.info/tags/topology.html</link>
       <pubDate>Fri, 03 Feb 2017 20:57:30 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/topology.html</guid>
       <description></description>
     </item>
@@ -727,7 +729,7 @@
       <title>Tosca</title>
       <link>https://blog.owulveryck.info/tags/tosca.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/tosca.html</guid>
       <description></description>
     </item>
@@ -736,7 +738,7 @@
       <title>Tuplespace</title>
       <link>https://blog.owulveryck.info/tags/tuplespace.html</link>
       <pubDate>Fri, 03 Feb 2017 20:57:30 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/tuplespace.html</guid>
       <description></description>
     </item>
@@ -745,7 +747,7 @@
       <title>Two</title>
       <link>https://blog.owulveryck.info/tags/two.html</link>
       <pubDate>Fri, 06 Jan 2017 11:06:06 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/two.html</guid>
       <description></description>
     </item>
@@ -754,7 +756,7 @@
       <title>Udev</title>
       <link>https://blog.owulveryck.info/tags/udev.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/udev.html</guid>
       <description></description>
     </item>
@@ -763,7 +765,7 @@
       <title>Udt</title>
       <link>https://blog.owulveryck.info/tags/udt.html</link>
       <pubDate>Mon, 17 Oct 2016 20:50:18 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/udt.html</guid>
       <description></description>
     </item>
@@ -772,7 +774,7 @@
       <title>Underscore.js</title>
       <link>https://blog.owulveryck.info/tags/underscore.js.html</link>
       <pubDate>Thu, 09 Jun 2016 14:54:26 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/underscore.js.html</guid>
       <description></description>
     </item>
@@ -781,7 +783,7 @@
       <title>Vagrant</title>
       <link>https://blog.owulveryck.info/tags/vagrant.html</link>
       <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/vagrant.html</guid>
       <description></description>
     </item>
@@ -790,7 +792,7 @@
       <title>Weather Station</title>
       <link>https://blog.owulveryck.info/tags/weather-station.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/weather-station.html</guid>
       <description></description>
     </item>
@@ -799,7 +801,7 @@
       <title>Webcam</title>
       <link>https://blog.owulveryck.info/tags/webcam.html</link>
       <pubDate>Fri, 16 Dec 2016 14:51:18 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/webcam.html</guid>
       <description></description>
     </item>
@@ -808,7 +810,7 @@
       <title>Websocket</title>
       <link>https://blog.owulveryck.info/tags/websocket.html</link>
       <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/websocket.html</guid>
       <description></description>
     </item>
@@ -817,7 +819,7 @@
       <title>Webui</title>
       <link>https://blog.owulveryck.info/tags/webui.html</link>
       <pubDate>Wed, 19 Oct 2016 07:24:51 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/webui.html</guid>
       <description></description>
     </item>
@@ -826,7 +828,7 @@
       <title>Xtreme Programming</title>
       <link>https://blog.owulveryck.info/tags/xtreme-programming.html</link>
       <pubDate>Fri, 14 Apr 2017 23:00:59 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/xtreme-programming.html</guid>
       <description></description>
     </item>
@@ -835,7 +837,7 @@
       <title>Zmq</title>
       <link>https://blog.owulveryck.info/tags/zmq.html</link>
       <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/zmq.html</guid>
       <description></description>
     </item>
@@ -844,7 +846,7 @@
       <title>Zygomys</title>
       <link>https://blog.owulveryck.info/tags/zygomys.html</link>
       <pubDate>Mon, 13 Mar 2017 20:54:27 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/tags/zygomys.html</guid>
       <description></description>
     </item>

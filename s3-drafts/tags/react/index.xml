@@ -6,7 +6,9 @@
     <description>Recent content in React on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Tue, 28 Mar 2017 21:03:52 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/react/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>From GraphQL to a table view with React and Apollo</title>
       <link>https://blog.owulveryck.info/2017/03/28/from-graphql-to-a-table-view-with-react-and-apollo.html</link>
       <pubDate>Tue, 28 Mar 2017 21:03:52 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/03/28/from-graphql-to-a-table-view-with-react-and-apollo.html</guid>
       <description>In the last post I have played with GraphQL. The next step is to actually query the data and display it.
 In this post I will use react (from Facebook) and the Apollo GraphQL client.

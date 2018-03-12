@@ -6,7 +6,9 @@
     <description>Recent content in Cucumber on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Thu, 31 Mar 2016 23:39:35 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/cucumber/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Behaviour Driven Development with Gherkin and Cucumber (an introduction)</title>
       <link>https://blog.owulveryck.info/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction.html</link>
       <pubDate>Thu, 31 Mar 2016 23:39:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction.html</guid>
       <description>Opening remarks All my previous posts were about choreography, deployment, topology, and more recently about an attempt to include AI in those systems. This post is a bit apart, because I&amp;rsquo;m facing a new challenge in my job which is to implement BDD in a CI chain. Therefore, I&amp;rsquo;m using this blog as a reminder of what I did personally. The following of the Markov saga will come again later.</description>
     </item>

@@ -6,7 +6,9 @@
     <description>Recent content on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Mon, 18 Dec 2017 16:47:27 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</title>
       <link>https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html</link>
       <pubDate>Mon, 18 Dec 2017 16:47:27 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html</guid>
       <description>In a previous article, I described an implementation of an RNN from scratch in go. The target is to use the RNN as a processing unit. The ultimate goal is to create a portable tool cross platform and able to grab and process data where they are. I have many applications in mind such as finding the root-cause of an incident or managing the capacity of an infrastructure.
 Note I stick to the go language for many reasons: Some of them a personnal and not opposable (I simply like it).</description>
@@ -26,7 +28,7 @@ Note I stick to the go language for many reasons: Some of them a personnal and n
       <title>About Recurrent Neural Network, Shakespeare and GO</title>
       <link>https://blog.owulveryck.info/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html</link>
       <pubDate>Sun, 29 Oct 2017 07:17:33 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html</guid>
       <description>Shakespeare and I, encounter of the third type A couple of months ago, I attended the Google Cloud Next 17 event in London. Among the talks about SRE, and keynotes, I had the chance to listen to Martin Gorner&amp;rsquo;s excellent introduction: TensorFlow and Deep Learning without a PhD, Part 2. If you don&amp;rsquo;t want to look at the video, here is a quick summary:
 a 100 of lines of python are reading all Shakespeare&amp;rsquo;s plays; it learns his style, and then generates a brand new play from scratch.</description>
@@ -36,7 +38,7 @@ a 100 of lines of python are reading all Shakespeare&amp;rsquo;s plays; it learn
       <title>Terraform is hip... Introducing Nhite</title>
       <link>https://blog.owulveryck.info/2017/09/12/terraform-is-hip...-introducing-nhite.html</link>
       <pubDate>Tue, 12 Sep 2017 13:28:36 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/09/12/terraform-is-hip...-introducing-nhite.html</guid>
       <description>In a previous post, I did some experiments with gRPC, protocol buffer and Terraform. The idea was to transform the &amp;ldquo;Terraform&amp;rdquo; cli tool into a micro-service thanks to gRPC.
 This post is the second part of the experiment. I will go deeper in the code and see if it is possible to create a brand new utility, without hacking Terraform. The idea is to import some packages that compose the binary and create my own service based on gRPC.</description>
@@ -46,7 +48,7 @@ This post is the second part of the experiment. I will go deeper in the code and
       <title>From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</title>
       <link>https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html</link>
       <pubDate>Sat, 02 Sep 2017 13:28:36 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html</guid>
       <description>This post is a little different from the last ones. As usual, the introduction tries to be open, but it quickly goes deeper into a go implementation. Some explanations may be tricky from time to times and therefore not very clear. As usual, do not hesitate to send me any comment via this blog or via twitter @owulveryck.
 TL;DR: This is a step-by-step example that turns a golang cli utility into a webservice powered by gRPC and protobuf.</description>
@@ -56,7 +58,7 @@ TL;DR: This is a step-by-step example that turns a golang cli utility into a web
       <title>A &#34;Smart&#34; CCTV with Tensorflow, and Inception? On a rapsberry pi?</title>
       <link>https://blog.owulveryck.info/2017/07/07/a-smart-cctv-with-tensorflow-and-inception-on-a-rapsberry-pi.html</link>
       <pubDate>Fri, 07 Jul 2017 21:06:46 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/07/07/a-smart-cctv-with-tensorflow-and-inception-on-a-rapsberry-pi.html</guid>
       <description>Imagine a CCTV at home that would trigger an alert when it detects a movement.
 Ok, this is easy.
@@ -70,7 +72,7 @@ Disclaimer: This article will not cover everything. I may post a second article 
       <title>Analyzing a parodic trailer (NSFW) with Google Cloud Video Intelligence</title>
       <link>https://blog.owulveryck.info/2017/06/01/analyzing-a-parodic-trailer-nsfw-with-google-cloud-video-intelligence.html</link>
       <pubDate>Thu, 01 Jun 2017 22:07:56 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/06/01/analyzing-a-parodic-trailer-nsfw-with-google-cloud-video-intelligence.html</guid>
       <description>Google has recently announced its new service called &amp;ldquo;Google Cloud Video Intelligence&amp;rdquo;. The purpose of this service is to offer tagging and annotations of digital videos.
 I will try this service on a trailer of a French parody. This movie is made of several scenes taken from erotic movies of the seventies.
@@ -82,7 +84,7 @@ Why this parody?
       <title>Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM</title>
       <link>https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html</link>
       <pubDate>Tue, 16 May 2017 21:43:46 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html</guid>
       <description>TL;DR: Thank you for passing by. This article is, as usual, geek oriented. However, if you are not a geek, and/or you are in a hurry, you can jump to the conclusion: Any real application?
 During the month of may, I have had the chance to attend to the Google Next event in London and the dotAI in Paris. In both conferences I learned a lot about machine learning.</description>
@@ -92,7 +94,7 @@ During the month of may, I have had the chance to attend to the Google Next even
       <title>Retour sur les conférences dotScale, édition 2017.</title>
       <link>https://blog.owulveryck.info/2017/04/24/retour-sur-les-conf%C3%A9rences-dotscale-%C3%A9dition-2017..html</link>
       <pubDate>Mon, 24 Apr 2017 20:51:22 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/04/24/retour-sur-les-conf%C3%A9rences-dotscale-%C3%A9dition-2017..html</guid>
       <description>Note This post is written in french, as it was, at first, targeted for another support. I apologize for the people who do not speak the language.
 A propos de la dotScale Lundi 24 avril se tenait la cinquième édition de la conférence dotScale qui se décrit elle-même comme étant la tech conférence Européenne sur la &amp;ldquo;scalabilité&amp;rdquo;. Cette conférence se veut être le &amp;ldquo;TED&amp;rdquo; des informaticiens. Elle se déroule dans le prestigieux théâtre de Paris.</description>
@@ -102,7 +104,7 @@ A propos de la dotScale Lundi 24 avril se tenait la cinquième édition de la co
       <title>I have tried Extreme Programming within a sprint and I think it is an excellent agile method for the Ops!</title>
       <link>https://blog.owulveryck.info/2017/04/14/i-have-tried-extreme-programming-within-a-sprint-and-i-think-it-is-an-excellent-agile-method-for-the-ops.html</link>
       <pubDate>Fri, 14 Apr 2017 23:00:59 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/04/14/i-have-tried-extreme-programming-within-a-sprint-and-i-think-it-is-an-excellent-agile-method-for-the-ops.html</guid>
       <description>Part I: Agility 2003 I have discovered the notion of extreme programming more than 15 years ago. My job was to integrate and to develop pieces of code in Java for the IBM Websphere Business Integration server. We were a small team with light programming skills. A part of our job was to operate the software, the other part was to develop. It was in 2003.
 We were trying hard to stick to the specific framework we developed.</description>
@@ -112,7 +114,7 @@ We were trying hard to stick to the specific framework we developed.</descriptio
       <title>From GraphQL to a table view with React and Apollo</title>
       <link>https://blog.owulveryck.info/2017/03/28/from-graphql-to-a-table-view-with-react-and-apollo.html</link>
       <pubDate>Tue, 28 Mar 2017 21:03:52 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/03/28/from-graphql-to-a-table-view-with-react-and-apollo.html</guid>
       <description>In the last post I have played with GraphQL. The next step is to actually query the data and display it.
 In this post I will use react (from Facebook) and the Apollo GraphQL client.
@@ -123,7 +125,7 @@ Tooling React I won&amp;rsquo;t give in here an introduction of the language bec
       <title>Playing with Facebook&#39;s GraphQL (applied to AWS products and offers management)</title>
       <link>https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html</link>
       <pubDate>Wed, 22 Mar 2017 09:15:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html</guid>
       <description>About GraphQL GraphQL has been invented by Facebook for the purpose of refactoring their mobile application. Facebook had reached the limits of the standard REST API mainly because:
  Getting that much information was requiring a huge amount of API endpoints The versioning of the API was counter-productive regarding Facebook&amp;rsquo;s frequents deployements.  But graphql is not only a query language related to Facebook. GraphQL is not only applicable to social data.</description>
@@ -133,7 +135,7 @@ Tooling React I won&amp;rsquo;t give in here an introduction of the language bec
       <title>Linda&#39;s evalc, a (tuple)space oddity</title>
       <link>https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity.html</link>
       <pubDate>Mon, 13 Mar 2017 20:54:27 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity.html</guid>
       <description>For a change, I will start with a good soundtrack
  (youtube version for those who are spotify-less)
@@ -146,7 +148,7 @@ Last time, I introduced a lisp based language (zygomys) as an embedded programin
       <title>350000 rows, 133 cols... From a huge CSV to DynamoDB (without breaking piggy-bank).</title>
       <link>https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html</link>
       <pubDate>Sat, 11 Mar 2017 09:15:17 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html</guid>
       <description>In this post I will explain how to:
  Parse a CSV file and extract only certain columns Create a table in DynamoDB Insert all the data with an adaptive algorithm in order to use the provisioned capacity Reduce the capacity once the insertion is done.  Exploring the problem: AWS Billing In a previous post I explained how I was using dynamodb to store a lot of data about aws billing.</description>
@@ -156,7 +158,7 @@ Last time, I introduced a lisp based language (zygomys) as an embedded programin
       <title>To go and touch Linda&#39;s Lisp</title>
       <link>https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp.html</link>
       <pubDate>Tue, 28 Feb 2017 20:57:38 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp.html</guid>
       <description>The title is not a typo nor dyslexia. I will really talk about Lisp.
 In a previous post I explained my will to implement the dining of the philosophers with Linda in GO.
@@ -168,7 +170,7 @@ The problem I&amp;rsquo;ve faced I want to use a GO implementation for the Linda
       <title>Linda, 31yo, with 5 starving philosophers...</title>
       <link>https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers....html</link>
       <pubDate>Fri, 03 Feb 2017 20:57:30 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers....html</guid>
       <description>The hand is the tool of tools - Aristotle.
  It ain&amp;rsquo;t no secret to anyone actually knowing me: I am a fan of automation. Automation and configuration management have come a long way since Mark Burgess wrote the first version of cfengine.
@@ -179,7 +181,7 @@ But even if the landscape has changed, operators are still scripting (only the D
       <title>A foot in NoSQL and a toe in big data</title>
       <link>https://blog.owulveryck.info/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data.html</link>
       <pubDate>Fri, 13 Jan 2017 22:22:46 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data.html</guid>
       <description>The more I work with AWS, the more I understand their models. This goes far beyond the technical principles of micro service. As an example I recently had an opportunity to dig a bit into the billing process. I had an explanation given by a colleague whose understanding was more advanced than mine. In his explanation, he mentioned this blog post: New price list API.
 Understanding the model By reading this post and this explanation, I understand that the offers are categorized in families (eg AmazonS3) and that an offer is composed of a set of products.</description>
@@ -189,7 +191,7 @@ Understanding the model By reading this post and this explanation, I understand 
       <title>Image reKognition with a webcam, go and AWS.</title>
       <link>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html</link>
       <pubDate>Fri, 16 Dec 2016 14:51:18 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html</guid>
       <description>It&amp;rsquo;s been a while since I last posted something. I will fill the gap with a quick post about rekognition.
 rekognition is a service from AWS that is described as:
@@ -203,7 +205,7 @@ The part of the result I will focus on is the emotion.</description>
       <title>SPA with Gopherjs</title>
       <link>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs.html</link>
       <pubDate>Wed, 19 Oct 2016 07:24:51 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/10/19/spa-with-gopherjs.html</guid>
       <description>Introduction Single page application (SPA) are a standard when dealing with mobile apps. Unfortunately, by now, JavaScript is the only programming language supported by a browser.
 Therefore, to code web UI it remains a must.
@@ -214,7 +216,7 @@ Life of an ex sysadmin who wants to code a web app: getting depressed To make th
       <title>HTTP over UDT for inter-region file transfer</title>
       <link>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer.html</link>
       <pubDate>Mon, 17 Oct 2016 20:50:18 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer.html</guid>
       <description>Introduction Transferring files between server is no big deal with nowadays network equipments. You use rsync, scp or even http to get a file from A to B.
 Of course, you rely on the TCP stack so you have a decent reliability in the transport.
@@ -225,7 +227,7 @@ But TCP has its drawback, especially when it needs to go through a lot of equipm
       <title>Processing CSV files with golang, python and perl</title>
       <link>https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl.html</link>
       <pubDate>Sun, 11 Sep 2016 20:27:49 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl.html</guid>
       <description>Introduction System engineers are used to CSV files. They may be considered as a good bridge between Excel and the CLI. They are also a common way to format the output of a script so data can be exploited easily from command lines tools such as sort , awk,uniq, grep, and so on.
 The point is that when there is a significant amount of data, parsing it with shell may be painful and extremely slow.</description>
@@ -235,7 +237,7 @@ The point is that when there is a significant amount of data, parsing it with sh
       <title>Being a better public speaker with a little help of Speech Recognition, Javascript and Chrome</title>
       <link>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</link>
       <pubDate>Fri, 09 Sep 2016 13:39:50 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</guid>
       <description>Introduction I usually don&amp;rsquo;t like slidewares.
 Actually as IT engineer working, by now, exclusively in France, I&amp;rsquo;m facing the PowerPoint problem:
@@ -247,7 +249,7 @@ I won&amp;rsquo;t redo the introduction I already did in a previous post but ind
       <title>Getting weather data from the station to the raspberry</title>
       <link>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</guid>
       <description>Introduction A bunch of friends/colleagues offered me a raspberry pi 3. It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe the center of an alarm&amp;hellip;. Maybe a spotify player&amp;hellip;
 Anyway, I have installed raspbian and I&amp;rsquo;m now playing with it.
@@ -258,7 +260,7 @@ Yesterday evening, as I was about to go to bed, I&amp;rsquo;ve had a very bad id
       <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote</title>
       <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</link>
       <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</guid>
       <description>the goal As all my peers, I have the opportunity to talk about different technological aspects. As all my peers, I&amp;rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).
 In this post I won&amp;rsquo;t dig into what&amp;rsquo;s good or not to put in a presentation, and if that&amp;rsquo;s what interest you, I recommend you to take a look at Garr Reynold&amp;rsquo;s tips and tricks.
@@ -269,7 +271,7 @@ Steve Jobs said:</description>
       <title>Which solution should I choose? Don&#39;t think too much and ask a bot!</title>
       <link>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html</link>
       <pubDate>Fri, 20 May 2016 12:50:59 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html</guid>
       <description>Let me tell you a story: the why! A year ago, one of those Sunday morning where spring starts to warm up the souls, I went, as usual to my favorite bakery. The family tradition is to come back with a bunch of &amp;ldquo;Pains au Chocolat&amp;rdquo; (which, are, you can trust me, simply excellent).
  hello sir, I&amp;rsquo;d like 4 of your excellent &amp;ldquo;pains au chocolat&amp;rdquo; please I&amp;rsquo;m sorry, I don&amp;rsquo;t have any &amp;ldquo;pains au chocolat&amp;rdquo; nor any &amp;ldquo;croissant&amp;rdquo; anymore what?</description>
@@ -279,7 +281,7 @@ Steve Jobs said:</description>
       <title>Behaviour Driven Development with Gherkin and Cucumber (an introduction)</title>
       <link>https://blog.owulveryck.info/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction.html</link>
       <pubDate>Thu, 31 Mar 2016 23:39:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction.html</guid>
       <description>Opening remarks All my previous posts were about choreography, deployment, topology, and more recently about an attempt to include AI in those systems. This post is a bit apart, because I&amp;rsquo;m facing a new challenge in my job which is to implement BDD in a CI chain. Therefore, I&amp;rsquo;m using this blog as a reminder of what I did personally. The following of the Markov saga will come again later.</description>
     </item>
@@ -288,7 +290,7 @@ Steve Jobs said:</description>
       <title>RVM from a USB stick on a Chromebook</title>
       <link>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook.html</link>
       <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook.html</guid>
       <description>Introduction Opening remarks I&amp;rsquo;m not a Ruby developer, and I&amp;rsquo;m heavily discovering the ecosystem by now. This are my notes, and if anything seems wrong to you, do not hesitate to send me remarks.
 The scenario For testing purpose, I wanted to play with vagrant-aws and more generally with ruby on my Chromebook.
@@ -299,7 +301,7 @@ Vagrant does not support rubygems as installation method anymore (see Mitchell H
       <title>Is there a Markov model hidden in the choreography?</title>
       <link>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography.html</link>
       <pubDate>Mon, 29 Feb 2016 20:55:01 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography.html</guid>
       <description>Introduction In my last post I introduced the notion of choreography as a way to deploy an manage application. It could be possible to implement self-healing, elasticity and in a certain extent self awareness.
 To do so, we must not rely on the certainty and the determinism of the automated tasks. Mark Burgess explains in his book in search of certainty that none should consider the command and control anymore.</description>
@@ -309,7 +311,7 @@ To do so, we must not rely on the certainty and the determinism of the automated
       <title>Configuration management, choreography and self-aware applications</title>
       <link>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications.html</guid>
       <description>Thanks to the company I&amp;rsquo;m working for (Techsys) I&amp;rsquo;ve had the opportunity to attend the configuration management camp in Gent (be) for its 2016 edition.
 I really enjoyed those two days of talks, watching people present different ideas of a possible future for the infrastructure and deployment engineering. Beyond the technical demonstrations and the experience sharing, I&amp;rsquo;ve spotted a bunch of ideas
@@ -320,7 +322,7 @@ Among all, those that comes to me spontaneously are:</description>
       <title>Orchestrate a digraph with goroutine, a concurrent orchestrator</title>
       <link>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html</link>
       <pubDate>Wed, 02 Dec 2015 14:24:21 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html</guid>
       <description>I&amp;rsquo;ve read a lot about graph theory recently. They have changed the world a lot. From the simple representation to Bayesian network via Markov chains, the applications are numerous.
 Today I would like to imagine a graph as a workflow of execution. Every node would be considered as runnable. And every edge would be a dependency.
@@ -331,7 +333,7 @@ It is an important framework that may be used to as an orchestrator for any mode
       <title>KSH93 cool features for scripting</title>
       <link>https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting.html</link>
       <pubDate>Mon, 30 Nov 2015 13:17:41 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/30/ksh93-cool-features-for-scripting.html</guid>
       <description>From time to time, I&amp;rsquo;m involved into a trolling conversation when any linux kiddie tells me:
 Bash is really the superior shell
@@ -344,7 +346,7 @@ Note I&amp;rsquo;m really talking about the engine of the script, (the shebang d
       <title>TOSCA lifecycle as a digraph</title>
       <link>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html</link>
       <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html</guid>
       <description>About TOSCA The TOSCA acronym stands for Topology and Orchestration Specification for Cloud Applications. It&amp;rsquo;s an OASIS standard.
 The purpose of the TOSCA project is to represent an application by its topology and formalize it using the TOSCA grammar.
@@ -356,7 +358,7 @@ The [TOSCA-Simple-Profile-YAML-v1.0] current specification in YAML introduces th
       <title>Playing with (Openstack) Keystone</title>
       <link>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone.html</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone.html</guid>
       <description>In the cloud computing, alongside of the hosting monsters such as amazon or google, there is the Openstack Platform.
 Openstack is not a single software, it is more a galaxy of components aim to control the infrastructure, such as hardware pools, storage, network. The management can then be done via a Web based interface or via a bunch of RESTful API.
@@ -367,7 +369,7 @@ I would like to evaluate its identity service named keystone and use it as a Aut
       <title>Simple IaaS API documentation with swagger</title>
       <link>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html</link>
       <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html</guid>
       <description>In a previous post I have explained how to develop a very simple API server.
 Without the associated documentation, the API will be useless. Let&amp;rsquo;s see how we can use swagger-ui in this project to generate a beautiful documentation.
@@ -379,7 +381,7 @@ About Swagger Swagger is a framework. On top of the swagger project is composed 
       <title>IaaS-like RESTfull API based on microservices</title>
       <link>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</link>
       <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</guid>
       <description>Abstracts Recently, I&amp;rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.
 I am reading more and more about the &amp;ldquo;API economy&amp;rdquo;
@@ -391,7 +393,7 @@ The problem I&amp;rsquo;m facing is that in the organization I&amp;rsquo;m worki
       <title>Developping &#34;Google Apps&#34; on my Chromebook</title>
       <link>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook.html</link>
       <pubDate>Mon, 26 Oct 2015 10:41:57 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/10/26/developping-google-apps-on-my-chromebook.html</guid>
       <description>It is a week now that I&amp;rsquo;m playing with my chromebook. I really enjoy this little internet Terminal.
 I &amp;ldquo;geeked&amp;rdquo; it a little bit and I installed my favorites dev tools eg:
@@ -402,7 +404,7 @@ I &amp;ldquo;geeked&amp;rdquo; it a little bit and I installed my favorites dev 
       <title>Simple polling, a cloud native app - part 1</title>
       <link>https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1.html</link>
       <pubDate>Fri, 23 Oct 2015 09:54:27 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1.html</guid>
       <description>In this series of posts I&amp;rsquo;ll explain how to setup a simple polling app, the cloud way. This app, written in go, will be hosted on a PAAS, and I&amp;rsquo;ve chosen the Google App Engine for convenience.
 I will not explain in this post how to setup the Development environment as it is described here
@@ -413,7 +415,7 @@ A word about the Hosting Google Apps Engine is a cloud service aim to host appli
       <title>Ruby / ZeroMQ / GO</title>
       <link>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html</link>
       <pubDate>Thu, 22 Oct 2015 20:40:36 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/10/22/ruby-/-zeromq-/-go.html</guid>
       <description>Abtract I really like go as a programming language. It is a good tool to develop web restful API service.
 On the other hand, ruby and its framework rails has also been wildly used to achieve the same goal.
@@ -424,7 +426,7 @@ Therefore we may be facing a &amp;ldquo;legacy&amp;rdquo; ruby developpement tha
       <title>Welcome</title>
       <link>https://blog.owulveryck.info/2015/10/22/welcome.html</link>
       <pubDate>Thu, 22 Oct 2015 15:59:07 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/10/22/welcome.html</guid>
       <description>You are in a place where a new technical blog will stand soon.</description>
     </item>
@@ -433,7 +435,7 @@ Therefore we may be facing a &amp;ldquo;legacy&amp;rdquo; ruby developpement tha
       <title>About me</title>
       <link>https://blog.owulveryck.info/about.html</link>
       <pubDate>Wed, 21 Oct 2015 21:19:59 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/about.html</guid>
       <description>     Olivier Wulveryck IT profesionnal
   Lille, France &amp;nbsp; olivier.wulveryck@gmail.com     To summarize my professional character I would say: I like to understand &#34;how things works&#34; in order to make them work in best conditions of reliability and security.  I like to exchange with people smarter than I am     /owulveryck    /owulveryck    /owulveryck           </description>

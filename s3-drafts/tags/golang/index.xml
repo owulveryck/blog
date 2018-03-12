@@ -6,7 +6,9 @@
     <description>Recent content in Golang on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Wed, 22 Mar 2017 09:15:35 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/golang/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Playing with Facebook&#39;s GraphQL (applied to AWS products and offers management)</title>
       <link>https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html</link>
       <pubDate>Wed, 22 Mar 2017 09:15:35 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html</guid>
       <description>About GraphQL GraphQL has been invented by Facebook for the purpose of refactoring their mobile application. Facebook had reached the limits of the standard REST API mainly because:
  Getting that much information was requiring a huge amount of API endpoints The versioning of the API was counter-productive regarding Facebook&amp;rsquo;s frequents deployements.  But graphql is not only a query language related to Facebook. GraphQL is not only applicable to social data.</description>
@@ -26,7 +28,7 @@
       <title>Linda&#39;s evalc, a (tuple)space oddity</title>
       <link>https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity.html</link>
       <pubDate>Mon, 13 Mar 2017 20:54:27 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity.html</guid>
       <description>For a change, I will start with a good soundtrack
  (youtube version for those who are spotify-less)
@@ -39,7 +41,7 @@ Last time, I introduced a lisp based language (zygomys) as an embedded programin
       <title>350000 rows, 133 cols... From a huge CSV to DynamoDB (without breaking piggy-bank).</title>
       <link>https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html</link>
       <pubDate>Sat, 11 Mar 2017 09:15:17 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/03/11/350000-rows-133-cols...-from-a-huge-csv-to-dynamodb-without-breaking-piggy-bank..html</guid>
       <description>In this post I will explain how to:
  Parse a CSV file and extract only certain columns Create a table in DynamoDB Insert all the data with an adaptive algorithm in order to use the provisioned capacity Reduce the capacity once the insertion is done.  Exploring the problem: AWS Billing In a previous post I explained how I was using dynamodb to store a lot of data about aws billing.</description>
@@ -49,7 +51,7 @@ Last time, I introduced a lisp based language (zygomys) as an embedded programin
       <title>A foot in NoSQL and a toe in big data</title>
       <link>https://blog.owulveryck.info/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data.html</link>
       <pubDate>Fri, 13 Jan 2017 22:22:46 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/01/13/a-foot-in-nosql-and-a-toe-in-big-data.html</guid>
       <description>The more I work with AWS, the more I understand their models. This goes far beyond the technical principles of micro service. As an example I recently had an opportunity to dig a bit into the billing process. I had an explanation given by a colleague whose understanding was more advanced than mine. In his explanation, he mentioned this blog post: New price list API.
 Understanding the model By reading this post and this explanation, I understand that the offers are categorized in families (eg AmazonS3) and that an offer is composed of a set of products.</description>
@@ -59,7 +61,7 @@ Understanding the model By reading this post and this explanation, I understand 
       <title>lambda inter s3</title>
       <link>https://blog.owulveryck.info/2017/01/06/lambda-inter-s3.html</link>
       <pubDate>Fri, 06 Jan 2017 21:59:25 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/01/06/lambda-inter-s3.html</guid>
       <description>In this post I will explain how to setup a lambda function written in go that will be triggered when an object is dropped on a bucket on s3. The function will read the object and copy it into another bucket iin another location. It will use AWS&amp;rsquo; golang sdk.
 The Lambda skeleton AWS Lambda does not support the go programming language natively. Anyway, it as a go program is compiled and packed as a simgle static binary, it it easy to execute a go program whitin a wrapper (node.</description>
@@ -69,7 +71,7 @@ The Lambda skeleton AWS Lambda does not support the go programming language nati
       <title>Image reKognition with a webcam, go and AWS.</title>
       <link>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html</link>
       <pubDate>Fri, 16 Dec 2016 14:51:18 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html</guid>
       <description>It&amp;rsquo;s been a while since I last posted something. I will fill the gap with a quick post about rekognition.
 rekognition is a service from AWS that is described as:
@@ -83,7 +85,7 @@ The part of the result I will focus on is the emotion.</description>
       <title>HTTP over UDT for inter-region file transfer</title>
       <link>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer.html</link>
       <pubDate>Mon, 17 Oct 2016 20:50:18 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/10/17/http-over-udt-for-inter-region-file-transfer.html</guid>
       <description>Introduction Transferring files between server is no big deal with nowadays network equipments. You use rsync, scp or even http to get a file from A to B.
 Of course, you rely on the TCP stack so you have a decent reliability in the transport.
@@ -94,7 +96,7 @@ But TCP has its drawback, especially when it needs to go through a lot of equipm
       <title>Getting weather data from the station to the raspberry</title>
       <link>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</guid>
       <description>Introduction A bunch of friends/colleagues offered me a raspberry pi 3. It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe the center of an alarm&amp;hellip;. Maybe a spotify player&amp;hellip;
 Anyway, I have installed raspbian and I&amp;rsquo;m now playing with it.
@@ -105,7 +107,7 @@ Yesterday evening, as I was about to go to bed, I&amp;rsquo;ve had a very bad id
       <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote</title>
       <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</link>
       <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</guid>
       <description>the goal As all my peers, I have the opportunity to talk about different technological aspects. As all my peers, I&amp;rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).
 In this post I won&amp;rsquo;t dig into what&amp;rsquo;s good or not to put in a presentation, and if that&amp;rsquo;s what interest you, I recommend you to take a look at Garr Reynold&amp;rsquo;s tips and tricks.
@@ -116,7 +118,7 @@ Steve Jobs said:</description>
       <title>OaaS orchestrator as a service - part 1</title>
       <link>https://blog.owulveryck.info/2015/12/07/oaas-orchestrator-as-a-service---part-1.html</link>
       <pubDate>Mon, 07 Dec 2015 08:48:20 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/12/07/oaas-orchestrator-as-a-service---part-1.html</guid>
       <description> In a previous post I have setup and orchestrator that takes a digraph as input (via its adjacency matrix).
 In this post I will implement an API, so the orchestrator will be transformed into a web service.
@@ -129,7 +131,7 @@ The verbs I will use only 3 verbs by now:
       <title>Orchestrate a digraph with goroutine, a concurrent orchestrator</title>
       <link>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html</link>
       <pubDate>Wed, 02 Dec 2015 14:24:21 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/12/02/orchestrate-a-digraph-with-goroutine-a-concurrent-orchestrator.html</guid>
       <description>I&amp;rsquo;ve read a lot about graph theory recently. They have changed the world a lot. From the simple representation to Bayesian network via Markov chains, the applications are numerous.
 Today I would like to imagine a graph as a workflow of execution. Every node would be considered as runnable. And every edge would be a dependency.
@@ -140,7 +142,7 @@ It is an important framework that may be used to as an orchestrator for any mode
       <title>TOSCA lifecycle as a digraph</title>
       <link>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html</link>
       <pubDate>Fri, 20 Nov 2015 10:09:30 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/20/tosca-lifecycle-as-a-digraph.html</guid>
       <description>About TOSCA The TOSCA acronym stands for Topology and Orchestration Specification for Cloud Applications. It&amp;rsquo;s an OASIS standard.
 The purpose of the TOSCA project is to represent an application by its topology and formalize it using the TOSCA grammar.

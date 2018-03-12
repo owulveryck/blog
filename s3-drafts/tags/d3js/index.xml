@@ -6,7 +6,9 @@
     <description>Recent content in D3js on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Thu, 23 Jun 2016 15:32:54 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/d3js/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote</title>
       <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</link>
       <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</guid>
       <description>the goal As all my peers, I have the opportunity to talk about different technological aspects. As all my peers, I&amp;rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).
 In this post I won&amp;rsquo;t dig into what&amp;rsquo;s good or not to put in a presentation, and if that&amp;rsquo;s what interest you, I recommend you to take a look at Garr Reynold&amp;rsquo;s tips and tricks.

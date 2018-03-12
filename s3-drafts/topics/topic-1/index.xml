@@ -6,7 +6,9 @@
     <description>Recent content in Topic 1 on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Fri, 06 Jan 2017 11:06:06 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/topics/topic-1/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Accessing AWS deep learning services from iOS.</title>
       <link>https://blog.owulveryck.info/2017/01/06/accessing-aws-deep-learning-services-from-ios..html</link>
       <pubDate>Fri, 06 Jan 2017 11:06:06 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/01/06/accessing-aws-deep-learning-services-from-ios..html</guid>
       <description> Only fools never change their minds - Talleyrand
  </description>
@@ -26,7 +28,7 @@
       <title>Image reKognition with a webcam, go and AWS.</title>
       <link>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html</link>
       <pubDate>Fri, 16 Dec 2016 14:51:18 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html</guid>
       <description>It&amp;rsquo;s been a while since I last posted something. I will fill the gap with a quick post about rekognition.
 rekognition is a service from AWS that is described as:
@@ -40,7 +42,7 @@ The part of the result I will focus on is the emotion.</description>
       <title>sound fingerprint</title>
       <link>https://blog.owulveryck.info/2016/11/19/sound-fingerprint.html</link>
       <pubDate>Sat, 19 Nov 2016 15:11:59 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/11/19/sound-fingerprint.html</guid>
       <description></description>
     </item>
@@ -49,7 +51,7 @@ The part of the result I will focus on is the emotion.</description>
       <title>Processing CSV files with golang, python and perl</title>
       <link>https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl.html</link>
       <pubDate>Sun, 11 Sep 2016 20:27:49 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl.html</guid>
       <description>Introduction System engineers are used to CSV files. They may be considered as a good bridge between Excel and the CLI. They are also a common way to format the output of a script so data can be exploited easily from command lines tools such as sort , awk,uniq, grep, and so on.
 The point is that when there is a significant amount of data, parsing it with shell may be painful and extremely slow.</description>
@@ -59,7 +61,7 @@ The point is that when there is a significant amount of data, parsing it with sh
       <title>Being a better public speaker with a little help of Speech Recognition, Javascript and Chrome</title>
       <link>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</link>
       <pubDate>Fri, 09 Sep 2016 13:39:50 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</guid>
       <description>Introduction I usually don&amp;rsquo;t like slidewares.
 Actually as IT engineer working, by now, exclusively in France, I&amp;rsquo;m facing the PowerPoint problem:
@@ -71,7 +73,7 @@ I won&amp;rsquo;t redo the introduction I already did in a previous post but ind
       <title>Getting weather data from the station to the raspberry</title>
       <link>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</guid>
       <description>Introduction A bunch of friends/colleagues offered me a raspberry pi 3. It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe the center of an alarm&amp;hellip;. Maybe a spotify player&amp;hellip;
 Anyway, I have installed raspbian and I&amp;rsquo;m now playing with it.
@@ -82,7 +84,7 @@ Yesterday evening, as I was about to go to bed, I&amp;rsquo;ve had a very bad id
       <title>ethereum</title>
       <link>https://blog.owulveryck.info/2016/08/20/ethereum.html</link>
       <pubDate>Sat, 20 Aug 2016 21:45:37 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/08/20/ethereum.html</guid>
       <description>The greeter: https://www.ethereum.org/greeter
 Installation From sources:
@@ -94,7 +96,7 @@ cd $GOPATH/src/github.com/ethereum git clone https://github.com/ethereum/go-ethe
       <title>hmm explained</title>
       <link>https://blog.owulveryck.info/2016/07/29/hmm-explained.html</link>
       <pubDate>Fri, 29 Jul 2016 09:51:12 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/07/29/hmm-explained.html</guid>
       <description>It&amp;rsquo;s been about a year that I started to read the tutorial on Hidden Markov Models and selected applications in speech recognition from Lawrence R. Rabiner.
 This paper is a reference in term of HMM application. The problem was that even with a lot of effort and concentration, I was lacking a bunch of skills to fully understand it. As I&amp;rsquo;ve now studied a bit, with the support of Coursera and the lectures of Andrew Ng, I will try to dig into it again.</description>
@@ -104,7 +106,7 @@ This paper is a reference in term of HMM application. The problem was that even 
       <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote</title>
       <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</link>
       <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</guid>
       <description>the goal As all my peers, I have the opportunity to talk about different technological aspects. As all my peers, I&amp;rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).
 In this post I won&amp;rsquo;t dig into what&amp;rsquo;s good or not to put in a presentation, and if that&amp;rsquo;s what interest you, I recommend you to take a look at Garr Reynold&amp;rsquo;s tips and tricks.
@@ -115,7 +117,7 @@ Steve Jobs said:</description>
       <title>Which solution should I choose? Don&#39;t think too much and ask a bot!</title>
       <link>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html</link>
       <pubDate>Fri, 20 May 2016 12:50:59 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html</guid>
       <description>Let me tell you a story: the why! A year ago, one of those Sunday morning where spring starts to warm up the souls, I went, as usual to my favorite bakery. The family tradition is to come back with a bunch of &amp;ldquo;Pains au Chocolat&amp;rdquo; (which, are, you can trust me, simply excellent).
  hello sir, I&amp;rsquo;d like 4 of your excellent &amp;ldquo;pains au chocolat&amp;rdquo; please I&amp;rsquo;m sorry, I don&amp;rsquo;t have any &amp;ldquo;pains au chocolat&amp;rdquo; nor any &amp;ldquo;croissant&amp;rdquo; anymore what?</description>
@@ -125,7 +127,7 @@ Steve Jobs said:</description>
       <title>dotscale2016</title>
       <link>https://blog.owulveryck.info/2016/04/25/dotscale2016.html</link>
       <pubDate>Mon, 25 Apr 2016 10:06:01 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/04/25/dotscale2016.html</guid>
       <description>I&amp;rsquo;ve had the opportunity to attend the dotScale conference in Paris.</description>
     </item>
@@ -134,7 +136,7 @@ Steve Jobs said:</description>
       <title>RVM from a USB stick on a Chromebook</title>
       <link>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook.html</link>
       <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook.html</guid>
       <description>Introduction Opening remarks I&amp;rsquo;m not a Ruby developer, and I&amp;rsquo;m heavily discovering the ecosystem by now. This are my notes, and if anything seems wrong to you, do not hesitate to send me remarks.
 The scenario For testing purpose, I wanted to play with vagrant-aws and more generally with ruby on my Chromebook.
@@ -145,7 +147,7 @@ Vagrant does not support rubygems as installation method anymore (see Mitchell H
       <title>markov2</title>
       <link>https://blog.owulveryck.info/2016/03/22/markov2.html</link>
       <pubDate>Tue, 22 Mar 2016 07:33:42 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/03/22/markov2.html</guid>
       <description>What we do here is online learning because it is not possible to provide a set of data. Actually, if the expectation is part of predetermined vector of states (${start, stop, confgure,&amp;hellip;}) for any topology, the way to achieve the goal and reach the state is different for every topology (the deployement plan is different).
 the definition of the universe We have to define the universe in which our machine evolve in order to bound the events that may interact with it.</description>
@@ -155,7 +157,7 @@ the definition of the universe We have to define the universe in which our machi
       <title>Is there a Markov model hidden in the choreography?</title>
       <link>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography.html</link>
       <pubDate>Mon, 29 Feb 2016 20:55:01 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography.html</guid>
       <description>Introduction In my last post I introduced the notion of choreography as a way to deploy an manage application. It could be possible to implement self-healing, elasticity and in a certain extent self awareness.
 To do so, we must not rely on the certainty and the determinism of the automated tasks. Mark Burgess explains in his book in search of certainty that none should consider the command and control anymore.</description>
@@ -165,7 +167,7 @@ To do so, we must not rely on the certainty and the determinism of the automated
       <title>cfg mgm camp</title>
       <link>https://blog.owulveryck.info/2016/02/01/cfg-mgm-camp.html</link>
       <pubDate>Mon, 01 Feb 2016 09:42:15 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/02/01/cfg-mgm-camp.html</guid>
       <description>To reach the next level we must stop doing configuration management from scarcity to abundance The problem is now:
 * How do we choose and manage software *  this is the age of big software Actually: knoledge scarce&amp;hellip;
@@ -175,10 +177,10 @@ the modeling language the modeling language for applicatios * model the software
     
     <item>
       <title>cfg mgm camp</title>
-      <link>https://blog.owulveryck.info/2016/02/01/cfg-mgm-camp.html</link>
+      <link>https://blog.owulveryck.info/content/post/cfg-mgm-camp.html</link>
       <pubDate>Mon, 01 Feb 2016 09:41:45 +0100</pubDate>
-      
-      <guid>https://blog.owulveryck.info/2016/02/01/cfg-mgm-camp.html</guid>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/content/post/cfg-mgm-camp.html</guid>
       <description></description>
     </item>
     
@@ -186,7 +188,7 @@ the modeling language the modeling language for applicatios * model the software
       <title>nas for macos on freebsd</title>
       <link>https://blog.owulveryck.info/2016/01/30/nas-for-macos-on-freebsd.html</link>
       <pubDate>Sat, 30 Jan 2016 11:35:36 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/01/30/nas-for-macos-on-freebsd.html</guid>
       <description> Creating the jail:
 iocage create tag=nas resolver=&amp;#34;nameserver 192.168.1.1&amp;#34; hostname=&amp;#34;nas&amp;#34; ip4_addr=&amp;#34;lo1|192.168.1.100/24&amp;#34; mDNSresponder </description>
@@ -196,7 +198,7 @@ iocage create tag=nas resolver=&amp;#34;nameserver 192.168.1.1&amp;#34; hostname
       <title>Setting up my new BSD box</title>
       <link>https://blog.owulveryck.info/2016/01/24/setting-up-my-new-bsd-box.html</link>
       <pubDate>Sun, 24 Jan 2016 15:25:54 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/01/24/setting-up-my-new-bsd-box.html</guid>
       <description>About the server I have subscribed for a now dedicated BSD box. The provider is OVH, and this box is hosted in Canada.
 It&amp;rsquo;s been a few years since I first subscribed a box a OVH, and I really enjoy their service.
@@ -207,7 +209,7 @@ The main usage for this box is a geek box. I use it to exeperiment some stuffs, 
       <title>Playing with (Openstack) Keystone</title>
       <link>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone.html</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone.html</guid>
       <description>In the cloud computing, alongside of the hosting monsters such as amazon or google, there is the Openstack Platform.
 Openstack is not a single software, it is more a galaxy of components aim to control the infrastructure, such as hardware pools, storage, network. The management can then be done via a Web based interface or via a bunch of RESTful API.

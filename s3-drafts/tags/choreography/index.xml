@@ -6,7 +6,9 @@
     <description>Recent content in Choreography on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Wed, 10 Feb 2016 17:19:47 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/choreography/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Configuration management, choreography and self-aware applications</title>
       <link>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications.html</link>
       <pubDate>Wed, 10 Feb 2016 17:19:47 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/02/10/configuration-management-choreography-and-self-aware-applications.html</guid>
       <description>Thanks to the company I&amp;rsquo;m working for (Techsys) I&amp;rsquo;ve had the opportunity to attend the configuration management camp in Gent (be) for its 2016 edition.
 I really enjoyed those two days of talks, watching people present different ideas of a possible future for the infrastructure and deployment engineering. Beyond the technical demonstrations and the experience sharing, I&amp;rsquo;ve spotted a bunch of ideas

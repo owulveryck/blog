@@ -6,7 +6,9 @@
     <description>Recent content in Rest on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Tue, 17 Nov 2015 10:05:42 +0000</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/rest/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Playing with (Openstack) Keystone</title>
       <link>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone.html</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone.html</guid>
       <description>In the cloud computing, alongside of the hosting monsters such as amazon or google, there is the Openstack Platform.
 Openstack is not a single software, it is more a galaxy of components aim to control the infrastructure, such as hardware pools, storage, network. The management can then be done via a Web based interface or via a bunch of RESTful API.
@@ -27,7 +29,7 @@ I would like to evaluate its identity service named keystone and use it as a Aut
       <title>Simple IaaS API documentation with swagger</title>
       <link>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html</link>
       <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html</guid>
       <description>In a previous post I have explained how to develop a very simple API server.
 Without the associated documentation, the API will be useless. Let&amp;rsquo;s see how we can use swagger-ui in this project to generate a beautiful documentation.
@@ -39,7 +41,7 @@ About Swagger Swagger is a framework. On top of the swagger project is composed 
       <title>IaaS-like RESTfull API based on microservices</title>
       <link>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</link>
       <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</guid>
       <description>Abstracts Recently, I&amp;rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.
 I am reading more and more about the &amp;ldquo;API economy&amp;rdquo;

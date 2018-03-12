@@ -6,7 +6,9 @@
     <description>Recent content in Udev on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Mon, 29 Aug 2016 21:58:17 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/udev/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Getting weather data from the station to the raspberry</title>
       <link>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</guid>
       <description>Introduction A bunch of friends/colleagues offered me a raspberry pi 3. It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe the center of an alarm&amp;hellip;. Maybe a spotify player&amp;hellip;
 Anyway, I have installed raspbian and I&amp;rsquo;m now playing with it.

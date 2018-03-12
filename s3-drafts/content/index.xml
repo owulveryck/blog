@@ -6,7 +6,9 @@
     <description>Recent content in Contents on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Mon, 01 Feb 2016 09:41:45 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/content/index.xml" rel="self" type="application/rss+xml" />
@@ -14,10 +16,10 @@
     
     <item>
       <title>cfg mgm camp</title>
-      <link>https://blog.owulveryck.info/2016/02/01/cfg-mgm-camp.html</link>
+      <link>https://blog.owulveryck.info/content/post/cfg-mgm-camp.html</link>
       <pubDate>Mon, 01 Feb 2016 09:41:45 +0100</pubDate>
-      
-      <guid>https://blog.owulveryck.info/2016/02/01/cfg-mgm-camp.html</guid>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/content/post/cfg-mgm-camp.html</guid>
       <description></description>
     </item>
     

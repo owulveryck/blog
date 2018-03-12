@@ -6,7 +6,9 @@
     <description>Recent content in Api on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Fri, 13 Nov 2015 09:21:30 +0000</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/tags/api/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Securing the API (in GO)</title>
       <link>https://blog.owulveryck.info/2015/11/13/securing-the-api-in-go.html</link>
       <pubDate>Fri, 13 Nov 2015 09:21:30 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/13/securing-the-api-in-go.html</guid>
       <description>I&amp;rsquo;ve created a couple of posts about creating an API (mainly in GO). By now, the API is open. Now I will implement a basic authentication and accreditation mechanism with a little help from JWT
 What is a Json Web Token According to the RFC 7519, it is a
@@ -27,7 +29,7 @@ What is a Json Web Token According to the RFC 7519, it is a
       <title>Simple IaaS API documentation with swagger</title>
       <link>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html</link>
       <pubDate>Wed, 11 Nov 2015 14:24:43 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html</guid>
       <description>In a previous post I have explained how to develop a very simple API server.
 Without the associated documentation, the API will be useless. Let&amp;rsquo;s see how we can use swagger-ui in this project to generate a beautiful documentation.
@@ -39,7 +41,7 @@ About Swagger Swagger is a framework. On top of the swagger project is composed 
       <title>IaaS-like RESTfull API based on microservices</title>
       <link>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</link>
       <pubDate>Tue, 10 Nov 2015 08:56:36 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/10/iaas-like-restfull-api-based-on-microservices.html</guid>
       <description>Abstracts Recently, I&amp;rsquo;ve been looking at the principles of a middleware layer and especially on how a RESTFULL API could glue different IT services together.
 I am reading more and more about the &amp;ldquo;API economy&amp;rdquo;

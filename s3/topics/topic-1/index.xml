@@ -6,7 +6,9 @@
     <description>Recent content in Topic 1 on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>All rights reserved - 2015/2017</copyright>
+    <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
+    <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
+    <copyright>All rights reserved</copyright>
     <lastBuildDate>Fri, 16 Dec 2016 14:51:18 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/topics/topic-1/index.xml" rel="self" type="application/rss+xml" />
@@ -16,7 +18,7 @@
       <title>Image reKognition with a webcam, go and AWS.</title>
       <link>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html</link>
       <pubDate>Fri, 16 Dec 2016 14:51:18 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html</guid>
       <description>It&amp;rsquo;s been a while since I last posted something. I will fill the gap with a quick post about rekognition.
 rekognition is a service from AWS that is described as:
@@ -30,7 +32,7 @@ The part of the result I will focus on is the emotion.</description>
       <title>Processing CSV files with golang, python and perl</title>
       <link>https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl.html</link>
       <pubDate>Sun, 11 Sep 2016 20:27:49 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/09/11/processing-csv-files-with-golang-python-and-perl.html</guid>
       <description>Introduction System engineers are used to CSV files. They may be considered as a good bridge between Excel and the CLI. They are also a common way to format the output of a script so data can be exploited easily from command lines tools such as sort , awk,uniq, grep, and so on.
 The point is that when there is a significant amount of data, parsing it with shell may be painful and extremely slow.</description>
@@ -40,7 +42,7 @@ The point is that when there is a significant amount of data, parsing it with sh
       <title>Being a better public speaker with a little help of Speech Recognition, Javascript and Chrome</title>
       <link>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</link>
       <pubDate>Fri, 09 Sep 2016 13:39:50 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/09/09/being-a-better-public-speaker-with-a-little-help-of-speech-recognition-javascript-and-chrome.html</guid>
       <description>Introduction I usually don&amp;rsquo;t like slidewares.
 Actually as IT engineer working, by now, exclusively in France, I&amp;rsquo;m facing the PowerPoint problem:
@@ -52,7 +54,7 @@ I won&amp;rsquo;t redo the introduction I already did in a previous post but ind
       <title>Getting weather data from the station to the raspberry</title>
       <link>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</link>
       <pubDate>Mon, 29 Aug 2016 21:58:17 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/08/29/getting-weather-data-from-the-station-to-the-raspberry.html</guid>
       <description>Introduction A bunch of friends/colleagues offered me a raspberry pi 3. It may become my VPN gateway, or my firewall, or the brain of my CCTV, or maybe the center of an alarm&amp;hellip;. Maybe a spotify player&amp;hellip;
 Anyway, I have installed raspbian and I&amp;rsquo;m now playing with it.
@@ -63,7 +65,7 @@ Yesterday evening, as I was about to go to bed, I&amp;rsquo;ve had a very bad id
       <title>Websockets, Reveal.js, D3 and GO for a dynamic keynote</title>
       <link>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</link>
       <pubDate>Thu, 23 Jun 2016 15:32:54 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html</guid>
       <description>the goal As all my peers, I have the opportunity to talk about different technological aspects. As all my peers, I&amp;rsquo;m asked to present a bunch of slides (powerpoint or keynote, or whatever).
 In this post I won&amp;rsquo;t dig into what&amp;rsquo;s good or not to put in a presentation, and if that&amp;rsquo;s what interest you, I recommend you to take a look at Garr Reynold&amp;rsquo;s tips and tricks.
@@ -74,7 +76,7 @@ Steve Jobs said:</description>
       <title>Which solution should I choose? Don&#39;t think too much and ask a bot!</title>
       <link>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html</link>
       <pubDate>Fri, 20 May 2016 12:50:59 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html</guid>
       <description>Let me tell you a story: the why! A year ago, one of those Sunday morning where spring starts to warm up the souls, I went, as usual to my favorite bakery. The family tradition is to come back with a bunch of &amp;ldquo;Pains au Chocolat&amp;rdquo; (which, are, you can trust me, simply excellent).
  hello sir, I&amp;rsquo;d like 4 of your excellent &amp;ldquo;pains au chocolat&amp;rdquo; please I&amp;rsquo;m sorry, I don&amp;rsquo;t have any &amp;ldquo;pains au chocolat&amp;rdquo; nor any &amp;ldquo;croissant&amp;rdquo; anymore what?</description>
@@ -84,7 +86,7 @@ Steve Jobs said:</description>
       <title>RVM from a USB stick on a Chromebook</title>
       <link>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook.html</link>
       <pubDate>Thu, 31 Mar 2016 10:23:02 +0200</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/03/31/rvm-from-a-usb-stick-on-a-chromebook.html</guid>
       <description>Introduction Opening remarks I&amp;rsquo;m not a Ruby developer, and I&amp;rsquo;m heavily discovering the ecosystem by now. This are my notes, and if anything seems wrong to you, do not hesitate to send me remarks.
 The scenario For testing purpose, I wanted to play with vagrant-aws and more generally with ruby on my Chromebook.
@@ -95,7 +97,7 @@ Vagrant does not support rubygems as installation method anymore (see Mitchell H
       <title>Is there a Markov model hidden in the choreography?</title>
       <link>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography.html</link>
       <pubDate>Mon, 29 Feb 2016 20:55:01 +0100</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2016/02/29/is-there-a-markov-model-hidden-in-the-choreography.html</guid>
       <description>Introduction In my last post I introduced the notion of choreography as a way to deploy an manage application. It could be possible to implement self-healing, elasticity and in a certain extent self awareness.
 To do so, we must not rely on the certainty and the determinism of the automated tasks. Mark Burgess explains in his book in search of certainty that none should consider the command and control anymore.</description>
@@ -105,7 +107,7 @@ To do so, we must not rely on the certainty and the determinism of the automated
       <title>Playing with (Openstack) Keystone</title>
       <link>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone.html</link>
       <pubDate>Tue, 17 Nov 2015 10:05:42 +0000</pubDate>
-      
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2015/11/17/playing-with-openstack-keystone.html</guid>
       <description>In the cloud computing, alongside of the hosting monsters such as amazon or google, there is the Openstack Platform.
 Openstack is not a single software, it is more a galaxy of components aim to control the infrastructure, such as hardware pools, storage, network. The management can then be done via a Web based interface or via a bunch of RESTful API.

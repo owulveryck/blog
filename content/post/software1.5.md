@@ -1,6 +1,6 @@
 +++
 images = ["/assets/lstm/LSTM-cell.png"]
-description = "From sfotware 1.0 to software 2.0. A little story of why I made a parser in go"
+description = "From software 1.0 to software 2.0. A little story of why I made a parser in go"
 draft = false
 title = "Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go"
 date = 2017-12-18T16:47:27+01:00
@@ -11,7 +11,7 @@ In a previous article, I described an implementation of an RNN from scratch in g
 The target is to use the RNN as a processing unit. The ultimate goal is to create a portable tool cross platform and able to grab and process data where they are.
 I have many applications in mind such as finding the root-cause of an incident or managing the capacity of an infrastructure. 
 
-_Note_ I stick to the go language for many reasons: 
+_Note_ I stick to the Go language for many reasons: 
 Some of them a personnal and not opposable (I simply like it). But another reason is that, in a distant future, this tool could act as a node of a processing network that would communicate via a tuple space (see my previous posts about Linda [here](https://blog.owulveryck.info/2017/02/03/linda-31yo-with-5-starving-philosophers....html), [here](https://blog.owulveryck.info/2017/02/28/to-go-and-touch-lindas-lisp.html) and [here](https://blog.owulveryck.info/2017/03/13/lindas-evalc-a-tuplespace-oddity.html).
 
 All the node would work in a choreography. The set of nodes would be a kind of distributed bot that could monitor a complete IT system. But that's for another story in a couple of years...
@@ -20,7 +20,7 @@ Back to 2017-2018: the purpose of this article is to describe a way to code in s
 
 I will first explain the concepts.
 Then I will explain why a LSTM (a certain kind of neural network) is a software 2.0.
-Then I will describe a way to parse and execute this software 2.0 on a machine coded in go (software 1.0).
+Then I will describe a way to parse and execute this software 2.0 on a machine coded in Go (software 1.0).
 
 # Considerations about software 1.0 and software 2.0
 
@@ -73,7 +73,7 @@ Form more information about LSTM, I strongly encourage you to read [Understandin
 
 ## LSTM
 
-LSTM are a bit more complex than vanilla RNN. Therefore, a naive go implementation as made for the RNN is harder to code.
+LSTM are a bit more complex than vanilla RNN. Therefore, a naive Go implementation as made for the RNN is harder to code.
 
 As one of my goal is to understand how things deeply works (some articles such as "[Yes you should understand backprop](https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b)" makes me confident that it is not a waste of time).
 
@@ -339,7 +339,7 @@ You can find the complete implementation [here](https://raw.githubusercontent.co
 
 ### Generating the package
 
-This is the "pure" go part.
+This is the "pure" Go part.
 The yacc tools actually generates a parser in go. I have chosen to declare it in its own package.
 The command `goyacc -o ../expr.go -p "Gorgonia" expr.y` will generate the file `expr.go` which holds an implementation able to parse my unicode equations.
 
