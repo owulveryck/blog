@@ -9,6 +9,11 @@
 <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 
@@ -16,6 +21,8 @@
 <meta name="msapplication-navbutton-color" content="#f8f5ec">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
 
 
 <meta name="author" content="Olivier Wulveryck" /><meta name="description" content="From software 1.0 to software 2.0. A little story of why I made a parser in go" />
@@ -26,10 +33,12 @@
 
 
 
-<meta name="generator" content="Hugo 0.37.1" />
+<meta name="generator" content="Hugo 0.38.2" />
 
 
 <link rel="canonical" href="https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html" />
+
+
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -106,6 +115,8 @@ ga('send', 'pageview');
 </script>
 <script async src='//www.google-analytics.com/analytics.js'></script>
 
+
+
 </head>
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
@@ -136,9 +147,16 @@ ga('send', 'pageview');
 <nav class="site-navbar">
   <ul id="menu" class="menu">
     <li class="menu-item">
-        <a class="menu-item-link" href="https://about.me/owulveryck">About the Author</a>
+        
+        <a class="menu-item-link" href="https://about.me/owulveryck" target="_blank">
+          About the Author
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
       </li><li class="menu-item">
+        
         <a class="menu-item-link" href="/">Home</a>
+        
       </li>
   </ul>
 </nav>
@@ -152,7 +170,7 @@ ga('send', 'pageview');
     
     <header class="post-header">
       <h1 class="post-title">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</h1>
-
+      
       <div class="post-meta">
         <span class="post-time"> 2017-12-18 </span>
         
@@ -165,8 +183,7 @@ ga('send', 'pageview');
     
 <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">Table of Contents</h2>
-  
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
 <ul>
 <li><a href="#considerations-about-software-1-0-and-software-2-0">Considerations about software 1.0 and software 2.0</a>
@@ -226,7 +243,7 @@ Then I will describe a way to parse and execute this software 2.0 on a machine c
 
 <h2 id="what-is-a-software">What is a software?</h2>
 
-<p>It is sequence of bits and bytes that can be computed, and that produces a result (the solution of a problem for example).</p>
+<p>It is a sequence of bits and bytes that can be computed, and that produces a result (the solution of a problem for example).</p>
 
 <p>To build a software until now, a compiler is used. Its goal is to turn a &ldquo;human readable sequence of characters&rdquo;, called code, into the sequence of bytes.</p>
 
@@ -249,7 +266,7 @@ The idea is similar to any software: a compiler is used to turn a sequence of co
 
 <p>For example:</p>
 
-<p>A programmer <strong>cannot</strong> write an algorithm that will <strong>solve a specific problem</strong> (ex: I need to recognize a cat on any photo).</p>
+<p>A programmer <strong>cannot</strong> write an algorithm that will <strong>solve a specific problem</strong> (ex: I need to recognize a cat in photo).</p>
 
 <p>So, the programmer will write a set of equations <strong>able to solve a kind of problem</strong> (recognize objects on any photo).</p>
 
@@ -596,6 +613,11 @@ It would then be independent of the execution machine. A parser could transpile 
       
       <nav class="post-nav">
         
+          <a class="prev" href="/2018/01/06/chromiumos-macbook.html">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Chromiumos Macbook</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
         
           <a class="next" href="/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html">
             <span class="next-text nav-default">About Recurrent Neural Network, Shakespeare and GO</span>
@@ -605,6 +627,7 @@ It would then be independent of the execution machine. A parser could transpile 
       </nav>
     </footer>
     
+
   <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
       Show Disqus Comments
     </div>
@@ -627,6 +650,8 @@ It would then be independent of the execution machine. A parser could transpile 
     
 
   
+
+  
   </article>
         </div>
       </div>
@@ -634,9 +659,15 @@ It would then be independent of the execution machine. A parser could transpile 
 
     <footer id="footer" class="footer">
       <div class="social-links">
-      <a href="https://twitter.com/owulveryck" class="iconfont icon-twitter" title="twitter"></a>
-      <a href="owulveryck" class="iconfont icon-itter" title="itter"></a>
-  <a href="https://blog.owulveryck.info/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+      <a href="https://twitter.com/owulveryck" rel="me" class="iconfont icon-twitter" 
+        title="twitter" target="_blank">
+      </a>
+      <a href="owulveryck" rel="me" class="iconfont icon-itter" 
+        title="itter" target="_blank">
+      </a>
+  <a href="https://blog.owulveryck.info/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
 </div>
 
 <div class="copyright">

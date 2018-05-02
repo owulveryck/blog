@@ -9,6 +9,11 @@
 <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 
@@ -16,6 +21,8 @@
 <meta name="msapplication-navbutton-color" content="#f8f5ec">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
 
 
 <meta name="author" content="Olivier Wulveryck" /><meta name="description" content="Is this post about Machine Learning? Well, not really, but it is highly related. In this post I will explain how to use a web browser to get information about the environment (pictures and sound). Then, I will present a simple way to process and interact with this information. Why do I do that? At first, simply because I am (trying) to play with tensorflow, chatbots etc, and I need a simple way to grab information to create a training set... But with the evolution of my code, I am now using it alongside with the cloud API of AWS. Welcome to my world." />
@@ -26,10 +33,12 @@
 
 
 
-<meta name="generator" content="Hugo 0.37.1" />
+<meta name="generator" content="Hugo 0.38.2" />
 
 
 <link rel="canonical" href="https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html" />
+
+
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -106,6 +115,8 @@ ga('send', 'pageview');
 </script>
 <script async src='//www.google-analytics.com/analytics.js'></script>
 
+
+
 </head>
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
@@ -136,9 +147,16 @@ ga('send', 'pageview');
 <nav class="site-navbar">
   <ul id="menu" class="menu">
     <li class="menu-item">
-        <a class="menu-item-link" href="https://about.me/owulveryck">About the Author</a>
+        
+        <a class="menu-item-link" href="https://about.me/owulveryck" target="_blank">
+          About the Author
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
       </li><li class="menu-item">
+        
         <a class="menu-item-link" href="/">Home</a>
+        
       </li>
   </ul>
 </nav>
@@ -152,7 +170,7 @@ ga('send', 'pageview');
     
     <header class="post-header">
       <h1 class="post-title">Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM</h1>
-
+      
       <div class="post-meta">
         <span class="post-time"> 2017-05-16 </span>
         
@@ -165,8 +183,7 @@ ga('send', 'pageview');
     
 <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">Table of Contents</h2>
-  
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
 <ul>
 <li>
@@ -290,9 +307,9 @@ That means for example that you can train a neuron network on GCP (so you don&rs
 <p>Here is the code to get access to the camera and display the video stream:</p>
 
 <p><em>html</em>
-<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">body</span><span class="p"></span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">video</span> <span class="na">autoplay</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;webcam&#34;</span><span class="p"></span><span class="p">&gt;&lt;</span><span class="p">/</span><span class="nt">video</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="p">/</span><span class="nt">body</span><span class="p">&gt;</span></code></pre></div></p>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">video</span> <span class="na">autoplay</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;webcam&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">video</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span></code></pre></div></p>
 
 <p><em>Javascript</em>
 <div class="highlight"><pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// use MediaDevices API
@@ -609,6 +626,7 @@ I imagine a simple web app (no need for an APK), that would warn you when it see
       </nav>
     </footer>
     
+
   <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
       Show Disqus Comments
     </div>
@@ -631,6 +649,8 @@ I imagine a simple web app (no need for an APK), that would warn you when it see
     
 
   
+
+  
   </article>
         </div>
       </div>
@@ -638,9 +658,15 @@ I imagine a simple web app (no need for an APK), that would warn you when it see
 
     <footer id="footer" class="footer">
       <div class="social-links">
-      <a href="https://twitter.com/owulveryck" class="iconfont icon-twitter" title="twitter"></a>
-      <a href="owulveryck" class="iconfont icon-itter" title="itter"></a>
-  <a href="https://blog.owulveryck.info/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+      <a href="https://twitter.com/owulveryck" rel="me" class="iconfont icon-twitter" 
+        title="twitter" target="_blank">
+      </a>
+      <a href="owulveryck" rel="me" class="iconfont icon-itter" 
+        title="itter" target="_blank">
+      </a>
+  <a href="https://blog.owulveryck.info/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
 </div>
 
 <div class="copyright">

@@ -9,10 +9,36 @@
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved</copyright>
-    <lastBuildDate>Mon, 18 Dec 2017 16:47:27 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 12 Feb 2018 20:49:15 +0100</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Burgess 2018</title>
+      <link>https://blog.owulveryck.info/2018/02/12/burgess-2018.html</link>
+      <pubDate>Mon, 12 Feb 2018 20:49:15 +0100</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2018/02/12/burgess-2018.html</guid>
+      <description>A brief history of configuration (managing sprawl) The video
+ ConfigManagement was the cure for VMSprawl.. what&amp;#39;s the cure for ContainerSprawl ? #devoops
+&amp;mdash; Kris Buytaert (@KrisBuytaert) September 16, 2017  
+At the very begining we were doing stuffs manually. Then CFEngine is born; the problem was it had to address special needs because every student has special needs
+There is a difference between what is happening quickly and what is happening slowly.</description>
+    </item>
+    
+    <item>
+      <title>Chromiumos Macbook</title>
+      <link>https://blog.owulveryck.info/2018/01/06/chromiumos-macbook.html</link>
+      <pubDate>Sat, 06 Jan 2018 09:24:39 +0100</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2018/01/06/chromiumos-macbook.html</guid>
+      <description>From ubuntu 14.04 first update
+ChromiumOS developer guide
+sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools python-pkg-resources python-virtualenv
+Install depot_tools Description:
+ The Chromium depot_tools suite contains many tools to assist/augment the Chromium development environment. The tools may be downloaded from here. There are two primary categories of tools. Some of these tools are essential to the development flow, in the sense that you cannot successfully develop Chromium without them.</description>
+    </item>
     
     <item>
       <title>Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</title>
@@ -21,7 +47,7 @@
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html</guid>
       <description>In a previous article, I described an implementation of an RNN from scratch in go. The target is to use the RNN as a processing unit. The ultimate goal is to create a portable tool cross platform and able to grab and process data where they are. I have many applications in mind such as finding the root-cause of an incident or managing the capacity of an infrastructure.
-Note I stick to the go language for many reasons: Some of them a personnal and not opposable (I simply like it).</description>
+Note I stick to the Go language for many reasons: Some of them a personnal and not opposable (I simply like it).</description>
     </item>
     
     <item>

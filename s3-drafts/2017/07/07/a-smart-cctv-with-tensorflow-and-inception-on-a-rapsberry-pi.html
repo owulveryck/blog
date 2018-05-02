@@ -9,6 +9,11 @@
 <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 
@@ -16,6 +21,8 @@
 <meta name="msapplication-navbutton-color" content="#f8f5ec">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
 
 
 <meta name="author" content="Olivier Wulveryck" /><meta name="description" content="Imagine a CCTV at home that would trigger an alert when it detects a movement. Ok, this is easy. Imagine a CCTV that would trigger an alert when it detects a human. A little bit trickier. Now imagine a CCTV that would trigger an alert when it sees someone who is not from the family." />
@@ -26,10 +33,12 @@
 
 
 
-<meta name="generator" content="Hugo 0.37.1" />
+<meta name="generator" content="Hugo 0.38.2" />
 
 
 <link rel="canonical" href="https://blog.owulveryck.info/2017/07/07/a-smart-cctv-with-tensorflow-and-inception-on-a-rapsberry-pi.html" />
+
+
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -76,7 +85,7 @@
 
 <meta itemprop="datePublished" content="2017-07-07T21:06:46&#43;02:00" />
 <meta itemprop="dateModified" content="2017-07-07T21:06:46&#43;02:00" />
-<meta itemprop="wordCount" content="2362">
+<meta itemprop="wordCount" content="2348">
 
   <meta itemprop="image" content="https://blog.owulveryck.info/assets/images/tensorflowserving-4.png">
 
@@ -105,6 +114,8 @@ ga('create', 'UA-69673850-1', 'auto');
 ga('send', 'pageview');
 </script>
 <script async src='//www.google-analytics.com/analytics.js'></script>
+
+
 
 </head>
 <body>
@@ -136,9 +147,16 @@ ga('send', 'pageview');
 <nav class="site-navbar">
   <ul id="menu" class="menu">
     <li class="menu-item">
-        <a class="menu-item-link" href="https://about.me/owulveryck">About the Author</a>
+        
+        <a class="menu-item-link" href="https://about.me/owulveryck" target="_blank">
+          About the Author
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
       </li><li class="menu-item">
+        
         <a class="menu-item-link" href="/">Home</a>
+        
       </li>
   </ul>
 </nav>
@@ -152,11 +170,11 @@ ga('send', 'pageview');
     
     <header class="post-header">
       <h1 class="post-title">A &#34;Smart&#34; CCTV with Tensorflow, and Inception? On a rapsberry pi?</h1>
-
+      
       <div class="post-meta">
         <span class="post-time"> 2017-07-07 </span>
         
-        <span class="more-meta"> 2362 words </span>
+        <span class="more-meta"> 2348 words </span>
         <span class="more-meta"> 12 min read </span>
       </div>
     </header>
@@ -165,8 +183,7 @@ ga('send', 'pageview');
     
 <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">Table of Contents</h2>
-  
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
 <ul>
 <li><a href="#machine-learning-and-computer-vision">Machine learning and computer vision</a>
@@ -356,9 +373,7 @@ Nowadays it is easy to get training set for free (as in free speech) on the web.
 
 <p><em>Note</em> You can see that, by offering services, the GAFA is increasing its training set to make their service more powerful than ever.
 <center>
-<blockquote class="twitter-tweet"><p lang="en" dir="ltr">2007: “You are the product.”<br><br>2017: “You are the training data.”</p>&mdash; Chris Albon (@chrisalbon) <a href="https://twitter.com/chrisalbon/status/857609299731791872?ref_src=twsrc%5Etfw">April 27, 2017</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
+&lt; tweet 857609299731791872 &gt;
 </center></p>
 
 <p>Let&rsquo;s get back to my experiment:
@@ -525,6 +540,7 @@ To do that I need to train the neuron network to classify classes such as:</p>
       </nav>
     </footer>
     
+
   <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
       Show Disqus Comments
     </div>
@@ -547,6 +563,8 @@ To do that I need to train the neuron network to classify classes such as:</p>
     
 
   
+
+  
   </article>
         </div>
       </div>
@@ -554,9 +572,15 @@ To do that I need to train the neuron network to classify classes such as:</p>
 
     <footer id="footer" class="footer">
       <div class="social-links">
-      <a href="https://twitter.com/owulveryck" class="iconfont icon-twitter" title="twitter"></a>
-      <a href="owulveryck" class="iconfont icon-itter" title="itter"></a>
-  <a href="https://blog.owulveryck.info/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+      <a href="https://twitter.com/owulveryck" rel="me" class="iconfont icon-twitter" 
+        title="twitter" target="_blank">
+      </a>
+      <a href="owulveryck" rel="me" class="iconfont icon-itter" 
+        title="itter" target="_blank">
+      </a>
+  <a href="https://blog.owulveryck.info/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
 </div>
 
 <div class="copyright">

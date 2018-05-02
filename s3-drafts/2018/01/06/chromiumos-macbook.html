@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Chromiumos Macbook - Unladen swallow</title>
+  <link rel="alternate" hreflang="en-us" href="https://blog.owulveryck.info/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+
+<meta name="author" content="Olivier Wulveryck" />
+  <meta name="description" content="From ubuntu 14.04 first update
+ChromiumOS developer guide
+sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools python-pkg-resources python-virtualenv
+Install depot_tools Description:
+ The Chromium depot_tools suite contains many tools to assist/augment the Chromium development environment. The tools may be downloaded from here. There are two primary categories of tools. Some of these tools are essential to the development flow, in the sense that you cannot successfully develop Chromium without them." />
+
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.38.2" />
+
+
+<link rel="canonical" href="https://blog.owulveryck.info/2018/01/06/chromiumos-macbook.html" />
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+
+
+<meta property="og:title" content="Chromiumos Macbook" />
+<meta property="og:description" content="From ubuntu 14.04 first update
+ChromiumOS developer guide
+sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools python-pkg-resources python-virtualenv
+Install depot_tools Description:
+ The Chromium depot_tools suite contains many tools to assist/augment the Chromium development environment. The tools may be downloaded from here. There are two primary categories of tools. Some of these tools are essential to the development flow, in the sense that you cannot successfully develop Chromium without them." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.owulveryck.info/2018/01/06/chromiumos-macbook.html" />
+
+  <meta property="og:image" content="https://blog.owulveryck.info/2016/10/image.jpg" />
+
+
+
+<meta property="article:published_time" content="2018-01-06T09:24:39&#43;01:00"/>
+
+<meta property="article:modified_time" content="2018-01-06T09:24:39&#43;01:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Chromiumos Macbook">
+<meta itemprop="description" content="From ubuntu 14.04 first update
+ChromiumOS developer guide
+sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools python-pkg-resources python-virtualenv
+Install depot_tools Description:
+ The Chromium depot_tools suite contains many tools to assist/augment the Chromium development environment. The tools may be downloaded from here. There are two primary categories of tools. Some of these tools are essential to the development flow, in the sense that you cannot successfully develop Chromium without them.">
+
+
+<meta itemprop="datePublished" content="2018-01-06T09:24:39&#43;01:00" />
+<meta itemprop="dateModified" content="2018-01-06T09:24:39&#43;01:00" />
+<meta itemprop="wordCount" content="112">
+
+  <meta itemprop="image" content="https://blog.owulveryck.info/2016/10/image.jpg">
+
+
+
+<meta itemprop="keywords" content="tag1,tag2," />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.owulveryck.info/2016/10/image.jpg"/>
+
+<meta name="twitter:title" content="Chromiumos Macbook"/>
+<meta name="twitter:description" content="From ubuntu 14.04 first update
+ChromiumOS developer guide
+sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools python-pkg-resources python-virtualenv
+Install depot_tools Description:
+ The Chromium depot_tools suite contains many tools to assist/augment the Chromium development environment. The tools may be downloaded from here. There are two primary categories of tools. Some of these tools are essential to the development flow, in the sense that you cannot successfully develop Chromium without them."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-69673850-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Unladen swallow</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="https://about.me/owulveryck">
+        <li class="mobile-menu-item">About the Author</li>
+      </a><a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a>
+  </ul>
+</nav>
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">Unladen swallow</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        
+        <a class="menu-item-link" href="https://about.me/owulveryck" target="_blank">
+          About the Author
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
+      </li><li class="menu-item">
+        
+        <a class="menu-item-link" href="/">Home</a>
+        
+      </li>
+  </ul>
+</nav>
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">Chromiumos Macbook</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2018-01-06 </span>
+        <div class="post-category">
+            
+              <a href="/categories/category/"> category </a>
+            
+          </div>
+        <span class="more-meta"> 112 words </span>
+        <span class="more-meta"> 1 min read </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Table of Contents</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#install-depot-tools">Install depot_tools</a>
+<ul>
+<li><a href="#setup">Setup</a></li>
+<li><a href="#creating-an-overlay">Creating an overlay</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>From ubuntu 14.04
+first update</p>
+
+<p><a href="https://www.chromium.org/chromium-os/developer-guide">ChromiumOS developer guide</a></p>
+
+<p><code>sudo apt-get install git-core gitk git-gui curl lvm2 thin-provisioning-tools python-pkg-resources python-virtualenv</code></p>
+
+<h1 id="install-depot-tools">Install depot_tools</h1>
+
+<p>Description:</p>
+
+<blockquote>
+<p>The Chromium depot_tools suite contains many tools to assist/augment the Chromium development environment. The tools may be downloaded from here.
+There are two primary categories of tools. Some of these tools are essential to the development flow, in the sense that you cannot successfully develop Chromium without them.
+Other tools are merely helper tools. Not required, but they can substantially ease the development workflow.
+A listing of both categories of tools follows.</p>
+</blockquote>
+
+<h2 id="setup">Setup</h2>
+
+<p><a href="http://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html#_setting_up">depot_tools_tutorial(7) Manual Page</a></p>
+
+<h2 id="creating-an-overlay">Creating an overlay</h2>
+
+<p>the <code>make.defaults</code></p>
+
+<p>Kernel 4.14</p>
+
+<p>USE=&ldquo;${USE} legacy_keyboard legacy_power_button sse kernel-4_14&rdquo;</p>
+
+<p>the firmwares</p>
+
+    </div>
+
+    
+    
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/tag1/">tag1</a>
+          
+          <a href="/tags/tag2/">tag2</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/2018/02/12/burgess-2018.html">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Burgess 2018</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html">
+            <span class="next-text nav-default">Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</span>
+            <span class="prev-text nav-mobile">Next</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+    
+
+  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
+      Show Disqus Comments
+    </div>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    function load_disqus() {
+        
+        
+        if (window.location.hostname === 'localhost') return;
+
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        var disqus_shortname = 'owulveryck';
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+        $('#load_disqus').remove();
+    };
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    
+
+  
+
+  
+  </article>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://twitter.com/owulveryck" rel="me" class="iconfont icon-twitter" 
+        title="twitter" target="_blank">
+      </a>
+      <a href="owulveryck" rel="me" class="iconfont icon-itter" 
+        title="itter" target="_blank">
+      </a>
+  <a href="https://blog.owulveryck.info/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy; 
+    
+      2015 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">All rights reserved</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script src="/lib/highlight/highlight.pack.js?v=20171001"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script async src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+
+
+
+
+
+</body>
+</html>

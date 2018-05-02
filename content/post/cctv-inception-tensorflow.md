@@ -119,7 +119,7 @@ Nowadays it is easy to get training set for free (as in free speech) on the web.
 
 _Note_ You can see that, by offering services, the GAFA is increasing its training set to make their service more powerful than ever.
 <center>
-{{< tweet 857609299731791872 >}}
+< tweet 857609299731791872 >
 </center>
 
 Let's get back to my experiment:

@@ -9,6 +9,11 @@
 <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
 <meta http-equiv="Cache-Control" content="no-transform" />
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 
@@ -16,6 +21,8 @@
 <meta name="msapplication-navbutton-color" content="#f8f5ec">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
 
 
 <meta name="author" content="author" /><meta name="description" content="description" />
@@ -27,10 +34,12 @@
 
 
 
-<meta name="generator" content="Hugo 0.37.1" />
+<meta name="generator" content="Hugo 0.38.2" />
 
 
 <link rel="canonical" href="https://blog.owulveryck.info/2016/01/30/nas-for-macos-on-freebsd.html" />
+
+
 
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -101,6 +110,8 @@ ga('send', 'pageview');
 </script>
 <script async src='//www.google-analytics.com/analytics.js'></script>
 
+
+
 </head>
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
@@ -131,9 +142,16 @@ ga('send', 'pageview');
 <nav class="site-navbar">
   <ul id="menu" class="menu">
     <li class="menu-item">
-        <a class="menu-item-link" href="https://about.me/owulveryck">About the Author</a>
+        
+        <a class="menu-item-link" href="https://about.me/owulveryck" target="_blank">
+          About the Author
+          <i class="iconfont icon-new-window"></i>
+        </a>
+        
       </li><li class="menu-item">
+        
         <a class="menu-item-link" href="/">Home</a>
+        
       </li>
   </ul>
 </nav>
@@ -147,7 +165,7 @@ ga('send', 'pageview');
     
     <header class="post-header">
       <h1 class="post-title">nas for macos on freebsd</h1>
-
+      
       <div class="post-meta">
         <span class="post-time"> 2016-01-30 </span>
         
@@ -160,8 +178,7 @@ ga('send', 'pageview');
     
 <div class="post-toc" id="post-toc">
   <h2 class="post-toc-title">Table of Contents</h2>
-  
-  <div class="post-toc-content always-active">
+  <div class="post-toc-content">
     <nav id="TableOfContents">
 <ul>
 <li>
@@ -215,6 +232,7 @@ ga('send', 'pageview');
       </nav>
     </footer>
     
+
   <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
       Show Disqus Comments
     </div>
@@ -237,6 +255,8 @@ ga('send', 'pageview');
     
 
   
+
+  
   </article>
         </div>
       </div>
@@ -244,9 +264,15 @@ ga('send', 'pageview');
 
     <footer id="footer" class="footer">
       <div class="social-links">
-      <a href="https://twitter.com/owulveryck" class="iconfont icon-twitter" title="twitter"></a>
-      <a href="owulveryck" class="iconfont icon-itter" title="itter"></a>
-  <a href="https://blog.owulveryck.info/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+      <a href="https://twitter.com/owulveryck" rel="me" class="iconfont icon-twitter" 
+        title="twitter" target="_blank">
+      </a>
+      <a href="owulveryck" rel="me" class="iconfont icon-itter" 
+        title="itter" target="_blank">
+      </a>
+  <a href="https://blog.owulveryck.info/index.xml" type="application/rss+xml" class="iconfont icon-rss" 
+    title="rss" target="_blank">
+  </a>
 </div>
 
 <div class="copyright">

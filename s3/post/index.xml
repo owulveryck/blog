@@ -21,7 +21,7 @@
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html</guid>
       <description>In a previous article, I described an implementation of an RNN from scratch in go. The target is to use the RNN as a processing unit. The ultimate goal is to create a portable tool cross platform and able to grab and process data where they are. I have many applications in mind such as finding the root-cause of an incident or managing the capacity of an infrastructure.
-Note I stick to the go language for many reasons: Some of them a personnal and not opposable (I simply like it).</description>
+Note I stick to the Go language for many reasons: Some of them a personnal and not opposable (I simply like it).</description>
     </item>
     
     <item>
