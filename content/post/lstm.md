@@ -73,7 +73,7 @@ For the system to be useful, we should be able to decode the output into usable 
 In its current implementation, this encoding/decoding is abstract and declared thanks to a Go interface (described in the [_datasetter_](https://github.com/owulveryck/lstm/blob/master/datasetter/definitions.go) package).
 It should allow enough flexibility to implement a different use case without any modification of the core of the package.
 
-# Enhancing of the model
+# Enhancing the model
 
 It is well-known that LSTM can lead to a good prediction system. Therefore such an NNRE can be useful to predict all sorts of chaotic things as long as we can encode them into vectors.
 The major problem of the LSTM is the fixed size of the input and the output vectors.
