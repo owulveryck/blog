@@ -2,7 +2,7 @@
 title: "Considerations about software 2.0"
 date: 2018-04-16T10:54:23+02:00
 lastmod: 2018-04-16T10:54:23+02:00
-draft: true
+draft: false
 keywords: []
 description: "This post describes the concept of software 2.0. It evaluates the idea of implementing an equation parser (written in Unicode) to give a strict separation of the software 1.0 and the software 2.0.
 
@@ -21,6 +21,10 @@ autoCollapseToc: false
 contentCopyright: false
 reward: false
 mathjax: false
+---
+
+**Disclaimer** This is a technical article about a work in progress. The primary goal is to document what I did and to clarify my ideas. A more general and complete article about software 2.0 is in development and should be published on my [company's blog](https://blog.octo.com/) later.
+
 ---
 
 This post describes the concept of software 2.0. It evaluates an instance of the Unicode equation parser (as described [here](https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html)) to give a strict separation of the software 1.0 and the software 2.0.
@@ -79,7 +83,7 @@ It is well-known that LSTM can lead to a good prediction system. Therefore such 
 The major problem of the LSTM is the fixed size of the input and the output vectors.
 Based on the concepts that I have described in this article, future work could be to implement a seq2seq kernel machine. 
 
-The seq2seq model have an intrinsic encoder and decoder mechanism.
+The seq2seq model has an intrinsic encoder and decoder mechanism.
 Then the VM should have pluggable encoder and decoder. gRPC would be an excellent candidate to expose the interface. It would allow an immutable implementation of the VM and high flexibility.
 
 The main difference between this and the [seq2seq](https://google.github.io/seq2seq/) Tensorflow framework would be in the exploitation. You would not need to handle all the dependencies of the SDK just to run the code. And this code could be run wherever a Go binary can be compiled: from an ARM-based machine to a serverless architecture. Flexibility at all levels!

@@ -9,10 +9,20 @@
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved</copyright>
-    <lastBuildDate>Mon, 18 Dec 2017 16:47:27 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 16 Apr 2018 10:54:23 +0200</lastBuildDate>
     
 	<atom:link href="https://blog.owulveryck.info/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Considerations about software 2.0</title>
+      <link>https://blog.owulveryck.info/2018/04/16/considerations-about-software-2.0.html</link>
+      <pubDate>Mon, 16 Apr 2018 10:54:23 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2018/04/16/considerations-about-software-2.0.html</guid>
+      <description>Disclaimer This is a technical article about a work in progress. The primary goal is to document what I did and to clarify my ideas. A more general and complete article about software 2.0 is in development and should be published on my company&amp;rsquo;s blog later.
+This post describes the concept of software 2.0. It evaluates an instance of the Unicode equation parser (as described here) to give a strict separation of the software 1.</description>
+    </item>
     
     <item>
       <title>Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</title>

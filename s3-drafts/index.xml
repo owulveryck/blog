@@ -9,10 +9,33 @@
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved</copyright>
-    <lastBuildDate>Mon, 12 Feb 2018 20:49:15 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 16 Apr 2018 11:16:08 +0200</lastBuildDate>
     
         <atom:link href="https://blog.owulveryck.info/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Topology DevOps</title>
+      <link>https://blog.owulveryck.info/2018/04/16/topology-devops.html</link>
+      <pubDate>Mon, 16 Apr 2018 11:16:08 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2018/04/16/topology-devops.html</guid>
+      
+        <description>&lt;p&gt;&lt;/p&gt;</description>
+      
+    </item>
+    
+    <item>
+      <title>Considerations about software 2.0</title>
+      <link>https://blog.owulveryck.info/2018/04/16/considerations-about-software-2.0.html</link>
+      <pubDate>Mon, 16 Apr 2018 10:54:23 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2018/04/16/considerations-about-software-2.0.html</guid>
+      
+        <description>Disclaimer This is a technical article about a work in progress. The primary goal is to document what I did and to clarify my ideas. A more general and complete article about software 2.0 is in development and should be published on my company&amp;rsquo;s blog later.
+This post describes the concept of software 2.0. It evaluates an instance of the Unicode equation parser (as described here) to give a strict separation of the software 1.</description>
+      
+    </item>
     
     <item>
       <title>Burgess 2018</title>
