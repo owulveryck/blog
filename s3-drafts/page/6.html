@@ -65,7 +65,7 @@
 
 
 
-<meta property="og:updated_time" content="2017-02-03T20:57:30&#43;01:00"/>
+<meta property="og:updated_time" content="2017-02-14T10:17:15&#43;01:00"/>
 
 
 
@@ -155,6 +155,36 @@ ga('send', 'pageview');
   <section id="posts" class="posts">
     
     
+    
+      <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/2017/02/14/zfs_cloud_ubuntu16.04.html">zfs_cloud_ubuntu16.04</a></h1>
+    
+    <div class="post-meta">
+      <span class="post-time"> 2017-02-14 </span>
+      <div class="post-category">
+          
+            <a href="/categories/category/"> category </a>
+          
+        </div>
+      <span class="more-meta"> 170 words </span>
+      <span class="more-meta"> 1 min read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      I am using the device entries /dev/xvd* for testing purpose. Other choices may be best suitable for production. Please refer to ZFS on linux wiki for more options.
+sudo apt-get install zfsutils-linux parted /dev/xvdb mklabel GPT parted /dev/xvdc mklabel GPT parted /dev/xvdd mklabel GPT zpool create -m none -o ashift=12 tank raidz /dev/xvdc /dev/xvdb /dev/xvdd RAIDZ is a little like RAID-5. I&rsquo;m using RAID-Z1, meaning that from a 3-disk pool, I can lose one disk while maintaining the data access.
+    </div>
+    <div class="read-more">
+      <a href="/2017/02/14/zfs_cloud_ubuntu16.04.html" class="read-more-link">Read more</a>
+    </div>
+    
+  </div>
+</article>
+
     
       <article class="post bg-white">
   <header class="post-header">
@@ -263,36 +293,6 @@ The Lambda skeleton AWS Lambda does not support the go programming language nati
     </div>
     <div class="read-more">
       <a href="/2017/01/06/accessing-aws-deep-learning-services-from-ios..html" class="read-more-link">Read more</a>
-    </div>
-    
-  </div>
-</article>
-
-    
-      <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html">Image reKognition with a webcam, go and AWS.</a></h1>
-    
-    <div class="post-meta">
-      <span class="post-time"> 2016-12-16 </span>
-      
-      <span class="more-meta"> 627 words </span>
-      <span class="more-meta"> 3 min read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      It&rsquo;s been a while since I last posted something. I will fill the gap with a quick post about rekognition.
-rekognition is a service from AWS that is described as:
- Deep learning-based image recognition
-Search, verify, and organize millions of images
- In this light post, I will present a simple method to grab a picture from my webcam, send it to rekognition and display the result.
-The part of the result I will focus on is the emotion.
-    </div>
-    <div class="read-more">
-      <a href="/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html" class="read-more-link">Read more</a>
     </div>
     
   </div>

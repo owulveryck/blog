@@ -76,12 +76,12 @@ Here is an extract from [The official documentation](https://webassembly.org/get
 
 Luckily, the Go authors made this task easy by providing a Javascript Loader. This loader is here `~/gowasm/misc/wasm/wasm_exec.js`. It comes with an HTML file that takes care of gluing everything in the browser.
 
-To actually run our file, let's copy the the following files in a directory and serve them by a webserver:
+To actually run our file, let's copy the following files in a directory and serve them by a webserver:
 
 ```
 ~ mkdir ~/wasmtest
 ~ cp ~/gowasm/misc/wasm/wasm_exec.js ~/wasmtest
-~ cp ~/gowasm/misc/wasm/wasm_exec.html~/wasmtest/index.html
+~ cp ~/gowasm/misc/wasm/wasm_exec.html ~/wasmtest/index.html
 ~ cp example.wasm ~/wasmtest
 ```
 

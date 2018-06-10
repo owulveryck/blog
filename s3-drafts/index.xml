@@ -9,10 +9,21 @@
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved</copyright>
-    <lastBuildDate>Mon, 16 Apr 2018 11:16:08 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 08 Jun 2018 21:23:17 +0200</lastBuildDate>
     
         <atom:link href="https://blog.owulveryck.info/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Some notes about the upcoming WebAssembly support in Go</title>
+      <link>https://blog.owulveryck.info/2018/06/08/some-notes-about-the-upcoming-webassembly-support-in-go.html</link>
+      <pubDate>Fri, 08 Jun 2018 21:23:17 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2018/06/08/some-notes-about-the-upcoming-webassembly-support-in-go.html</guid>
+      
+        <description></description>
+      
+    </item>
     
     <item>
       <title>Topology DevOps</title>
