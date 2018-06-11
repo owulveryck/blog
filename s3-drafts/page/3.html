@@ -65,7 +65,7 @@
 
 
 
-<meta property="og:updated_time" content="2017-07-07T21:06:46&#43;02:00"/>
+<meta property="og:updated_time" content="2017-08-14T09:42:12&#43;02:00"/>
 
 
 
@@ -155,6 +155,33 @@ ga('send', 'pageview');
   <section id="posts" class="posts">
     
     
+    
+      <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html">When I apply a 350€ update on the iPhone</a></h1>
+    
+    <div class="post-meta">
+      <span class="post-time"> 2017-08-14 </span>
+      
+      <span class="more-meta"> 1278 words </span>
+      <span class="more-meta"> 6 min read </span>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      I am an apple client for years now. I was very pleased with the apple customer care until the day I really needed something from them.
+This post is the &ldquo;why&rdquo;. But as you are on a technical blog the idea behind this post is:
+ to explain the reason of wrath that made me dig into the deep understanding of my phone and to give technical facts and hints to any geek that would like to investigate an iPhone issue based on what I learned (this is, according to me, the most interesting part)  Part I: The facts I have add an iPhones, iPads and MacBook.
+    </div>
+    <div class="read-more">
+      <a href="/2017/08/14/when-i-apply-a-350-update-on-the-iphone.html" class="read-more-link">Read more</a>
+    </div>
+    
+  </div>
+</article>
+
     
       <article class="post bg-white">
   <header class="post-header">
@@ -264,37 +291,6 @@ The infrastructure level Compute engine: a pure IaaS Solution App engine: Severl
     </div>
     <div class="read-more">
       <a href="/2017/05/04/what-i-learned-at-the-google-next-2017-in-london.html" class="read-more-link">Read more</a>
-    </div>
-    
-  </div>
-</article>
-
-    
-      <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2017/04/30/tosca-n-quads.html">tosca n quads</a></h1>
-    
-    <div class="post-meta">
-      <span class="post-time"> 2017-04-30 </span>
-      <div class="post-category">
-          
-            <a href="/categories/category/"> category </a>
-          
-        </div>
-      <span class="more-meta"> 55 words </span>
-      <span class="more-meta"> 1 min read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      Tosca tosca_definitions_version:tosca_simple_yaml_1_0description:TemplatefordeployingMySQLanddatabasecontent.topology_template:inputs:# omitted here for brevitynode_templates:my_db:type:tosca.nodes.Database.MySQLproperties:name:{get_input:database_name}user:{get_input:database_user}password:{get_input:database_password}port:{get_input:database_port}artifacts:db_content:file:files/my_db_content.txttype:tosca.artifacts.Filerequirements:-host:mysqlinterfaces:Standard:create:implementation:db_create.shinputs:# Copy DB file artifact to server&#39;s staging areadb_data:{get_artifact:[SELF,db_content]}mysql:type:tosca.nodes.DBMS.MySQLproperties:root_password:{get_input:mysql_rootpw}port:{get_input:mysql_port}requirements:-host:db_serverdb_server:type:tosca.nodes.Computecapabilities:# omitted here for brevity n-quads &#34;topology_template&#34;&#34;input&#34;&#34;database_name&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_user&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_password&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_port&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;mysql_rootpw&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;mysql_port&#34;.&#34;my_db&#34;&#34;type&#34;&#34;tosca.nodes.Database.MySQL&#34;.&#34;my_db&#34;&#34;property&#34;&#34;name&#34;.&#34;name&#34;&#34;value&#34;&#34;database_name&#34;.&#34;my_db&#34;&#34;property&#34;&#34;user&#34;.&#34;user&#34;&#34;value&#34;&#34;database_user&#34;.&#34;my_db&#34;&#34;property&#34;&#34;password&#34;.&#34;password&#34;&#34;value&#34;&#34;database_password&#34;.&#34;my_db&#34;&#34;property&#34;&#34;dbport&#34;.&#34;dbport&#34;&#34;value&#34;&#34;database_port&#34;.&#34;my_db&#34;&#34;artifact&#34;&#34;db_content&#34;.&#34;db_content&#34;&#34;file&#34;&#34;files/my_db_content.txt&#34;.&#34;db_content&#34;&#34;type&#34;&#34;tosca.artifacts.File&#34;.&#34;my_db&#34;&#34;interface&#34;&#34;Standard&#34;.&#34;my_db&#34;&#34;interface_create&#34;&#34;create&#34;.&#34;my_db&#34;&#34;requires&#34;&#34;mysql&#34;.&#34;create&#34;&#34;implementation&#34;&#34;db_create.sh&#34;.&#34;create&#34;&#34;input&#34;&#34;db_data&#34;.&#34;db_data&#34;&#34;value&#34;&#34;db_content&#34;.&#34;mysql&#34;&#34;type&#34;&#34;tosca.nodes.DBMS.MySQL&#34;.&#34;mysql&#34;&#34;property&#34;&#34;root_password&#34;.&#34;root_password&#34;&#34;value&#34;&#34;mysql_rootpw&#34;.&#34;mysql&#34;&#34;property&#34;&#34;port&#34;.&#34;port&#34;&#34;value&#34;&#34;mysql_port&#34;.&#34;mysql&#34;&#34;requires&#34;&#34;db_server&#34;.&#34;db_server&#34;&#34;type&#34;&#34;tosca.nodes.Compute&#34;.
-Let&rsquo;s visualize that:
-#!/usr/bin/zsh ( echo &#34;digraph G {&#34; cat $1 | while read subject predicate object trash do echo &#34;$subject-&gt; $object[ label = &#34;$predicate&#34; ];&#34; done echo &#34;}&#34; ) | dot -Tsvg &gt; output.svg
-    </div>
-    <div class="read-more">
-      <a href="/2017/04/30/tosca-n-quads.html" class="read-more-link">Read more</a>
     </div>
     
   </div>

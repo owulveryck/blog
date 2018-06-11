@@ -9,10 +9,21 @@
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved</copyright>
-    <lastBuildDate>Fri, 08 Jun 2018 21:23:17 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 11 Jun 2018 10:54:59 +0200</lastBuildDate>
     
         <atom:link href="https://blog.owulveryck.info/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Test</title>
+      <link>https://blog.owulveryck.info/2018/06/11/test.html</link>
+      <pubDate>Mon, 11 Jun 2018 10:54:59 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2018/06/11/test.html</guid>
+      
+        <description></description>
+      
+    </item>
     
     <item>
       <title>Some notes about the upcoming WebAssembly support in Go</title>
