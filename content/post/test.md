@@ -45,7 +45,10 @@ mathjax: false
 <script src="/js/wasm_exec.js"></script>
 <script src="/js/loader.js"></script>
 <center>
+<input type="file" id="knowledgeFile" multiple size="1">
+<br>
 <button onClick="load();" id="loadButton">Load</button>
 <button onClick="run();" id="runButton" disabled>Run</button>
 </center>
+
 
