@@ -1,10 +1,10 @@
 ---
-title: "Test"
+title: "Recurrent Neural Network, Serverless with Webassembly and S3"
 date: 2018-06-11T10:54:59+02:00
 lastmod: 2018-06-11T10:54:59+02:00
 draft: true
 keywords: []
-description: ""
+description: "This article is Bikeshedding!"
 tags: []
 categories: []
 author: ""
@@ -21,6 +21,23 @@ mathjax: false
 ---
 
 <!--more-->
+----
+<link rel="stylesheet" type="text/css" href="/css/extra.css">
+<script src="/js/wasm_exec.js"></script>
+<script src="/js/loader.js"></script>
+Download a "knowledge"
+
+* [Knowldege 1](/tictactoe/tictactoe1.bin)
+* [Knowldege 2](/tictactoe/tictactoe2.bin)
+* [Knowldege 3](/tictactoe/tictactoe3.bin)
+
+Upload it here: <input type="file" id="knowledgeFile" multiple size="1" style="width:250px" accept=".bin">
+
+Load the WASM file (the file is 25Mo): <button onClick="load();" id="loadButton" style="width:125px;">Load</button>
+
+Wait for the file to be compiled (the run button will become available): <button onClick="run();" id="runButton" style="width:125px;" disabled>Run</button>
+
+
 <center>
 <table style="border:1px solid black;">
   <tr style="height: 50px; border:1px solid black;">
@@ -40,15 +57,4 @@ mathjax: false
   </tr>
 </table>
 </center>
-
-<link rel="stylesheet" type="text/css" href="/css/extra.css">
-<script src="/js/wasm_exec.js"></script>
-<script src="/js/loader.js"></script>
-<center>
-<input type="file" id="knowledgeFile" multiple size="1">
-<br>
-<button onClick="load();" id="loadButton">Load</button>
-<button onClick="run();" id="runButton" disabled>Run</button>
-</center>
-
 
