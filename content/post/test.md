@@ -2,7 +2,7 @@
 title: "Recurrent Neural Network, Serverless with Webassembly and S3"
 date: 2018-06-11T10:54:59+02:00
 lastmod: 2018-06-11T10:54:59+02:00
-draft: true
+draft: false
 keywords: []
 description: "This article is Bikeshedding! It is about creating a neural network runtime environment and running it in the browser via Wasm in #Golang. It also demonstrates the strict separation of the Neural Net dev kit, the Neural Net runtime and the knowledge (software 2.0)"
 tags: []
@@ -12,7 +12,7 @@ author: "Olivier Wulveryck"
 # You can also close(false) or open(true) something for this content.
 # P.S. comment can only be closed
 comment: false
-toc: false
+toc: true
 autoCollapseToc: false
 # You can also define another contentCopyright. e.g. contentCopyright: "This is another copyright."
 contentCopyright: false
@@ -136,6 +136,11 @@ All of this to get this result. You can try it and have fun.
 
 **Warning** Just a couple of warning. It can hang a tab of your browser and even all the browser.
 I don't think it works on a mobile.
+
+TODO: The algo do not check for a winning move.
+A new game is triggered by clicking the Run button. The process is not bulletproof as it kills the current process to reload a new one.
+Therefore it hangs from times to time. A better option would be to catch an event within the Go file and to trigger a new game. But, well, it is a POC :D
+
 
 ---
 

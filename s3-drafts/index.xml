@@ -15,11 +15,11 @@
     
     
     <item>
-      <title>Test</title>
-      <link>https://blog.owulveryck.info/2018/06/11/test.html</link>
+      <title>Recurrent Neural Network, Serverless with Webassembly and S3</title>
+      <link>https://blog.owulveryck.info/2018/06/11/recurrent-neural-network-serverless-with-webassembly-and-s3.html</link>
       <pubDate>Mon, 11 Jun 2018 10:54:59 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>https://blog.owulveryck.info/2018/06/11/test.html</guid>
+      <guid>https://blog.owulveryck.info/2018/06/11/recurrent-neural-network-serverless-with-webassembly-and-s3.html</guid>
       
         <description>&lt;h2 id=&#34;hugomore42&#34;&gt;</description>
       
@@ -32,7 +32,10 @@
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2018/06/08/some-notes-about-the-upcoming-webassembly-support-in-go.html</guid>
       
-        <description></description>
+        <description>This is a rapid post about webassembly. Its goal is to act as a reminder for me more than a tutorial on how to use it.
+The upcoming version of go 1.11 will have support for Wasm. @neelance has done most of the work of implementation. The support for wasm can already be tested by extracting his working branch from GitHub.
+See this article for more information.
+Setup of the toolchain To generate a wasm file from a go source, you need to get and patch the go toolset from the sources:</description>
       
     </item>
     
@@ -214,18 +217,6 @@ The infrastructure level Compute engine: a pure IaaS Solution App engine: Severl
         <description>Tosca tosca_definitions_version:tosca_simple_yaml_1_0description:TemplatefordeployingMySQLanddatabasecontent.topology_template:inputs:# omitted here for brevitynode_templates:my_db:type:tosca.nodes.Database.MySQLproperties:name:{get_input:database_name}user:{get_input:database_user}password:{get_input:database_password}port:{get_input:database_port}artifacts:db_content:file:files/my_db_content.txttype:tosca.artifacts.Filerequirements:-host:mysqlinterfaces:Standard:create:implementation:db_create.shinputs:# Copy DB file artifact to server&amp;#39;s staging areadb_data:{get_artifact:[SELF,db_content]}mysql:type:tosca.nodes.DBMS.MySQLproperties:root_password:{get_input:mysql_rootpw}port:{get_input:mysql_port}requirements:-host:db_serverdb_server:type:tosca.nodes.Computecapabilities:# omitted here for brevity n-quads &amp;#34;topology_template&amp;#34;&amp;#34;input&amp;#34;&amp;#34;database_name&amp;#34;.&amp;#34;topology_template&amp;#34;&amp;#34;input&amp;#34;&amp;#34;database_user&amp;#34;.&amp;#34;topology_template&amp;#34;&amp;#34;input&amp;#34;&amp;#34;database_password&amp;#34;.&amp;#34;topology_template&amp;#34;&amp;#34;input&amp;#34;&amp;#34;database_port&amp;#34;.&amp;#34;topology_template&amp;#34;&amp;#34;input&amp;#34;&amp;#34;mysql_rootpw&amp;#34;.&amp;#34;topology_template&amp;#34;&amp;#34;input&amp;#34;&amp;#34;mysql_port&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;type&amp;#34;&amp;#34;tosca.nodes.Database.MySQL&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;property&amp;#34;&amp;#34;name&amp;#34;.&amp;#34;name&amp;#34;&amp;#34;value&amp;#34;&amp;#34;database_name&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;property&amp;#34;&amp;#34;user&amp;#34;.&amp;#34;user&amp;#34;&amp;#34;value&amp;#34;&amp;#34;database_user&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;property&amp;#34;&amp;#34;password&amp;#34;.&amp;#34;password&amp;#34;&amp;#34;value&amp;#34;&amp;#34;database_password&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;property&amp;#34;&amp;#34;dbport&amp;#34;.&amp;#34;dbport&amp;#34;&amp;#34;value&amp;#34;&amp;#34;database_port&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;artifact&amp;#34;&amp;#34;db_content&amp;#34;.&amp;#34;db_content&amp;#34;&amp;#34;file&amp;#34;&amp;#34;files/my_db_content.txt&amp;#34;.&amp;#34;db_content&amp;#34;&amp;#34;type&amp;#34;&amp;#34;tosca.artifacts.File&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;interface&amp;#34;&amp;#34;Standard&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;interface_create&amp;#34;&amp;#34;create&amp;#34;.&amp;#34;my_db&amp;#34;&amp;#34;requires&amp;#34;&amp;#34;mysql&amp;#34;.&amp;#34;create&amp;#34;&amp;#34;implementation&amp;#34;&amp;#34;db_create.sh&amp;#34;.&amp;#34;create&amp;#34;&amp;#34;input&amp;#34;&amp;#34;db_data&amp;#34;.&amp;#34;db_data&amp;#34;&amp;#34;value&amp;#34;&amp;#34;db_content&amp;#34;.&amp;#34;mysql&amp;#34;&amp;#34;type&amp;#34;&amp;#34;tosca.nodes.DBMS.MySQL&amp;#34;.&amp;#34;mysql&amp;#34;&amp;#34;property&amp;#34;&amp;#34;root_password&amp;#34;.&amp;#34;root_password&amp;#34;&amp;#34;value&amp;#34;&amp;#34;mysql_rootpw&amp;#34;.&amp;#34;mysql&amp;#34;&amp;#34;property&amp;#34;&amp;#34;port&amp;#34;.&amp;#34;port&amp;#34;&amp;#34;value&amp;#34;&amp;#34;mysql_port&amp;#34;.&amp;#34;mysql&amp;#34;&amp;#34;requires&amp;#34;&amp;#34;db_server&amp;#34;.&amp;#34;db_server&amp;#34;&amp;#34;type&amp;#34;&amp;#34;tosca.nodes.Compute&amp;#34;.
 Let&amp;rsquo;s visualize that:
 #!/usr/bin/zsh ( echo &amp;#34;digraph G {&amp;#34; cat $1 | while read subject predicate object trash do echo &amp;#34;$subject-&amp;gt; $object[ label = &amp;#34;$predicate&amp;#34; ];&amp;#34; done echo &amp;#34;}&amp;#34; ) | dot -Tsvg &amp;gt; output.svg</description>
-      
-    </item>
-    
-    <item>
-      <title>Retour sur les conférences dotScale, édition 2017.</title>
-      <link>https://blog.owulveryck.info/2017/04/24/retour-sur-les-conf%C3%A9rences-dotscale-%C3%A9dition-2017..html</link>
-      <pubDate>Mon, 24 Apr 2017 20:51:22 +0200</pubDate>
-      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>https://blog.owulveryck.info/2017/04/24/retour-sur-les-conf%C3%A9rences-dotscale-%C3%A9dition-2017..html</guid>
-      
-        <description>Note This post is written in french, as it was, at first, targeted for another support. I apologize for the people who do not speak the language.
-A propos de la dotScale Lundi 24 avril se tenait la cinquième édition de la conférence dotScale qui se décrit elle-même comme étant la tech conférence Européenne sur la &amp;ldquo;scalabilité&amp;rdquo;. Cette conférence se veut être le &amp;ldquo;TED&amp;rdquo; des informaticiens. Elle se déroule dans le prestigieux théâtre de Paris.</description>
       
     </item>
     
