@@ -19,8 +19,6 @@ contentCopyright: false
 reward: false
 mathjax: false
 ---
-<!--more-->
-----
 <link rel="stylesheet" type="text/css" href="/css/extra.css">
 <script src="/js/wasm_exec.js"></script>
 <script src="/js/loader.js"></script>
