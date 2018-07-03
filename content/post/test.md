@@ -43,7 +43,7 @@ But the principle is as follow:
 
 An autonomous code based on an LSTM is learning the possible combinations of a winning tic-tac-toe board for token X.
 
-Then, the weights of the LSTM are exported (as a Gob file).
+Then, the weights of the LSTM (**the knowledge**) are exported (as a Gob file).
 
 Another code (the NNRE) car read the knowledge file, applies it to the LSTM model and implements the mechanism to play the game.
 The interactive part is concurrent and synchronized via channels (did I told you how much I like this model of concurrency :))
@@ -53,7 +53,7 @@ That's almost it.
 
 This was my first POC. Then I realized that I could run all of this in the browser.
 
-I first created a table and gave every cell an ID: `ttt0 ... ttt8`.
+I first created a table to represent the board. I gave every cell an ID: `ttt0 ... ttt8`.
 
 Within my GO/Wasm code, I added an EventListener to trigger a callback when a click on a cell is made:
 
@@ -64,18 +64,80 @@ for i, v := range []string{"ttt0", "ttt1", "ttt2", "ttt3", "ttt4", "ttt5", "ttt6
 }
 {{</ highlight >}}
 
-
 _Note_ `mycb` is a just a wrapper to pass some parameters to the "cb" method which is actually the callback.
 
-When the AI player has made a move, an event is also triggered, and the corresponding letter is placed in the correct cell of the table.
+When the AI player is playing, an event is triggered, and the corresponding letter is placed in the correct cell of the table.
 
 ## The knowledge
 
 I really wanted to show that the knowledge was strictly separated from the code.
-So I made a little hack to be able to import the knowledge at runtime.
-The uploaded file is 
+At first, I used the "[fetch](github.com/johanbrandhorst/fetch)" transport method from from Johan Brandhorst.
+{{< highlight go >}}
+import "github.com/johanbrandhorst/fetch"
+//...
+c := http.Client{
+        Transport: &fetch.Transport{},
+}
+resp, err := c.Get("/tictactoe.bin")
+// ...
+defer resp.Body.Close()
+model := new(lstm.Model)
+dec := gob.NewDecoder(resp.Body)
+err = dec.Decode(model)
+{{</ highlight >}}
+
+But this was not visual enough, so I decided to implent it in another way.
+What I wanted was the ability to upload the file directly to my pseudo server. (yes, actually, in regard to the front, the wasm file is a server).
+
+
+The trick is to use an HTML "[input](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)" element and use `file` as type. The usage is clearly documented in the article [Using files from web applications](https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications)
+
+{{< highlight html >}}
+<input type="file" id="knowledgeFile" multiple="" size="1" style="width:250px" accept=".bin">
+{{</ highlight >}}
+
+Now, in the Go code, I can make an API call to access `FileList` that contains `File` Objects as described in the documentation.
+
+{{< highlight go >}}
+files := js.Global.Get("document").Call("getElementById", "knowledgeFile").Get("files")
+if files.Length() == 1 {
+{{</ highlight >}}
+
+The first element of the list is now the first and unique object that contains all the pieces of information of the uploaded file.
+Now I have to enter a loop to wait for it to be fully loaded (there must be a better and more idiomatic way, but let's keep that for another time)...
+
+{{< highlight go >}}
+reader := js.Global.Get("FileReader").New()
+reader.Call("readAsDataURL", files.Index(0))
+for reader.Get("readyState").Int() != 2 {
+        fmt.Println("Waiting for the file to be uploaded")
+        time.Sleep(1 * time.Second)
+}
+{{</ highlight >}}
+
+Once we have the file, we can read its content as a data-url encoded value.
+First pass of decoding to get the payload, then second pass of Gob-decoding to extract the weight and instantiate a new model, _et voilà!_
+
+{{< highlight go >}}
+content := reader.Get("result").String()
+dataURL, err := dataurl.DecodeString(content)
+if err != nil {
+        return nil, err
+}
+model := new(lstm.Model)
+dec := gob.NewDecoder(bytes.NewReader(dataURL.Data))
+err = dec.Decode(model)
+{{</ highlight >}}
+
 
 # Go and test it live!
+
+All of this to get this result. You can try it and have fun.
+
+**Warning** Just a couple of warning. It can hang a tab of your browser and even all the browser.
+I don't think it works on a mobile.
+
+---
 
 Download a "knowledge" (Thos have been pre-trained with different hyper parameters).
 
