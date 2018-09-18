@@ -72,6 +72,42 @@ After some discussions with the [official team](https://github.com/onnx/onnx/pul
 
 The corresponding Godoc is hosted [here](https://godoc.org/github.com/owulveryck/onnx-go)
 
+This package on its own is enough to read a ONNX format. 
+
+### Testing the package
+
+The ONNX organization has setup a [model repository](https://github.com/onnx/models). From this repository, let's extract the basic MNIST example.
+
+`curl https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz | tar -C /tmp -xzvf -`
+
+Now, let's write a simple program that will read the ONNX file and decode it into the [`ModelProto` Object](https://godoc.org/github.com/owulveryck/onnx-go#example-ModelProto) (which is the top level object in the ONNX file).
+
+Then create a very simple Go program to read and dump the model:
+
+{{< highlight go >}}
+import (
+        "io/ioutil"
+        "log"
+        onnx "github.com/owulveryck/onnx-go"
+        "github.com/y0ssar1an/q"
+)
+
+func main() {
+        b, err := ioutil.ReadFile("/tmp/mnist/model.onnx")
+        if err != nil {
+                log.Fatal(err)
+        }
+        model := new(onnx.ModelProto)
+        err = model.Unmarshal(b)
+        if err != nil {
+                log.Fatal(err)
+        }
+        q.Q(model)
+}
+{{</ highlight >}}
+
+_Note_: I am using the [`q`](https://github.com/y0ssar1an/q) package to dump the content as the output is verbose. The result is present in the file `$TMPDIR/q`
+
 # From the Go structure to a Graph
 
 # Graphs
