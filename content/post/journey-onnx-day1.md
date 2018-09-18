@@ -45,6 +45,8 @@ In this post, I will describe the first step I have made in order to be able to 
 
 # From the protobuf definition to a Go structure
 
+In this section, let's dig a little bit into the protobuf definition file of ONNX. Then let's create a first Go code to read and import a model.
+
 ## What are protocol buffers
 
 According to the [website](https://developers.google.com/protocol-buffers/)
@@ -78,9 +80,12 @@ This package on its own is enough to read a ONNX format.
 
 The ONNX organization has setup a [model repository](https://github.com/onnx/models). From this repository, let's extract the basic MNIST example.
 
-`curl https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz | tar -C /tmp -xzvf -`
+```
+curl https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz | \
+tar -C /tmp -xzvf -
+```
 
-Now, let's write a simple program that will read the ONNX file and decode it into the [`ModelProto` Object](https://godoc.org/github.com/owulveryck/onnx-go#example-ModelProto) (which is the top level object in the ONNX file).
+Now, let's write a simple program that will read the ONNX file and decode it into an object of type [`ModelProto`](https://godoc.org/github.com/owulveryck/onnx-go#ModelProto) (which is the top level object in the ONNX file).
 
 Then create a very simple Go program to read and dump the model:
 
@@ -110,9 +115,22 @@ _Note_: I am using the [`q`](https://github.com/y0ssar1an/q) package to dump the
 
 # From the Go structure to a Graph
 
+Now that we are able to read and decode a binary file, let's dig into the functional explanation.
+
 # Graphs
 
-Computation graphs are made up of a DAG of nodes, which represent what is commonly called a "layer" or "pipeline stage" in machine learning frameworks.
+The ONNX Model document is made of several structures. On of those structure is the [GraphProto](https://godoc.org/github.com/owulveryck/onnx-go#GraphProto)
+From the documentation we read that:
+
+> A graph defines the computational logic of a model and is comprised of a parameterized list of nodes that form a directed acyclic graph based on their inputs and outputs. This is the equivalent of the "network" or "graph" in many deep learning frameworks.
+
+The graph is made of arrays of `Input`, `Output` and [`Node`](https://godoc.org/github.com/owulveryck/onnx-go#NodeProto).
+
+Again from the documentation we read that: 
+
+> Computation graphs are made up of a DAG of nodes, which represent what is commonly called a "layer" or "pipeline stage" in machine learning frameworks.
+
+_Note_: This documentation is present in the GoDoc and has been auto-generated from the protobuf definition; it one of the reason why I say the protobuf is more flexible than JSON for writing API contracts.
 
 ## Gonum
 
