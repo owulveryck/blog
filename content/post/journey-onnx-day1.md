@@ -76,7 +76,7 @@ This package on its own is enough to read a ONNX format.
 
 The ONNX organization has setup a [model repository](https://github.com/onnx/models). From this repository, let's extract the basic MNIST example.
 
-```
+{{```
 curl https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz | \
 tar -C /tmp -xzvf -
 ```
@@ -236,7 +236,16 @@ By taking back and completing the MNIST example, gluing a little bit and adding 
 ![Graph mnist](/assets/onnx/mnist.png)
 
 Our graph sounds ok, and is representing a convolution neural network. 
-Now let's implement a real backend to be able to compute that.
+This is the end of the first part.
+
+In the next article, let's implement a real backend to be able to compute that.
 
 # Conclusion
 
+We are now able to read and understand the information encoded into an ONNX model.
+The next step is to be able to create a real computation graph than can be run.
+That is what we will do in a second post.
+
+So far, with Go, we can write tiny utilities to extract various informations and represent the models. This is independant of any framework and can be used as a standalon tool. 
+
+So far.... so good!
