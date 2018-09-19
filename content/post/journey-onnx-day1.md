@@ -4,7 +4,7 @@ date: 2018-08-14T20:41:30+02:00
 lastmod: 2018-08-14T20:41:30+02:00
 draft: true
 keywords: []
-description: "This is the very begining of my journey with ONNX and Go. In this post I am describing how to decode a ONNX model from its protocol buffer serialized format to a computation graph. I am using the gonum package and then the Gorgonia package in Go."
+description: "This is the very begining of my journey with ONNX and Go. In this post I am describing how to decode a ONNX model from its protocol buffer serialized format to a computation graph. I am using the gonum package. Later I will switch to Gorgonia."
 tags: []
 categories: []
 author: ""
@@ -238,19 +238,5 @@ By taking back and completing the MNIST example, gluing a little bit and adding 
 Our graph sounds ok, and is representing a convolution neural network. 
 Now let's implement a real backend to be able to compute that.
 
-# Switching to Gorgonia
-
-## Decoding the tensor
-
-
-
-<center>
-![0](/assets/onnx/0.png)
-</center>
-
-## Creating an ExprGraph
-
-## Running the graph
-
-
 # Conclusion
+
