@@ -4,15 +4,15 @@ date: 2018-08-14T20:41:30+02:00
 lastmod: 2018-08-14T20:41:30+02:00
 draft: true
 keywords: []
-description: "This is the very begining of my journey with ONNX and Go"
+description: "This is the very begining of my journey with ONNX and Go. In this post I am describing how to decode a ONNX model from its protocol buffer serialized format to a computation graph. I am using the gonum package and then the Gorgonia package in Go."
 tags: []
 categories: []
 author: ""
 
 # You can also close(false) or open(true) something for this content.
 # P.S. comment can only be closed
-comment: false
-toc: false
+comment: true
+toc: true
 autoCollapseToc: false
 contentCopyright: false
 reward: false
@@ -120,15 +120,22 @@ From the documentation we read that:
 
 > A graph defines the computational logic of a model and is comprised of a parameterized list of nodes that form a directed acyclic graph based on their inputs and outputs. This is the equivalent of the "network" or "graph" in many deep learning frameworks.
 
-As a consequence, the vertices of the graph are composed of nodes that may be Operators or Tensors. Tensor can be a computable element (defined by the type TensorProto) or an actual (fixed) value (defined in the type ValueInfoProto).
+As a consequence, the vertices of the graph are composed of nodes that may be Operators or Tensors. The Tensors can be a computable (learnable) element (defined by the type TensorProto) or values (defined in the type ValueInfoProto). Values are actually not computable. This means that a value is not learnable; most likely is is the input of the neural net.
 
 The elementary types needed to reconstruct the computation graph are:
 
-* [NodeProto](https://godoc.org/github.com/owulveryck/onnx-go#NodeProto)
+* [NodeProto](https://godoc.org/github.com/owulveryck/onnx-go#NodeProto) 
 * [TensorProto](https://godoc.org/github.com/owulveryck/onnx-go#TensorProto)
 * [ValueInfoPRoto](https://godoc.org/github.com/owulveryck/onnx-go#ValueInfoProto)
 
-In ONNX, all those elements are identified by their `name` which are strings.
+In ONNX, all those elements are identified by their `name` which are strings. Despite the naming, all of them are actually nodes of the computation graph.
+
+Ths [`GraphProto`](https://godoc.org/github.com/owulveryck/onnx-go#GraphProto) structure is made of:
+
+* a list of inputs of type `ValueInfoProto`
+* a list outputs of type `ValueInfoProto`
+* a list of "Initializers" used to specify constant inputs of the graph of type `TensorProto`
+* a list of operations of type `NodeProto`
 
 ## Nodes
 
@@ -149,7 +156,87 @@ In ONNX, the NodeProto has a type and a name. The type is representing the actua
 
 ## Gonum
 
+To test and evaluate the structure in the Go environment, let's create a simple graph with the help of the Gonum's Graph package.
+I will keep it simple and use the "[simple](https://godoc.org/gonum.org/v1/gonum/graph/simple#DirectedGraph)" package.
+
+First, let's define a wrapper struct:
+
+{{< highlight go >}}
+type computationGraph struct {
+        db      map[string]*node
+        digraph *simple.DirectedGraph
+}
+{{</ highlight >}}
+
+where `db` is the dictionary of nodes as described in the previous section.
+
+### Node 
+
+Let's then define a simple `node` structure that will fulfil the [Node](https://godoc.org/gonum.org/v1/gonum/graph#Node) interface.
+The structure will handle various information later, but for now, let's start with its name and the operation type:
+
+{{< highlight go >}}
+type node struct {
+        id        int64
+        Name      string
+        Operation string
+}
+
+func (n *node) ID() int64 {
+        return n.id
+}
+{{</ highlight >}}
+
+### Building the DAG
+
+Let's define a wrapper struct. This will gives us the flexibility to add (at least) a method to parse the graph later; this will ease the work when we will switch to Gorgonia.
+
+{{< highlight go >}}
+type computationGraph struct {
+        db      map[string]*node
+        digraph *simple.DirectedGraph
+}
+{{</ highlight >}}
+
+To parse the graph we will process the Initializers, the Inputs and the Nodes (let's forget the outputs for now).
+
+{{< highlight go >}}
+for _, tensorProto := range gx.Initializer {
+        n := &node{
+              id:    g.digraph.NewNode().ID(),
+              Name:  tensorProto.GetName(),
+        }
+        g.digraph.AddNode(n)
+        g.db[name] = n
+
+}
+for _, valueInfo := range gx.Input {
+        n := &node{
+              id:    g.digraph.NewNode().ID(),
+              Name:  valueInfo.GetName(),
+        }
+        g.digraph.AddNode(n)
+        g.db[name] = n
+}
+{{</ highlight >}}
+
+Now a bit more tricky, let's add the Operators and the edges of the graph.
+The nodes are supposed to be in topological order in the ONNX model; 
+but let's ignore this information and reconstruct the graph as explained before (by reconstructing the topology from the inputs/initializers to the output).
+
+The algo I am using consists in removing items from the node list once it is processed and waiting for the list to be empty. There is a condition that exit the loop, just in case the graph is not a valid DAG.
+
+_Note_: maybe a recursive algorithm would be more efficient, but efficiency is not an issue here.
+
+For clarity, I will not copy the whole code here. Please visit [the github repo](https://github.com/owulveryck/gorgonnx/blob/bfd7eea73340f63b997599b808695401d1ae6f6e/graph.go#L95-L124) for more information.
+
+Thanks to the dot encoding capability of the graph package of gonum, it is easy to generate an output that is compatible with Graphviz.
+By taking back and completing the MNIST example, gluing a little bit and adding special methods for the `node` object (DOTID,...), we obtain this output:
+
 ![Graph mnist](/assets/onnx/mnist.png)
+
+Our graph sounds ok, and is representing a convolution neural network. 
+Now let's implement a real backend to be able to compute that.
 
 # Switching to Gorgonia
 
