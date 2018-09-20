@@ -21,7 +21,7 @@ reward: false
 mathjax: false
 ---
 
-In the [previous post](/2018/08/14/my-journey-with-onnx-and-go---the-begining.html#building-the-dag), I made an introduction and a POC to interact with ONNX models and Go.
+In the [previous post](/2018/08/14/my-journey-with-onnx-and-go---the-beginning.html#building-the-dag), I made an introduction and a POC to interact with ONNX models and Go.
 
 I have decoded the information to reconstruct a graph.
 Now I propose to expand the principle and to create a proper execution backend based on Gorgonia.
@@ -31,9 +31,9 @@ This post is a bit more technical than the previous one as I don't have any new 
 
 In machine learning, the basic element of a computation graph is a Tensor.
 In ONNX this element is described in the structure [TensorProto](https://godoc.org/github.com/owulveryck/onnx-go#TensorProto). 
-A tensor has a shape represented here by the field `Dims` which is an array of int64, is holdind a data type and obviously some data.
+A tensor has a shape represented here by the field `Dims` which is an array of int64, is holding a data type and obviously some data.
 
-Gorgonia has also a notion of tensor. A tensor is an interface. Therefore, creating a Go object from TensorProto that fulfils the Tensor interface of Gorgonia
+Gorgonia has also a notion of tensor. A tensor is an interface. Therefore, creating a Go object from TensorProto that fulfills the Tensor interface of Gorgonia
 should be easy.
 
 Let's write a method that taks a `onnx.TensorProto` as input and that returns a `tensor.Tensor` as output
@@ -48,7 +48,7 @@ We need to address the thre elements:
 * read and process the data to write a tensor backend
 * deal with tensor shape.
 
-I will not focus much on tensor shape. Actually ONNX has a notion of dimension which is an array of integer. Every entry represent the size of an axe of the tensor.
+I will not focus much on tensor shape. Actually ONNX has a notion of dimension which is an array of integer. Every entry representst the size of an axe of the tensor.
 This can be converted out-of-the-box into a [`Shape`](https://godoc.org/gorgonia.org/tensor#Shape) element of the `tensor` package.
 
 The data type conversion and the raw data processing is a (little) bit trickier, so let's focus on them.
@@ -57,7 +57,7 @@ The data type conversion and the raw data processing is a (little) bit trickier,
 
 A tensor is composed of elements of certain types. The supported data types are described as constants in ONNX. They can be found [in the documentation of ONNX](https://github.com/onnx/onnx/blob/master/docs/IR.md#standard-data-types) and are represented in [Go constant values](https://godoc.org/github.com/owulveryck/onnx-go#TensorProto_DataType) of our Go API.
 
-On the other hand, the tensor package of gorgonia has also its own declaration of types represented by values of [`Dtypes`](https://godoc.org/gorgonia.org/tensor#Dtype). The list is a set of variables declared [here](https://godoc.org/gorgonia.org/tensor#pkg-variables).
+On the other hand, the tensor package of Gorgonia has also its own declaration of types represented by values of [`Dtypes`](https://godoc.org/gorgonia.org/tensor#Dtype). The list is a set of variables declared [here](https://godoc.org/gorgonia.org/tensor#pkg-variables).
 
 Writing a function to return a `Dtype` from a `TensorProto_DataType` is relatively straightforward: 
 
@@ -72,9 +72,9 @@ func Dtype(t *onnx.TensorProto_DataType) (tensor.Dtype, error) {
 ### Raw Data
 
 ONNX has two way to encode the data of a tensor.
-The first is really easy and is a straigh serialization of the basic type. For example, a tensor of type Float32 will have its data set in the `FloatData` field which is of type `[]float32`.
+The first is really easy and is a straight serialization of the basic type. For example, a tensor of type Float32 will have its data set in the `FloatData` field which is of type `[]float32`.
 
-The second one is a bit trickier. ONNX allows to serialize the "raw data" encoded in a sequence of bytes. The documentation says that:
+The second one is a bit trickier. ONNX allows serializing the "raw data" encoded in a sequence of bytes. The documentation says that:
 
 > When this raw_data field is used to store tensor value, elements MUST
 > be stored in as fixed-width, little-endian order.
@@ -154,7 +154,7 @@ In the previous post, we have sliced the parsing function into three parts:
 * the processing of the _Inputs_
 * the processing of the _Operators_
 
-(cf [_Building the DAG_](/2018/08/14/my-journey-with-onnx-and-go---the-begining.html#building-the-dag) in the previous post for more information)
+(cf [_Building the DAG_](/2018/08/14/my-journey-with-onnx-and-go---the-beginning.html#building-the-dag) in the previous post for more information)
 
 I will take back the skeleton of the code I made to generate the graph with gonum in the first article.
 The main differences are:
@@ -162,12 +162,12 @@ The main differences are:
 * I am now using a pointer to `gorgonia.ExprGraph` in the `computationGraph` structure
 * I am using `gorgonia.Node` instead of the `node` structure
 
-The main loops remains similar: 
+The main loops remain similar: 
 
 * creating a node object from the TensorProto (or ValueInfoProto) and adding them to the graph (which is transparent with gorgonia)
 * processing the operator nodes
 
-Here is an exemple with the _Initializers_ of the model (the tensor is generated thanks to the `NewTensor` we wrote before):
+Here is an example with the _Initializers_ of the model (the tensor is generated thanks to the `NewTensor` we wrote before):
 
 {{< highlight go >}}
 type computationGraph struct {
@@ -192,7 +192,7 @@ for _, tensorProto := range gx.Initializer {
 The logic is exactly the same as the one we have used in the first article.
 The only modification is in the `processNode` method.
 
-This method as a giant switch that delegate the work to different method.
+This method as a giant switch that delegates the work to different methods.
 
 {{< highlight go >}}
 func (cg *computationGraph) processNode(nx *onnx.NodeProto) error {
@@ -208,12 +208,12 @@ func (cg *computationGraph) processNode(nx *onnx.NodeProto) error {
 
 Then each operation has its own isolated method.
 
-_Note_: There are better way to handle that, but refactoring will come with a certain maturity of the package. 
+_Note_: There is a better way to handle that, but refactoring will come with certain maturity of the package. 
 
-The purpose of each method is to analyse the `NodeProto`, extract its atrtibutes and inputs, and create a correponding node into the Gorgonia Graph.
+The purpose of each method is to analyze the `NodeProto`, extract its attributes and inputs, and create a corresponding node into the Gorgonia Graph.
 The operators implemented in ONNX are very well documented in this file accessible from the ONNX repository: [Operators.md](https://github.com/onnx/onnx/blob/master/docs/Operators.md)
 
-Here is for example the implementation of the _ReLU_ operator. 
+Here is, for example, the implementation of the _ReLU_ operator. 
 {{< highlight go >}}
 import 	nnops "gorgonia.org/gorgonia/ops/nn"
 
@@ -227,16 +227,16 @@ func (d *graph) reluOp(nx *onnx.NodeProto) error {
 }
 {{</ highlight >}}
 
-Most of the work here is to analyse the documentation of the operators from ONNX and to find a way to implement it into Gorgonia. Most of the operators already exists, but some of them may have different parameters.
+Most of the work here is to analyze the documentation of the operators from ONNX and to find a way to implement it into Gorgonia. Most of the operators already exist, but some of them may have different parameters.
 
 ### Constraints with the broadcastable operators
 
-A quick word about a constraint I have faced. It is written in the ONNX documentation that the element-wise operators are broadcastable (the behavior is similar of what numpy implements). The behavior is explained [here](https://github.com/onnx/onnx/blob/master/docs/Broadcasting.md). I made a very dirty hack to make my MNIST test pass, but we have an [open issue](https://github.com/gorgonia/gorgonia/issues/223) in Gorgonia to implement a proper way to apply broadcasting in a non transparent way.
+A quick word about a constraint I have faced. It is written in the ONNX documentation that the element-wise operators are broadcastable (the behavior is similar of what numpy implements). The behavior is explained [here](https://github.com/onnx/onnx/blob/master/docs/Broadcasting.md). I made a very dirty hack to make my MNIST test pass, but we have an [open issue](https://github.com/gorgonia/gorgonia/issues/223) in Gorgonia to implement a proper way to apply broadcasting in a non-transparent way.
 
 # Computing the MNIST model
 
 My goal is to run the MNIST model and to evaluate it.
-Therefore I have implemented all the Operators used in the model:
+Therefore, I have implemented all the Operators used in the model:
 
 * Add
 * Conv
@@ -290,12 +290,12 @@ sadly my computation gives the following result:
 # Conclusion
 
 I am glad to be able to read, understand and compute a ONNX model. Getting the wrong result is annoying but gives a good challenge.
-Finding where the problem is is not trivial, and debugging a neural network is not easy, but it is a good learning experience to analyse the behavior of the operators in detail..
+Finding where the problem is not trivial, and debugging a neural network is not easy, but it is a good learning experience to analyze the behavior of the operators in detail.
 I have started to implement unit tests for each operator I need in the MNIST model.
 
 More recently, I have noticed that the ONNX repository was [full of simple test cases made to evaluate the backends](https://github.com/onnx/onnx/tree/master/onnx/backend/test/data/node). This is the next step to implement into the decoding package 
 
-If you are interested in testing or contributing, I have setup a repository where you will find the sources and the MNIST example (that you can run with `go test`).
+If you are interested in testing or contributing, I have set up a repository where you will find the sources and the MNIST example (that you can run with `go test`).
 This repository is really a work in progress, and I will not provide (for now) any support around it. 
 
 [https://github.com/owulveryck/gorgonnx](https://github.com/owulveryck/gorgonnx)

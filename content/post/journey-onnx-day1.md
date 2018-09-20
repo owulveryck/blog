@@ -1,5 +1,5 @@
 ---
-title: "My journey with ONNX and Go - The begining"
+title: "My journey with ONNX and Go - The beginning"
 date: 2018-08-14T20:41:30+02:00
 lastmod: 2018-08-14T20:41:30+02:00
 draft: true
