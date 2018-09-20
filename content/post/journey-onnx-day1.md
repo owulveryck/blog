@@ -76,7 +76,7 @@ This package on its own is enough to read a ONNX format.
 
 The ONNX organization has setup a [model repository](https://github.com/onnx/models). From this repository, let's extract the basic MNIST example.
 
-{{```
+```
 curl https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz | \
 tar -C /tmp -xzvf -
 ```
@@ -229,6 +229,9 @@ The algo I am using consists in removing items from the node list once it is pro
 _Note_: maybe a recursive algorithm would be more efficient, but efficiency is not an issue here.
 
 For clarity, I will not copy the whole code here. Please visit [the github repo](https://github.com/owulveryck/gorgonnx/blob/bfd7eea73340f63b997599b808695401d1ae6f6e/graph.go#L95-L124) for more information.
+The important point is that for each processable node we call a method of the `computationGraph` structure call `processNode`. This method evaluates the content of the node (its intputs and its name), add it to the graph and place the edges the node has with its ancestors (inputs).
+
+## Displaying the result
 
 Thanks to the dot encoding capability of the graph package of gonum, it is easy to generate an output that is compatible with Graphviz.
 By taking back and completing the MNIST example, gluing a little bit and adding special methods for the `node` object (DOTID,...), we obtain this output:
