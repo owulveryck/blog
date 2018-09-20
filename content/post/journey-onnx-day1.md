@@ -31,7 +31,7 @@ Therefore, switching from a mathematical representation to the computation graph
 
 # Quick word about ONNX
 
-Describing computation graph in straightforward. A computation graph is a [Directed Acyclic Graph (DAG)](https://en.wikipedia.org/wiki/Directed_acyclic_graph). Each node  of the graph represents a tensor or an operator.
+Describing a computation graph is straightforward. A computation graph is a [Directed Acyclic Graph (DAG)](https://en.wikipedia.org/wiki/Directed_acyclic_graph). Each node  of the graph represents a tensor or an operator.
 The challenge is to find a domain specific language (DSL) to describe a graph in a way that it is agnostic of its implementation.
 
 This is the promise of [ONNX](https://onnx.ai/).
@@ -55,33 +55,33 @@ Definition from the [official website of protocol buffers:](https://developers.g
 
 Protocol buffer is a binary format (once compiled it cannot be read by a human). It is a way to serialize messages. For short, a protobuf file describes an API contract. 
 
-_Note_: I will not go deeper in the protobuf description here. But, in my humble opinion, it is a very good way to express an API when implementing a machine-to-machine communication. Better than JSON because of it simplicity, efficiency and the ability to validate a schema natively.
+_Note_: I will not go deeper in the protobuf description here. But, in my humble opinion, it is a very good way to express an API when implementing a machine-to-machine communication. Better than JSON because of its simplicity, efficiency and the ability to validate a schema natively.
 
 The main definition file for ONNX (the API contract) is hosted [here](https://github.com/onnx/onnx/blob/master/onnx/onnx.proto3) and is named `onnx.proto3`.
 This file is used to generate bindings to other languages.
 
-In order to create a bridge between the protobuf binary format and the Go ecosystem, the first thing to do is to generate the Go API. This will allow to read a ONNX file and to transpile it into a Go compatible object.
+In order to create a bridge between the protobuf binary format and the Go ecosystem, the first thing to do is to generate the Go API. This will allow to read an ONNX file and to transpile it into a Go compatible object.
 
-To do this, you need a compiler named `protoc`. I am also using the alternative compiler [gogoprotobuf](https://github.com/gogo/protobuf) which add some useful features (such as fast Mashaller/Unmarshaler methods).  For clarity, I will not describe how to install and use the `protoc` binary.
+To do this, you need a compiler named `protoc`. I am also using the alternative compiler [gogoprotobuf](https://github.com/gogo/protobuf) which add some useful features (such as fast Marshaller/Unmarshaler methods).  For clarity, I will not describe how to install and use the `protoc` binary.
 
 Simply running `protoc --gofast_out=. onnx.proto3` will generate a file [onnx.pb.go](https://github.com/owulveryck/onnx-go/blob/master/onnx.pb.go) which is usable out-of-the box.
 
 ## onnx-go 
 
-After some discussions with the [official team](https://github.com/onnx/onnx/pull/1328), we agreed that, before the onnx-go reachs a certain level maturity, it was best to host it on my personal github account. So, as of today, I am hosting the repository here: [github.com/owulveryck/onnx-go](https://godoc.org/github.com/owulveryck/onnx-go). The corresponding Godoc is hosted [here](https://godoc.org/github.com/owulveryck/onnx-go)
+After some discussions with the [official team](https://github.com/onnx/onnx/pull/1328), we agreed that, before the onnx-go reaches a certain level maturity, it was best to host it on my personal GitHub account. So, as of today, I am hosting the repository here: [github.com/owulveryck/onnx-go](https://godoc.org/github.com/owulveryck/onnx-go). The corresponding Godoc is hosted [here](https://godoc.org/github.com/owulveryck/onnx-go)
 
-This package on its own is enough to read a ONNX format. 
+This package on its own is enough to read an ONNX format. 
 
 ### Testing the package
 
-The ONNX organization has setup a [model repository](https://github.com/onnx/models). From this repository, let's extract the basic MNIST example.
+The ONNX organization has set up a [model repository](https://github.com/onnx/models). From this repository, let's extract the basic MNIST example.
 
 ```
 curl https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz | \
 tar -C /tmp -xzvf -
 ```
 
-Now, let's write a simple program that will read the ONNX file and decode it into an object of type [`ModelProto`](https://godoc.org/github.com/owulveryck/onnx-go#ModelProto) (which is the top level object in the ONNX file).
+Now, let's write a simple program that will read the ONNX file and decode it into an object of type [`ModelProto`](https://godoc.org/github.com/owulveryck/onnx-go#ModelProto) (which is the top-level object in the ONNX file).
 
 Then create a very simple Go program to read and dump the model:
 
@@ -115,12 +115,12 @@ Now that we are able to read and decode a binary file, let's dig into the functi
 
 # Graphs
 
-The ONNX Model document is made of several structures. On of those structure is the [GraphProto](https://godoc.org/github.com/owulveryck/onnx-go#GraphProto)
+The ONNX Model document is made of several structures. One of those structures is the [GraphProto](https://godoc.org/github.com/owulveryck/onnx-go#GraphProto)
 From the documentation we read that:
 
 > A graph defines the computational logic of a model and is comprised of a parameterized list of nodes that form a directed acyclic graph based on their inputs and outputs. This is the equivalent of the "network" or "graph" in many deep learning frameworks.
 
-As a consequence, the vertices of the graph are composed of nodes that may be Operators or Tensors. The Tensors can be a computable (learnable) element (defined by the type TensorProto) or values (defined in the type ValueInfoProto). Values are actually not computable. This means that a value is not learnable; most likely is is the input of the neural net.
+As a consequence, the vertices of the graph are composed of nodes that may be Operators or Tensors. The Tensors can be a computable (learnable) element (defined by the type TensorProto) or values (defined in the type ValueInfoProto). Values are actually not computable. This means that a value is not learnable; most likely it is the input of the neural net.
 
 The elementary types needed to reconstruct the computation graph are:
 
@@ -128,7 +128,7 @@ The elementary types needed to reconstruct the computation graph are:
 * [TensorProto](https://godoc.org/github.com/owulveryck/onnx-go#TensorProto)
 * [ValueInfoPRoto](https://godoc.org/github.com/owulveryck/onnx-go#ValueInfoProto)
 
-In ONNX, all those elements are identified by their `name` which are strings. Despite the naming, all of them are actually nodes of the computation graph.
+In ONNX, all those elements are identified by their `name` which is string. Despite the naming, all of them are actually nodes of the computation graph.
 
 Ths [`GraphProto`](https://godoc.org/github.com/owulveryck/onnx-go#GraphProto) structure is made of:
 
@@ -139,11 +139,11 @@ Ths [`GraphProto`](https://godoc.org/github.com/owulveryck/onnx-go#GraphProto) s
 
 ## Nodes
 
-Again from the documentation we read that: 
+Again from the documentation, we read that: 
 
 > Computation graphs are made up of a DAG of nodes, which represent what is commonly called a "layer" or "pipeline stage" in machine learning frameworks.
 
-_Note_: This documentation is present in the GoDoc and has been auto-generated from the protobuf definition; it's one of the reason why I said the protobuf is more flexible than JSON for writing API contracts.
+_Note_: This documentation is present in the GoDoc and has been auto-generated from the protobuf definition; it's one of the reasons why I said the protobuf is more flexible than JSON for writing API contracts.
 
 A node knows its inputs and its output. Therefore, to generate the graph, we should:
 
@@ -172,7 +172,7 @@ where `db` is the dictionary of nodes as described in the previous section.
 
 ### Node 
 
-Let's then define a simple `node` structure that will fulfil the [Node](https://godoc.org/gonum.org/v1/gonum/graph#Node) interface.
+Let's then define a simple `node` structure that will fulfill the [Node](https://godoc.org/gonum.org/v1/gonum/graph#Node) interface.
 The structure will handle various information later, but for now, let's start with its name and the operation type:
 
 {{< highlight go >}}
@@ -189,7 +189,7 @@ func (n *node) ID() int64 {
 
 ### Building the DAG
 
-Let's define a wrapper struct. This will gives us the flexibility to add (at least) a method to parse the graph later; this will ease the work when we will switch to Gorgonia.
+Let's define a wrapper struct. This will give us the flexibility to add (at least) a method to parse the graph later; this will ease the work when we will switch to Gorgonia.
 
 {{< highlight go >}}
 type computationGraph struct {
@@ -221,7 +221,7 @@ for _, valueInfo := range gx.Input {
 {{</ highlight >}}
 
 Now a bit more tricky, let's add the Operators and the edges of the graph.
-The nodes are supposed to be in topological order in the ONNX model; 
+The nodes are supposed to be in topological order in the ONNX model, 
 but let's ignore this information and reconstruct the graph as explained before (by reconstructing the topology from the inputs/initializers to the output).
 
 The algo I am using consists in removing items from the node list once it is processed and waiting for the list to be empty. There is a condition that exit the loop, just in case the graph is not a valid DAG.
@@ -229,7 +229,7 @@ The algo I am using consists in removing items from the node list once it is pro
 _Note_: maybe a recursive algorithm would be more efficient, but efficiency is not an issue here.
 
 For clarity, I will not copy the whole code here. Please visit [the github repo](https://github.com/owulveryck/gorgonnx/blob/bfd7eea73340f63b997599b808695401d1ae6f6e/graph.go#L95-L124) for more information.
-The important point is that for each processable node we call a method of the `computationGraph` structure call `processNode`. This method evaluates the content of the node (its intputs and its name), add it to the graph and place the edges the node has with its ancestors (inputs).
+The important point is that for each processable node we call a method of the `computationGraph` structure call `processNode`. This method evaluates the content of the node (its inputs and its name), add it to the graph and place the edges the node has with its ancestors (inputs).
 
 ## Displaying the result
 
@@ -246,10 +246,10 @@ In the [next article](/2018/09/19/my-journey-with-onnx-and-go---running-the-grap
 # Conclusion
 
 We are now able to read and understand the information encoded into an ONNX model.
-The next step is to be able to create a real computation graph than can be run.
+The next step is to be able to create a real computation graph that can be run.
 That is what we will do in a second post.
 
-So far, with Go, we can write tiny utilities to extract various informations and represent the models. This is independant of any framework and can be used as a standalon tool. 
+So far, with Go, we can write tiny utilities to extract various pieces of information and represent the models. This is independent of any framework and can be used as a standalone tool. 
 
-So far.... so good! 
+So far, so good! 
 
