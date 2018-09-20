@@ -29,26 +29,26 @@ This post is a bit more technical than the previous one as I don't have any new 
 
 # Decoding the tensor
 
-In machine learning, the basic element of a computation graph is a Tensor.
+In machine learning, the fundamental element of a computation graph is a Tensor.
 In ONNX this element is described in the structure [TensorProto](https://godoc.org/github.com/owulveryck/onnx-go#TensorProto). 
 A tensor has a shape represented here by the field `Dims` which is an array of int64, is holding a data type and obviously some data.
 
-Gorgonia has also a notion of tensor. A tensor is an interface. Therefore, creating a Go object from TensorProto that fulfills the Tensor interface of Gorgonia
+Gorgonia also has a notion of tensor. A tensor is an interface. Therefore, creating a Go object from TensorProto that fulfills the Tensor interface of Gorgonia
 should be easy.
 
-Let's write a method that taks a `onnx.TensorProto` as input and that returns a `tensor.Tensor` as output
+Let's write a method that takes an `onnx.TensorProto` as input and that returns a `tensor.Tensor` as output
 
 {{< highlight go >}}
 func NewTensor(tx *onnx.TensorProto) (tensor.Tensor, error) { ... } 
 {{</ highlight >}}
 
-We need to address the thre elements:
+We need to address the three elements:
 
 * convert the data type to something understandable by Go (and Gorgonia)
 * read and process the data to write a tensor backend
 * deal with tensor shape.
 
-I will not focus much on tensor shape. Actually ONNX has a notion of dimension which is an array of integer. Every entry representst the size of an axe of the tensor.
+I will not focus much on tensor shape. Actually, ONNX has a notion of dimension which is an array of integer. Every entry represents the size of an ax of the tensor.
 This can be converted out-of-the-box into a [`Shape`](https://godoc.org/gorgonia.org/tensor#Shape) element of the `tensor` package.
 
 The data type conversion and the raw data processing is a (little) bit trickier, so let's focus on them.
@@ -57,7 +57,7 @@ The data type conversion and the raw data processing is a (little) bit trickier,
 
 A tensor is composed of elements of certain types. The supported data types are described as constants in ONNX. They can be found [in the documentation of ONNX](https://github.com/onnx/onnx/blob/master/docs/IR.md#standard-data-types) and are represented in [Go constant values](https://godoc.org/github.com/owulveryck/onnx-go#TensorProto_DataType) of our Go API.
 
-On the other hand, the tensor package of Gorgonia has also its own declaration of types represented by values of [`Dtypes`](https://godoc.org/gorgonia.org/tensor#Dtype). The list is a set of variables declared [here](https://godoc.org/gorgonia.org/tensor#pkg-variables).
+On the other hand, the tensor package of Gorgonia also has its own declaration of types represented by values of [`Dtypes`](https://godoc.org/gorgonia.org/tensor#Dtype). The list is a set of variables declared [here](https://godoc.org/gorgonia.org/tensor#pkg-variables).
 
 Writing a function to return a `Dtype` from a `TensorProto_DataType` is relatively straightforward: 
 
@@ -72,7 +72,7 @@ func Dtype(t *onnx.TensorProto_DataType) (tensor.Dtype, error) {
 ### Raw Data
 
 ONNX has two way to encode the data of a tensor.
-The first is really easy and is a straight serialization of the basic type. For example, a tensor of type Float32 will have its data set in the `FloatData` field which is of type `[]float32`.
+The first is really easy and is a straight serialization of the underlying type. For example, a tensor of type Float32 will have its data set in the `FloatData` field which is of type `[]float32`.
 
 The second one is a bit trickier. ONNX allows serializing the "raw data" encoded in a sequence of bytes. The documentation says that:
 
@@ -88,7 +88,7 @@ The second one is a bit trickier. ONNX allows serializing the "raw data" encoded
 > variable length storage, and may lead to smaller binary footprint.
 > When this field is present, the data_type field MUST NOT be STRING or UNDEFINED
 
-So our function must handle this special case.
+So our function must handle this particular case.
 Let's focus on the Float32 type for now. Go has natively everything needed to read this famous `IEEE 754 format` (thanks to the binary and the math packages).
 
 Here is how to read the informations and to transcribe it into a `[]float32`:
@@ -147,7 +147,7 @@ Running the code produces a `0` as expected:
 
 # Creating an ExprGraph
 
-Now that we are able to decode the tensors from the ONNX model, let's go further and create a graph.
+Now that we are able to decode the tensors from the ONNX model let's go further and create a graph.
 In the previous post, we have sliced the parsing function into three parts:
 
 * the processing of the _Initializers_
@@ -192,7 +192,7 @@ for _, tensorProto := range gx.Initializer {
 The logic is exactly the same as the one we have used in the first article.
 The only modification is in the `processNode` method.
 
-This method as a giant switch that delegates the work to different methods.
+This method has a giant switch that delegates the work to other specialized methods.
 
 {{< highlight go >}}
 func (cg *computationGraph) processNode(nx *onnx.NodeProto) error {
@@ -208,7 +208,7 @@ func (cg *computationGraph) processNode(nx *onnx.NodeProto) error {
 
 Then each operation has its own isolated method.
 
-_Note_: There is a better way to handle that, but refactoring will come with certain maturity of the package. 
+_Note_: There is a better way to handle that, but refactoring will come with a certain maturity of the package. 
 
 The purpose of each method is to analyze the `NodeProto`, extract its attributes and inputs, and create a corresponding node into the Gorgonia Graph.
 The operators implemented in ONNX are very well documented in this file accessible from the ONNX repository: [Operators.md](https://github.com/onnx/onnx/blob/master/docs/Operators.md)
@@ -229,9 +229,9 @@ func (d *graph) reluOp(nx *onnx.NodeProto) error {
 
 Most of the work here is to analyze the documentation of the operators from ONNX and to find a way to implement it into Gorgonia. Most of the operators already exist, but some of them may have different parameters.
 
-### Constraints with the broadcastable operators
+### Obstacle with the broadcastable operators
 
-A quick word about a constraint I have faced. It is written in the ONNX documentation that the element-wise operators are broadcastable (the behavior is similar of what numpy implements). The behavior is explained [here](https://github.com/onnx/onnx/blob/master/docs/Broadcasting.md). I made a very dirty hack to make my MNIST test pass, but we have an [open issue](https://github.com/gorgonia/gorgonia/issues/223) in Gorgonia to implement a proper way to apply broadcasting in a non-transparent way.
+A quick word about an obstacle I have faced. It is written in the ONNX documentation that the element-wise operators are broadcastable (the behavior is similar of what numpy implements). The behavior is explained [here](https://github.com/onnx/onnx/blob/master/docs/Broadcasting.md). I made a filthy hack to make my MNIST test pass, but we have an [open issue](https://github.com/gorgonia/gorgonia/issues/223) in Gorgonia to implement a proper way to apply broadcasting in a non-transparent way.
 
 # Computing the MNIST model
 
@@ -289,11 +289,11 @@ sadly my computation gives the following result:
 
 # Conclusion
 
-I am glad to be able to read, understand and compute a ONNX model. Getting the wrong result is annoying but gives a good challenge.
+I am glad to be able to read, understand and compute an ONNX model. Getting the wrong result is annoying but gives a good challenge.
 Finding where the problem is not trivial, and debugging a neural network is not easy, but it is a good learning experience to analyze the behavior of the operators in detail.
 I have started to implement unit tests for each operator I need in the MNIST model.
 
-More recently, I have noticed that the ONNX repository was [full of simple test cases made to evaluate the backends](https://github.com/onnx/onnx/tree/master/onnx/backend/test/data/node). This is the next step to implement into the decoding package 
+More recently, I have noticed that the ONNX repository was [full of simple test cases made to evaluate the backends](https://github.com/onnx/onnx/tree/master/onnx/backend/test/data/node). This is the next step to implement into the decoding package. 
 
 If you are interested in testing or contributing, I have set up a repository where you will find the sources and the MNIST example (that you can run with `go test`).
 This repository is really a work in progress, and I will not provide (for now) any support around it. 
