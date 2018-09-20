@@ -14,7 +14,7 @@ publishdir = "public"
 # # true: use pygments-css or false: color-codes directly
 pygmentsUseClasses =true
 pygmentsCodeFences=true
-PygmentsOptions = "linenos=table"
+#pygmentsOptions = "linenos=table"
 
 # Theme to use (located in /themes/THEMENAME/)
 # theme = "hugo-bootstrap"
@@ -61,6 +61,9 @@ uglyURLs = true
   url = "https://about.me/owulveryck"
 
 [params]
+     googlefonts = ["Droid Sans", "Fira Mono"]
+     fontbody = 'Droid Sans'
+     fontcode = 'Fira Mono'
     author = "Olivier Wulveryck"
     description = "Olivier Wulveryck's (tech) blog"
     #footline = "code with <i class='fa fa-heart'></i>"
@@ -71,6 +74,7 @@ uglyURLs = true
     # Select a syntax highight.
 # Check the static/css/highlight directory for options.
     highlight = "default"
+    customCSS = ['syntax.css']            # if ['custom.css'], load '/static/css/custom.css' file
     since = "2015"
 
     moreMeta = true

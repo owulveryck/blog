@@ -233,12 +233,12 @@ For clarity, I will not copy the whole code here. Please visit [the github repo]
 Thanks to the dot encoding capability of the graph package of gonum, it is easy to generate an output that is compatible with Graphviz.
 By taking back and completing the MNIST example, gluing a little bit and adding special methods for the `node` object (DOTID,...), we obtain this output:
 
-![Graph mnist](/assets/onnx/mnist.png)
+{{< figure src="/assets/onnx/mnist.png" title="Representation of the MNIST Model" >}}
 
-Our graph sounds ok, and is representing a convolution neural network. 
+Our graph looks ok, and is representing a convolution neural network. 
 This is the end of the first part.
 
-In the next article, let's implement a real backend to be able to compute that.
+In the [next article](/2018/09/19/my-journey-with-onnx-and-go---running-the-graph.html), let's implement a real backend to be able to compute and evaluate the graph.
 
 # Conclusion
 
@@ -248,4 +248,5 @@ That is what we will do in a second post.
 
 So far, with Go, we can write tiny utilities to extract various informations and represent the models. This is independant of any framework and can be used as a standalon tool. 
 
-So far.... so good!
+So far.... so good! 
+
