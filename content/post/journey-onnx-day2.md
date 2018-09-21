@@ -2,9 +2,9 @@
 title: "My journey with ONNX and Go - Running the graph"
 date: 2018-09-19T08:53:09+02:00
 lastmod: 2018-09-19T08:53:09+02:00
-draft: true
+draft: false
 keywords: []
-description: "This post is the second part of my experiments with ONNX and Go. In this post I am describing how to create a computation graph in Gorgonia (ExprGraph) from a ONNX Model."
+description: "This post is the second part of my experiments with ONNX and Go. In this post I am describing how to create a computation graph in Gorgonia (ExprGraph) from an ONNX Model."
 description: ""
 tags: []
 categories: []
@@ -25,16 +25,19 @@ In the [previous post](/2018/08/14/my-journey-with-onnx-and-go---the-beginning.h
 
 I have decoded the information to reconstruct a graph.
 Now I propose to expand the principle and to create a proper execution backend based on Gorgonia.
-This post is a bit more technical than the previous one as I don't have any new concept to explain. 
+This post is a bit more technical than the previous one because all the concepts needed to work should be present in the last article.
 
 # Decoding the tensor
 
 In machine learning, the fundamental element of a computation graph is a Tensor.
 In ONNX this element is described in the structure [TensorProto](https://godoc.org/github.com/owulveryck/onnx-go#TensorProto). 
-A tensor has a shape represented here by the field `Dims` which is an array of int64, is holding a data type and obviously some data.
+A tensor: 
 
-Gorgonia also has a notion of tensor. A tensor is an interface. Therefore, creating a Go object from TensorProto that fulfills the Tensor interface of Gorgonia
-should be easy.
+* has a shape represented here by the field `Dims` (an array of `int64`)
+* is holding a data type 
+* is eventually handling some data.
+
+Gorgonia also has a notion of tensor. In Gorgonia, a tensor is an interface (in the pure Go sense). Therefore, creating a Go object from TensorProto that fulfills the Tensor interface of Gorgonia should be easy.
 
 Let's write a method that takes an `onnx.TensorProto` as input and that returns a `tensor.Tensor` as output
 
@@ -108,16 +111,19 @@ for {
 }
 {{</ highlight >}}
 
-
 ## Vizualizing the tensor
 
-Let's take back the MNIST example from the ONNX model zoo.
+With all those elements, it is easy to write the content of the `NewTensor` function. No need to paste all the code in this post, but you can find the implementation [here](https://github.com/owulveryck/gorgonnx/blob/9df285e6d96d6ad9494aeeb420fb9f42ebe7f360/vendor/gorgonia.org/tensor/tensonnx/tensor.go#L16).
+
+To do an eye-test of the result, let's convert a 3D-tensor back into an image.
+
+An example can be found in the MNIST example we used in the last post:
 ```
 curl https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz | \
 tar -C /tmp -xzvf -
 ```
 
-The model is delivered with three tests. The tests are made of an input tensor and the expected output tensor.
+The model is delivered with three tests. The tests are made of an input tensor (3D) and the expected output tensor.
 Let's take one of the input tensor, convert it to a Gorgonia tensor and create a picture from it (so see if the data, types and shapes are coherents).
 I am using the `image` package of the standard Go distribution and dumping a png file on stdout for commodity:
 
@@ -156,7 +162,7 @@ In the previous post, we have sliced the parsing function into three parts:
 
 (cf [_Building the DAG_](/2018/08/14/my-journey-with-onnx-and-go---the-beginning.html#building-the-dag) in the previous post for more information)
 
-I will take back the skeleton of the code I made to generate the graph with gonum in the first article.
+I will take back the skeleton of the code I made to generate the graph with Gonum in the first article.
 The main differences are:
 
 * I am now using a pointer to `gorgonia.ExprGraph` in the `computationGraph` structure
@@ -253,7 +259,7 @@ With all those operators, I can open the MNIST model, and create the Graph. The 
 
 ## Running the graph
 
-To run the graph, I need to give it one input.
+To run the graph, I need to give it one input to work on.
 I will use the input of the first section (the one that displayed a `0`).
 The model should return a vector of 10 entries with a higher value in the first position:
 
@@ -287,13 +293,19 @@ sadly my computation gives the following result:
 [55.41009 984.514 -1191.4886 -652.1293 802.4857 497.57553 -303.6763 952.77106 -233.73296 -672.92255]
 ```
 
+By now, I am stuck with this bug, the the goal is reached, I have generated a computation graph that actually runs and gives me a result.
+Let's now write a temporary conclusion.
+
 # Conclusion
 
 I am glad to be able to read, understand and compute an ONNX model. Getting the wrong result is annoying but gives a good challenge.
 Finding where the problem is not trivial, and debugging a neural network is not easy, but it is a good learning experience to analyze the behavior of the operators in detail.
-I have started to implement unit tests for each operator I need in the MNIST model.
+I have started to implement unit tests for each operator I need in the MNIST model. This is an heavy task, and sometimes I wish I did TDD for this (but this is another story). 
 
 More recently, I have noticed that the ONNX repository was [full of simple test cases made to evaluate the backends](https://github.com/onnx/onnx/tree/master/onnx/backend/test/data/node). This is the next step to implement into the decoding package. 
+
+I am very excited by the possibility to run an ONNX model thanks to a entirely self-sufficient runtime environment. 
+With the potential to export this "_VM_" to WASM, we can imagine great applications such as running an ImagerNet network straight to the browser while capting images from the webcam or the microphone. So the challenge now is to fix the MNIST model and to implement more Operators. Then to play and have some more fun with ML! 
 
 If you are interested in testing or contributing, I have set up a repository where you will find the sources and the MNIST example (that you can run with `go test`).
 This repository is really a work in progress, and I will not provide (for now) any support around it. 
