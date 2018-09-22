@@ -9,10 +9,34 @@
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved</copyright>
-    <lastBuildDate>Mon, 11 Jun 2018 10:54:59 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 19 Sep 2018 08:53:09 +0200</lastBuildDate>
     
         <atom:link href="https://blog.owulveryck.info/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>My journey with ONNX and Go - Running the graph</title>
+      <link>https://blog.owulveryck.info/2018/09/19/my-journey-with-onnx-and-go---running-the-graph.html</link>
+      <pubDate>Wed, 19 Sep 2018 08:53:09 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2018/09/19/my-journey-with-onnx-and-go---running-the-graph.html</guid>
+      
+        <description>In the previous post, I made an introduction and a POC to interact with ONNX models and Go.
+I have decoded the information to reconstruct a graph. Now I propose to expand the principle and to create a proper execution backend based on Gorgonia. This post is a bit more technical than the previous one because all the concepts needed to work should be present in the last article.</description>
+      
+    </item>
+    
+    <item>
+      <title>My journey with ONNX and Go - The beginning</title>
+      <link>https://blog.owulveryck.info/2018/08/14/my-journey-with-onnx-and-go---the-beginning.html</link>
+      <pubDate>Tue, 14 Aug 2018 20:41:30 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2018/08/14/my-journey-with-onnx-and-go---the-beginning.html</guid>
+      
+        <description>This year has started with a lot of deep thoughts about the software 2.0. My conclusion (which is slightly different from Andrej Karpathy&amp;rsquo;s consideration) is that a software 2.0 is a combination of a Neural network model and its associated weights. This is a concept; now the question is: how to materialize the idea? What artifact represents a software 2.0.
+I emitted several ideas and tried one of them: to serialize the mathematical model and the weights.</description>
+      
+    </item>
     
     <item>
       <title>Recurrent Neural Network, Serverless with Webassembly and S3</title>

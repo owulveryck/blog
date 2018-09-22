@@ -51,7 +51,7 @@ We need to address the three elements:
 * read and process the data to write a tensor backend
 * deal with tensor shape.
 
-I will not focus much on tensor shape. Actually, ONNX has a notion of dimension which is an array of integer. Every entry represents the size of an ax of the tensor.
+I will not focus much on tensor shape. Actually, ONNX has a notion of dimension which is an array of integer. Every entry represents the size of an axis of the tensor.
 This can be converted out-of-the-box into a [`Shape`](https://godoc.org/gorgonia.org/tensor#Shape) element of the `tensor` package.
 
 The data type conversion and the raw data processing is a (little) bit trickier, so let's focus on them.

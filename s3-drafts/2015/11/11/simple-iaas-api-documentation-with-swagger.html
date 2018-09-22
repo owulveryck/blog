@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Simple IaaS API documentation with swagger - Unladen swallow</title>
-  <link rel="alternate" hreflang="en-us" href="https://blog.owulveryck.info/" />
+  
 
 <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -32,7 +32,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.42.2" />
+<meta name="generator" content="Hugo 0.48" />
 
 
 <link rel="canonical" href="https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html" />
@@ -49,33 +49,18 @@
 
 
 
-
 <link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
 
 
+
+<link rel="stylesheet" href="/css/syntax.css">
 
 
 <meta property="og:title" content="Simple IaaS API documentation with swagger" />
 <meta property="og:description" content="Experience with swagger-ui as a documentation tool for the simple iaas api" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html" />
-
-
-
-<meta property="article:published_time" content="2015-11-11T14:24:43&#43;01:00"/>
-
+<meta property="og:url" content="https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html" /><meta property="article:published_time" content="2015-11-11T14:24:43&#43;01:00"/>
 <meta property="article:modified_time" content="2015-11-11T14:24:43&#43;01:00"/>
-
-
-
-
-
-
-
-
-
-
-
 <meta itemprop="name" content="Simple IaaS API documentation with swagger">
 <meta itemprop="description" content="Experience with swagger-ui as a documentation tool for the simple iaas api">
 
@@ -101,7 +86,7 @@
 <![endif]-->
 
 
-<script>
+<script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
@@ -111,6 +96,22 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Droid Sans" type="text/css" media="all" />
+     
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Fira Mono" type="text/css" media="all" />
+     
+
+ <style>
+ body {
+     font-family: 'Droid Sans';
+ }
+ code {
+    font-family: 'Fira Mono';
+ }
+ </style>
+
 
 
 
@@ -129,14 +130,24 @@ if (!doNotTrack) {
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
     <li class="mobile-menu-item">
-        <a href="https://about.me/owulveryck">
-          About the Author
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://about.me/owulveryck" rel="noopener" target="_blank">
+              About the Author
+              <i class="iconfont icon-new-window"></i>
+            </a>
+          
+        
       </li><li class="mobile-menu-item">
-        <a href="https://blog.owulveryck.info/">
-          Home
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://blog.owulveryck.info/">Home</a>
+          
+        
       </li>
+    
   </ul>
 </nav>
 
@@ -240,6 +251,7 @@ if (!doNotTrack) {
 
       </li>
     
+    
   </ul>
 </nav>
 
@@ -258,7 +270,13 @@ if (!doNotTrack) {
         <span class="post-time"> 2015-11-11 </span>
         
         <span class="more-meta"> 1029 words </span>
-        <span class="more-meta"> 5 min read </span>
+          <span class="more-meta"> 5 min read </span>
+
+        
+        
+
+        
+        
       </div>
     </header>
 
@@ -549,18 +567,12 @@ Once the API is fully implemented, any client binding may also be generated with
 
     <footer class="post-footer">
       <div class="post-tags">
-          
-          <a href="/tags/swagger/">swagger</a>
-          
-          <a href="/tags/api/">api</a>
-          
-          <a href="/tags/documentation/">documentation</a>
-          
-          <a href="/tags/json/">JSON</a>
-          
-          <a href="/tags/rest/">REST</a>
-          
-          <a href="/tags/simple-iaas/">simple-iaas</a>
+          <a href="https://blog.owulveryck.info/tags/swagger.html">swagger</a>
+          <a href="https://blog.owulveryck.info/tags/api.html">api</a>
+          <a href="https://blog.owulveryck.info/tags/documentation.html">documentation</a>
+          <a href="https://blog.owulveryck.info/tags/json.html">JSON</a>
+          <a href="https://blog.owulveryck.info/tags/rest.html">REST</a>
+          <a href="https://blog.owulveryck.info/tags/simple-iaas.html">simple-iaas</a>
           
         </div>
 
@@ -580,33 +592,46 @@ Once the API is fully implemented, any client binding may also be generated with
           </a>
       </nav>
     </footer>
-    
-
-  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
-      Show Disqus Comments
-    </div>
-    <div id="disqus_thread"></div>
-    <script type="text/javascript">
-    function load_disqus() {
-        
-        
-        if (window.location.hostname === 'localhost') return;
-
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        var disqus_shortname = 'owulveryck';
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-
-        $('#load_disqus').remove();
-    };
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    
-
-  
-
-  
   </article>
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+  <div class="disqus-comment">
+  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
+    Show Disqus Comments
+  </div>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_config = function () {
+      this.page.url = "https://blog.owulveryck.info/2015/11/11/simple-iaas-api-documentation-with-swagger.html";
+    };
+    function load_disqus() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'owulveryck';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+      $('#load_disqus').remove();
+    };
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+  
+  </div>
+
         </div>
       </div>
     </main>
@@ -619,10 +644,10 @@ Once the API is fully implemented, any client binding may also be generated with
       <a href="owulveryck" rel="me noopener" class="iconfont icon-itter"
         title="itter" target="_blank">
       </a>
-  <a href="https://blog.owulveryck.info/index.xml" rel="noopener" type="application/rss+xml" class="iconfont icon-rss"
+  <a href="https://blog.owulveryck.info/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="iconfont icon-rss"
     title="rss" target="_blank">
   </a>
-</div>
+  </div>
 
 <div class="copyright">
   <span class="power-by">
@@ -640,8 +665,15 @@ Once the API is fully implemented, any client binding may also be generated with
     2018
     <span class="heart">
       <i class="iconfont icon-heart"></i>
-    </span><span class="author">All rights reserved</span></span>
+    </span><span class="author">
+        All rights reserved
+        
+      </span></span>
+
+  
+  
 </div>
+
     </footer>
 
     <div class="back-to-top" id="back-to-top">
@@ -649,8 +681,8 @@ Once the API is fully implemented, any client binding may also be generated with
     </div>
   </div>
   
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
 <script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
   <script type="text/javascript">
     window.MathJax = {
@@ -669,6 +701,12 @@ Once the API is fully implemented, any client binding may also be generated with
     <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
     <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
   
+
+
+
+
+
+
 
 
 

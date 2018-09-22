@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Unladen swallow</title>
-  <link rel="alternate" hreflang="en-us" href="https://blog.owulveryck.info/" />
+  
 
 <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -32,7 +32,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.42.2" />
+<meta name="generator" content="Hugo 0.48" />
 
 
 <link rel="canonical" href="https://blog.owulveryck.info/" />
@@ -50,30 +50,18 @@
 
 
 
-
 <link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
 
 
+
+<link rel="stylesheet" href="/css/syntax.css">
 
 
 <meta property="og:title" content="Unladen swallow" />
 <meta property="og:description" content="Olivier Wulveryck&#39;s (tech) blog" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://blog.owulveryck.info/" />
-
-
-
-<meta property="og:updated_time" content="2016-06-23T15:32:54&#43;02:00"/>
-
-
-
-
-
-
-
-
-
-
+<meta property="og:updated_time" content="2016-08-20T21:45:37&#43;02:00"/>
 <meta itemprop="name" content="Unladen swallow">
 <meta itemprop="description" content="Olivier Wulveryck&#39;s (tech) blog">
 
@@ -91,7 +79,7 @@
 <![endif]-->
 
 
-<script>
+<script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
@@ -101,6 +89,22 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Droid Sans" type="text/css" media="all" />
+     
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Fira Mono" type="text/css" media="all" />
+     
+
+ <style>
+ body {
+     font-family: 'Droid Sans';
+ }
+ code {
+    font-family: 'Fira Mono';
+ }
+ </style>
+
 
 
 
@@ -119,14 +123,24 @@ if (!doNotTrack) {
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
     <li class="mobile-menu-item">
-        <a href="https://about.me/owulveryck">
-          About the Author
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://about.me/owulveryck" rel="noopener" target="_blank">
+              About the Author
+              <i class="iconfont icon-new-window"></i>
+            </a>
+          
+        
       </li><li class="mobile-menu-item">
-        <a href="https://blog.owulveryck.info/">
-          Home
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://blog.owulveryck.info/">Home</a>
+          
+        
       </li>
+    
   </ul>
 </nav>
 
@@ -230,6 +244,7 @@ if (!doNotTrack) {
 
       </li>
     
+    
   </ul>
 </nav>
 
@@ -246,6 +261,64 @@ if (!doNotTrack) {
     
       <article class="post bg-white">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/2016/08/20/ethereum.html">ethereum</a></h1>
+    
+    <div class="post-meta">
+      <span class="post-time"> 2016-08-20 </span>
+      
+      <span class="more-meta"> 87 words </span>
+      <span class="more-meta"> 1 min read </span>
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      The greeter: https://www.ethereum.org/greeter
+Installation From sources:
+cd $GOPATH/src/github.com/ethereum git clone https://github.com/ethereum/go-ethereum.git installing the solidity compiler sudo add-apt-repository ppa:ethereum/ethereum sudo apt-get update sudo apt-get install solc which solc  Triggering the console and entering the network Triggering the console on the test network $GOPATH/src/github.com/ethereum/go-ethereum/build/bin/geth --testnet --fast --cache=512 console
+&gt; eth.getCompilers() &gt; I0820 21:59:11.083752 common/compiler/solidity.go:114] solc, the solidity compiler commandline interface &gt; Version: 0.3.6-0/None-Linux/g++ &gt; &gt; path: /usr/bin/solc &gt; [&quot;Solidity&quot;]²  The client is downloading the headers, I should wait until 512 Mb is filled:
+    </div>
+    <div class="read-more">
+      <a href="/2016/08/20/ethereum.html" class="read-more-link">Read more</a>
+    </div>
+    
+  </div>
+</article>
+
+    
+      <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/2016/07/29/hmm-explained.html">hmm explained</a></h1>
+    
+    <div class="post-meta">
+      <span class="post-time"> 2016-07-29 </span>
+      
+      <span class="more-meta"> 121 words </span>
+      <span class="more-meta"> 1 min read </span>
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      It&rsquo;s been about a year that I started to read the tutorial on Hidden Markov Models and selected applications in speech recognition from Lawrence R. Rabiner.
+This paper is a reference in term of HMM application. The problem was that even with a lot of effort and concentration, I was lacking a bunch of skills to fully understand it. As I&rsquo;ve now studied a bit, with the support of Coursera and the lectures of Andrew Ng, I will try to dig into it again.
+    </div>
+    <div class="read-more">
+      <a href="/2016/07/29/hmm-explained.html" class="read-more-link">Read more</a>
+    </div>
+    
+  </div>
+</article>
+
+    
+      <article class="post bg-white">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/2016/06/23/websockets-reveal.js-d3-and-go-for-a-dynamic-keynote.html">Websockets, Reveal.js, D3 and GO for a dynamic keynote</a></h1>
     
     <div class="post-meta">
@@ -253,6 +326,8 @@ if (!doNotTrack) {
       
       <span class="more-meta"> 770 words </span>
       <span class="more-meta"> 4 min read </span>
+      
+      
     </div>
   </header>
   
@@ -280,6 +355,8 @@ Steve Jobs said:
       
       <span class="more-meta"> 0 words </span>
       <span class="more-meta"> 0 min read </span>
+      
+      
     </div>
   </header>
   
@@ -305,6 +382,8 @@ Steve Jobs said:
       
       <span class="more-meta"> 1570 words </span>
       <span class="more-meta"> 8 min read </span>
+      
+      
     </div>
   </header>
   
@@ -316,56 +395,6 @@ Steve Jobs said:
     </div>
     <div class="read-more">
       <a href="/2016/05/20/which-solution-should-i-choose-dont-think-too-much-and-ask-a-bot.html" class="read-more-link">Read more</a>
-    </div>
-    
-  </div>
-</article>
-
-    
-      <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/04/25/dotscale2016.html">dotscale2016</a></h1>
-    
-    <div class="post-meta">
-      <span class="post-time"> 2016-04-25 </span>
-      
-      <span class="more-meta"> 11 words </span>
-      <span class="more-meta"> 1 min read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      I&rsquo;ve had the opportunity to attend the dotScale conference in Paris.
-    </div>
-    <div class="read-more">
-      <a href="/2016/04/25/dotscale2016.html" class="read-more-link">Read more</a>
-    </div>
-    
-  </div>
-</article>
-
-    
-      <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction.html">Behaviour Driven Development with Gherkin and Cucumber (an introduction)</a></h1>
-    
-    <div class="post-meta">
-      <span class="post-time"> 2016-03-31 </span>
-      
-      <span class="more-meta"> 2337 words </span>
-      <span class="more-meta"> 11 min read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      Opening remarks All my previous posts were about choreography, deployment, topology, and more recently about an attempt to include AI in those systems. This post is a bit apart, because I&rsquo;m facing a new challenge in my job which is to implement BDD in a CI chain. Therefore, I&rsquo;m using this blog as a reminder of what I did personally. The following of the Markov saga will come again later.
-    </div>
-    <div class="read-more">
-      <a href="/2016/03/31/behaviour-driven-development-with-gherkin-and-cucumber-an-introduction.html" class="read-more-link">Read more</a>
     </div>
     
   </div>
@@ -867,10 +896,10 @@ Steve Jobs said:
       <a href="owulveryck" rel="me noopener" class="iconfont icon-itter"
         title="itter" target="_blank">
       </a>
-  <a href="https://blog.owulveryck.info/index.xml" rel="noopener" type="application/rss+xml" class="iconfont icon-rss"
+  <a href="https://blog.owulveryck.info/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="iconfont icon-rss"
     title="rss" target="_blank">
   </a>
-</div>
+  </div>
 
 <div class="copyright">
   <span class="power-by">
@@ -888,8 +917,15 @@ Steve Jobs said:
     2018
     <span class="heart">
       <i class="iconfont icon-heart"></i>
-    </span><span class="author">All rights reserved</span></span>
+    </span><span class="author">
+        All rights reserved
+        
+      </span></span>
+
+  
+  
 </div>
+
     </footer>
 
     <div class="back-to-top" id="back-to-top">
@@ -897,8 +933,8 @@ Steve Jobs said:
     </div>
   </div>
   
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
 <script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
   <script type="text/javascript">
     window.MathJax = {
@@ -917,6 +953,12 @@ Steve Jobs said:
     <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
     <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
   
+
+
+
+
+
+
 
 
 

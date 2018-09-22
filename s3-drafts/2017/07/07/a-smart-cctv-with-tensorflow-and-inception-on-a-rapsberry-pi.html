@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>A &#34;Smart&#34; CCTV with Tensorflow, and Inception? On a rapsberry pi? - Unladen swallow</title>
-  <link rel="alternate" hreflang="en-us" href="https://blog.owulveryck.info/" />
+  
 
 <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -32,7 +32,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.42.2" />
+<meta name="generator" content="Hugo 0.48" />
 
 
 <link rel="canonical" href="https://blog.owulveryck.info/2017/07/07/a-smart-cctv-with-tensorflow-and-inception-on-a-rapsberry-pi.html" />
@@ -49,35 +49,20 @@
 
 
 
-
 <link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
 
 
+
+<link rel="stylesheet" href="/css/syntax.css">
 
 
 <meta property="og:title" content="A &#34;Smart&#34; CCTV with Tensorflow, and Inception? On a rapsberry pi?" />
 <meta property="og:description" content="Imagine a CCTV at home that would trigger an alert when it detects a movement. Ok, this is easy. Imagine a CCTV that would trigger an alert when it detects a human. A little bit trickier. Now imagine a CCTV that would trigger an alert when it sees someone who is not from the family." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.owulveryck.info/2017/07/07/a-smart-cctv-with-tensorflow-and-inception-on-a-rapsberry-pi.html" />
-
-  <meta property="og:image" content="https://blog.owulveryck.info/assets/images/tensorflowserving-4.png" />
-
-
-
+<meta property="og:image" content="https://blog.owulveryck.info/assets/images/tensorflowserving-4.png" />
 <meta property="article:published_time" content="2017-07-07T21:06:46&#43;02:00"/>
-
 <meta property="article:modified_time" content="2017-07-07T21:06:46&#43;02:00"/>
-
-
-
-
-
-
-
-
-
-
-
 <meta itemprop="name" content="A &#34;Smart&#34; CCTV with Tensorflow, and Inception? On a rapsberry pi?">
 <meta itemprop="description" content="Imagine a CCTV at home that would trigger an alert when it detects a movement. Ok, this is easy. Imagine a CCTV that would trigger an alert when it detects a human. A little bit trickier. Now imagine a CCTV that would trigger an alert when it sees someone who is not from the family.">
 
@@ -107,7 +92,7 @@
 <![endif]-->
 
 
-<script>
+<script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
@@ -117,6 +102,22 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Droid Sans" type="text/css" media="all" />
+     
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Fira Mono" type="text/css" media="all" />
+     
+
+ <style>
+ body {
+     font-family: 'Droid Sans';
+ }
+ code {
+    font-family: 'Fira Mono';
+ }
+ </style>
+
 
 
 
@@ -135,14 +136,24 @@ if (!doNotTrack) {
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
     <li class="mobile-menu-item">
-        <a href="https://about.me/owulveryck">
-          About the Author
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://about.me/owulveryck" rel="noopener" target="_blank">
+              About the Author
+              <i class="iconfont icon-new-window"></i>
+            </a>
+          
+        
       </li><li class="mobile-menu-item">
-        <a href="https://blog.owulveryck.info/">
-          Home
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://blog.owulveryck.info/">Home</a>
+          
+        
       </li>
+    
   </ul>
 </nav>
 
@@ -246,6 +257,7 @@ if (!doNotTrack) {
 
       </li>
     
+    
   </ul>
 </nav>
 
@@ -264,7 +276,13 @@ if (!doNotTrack) {
         <span class="post-time"> 2017-07-07 </span>
         
         <span class="more-meta"> 2348 words </span>
-        <span class="more-meta"> 12 min read </span>
+          <span class="more-meta"> 12 min read </span>
+
+        
+        
+
+        
+        
       </div>
     </header>
 
@@ -532,7 +550,7 @@ A binding for go exists, but it is only implementing the core library of tensorf
 To avoid this, I am using a non-blocking tick in a go channel within the loop. Therefore I do not process every single frame, but I process a frame every x milliseconds and I discard the rest.
 I could have used a pool, but that would have add complexity for the example.</p>
 
-<script src="//gist.github.com/owulveryck/1f3fc2366e5a35ab119633d57ad074b6.js?file=tick.go"></script>
+<script type="application/javascript" src="//gist.github.com/owulveryck/1f3fc2366e5a35ab119633d57ad074b6.js?file=tick.go"></script>
 
 <h3 id="normalizing-the-picture">Normalizing the picture</h3>
 
@@ -544,7 +562,7 @@ I could have used a pool, but that would have add complexity for the example.</p
 
 <p><em>These values probably look somewhat magical, but they are just defined by the original model author based on what he/she wanted to use as input images for training. If you have a graph that you&rsquo;ve trained yourself, you&rsquo;ll just need to adjust the values to match whatever you used during your training process.</em></p>
 
-<script src="//gist.github.com/owulveryck/1f3fc2366e5a35ab119633d57ad074b6.js?file=normalizationgraph.go"></script>
+<script type="application/javascript" src="//gist.github.com/owulveryck/1f3fc2366e5a35ab119633d57ad074b6.js?file=normalizationgraph.go"></script>
 
 <p>Apart from that the rest of the code remains similar.</p>
 
@@ -622,33 +640,46 @@ To do that I need to train the neuron network to classify classes such as:</p>
           </a>
       </nav>
     </footer>
-    
-
-  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
-      Show Disqus Comments
-    </div>
-    <div id="disqus_thread"></div>
-    <script type="text/javascript">
-    function load_disqus() {
-        
-        
-        if (window.location.hostname === 'localhost') return;
-
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        var disqus_shortname = 'owulveryck';
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-
-        $('#load_disqus').remove();
-    };
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    
-
-  
-
-  
   </article>
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+  <div class="disqus-comment">
+  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
+    Show Disqus Comments
+  </div>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_config = function () {
+      this.page.url = "https://blog.owulveryck.info/2017/07/07/a-smart-cctv-with-tensorflow-and-inception-on-a-rapsberry-pi.html";
+    };
+    function load_disqus() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'owulveryck';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+      $('#load_disqus').remove();
+    };
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+  
+  </div>
+
         </div>
       </div>
     </main>
@@ -661,10 +692,10 @@ To do that I need to train the neuron network to classify classes such as:</p>
       <a href="owulveryck" rel="me noopener" class="iconfont icon-itter"
         title="itter" target="_blank">
       </a>
-  <a href="https://blog.owulveryck.info/index.xml" rel="noopener" type="application/rss+xml" class="iconfont icon-rss"
+  <a href="https://blog.owulveryck.info/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="iconfont icon-rss"
     title="rss" target="_blank">
   </a>
-</div>
+  </div>
 
 <div class="copyright">
   <span class="power-by">
@@ -682,8 +713,15 @@ To do that I need to train the neuron network to classify classes such as:</p>
     2018
     <span class="heart">
       <i class="iconfont icon-heart"></i>
-    </span><span class="author">All rights reserved</span></span>
+    </span><span class="author">
+        All rights reserved
+        
+      </span></span>
+
+  
+  
 </div>
+
     </footer>
 
     <div class="back-to-top" id="back-to-top">
@@ -691,8 +729,8 @@ To do that I need to train the neuron network to classify classes such as:</p>
     </div>
   </div>
   
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
 <script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
   <script type="text/javascript">
     window.MathJax = {
@@ -711,6 +749,12 @@ To do that I need to train the neuron network to classify classes such as:</p>
     <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
     <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
   
+
+
+
+
+
+
 
 
 

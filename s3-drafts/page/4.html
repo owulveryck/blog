@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Unladen swallow</title>
-  <link rel="alternate" hreflang="en-us" href="https://blog.owulveryck.info/" />
+  
 
 <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -32,7 +32,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.42.2" />
+<meta name="generator" content="Hugo 0.48" />
 
 
 <link rel="canonical" href="https://blog.owulveryck.info/" />
@@ -50,30 +50,18 @@
 
 
 
-
 <link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
 
 
+
+<link rel="stylesheet" href="/css/syntax.css">
 
 
 <meta property="og:title" content="Unladen swallow" />
 <meta property="og:description" content="Olivier Wulveryck&#39;s (tech) blog" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://blog.owulveryck.info/" />
-
-
-
-<meta property="og:updated_time" content="2017-04-30T21:16:38&#43;02:00"/>
-
-
-
-
-
-
-
-
-
-
+<meta property="og:updated_time" content="2017-05-16T21:43:46&#43;02:00"/>
 <meta itemprop="name" content="Unladen swallow">
 <meta itemprop="description" content="Olivier Wulveryck&#39;s (tech) blog">
 
@@ -91,7 +79,7 @@
 <![endif]-->
 
 
-<script>
+<script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
@@ -101,6 +89,22 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Droid Sans" type="text/css" media="all" />
+     
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Fira Mono" type="text/css" media="all" />
+     
+
+ <style>
+ body {
+     font-family: 'Droid Sans';
+ }
+ code {
+    font-family: 'Fira Mono';
+ }
+ </style>
+
 
 
 
@@ -119,14 +123,24 @@ if (!doNotTrack) {
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
     <li class="mobile-menu-item">
-        <a href="https://about.me/owulveryck">
-          About the Author
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://about.me/owulveryck" rel="noopener" target="_blank">
+              About the Author
+              <i class="iconfont icon-new-window"></i>
+            </a>
+          
+        
       </li><li class="mobile-menu-item">
-        <a href="https://blog.owulveryck.info/">
-          Home
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://blog.owulveryck.info/">Home</a>
+          
+        
       </li>
+    
   </ul>
 </nav>
 
@@ -230,6 +244,7 @@ if (!doNotTrack) {
 
       </li>
     
+    
   </ul>
 </nav>
 
@@ -246,26 +261,83 @@ if (!doNotTrack) {
     
       <article class="post bg-white">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2017/04/30/tosca-n-quads.html">tosca n quads</a></h1>
+    <h1 class="post-title"><a class="post-link" href="/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html">Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM</a></h1>
     
     <div class="post-meta">
-      <span class="post-time"> 2017-04-30 </span>
-      <div class="post-category">
-          
-            <a href="/categories/category/"> category </a>
-          
-        </div>
-      <span class="more-meta"> 55 words </span>
-      <span class="more-meta"> 1 min read </span>
+      <span class="post-time"> 2017-05-16 </span>
+      
+      <span class="more-meta"> 2300 words </span>
+      <span class="more-meta"> 11 min read </span>
+      
+      
     </div>
   </header>
   
   <div class="post-content">
     
     <div class="post-summary">
-      Tosca tosca_definitions_version:tosca_simple_yaml_1_0description:TemplatefordeployingMySQLanddatabasecontent.topology_template:inputs:# omitted here for brevitynode_templates:my_db:type:tosca.nodes.Database.MySQLproperties:name:{get_input:database_name}user:{get_input:database_user}password:{get_input:database_password}port:{get_input:database_port}artifacts:db_content:file:files/my_db_content.txttype:tosca.artifacts.Filerequirements:-host:mysqlinterfaces:Standard:create:implementation:db_create.shinputs:# Copy DB file artifact to server&#39;s staging areadb_data:{get_artifact:[SELF,db_content]}mysql:type:tosca.nodes.DBMS.MySQLproperties:root_password:{get_input:mysql_rootpw}port:{get_input:mysql_port}requirements:-host:db_serverdb_server:type:tosca.nodes.Computecapabilities:# omitted here for brevity n-quads &#34;topology_template&#34;&#34;input&#34;&#34;database_name&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_user&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_password&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_port&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;mysql_rootpw&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;mysql_port&#34;.&#34;my_db&#34;&#34;type&#34;&#34;tosca.nodes.Database.MySQL&#34;.&#34;my_db&#34;&#34;property&#34;&#34;name&#34;.&#34;name&#34;&#34;value&#34;&#34;database_name&#34;.&#34;my_db&#34;&#34;property&#34;&#34;user&#34;.&#34;user&#34;&#34;value&#34;&#34;database_user&#34;.&#34;my_db&#34;&#34;property&#34;&#34;password&#34;.&#34;password&#34;&#34;value&#34;&#34;database_password&#34;.&#34;my_db&#34;&#34;property&#34;&#34;dbport&#34;.&#34;dbport&#34;&#34;value&#34;&#34;database_port&#34;.&#34;my_db&#34;&#34;artifact&#34;&#34;db_content&#34;.&#34;db_content&#34;&#34;file&#34;&#34;files/my_db_content.txt&#34;.&#34;db_content&#34;&#34;type&#34;&#34;tosca.artifacts.File&#34;.&#34;my_db&#34;&#34;interface&#34;&#34;Standard&#34;.&#34;my_db&#34;&#34;interface_create&#34;&#34;create&#34;.&#34;my_db&#34;&#34;requires&#34;&#34;mysql&#34;.&#34;create&#34;&#34;implementation&#34;&#34;db_create.sh&#34;.&#34;create&#34;&#34;input&#34;&#34;db_data&#34;.&#34;db_data&#34;&#34;value&#34;&#34;db_content&#34;.&#34;mysql&#34;&#34;type&#34;&#34;tosca.nodes.DBMS.MySQL&#34;.&#34;mysql&#34;&#34;property&#34;&#34;root_password&#34;.&#34;root_password&#34;&#34;value&#34;&#34;mysql_rootpw&#34;.&#34;mysql&#34;&#34;property&#34;&#34;port&#34;.&#34;port&#34;&#34;value&#34;&#34;mysql_port&#34;.&#34;mysql&#34;&#34;requires&#34;&#34;db_server&#34;.&#34;db_server&#34;&#34;type&#34;&#34;tosca.nodes.Compute&#34;.
-Let&rsquo;s visualize that:
-#!/usr/bin/zsh ( echo &#34;digraph G {&#34; cat $1 | while read subject predicate object trash do echo &#34;$subject-&gt; $object[ label = &#34;$predicate&#34; ];&#34; done echo &#34;}&#34; ) | dot -Tsvg &gt; output.svg
+      TL;DR: Thank you for passing by. This article is, as usual, geek oriented. However, if you are not a geek, and/or you are in a hurry, you can jump to the conclusion: Any real application?
+During the month of may, I have had the chance to attend to the Google Next event in London and the dotAI in Paris. In both conferences I learned a lot about machine learning.
+    </div>
+    <div class="read-more">
+      <a href="/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html" class="read-more-link">Read more</a>
+    </div>
+    
+  </div>
+</article>
+
+    
+      <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/2017/05/04/what-i-learned-at-the-google-next-2017-in-london.html">What I learned at the Google Next 2017 in London</a></h1>
+    
+    <div class="post-meta">
+      <span class="post-time"> 2017-05-04 </span>
+      <div class="post-category">
+          
+        </div>
+      <span class="more-meta"> 64 words </span>
+      <span class="more-meta"> 1 min read </span>
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+       I have rencetly attended the google Next event in London.
+The infrastructure level Compute engine: a pure IaaS Solution App engine: Severless before it was cool Traditional app-engine Flex app-engine Cloud functions The machine learning The tools provided Tensorflow The Shakespear demo The ML services and APIs Computer vision Translate NLP Why machine learning About databases Methods at Google Mindset SRE Change management Conclusion 
+    </div>
+    <div class="read-more">
+      <a href="/2017/05/04/what-i-learned-at-the-google-next-2017-in-london.html" class="read-more-link">Read more</a>
+    </div>
+    
+  </div>
+</article>
+
+    
+      <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/2017/04/30/tosca-n-quads.html">tosca n quads</a></h1>
+    
+    <div class="post-meta">
+      <span class="post-time"> 2017-04-30 </span>
+      <div class="post-category">
+          
+        </div>
+      <span class="more-meta"> 55 words </span>
+      <span class="more-meta"> 1 min read </span>
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+       Tosca tosca_definitions_version:tosca_simple_yaml_1_0description:TemplatefordeployingMySQLanddatabasecontent.topology_template:inputs:# omitted here for brevitynode_templates:my_db:type:tosca.nodes.Database.MySQLproperties:name:{get_input:database_name}user:{get_input:database_user}password:{get_input:database_password}port:{get_input:database_port}artifacts:db_content:file:files/my_db_content.txttype:tosca.artifacts.Filerequirements:-host:mysqlinterfaces:Standard:create:implementation:db_create.shinputs:# Copy DB file artifact to server&#39;s staging areadb_data:{get_artifact:[SELF,db_content]}mysql:type:tosca.nodes.DBMS.MySQLproperties:root_password:{get_input:mysql_rootpw}port:{get_input:mysql_port}requirements:-host:db_serverdb_server:type:tosca.nodes.Computecapabilities:# omitted here for brevity n-quads &#34;topology_template&#34;&#34;input&#34;&#34;database_name&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_user&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_password&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;database_port&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;mysql_rootpw&#34;.&#34;topology_template&#34;&#34;input&#34;&#34;mysql_port&#34;.&#34;my_db&#34;&#34;type&#34;&#34;tosca.nodes.Database.MySQL&#34;.&#34;my_db&#34;&#34;property&#34;&#34;name&#34;.&#34;name&#34;&#34;value&#34;&#34;database_name&#34;.&#34;my_db&#34;&#34;property&#34;&#34;user&#34;.&#34;user&#34;&#34;value&#34;&#34;database_user&#34;.&#34;my_db&#34;&#34;property&#34;&#34;password&#34;.&#34;password&#34;&#34;value&#34;&#34;database_password&#34;.&#34;my_db&#34;&#34;property&#34;&#34;dbport&#34;.&#34;dbport&#34;&#34;value&#34;&#34;database_port&#34;.&#34;my_db&#34;&#34;artifact&#34;&#34;db_content&#34;.&#34;db_content&#34;&#34;file&#34;&#34;files/my_db_content.txt&#34;.&#34;db_content&#34;&#34;type&#34;&#34;tosca.artifacts.File&#34;.&#34;my_db&#34;&#34;interface&#34;&#34;Standard&#34;.&#34;my_db&#34;&#34;interface_create&#34;&#34;create&#34;.&#34;my_db&#34;&#34;requires&#34;&#34;mysql&#34;.&#34;create&#34;&#34;implementation&#34;&#34;db_create.sh&#34;.&#34;create&#34;&#34;input&#34;&#34;db_data&#34;.&#34;db_data&#34;&#34;value&#34;&#34;db_content&#34;.&#34;mysql&#34;&#34;type&#34;&#34;tosca.nodes.DBMS.MySQL&#34;.&#34;mysql&#34;&#34;property&#34;&#34;root_password&#34;.&#34;root_password&#34;&#34;value&#34;&#34;mysql_rootpw&#34;.&#34;mysql&#34;&#34;property&#34;&#34;port&#34;.&#34;port&#34;&#34;value&#34;&#34;mysql_port&#34;.&#34;mysql&#34;&#34;requires&#34;&#34;db_server&#34;.&#34;db_server&#34;&#34;type&#34;&#34;tosca.nodes.Compute&#34;. Let&rsquo;s visualize that:
+#!/usr/bin/zsh ( echo &#34;digraph G {&#34; cat $1 | while read subject predicate object trash do echo &#34;$subject-&gt; $object[ label = &#34;$predicate&#34; ];&#34; done echo &#34;}&#34; ) | dot -Tsvg &gt; output.svg 
     </div>
     <div class="read-more">
       <a href="/2017/04/30/tosca-n-quads.html" class="read-more-link">Read more</a>
@@ -284,6 +356,8 @@ Let&rsquo;s visualize that:
       
       <span class="more-meta"> 1348 words </span>
       <span class="more-meta"> 7 min read </span>
+      
+      
     </div>
   </header>
   
@@ -309,11 +383,11 @@ We were trying hard to stick to the specific framework we developed.
       <span class="post-time"> 2017-03-28 </span>
       <div class="post-category">
           
-            <a href="/categories/category/"> category </a>
-          
         </div>
       <span class="more-meta"> 1291 words </span>
       <span class="more-meta"> 7 min read </span>
+      
+      
     </div>
   </header>
   
@@ -326,69 +400,6 @@ Tooling React I won&rsquo;t give in here an introduction of the language because
     </div>
     <div class="read-more">
       <a href="/2017/03/28/from-graphql-to-a-table-view-with-react-and-apollo.html" class="read-more-link">Read more</a>
-    </div>
-    
-  </div>
-</article>
-
-    
-      <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html">Playing with Facebook&#39;s GraphQL (applied to AWS products and offers management)</a></h1>
-    
-    <div class="post-meta">
-      <span class="post-time"> 2017-03-22 </span>
-      <div class="post-category">
-          
-            <a href="/categories/category/"> category </a>
-          
-        </div>
-      <span class="more-meta"> 1797 words </span>
-      <span class="more-meta"> 9 min read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      About GraphQL GraphQL has been invented by Facebook for the purpose of refactoring their mobile application. Facebook had reached the limits of the standard REST API mainly because:
- Getting that much information was requiring a huge amount of API endpoints The versioning of the API was counter-productive regarding Facebook&rsquo;s frequents deployements.  But graphql is not only a query language related to Facebook. GraphQL is not only applicable to social data.
-    </div>
-    <div class="read-more">
-      <a href="/2017/03/22/playing-with-facebooks-graphql-applied-to-aws-products-and-offers-management.html" class="read-more-link">Read more</a>
-    </div>
-    
-  </div>
-</article>
-
-    
-      <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2017/03/13/lindas-evalc-a-tuplespace-oddity.html">Linda&#39;s evalc, a (tuple)space oddity</a></h1>
-    
-    <div class="post-meta">
-      <span class="post-time"> 2017-03-13 </span>
-      <div class="post-category">
-          
-            <a href="/categories/coordination-language/"> coordination language </a>
-          
-        </div>
-      <span class="more-meta"> 1103 words </span>
-      <span class="more-meta"> 6 min read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      For a change, I will start with a good soundtrack
- (youtube version for those who are spotify-less)
-This is my third article about the distributed coordination language Linda.
-The final target of the work is to use this coordination mechanism to deploy and maintain applications based on the description of their topology (using, for example, TOSCA as a DSL).
-Last time, I introduced a lisp based language (zygomys) as an embedded programing mechanism to describe the business logic.
-    </div>
-    <div class="read-more">
-      <a href="/2017/03/13/lindas-evalc-a-tuplespace-oddity.html" class="read-more-link">Read more</a>
     </div>
     
   </div>
@@ -904,10 +915,10 @@ Last time, I introduced a lisp based language (zygomys) as an embedded programin
       <a href="owulveryck" rel="me noopener" class="iconfont icon-itter"
         title="itter" target="_blank">
       </a>
-  <a href="https://blog.owulveryck.info/index.xml" rel="noopener" type="application/rss+xml" class="iconfont icon-rss"
+  <a href="https://blog.owulveryck.info/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="iconfont icon-rss"
     title="rss" target="_blank">
   </a>
-</div>
+  </div>
 
 <div class="copyright">
   <span class="power-by">
@@ -925,8 +936,15 @@ Last time, I introduced a lisp based language (zygomys) as an embedded programin
     2018
     <span class="heart">
       <i class="iconfont icon-heart"></i>
-    </span><span class="author">All rights reserved</span></span>
+    </span><span class="author">
+        All rights reserved
+        
+      </span></span>
+
+  
+  
 </div>
+
     </footer>
 
     <div class="back-to-top" id="back-to-top">
@@ -934,8 +952,8 @@ Last time, I introduced a lisp based language (zygomys) as an embedded programin
     </div>
   </div>
   
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
 <script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
   <script type="text/javascript">
     window.MathJax = {
@@ -954,6 +972,12 @@ Last time, I introduced a lisp based language (zygomys) as an embedded programin
     <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
     <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
   
+
+
+
+
+
+
 
 
 

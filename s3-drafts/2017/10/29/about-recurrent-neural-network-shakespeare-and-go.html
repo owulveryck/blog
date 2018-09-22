@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>About Recurrent Neural Network, Shakespeare and GO - Unladen swallow</title>
-  <link rel="alternate" hreflang="en-us" href="https://blog.owulveryck.info/" />
+  
 
 <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -32,7 +32,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.42.2" />
+<meta name="generator" content="Hugo 0.48" />
 
 
 <link rel="canonical" href="https://blog.owulveryck.info/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html" />
@@ -49,35 +49,20 @@
 
 
 
-
 <link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
 
 
+
+<link rel="stylesheet" href="/css/syntax.css">
 
 
 <meta property="og:title" content="About Recurrent Neural Network, Shakespeare and GO" />
 <meta property="og:description" content="You may know how enthusiast I am about machine learning. A while ago I discovered recurrent neural networks. I have read that this &#39;tool&#39; allow to predict the future! Is this a kind of magic? I have read a lot of stuffs about the &#39;unreasonable effectiveness&#39; of this mechanism. The litteracy that gives deep explanation exists and is excellent. There is also plehtora of examples, but most of them are using python and a calcul framework. To fully undestand how things work (as I am not a data-scientist), I needed to write my own tool &#39;from scratch&#39;. This is what this post is about: a more-or-less &#39;from scratch&#39; implementation of a RNN in go that can be used to applied to a lot of examples" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.owulveryck.info/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html" />
-
-  <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/en/6/63/Queen_A_Kind_Of_Magic.png" />
-
-
-
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/en/6/63/Queen_A_Kind_Of_Magic.png" />
 <meta property="article:published_time" content="2017-10-29T07:17:33&#43;01:00"/>
-
 <meta property="article:modified_time" content="2017-10-29T07:17:33&#43;01:00"/>
-
-
-
-
-
-
-
-
-
-
-
 <meta itemprop="name" content="About Recurrent Neural Network, Shakespeare and GO">
 <meta itemprop="description" content="You may know how enthusiast I am about machine learning. A while ago I discovered recurrent neural networks. I have read that this &#39;tool&#39; allow to predict the future! Is this a kind of magic? I have read a lot of stuffs about the &#39;unreasonable effectiveness&#39; of this mechanism. The litteracy that gives deep explanation exists and is excellent. There is also plehtora of examples, but most of them are using python and a calcul framework. To fully undestand how things work (as I am not a data-scientist), I needed to write my own tool &#39;from scratch&#39;. This is what this post is about: a more-or-less &#39;from scratch&#39; implementation of a RNN in go that can be used to applied to a lot of examples">
 
@@ -107,7 +92,7 @@
 <![endif]-->
 
 
-<script>
+<script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
@@ -117,6 +102,22 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Droid Sans" type="text/css" media="all" />
+     
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Fira Mono" type="text/css" media="all" />
+     
+
+ <style>
+ body {
+     font-family: 'Droid Sans';
+ }
+ code {
+    font-family: 'Fira Mono';
+ }
+ </style>
+
 
 
 
@@ -135,14 +136,24 @@ if (!doNotTrack) {
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
     <li class="mobile-menu-item">
-        <a href="https://about.me/owulveryck">
-          About the Author
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://about.me/owulveryck" rel="noopener" target="_blank">
+              About the Author
+              <i class="iconfont icon-new-window"></i>
+            </a>
+          
+        
       </li><li class="mobile-menu-item">
-        <a href="https://blog.owulveryck.info/">
-          Home
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://blog.owulveryck.info/">Home</a>
+          
+        
       </li>
+    
   </ul>
 </nav>
 
@@ -246,6 +257,7 @@ if (!doNotTrack) {
 
       </li>
     
+    
   </ul>
 </nav>
 
@@ -264,7 +276,13 @@ if (!doNotTrack) {
         <span class="post-time"> 2017-10-29 </span>
         
         <span class="more-meta"> 2982 words </span>
-        <span class="more-meta"> 14 min read </span>
+          <span class="more-meta"> 14 min read </span>
+
+        
+        
+
+        
+        
       </div>
     </header>
 
@@ -823,33 +841,46 @@ I have also uploaded a binary distribution and a pre-trained model (I have imple
           </a>
       </nav>
     </footer>
-    
-
-  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
-      Show Disqus Comments
-    </div>
-    <div id="disqus_thread"></div>
-    <script type="text/javascript">
-    function load_disqus() {
-        
-        
-        if (window.location.hostname === 'localhost') return;
-
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        var disqus_shortname = 'owulveryck';
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-
-        $('#load_disqus').remove();
-    };
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    
-
-  
-
-  
   </article>
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+  <div class="disqus-comment">
+  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
+    Show Disqus Comments
+  </div>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_config = function () {
+      this.page.url = "https://blog.owulveryck.info/2017/10/29/about-recurrent-neural-network-shakespeare-and-go.html";
+    };
+    function load_disqus() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'owulveryck';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+      $('#load_disqus').remove();
+    };
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+  
+  </div>
+
         </div>
       </div>
     </main>
@@ -862,10 +893,10 @@ I have also uploaded a binary distribution and a pre-trained model (I have imple
       <a href="owulveryck" rel="me noopener" class="iconfont icon-itter"
         title="itter" target="_blank">
       </a>
-  <a href="https://blog.owulveryck.info/index.xml" rel="noopener" type="application/rss+xml" class="iconfont icon-rss"
+  <a href="https://blog.owulveryck.info/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="iconfont icon-rss"
     title="rss" target="_blank">
   </a>
-</div>
+  </div>
 
 <div class="copyright">
   <span class="power-by">
@@ -883,8 +914,15 @@ I have also uploaded a binary distribution and a pre-trained model (I have imple
     2018
     <span class="heart">
       <i class="iconfont icon-heart"></i>
-    </span><span class="author">All rights reserved</span></span>
+    </span><span class="author">
+        All rights reserved
+        
+      </span></span>
+
+  
+  
 </div>
+
     </footer>
 
     <div class="back-to-top" id="back-to-top">
@@ -892,8 +930,8 @@ I have also uploaded a binary distribution and a pre-trained model (I have imple
     </div>
   </div>
   
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
 <script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
   <script type="text/javascript">
     window.MathJax = {
@@ -912,6 +950,12 @@ I have also uploaded a binary distribution and a pre-trained model (I have imple
     <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
     <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
   
+
+
+
+
+
+
 
 
 

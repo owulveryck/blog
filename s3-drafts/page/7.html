@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Unladen swallow</title>
-  <link rel="alternate" hreflang="en-us" href="https://blog.owulveryck.info/" />
+  
 
 <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -32,7 +32,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.42.2" />
+<meta name="generator" content="Hugo 0.48" />
 
 
 <link rel="canonical" href="https://blog.owulveryck.info/" />
@@ -50,30 +50,18 @@
 
 
 
-
 <link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
 
 
+
+<link rel="stylesheet" href="/css/syntax.css">
 
 
 <meta property="og:title" content="Unladen swallow" />
 <meta property="og:description" content="Olivier Wulveryck&#39;s (tech) blog" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://blog.owulveryck.info/" />
-
-
-
-<meta property="og:updated_time" content="2016-12-16T14:51:18&#43;01:00"/>
-
-
-
-
-
-
-
-
-
-
+<meta property="og:updated_time" content="2017-01-06T21:59:25&#43;01:00"/>
 <meta itemprop="name" content="Unladen swallow">
 <meta itemprop="description" content="Olivier Wulveryck&#39;s (tech) blog">
 
@@ -91,7 +79,7 @@
 <![endif]-->
 
 
-<script>
+<script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
@@ -101,6 +89,22 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Droid Sans" type="text/css" media="all" />
+     
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Fira Mono" type="text/css" media="all" />
+     
+
+ <style>
+ body {
+     font-family: 'Droid Sans';
+ }
+ code {
+    font-family: 'Fira Mono';
+ }
+ </style>
+
 
 
 
@@ -119,14 +123,24 @@ if (!doNotTrack) {
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
     <li class="mobile-menu-item">
-        <a href="https://about.me/owulveryck">
-          About the Author
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://about.me/owulveryck" rel="noopener" target="_blank">
+              About the Author
+              <i class="iconfont icon-new-window"></i>
+            </a>
+          
+        
       </li><li class="mobile-menu-item">
-        <a href="https://blog.owulveryck.info/">
-          Home
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://blog.owulveryck.info/">Home</a>
+          
+        
       </li>
+    
   </ul>
 </nav>
 
@@ -230,6 +244,7 @@ if (!doNotTrack) {
 
       </li>
     
+    
   </ul>
 </nav>
 
@@ -246,6 +261,62 @@ if (!doNotTrack) {
     
       <article class="post bg-white">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/2017/01/06/lambda-inter-s3.html">lambda inter s3</a></h1>
+    
+    <div class="post-meta">
+      <span class="post-time"> 2017-01-06 </span>
+      
+      <span class="more-meta"> 161 words </span>
+      <span class="more-meta"> 1 min read </span>
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      In this post I will explain how to setup a lambda function written in go that will be triggered when an object is dropped on a bucket on s3. The function will read the object and copy it into another bucket iin another location. It will use AWS&rsquo; golang sdk.
+The Lambda skeleton AWS Lambda does not support the go programming language natively. Anyway, it as a go program is compiled and packed as a simgle static binary, it it easy to execute a go program whitin a wrapper (node.
+    </div>
+    <div class="read-more">
+      <a href="/2017/01/06/lambda-inter-s3.html" class="read-more-link">Read more</a>
+    </div>
+    
+  </div>
+</article>
+
+    
+      <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/2017/01/06/accessing-aws-deep-learning-services-from-ios..html">Accessing AWS deep learning services from iOS.</a></h1>
+    
+    <div class="post-meta">
+      <span class="post-time"> 2017-01-06 </span>
+      
+      <span class="more-meta"> 8 words </span>
+      <span class="more-meta"> 1 min read </span>
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+       Only fools never change their minds - Talleyrand
+ 
+    </div>
+    <div class="read-more">
+      <a href="/2017/01/06/accessing-aws-deep-learning-services-from-ios..html" class="read-more-link">Read more</a>
+    </div>
+    
+  </div>
+</article>
+
+    
+      <article class="post bg-white">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html">Image reKognition with a webcam, go and AWS.</a></h1>
     
     <div class="post-meta">
@@ -253,6 +324,8 @@ if (!doNotTrack) {
       
       <span class="more-meta"> 627 words </span>
       <span class="more-meta"> 3 min read </span>
+      
+      
     </div>
   </header>
   
@@ -283,6 +356,8 @@ The part of the result I will focus on is the emotion.
       
       <span class="more-meta"> 0 words </span>
       <span class="more-meta"> 0 min read </span>
+      
+      
     </div>
   </header>
   
@@ -308,6 +383,8 @@ The part of the result I will focus on is the emotion.
       
       <span class="more-meta"> 1251 words </span>
       <span class="more-meta"> 6 min read </span>
+      
+      
     </div>
   </header>
   
@@ -320,60 +397,6 @@ Life of an ex sysadmin who wants to code a web app: getting depressed To make th
     </div>
     <div class="read-more">
       <a href="/2016/10/19/spa-with-gopherjs.html" class="read-more-link">Read more</a>
-    </div>
-    
-  </div>
-</article>
-
-    
-      <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/10/17/http-over-udt-for-inter-region-file-transfer.html">HTTP over UDT for inter-region file transfer</a></h1>
-    
-    <div class="post-meta">
-      <span class="post-time"> 2016-10-17 </span>
-      
-      <span class="more-meta"> 753 words </span>
-      <span class="more-meta"> 4 min read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      Introduction Transferring files between server is no big deal with nowadays network equipments. You use rsync, scp or even http to get a file from A to B.
-Of course, you rely on the TCP stack so you have a decent reliability in the transport.
-But TCP has its drawback, especially when it needs to go through a lot of equipments. Typically in the cloud, or over a VPN.
-    </div>
-    <div class="read-more">
-      <a href="/2016/10/17/http-over-udt-for-inter-region-file-transfer.html" class="read-more-link">Read more</a>
-    </div>
-    
-  </div>
-</article>
-
-    
-      <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2016/10/10/j.a.r.v.i.s.-show-them-how-go-javascript-and-aws-ec2-can-change-the-way-we-do-iaas-and-more-and-more.html">J.A.R.V.I.S., show them how go, javascript, and aws ec2 can change the way we do IaaS (and more) (and more)</a></h1>
-    
-    <div class="post-meta">
-      <span class="post-time"> 2016-10-10 </span>
-      
-      <span class="more-meta"> 227 words </span>
-      <span class="more-meta"> 2 min read </span>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      introduction As you may know, if you know me personally of if you read my blog, I&rsquo;m a big fan of automation.
-Automation alongside of machine learning could heavily improve the usage of IT and increase functional perspectives. Indeed, automation is not a reserved principle of continuous integration; automation is not only targeted to ease the life of operation engineers or a tool to lower the costs.
-Automation (and machine learning) may also be used for everyday life.
-    </div>
-    <div class="read-more">
-      <a href="/2016/10/10/j.a.r.v.i.s.-show-them-how-go-javascript-and-aws-ec2-can-change-the-way-we-do-iaas-and-more-and-more.html" class="read-more-link">Read more</a>
     </div>
     
   </div>
@@ -889,10 +912,10 @@ Automation (and machine learning) may also be used for everyday life.
       <a href="owulveryck" rel="me noopener" class="iconfont icon-itter"
         title="itter" target="_blank">
       </a>
-  <a href="https://blog.owulveryck.info/index.xml" rel="noopener" type="application/rss+xml" class="iconfont icon-rss"
+  <a href="https://blog.owulveryck.info/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="iconfont icon-rss"
     title="rss" target="_blank">
   </a>
-</div>
+  </div>
 
 <div class="copyright">
   <span class="power-by">
@@ -910,8 +933,15 @@ Automation (and machine learning) may also be used for everyday life.
     2018
     <span class="heart">
       <i class="iconfont icon-heart"></i>
-    </span><span class="author">All rights reserved</span></span>
+    </span><span class="author">
+        All rights reserved
+        
+      </span></span>
+
+  
+  
 </div>
+
     </footer>
 
     <div class="back-to-top" id="back-to-top">
@@ -919,8 +949,8 @@ Automation (and machine learning) may also be used for everyday life.
     </div>
   </div>
   
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
 <script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
   <script type="text/javascript">
     window.MathJax = {
@@ -939,6 +969,12 @@ Automation (and machine learning) may also be used for everyday life.
     <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
     <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
   
+
+
+
+
+
+
 
 
 

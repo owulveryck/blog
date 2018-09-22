@@ -3,6 +3,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.owulveryck.info/2018/09/19/my-journey-with-onnx-and-go---running-the-graph.html</loc>
+    <lastmod>2018-09-19T08:53:09+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://blog.owulveryck.info/2018/08/14/my-journey-with-onnx-and-go---the-beginning.html</loc>
+    <lastmod>2018-08-14T20:41:30+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://blog.owulveryck.info/2018/06/11/recurrent-neural-network-serverless-with-webassembly-and-s3.html</loc>
     <lastmod>2018-06-11T10:54:59+02:00</lastmod>
   </url>
@@ -244,13 +254,13 @@
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/tags/bdd.html</loc>
+    <loc>https://blog.owulveryck.info/topics/bdd.html</loc>
     <lastmod>2016-03-31T23:39:35+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/topics/bdd.html</loc>
+    <loc>https://blog.owulveryck.info/tags/bdd.html</loc>
     <lastmod>2016-03-31T23:39:35+01:00</lastmod>
     <priority>0</priority>
   </url>
@@ -551,7 +561,7 @@
   
   <url>
     <loc>https://blog.owulveryck.info/post.html</loc>
-    <lastmod>2018-06-11T10:54:59+02:00</lastmod>
+    <lastmod>2018-09-19T08:53:09+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -664,14 +674,14 @@
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/tags/tosca.html</loc>
-    <lastmod>2016-02-10T17:19:47+01:00</lastmod>
+    <loc>https://blog.owulveryck.info/topics/tosca.html</loc>
+    <lastmod>2015-11-20T10:09:30+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/topics/tosca.html</loc>
-    <lastmod>2015-11-20T10:09:30+00:00</lastmod>
+    <loc>https://blog.owulveryck.info/tags/tosca.html</loc>
+    <lastmod>2016-02-10T17:19:47+01:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -688,20 +698,20 @@
   </url>
   
   <url>
-    <loc>https://blog.owulveryck.info/tags/udt.html</loc>
-    <lastmod>2016-10-17T20:50:18+02:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://blog.owulveryck.info/topics/udt.html</loc>
     <lastmod>2016-10-17T20:50:18+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>https://blog.owulveryck.info/tags/udt.html</loc>
+    <lastmod>2016-10-17T20:50:18+02:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://blog.owulveryck.info/</loc>
-    <lastmod>2018-06-11T10:54:59+02:00</lastmod>
+    <lastmod>2018-09-19T08:53:09+02:00</lastmod>
     <priority>0</priority>
   </url>
   

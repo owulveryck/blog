@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <title>Image reKognition with a webcam, go and AWS. - Unladen swallow</title>
-  <link rel="alternate" hreflang="en-us" href="https://blog.owulveryck.info/" />
+  
 
 <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -32,7 +32,7 @@
 
 
 
-<meta name="generator" content="Hugo 0.42.2" />
+<meta name="generator" content="Hugo 0.48" />
 
 
 <link rel="canonical" href="https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html" />
@@ -49,33 +49,18 @@
 
 
 
-
 <link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
 
 
+
+<link rel="stylesheet" href="/css/syntax.css">
 
 
 <meta property="og:title" content="Image reKognition with a webcam, go and AWS." />
 <meta property="og:description" content="Very quick post to present a piece of code that grabs an image from a webcam and send it to amazon&#39;s image recognition service." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html" />
-
-
-
-<meta property="article:published_time" content="2016-12-16T14:51:18&#43;01:00"/>
-
+<meta property="og:url" content="https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html" /><meta property="article:published_time" content="2016-12-16T14:51:18&#43;01:00"/>
 <meta property="article:modified_time" content="2016-12-16T14:51:18&#43;01:00"/>
-
-
-
-
-
-
-
-
-
-
-
 <meta itemprop="name" content="Image reKognition with a webcam, go and AWS.">
 <meta itemprop="description" content="Very quick post to present a piece of code that grabs an image from a webcam and send it to amazon&#39;s image recognition service.">
 
@@ -101,7 +86,7 @@
 <![endif]-->
 
 
-<script>
+<script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
@@ -111,6 +96,22 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Droid Sans" type="text/css" media="all" />
+     
+       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Fira Mono" type="text/css" media="all" />
+     
+
+ <style>
+ body {
+     font-family: 'Droid Sans';
+ }
+ code {
+    font-family: 'Fira Mono';
+ }
+ </style>
+
 
 
 
@@ -129,14 +130,24 @@ if (!doNotTrack) {
 <nav id="mobile-menu" class="mobile-menu slideout-menu">
   <ul class="mobile-menu-list">
     <li class="mobile-menu-item">
-        <a href="https://about.me/owulveryck">
-          About the Author
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://about.me/owulveryck" rel="noopener" target="_blank">
+              About the Author
+              <i class="iconfont icon-new-window"></i>
+            </a>
+          
+        
       </li><li class="mobile-menu-item">
-        <a href="https://blog.owulveryck.info/">
-          Home
-        </a>
+        
+          
+          
+            <a class="menu-item-link" href="https://blog.owulveryck.info/">Home</a>
+          
+        
       </li>
+    
   </ul>
 </nav>
 
@@ -240,6 +251,7 @@ if (!doNotTrack) {
 
       </li>
     
+    
   </ul>
 </nav>
 
@@ -258,7 +270,13 @@ if (!doNotTrack) {
         <span class="post-time"> 2016-12-16 </span>
         
         <span class="more-meta"> 627 words </span>
-        <span class="more-meta"> 3 min read </span>
+          <span class="more-meta"> 3 min read </span>
+
+        
+        
+
+        
+        
       </div>
     </header>
 
@@ -429,12 +447,9 @@ For example to monitor my home and sends an alert if someone is in my place and 
 
     <footer class="post-footer">
       <div class="post-tags">
-          
-          <a href="/tags/webcam/">webcam</a>
-          
-          <a href="/tags/golang/">golang</a>
-          
-          <a href="/tags/aws/">aws</a>
+          <a href="https://blog.owulveryck.info/tags/webcam.html">webcam</a>
+          <a href="https://blog.owulveryck.info/tags/golang.html">golang</a>
+          <a href="https://blog.owulveryck.info/tags/aws.html">aws</a>
           
         </div>
 
@@ -454,33 +469,46 @@ For example to monitor my home and sends an alert if someone is in my place and 
           </a>
       </nav>
     </footer>
-    
-
-  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
-      Show Disqus Comments
-    </div>
-    <div id="disqus_thread"></div>
-    <script type="text/javascript">
-    function load_disqus() {
-        
-        
-        if (window.location.hostname === 'localhost') return;
-
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        var disqus_shortname = 'owulveryck';
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-
-        $('#load_disqus').remove();
-    };
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    
-
-  
-
-  
   </article>
+
+  
+  
+
+  
+  
+
+  
+
+  
+
+  <div class="disqus-comment">
+  <div class="disqus-button" id="load_disqus" onclick="load_disqus()">
+    Show Disqus Comments
+  </div>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_config = function () {
+      this.page.url = "https://blog.owulveryck.info/2016/12/16/image-rekognition-with-a-webcam-go-and-aws..html";
+    };
+    function load_disqus() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'owulveryck';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+
+      $('#load_disqus').remove();
+    };
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+  </noscript>
+  
+  </div>
+
         </div>
       </div>
     </main>
@@ -493,10 +521,10 @@ For example to monitor my home and sends an alert if someone is in my place and 
       <a href="owulveryck" rel="me noopener" class="iconfont icon-itter"
         title="itter" target="_blank">
       </a>
-  <a href="https://blog.owulveryck.info/index.xml" rel="noopener" type="application/rss+xml" class="iconfont icon-rss"
+  <a href="https://blog.owulveryck.info/index.xml" rel="noopener alternate" type="application/rss&#43;xml" class="iconfont icon-rss"
     title="rss" target="_blank">
   </a>
-</div>
+  </div>
 
 <div class="copyright">
   <span class="power-by">
@@ -514,8 +542,15 @@ For example to monitor my home and sends an alert if someone is in my place and 
     2018
     <span class="heart">
       <i class="iconfont icon-heart"></i>
-    </span><span class="author">All rights reserved</span></span>
+    </span><span class="author">
+        All rights reserved
+        
+      </span></span>
+
+  
+  
 </div>
+
     </footer>
 
     <div class="back-to-top" id="back-to-top">
@@ -523,8 +558,8 @@ For example to monitor my home and sends an alert if someone is in my place and 
     </div>
   </div>
   
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
 <script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
   <script type="text/javascript">
     window.MathJax = {
@@ -543,6 +578,12 @@ For example to monitor my home and sends an alert if someone is in my place and 
     <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
     <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
   
+
+
+
+
+
+
 
 
 
