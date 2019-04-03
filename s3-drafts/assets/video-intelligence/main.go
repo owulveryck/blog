@@ -4,8 +4,9 @@ package main
 // +build ignore
 
 import (
-	"github.com/gopherjs/gopherjs/js"
 	"time"
+
+	"github.com/gopherjs/gopherjs/js"
 )
 
 var anns []annotation
@@ -51,7 +52,7 @@ func main() {
 	//config.Width = "560"
 	//config.Height = "315"
 	config.Width = "100%"
-	config.VideoID = "A0yQ0dPhkOg"
+	config.VideoID = "O1xitYlzDsc"
 	js.Global.Get("window").Set("onYouTubeIframeAPIReady", func() {
 		// Then create a new Player instance called "player", actually creating an iFrame "player" instead of the
 		// Div identified by "player"
