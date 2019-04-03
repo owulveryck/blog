@@ -77,7 +77,7 @@ Therefore, decoupling onnx from Gorgonia is easy via an interface, and gonum's g
 So onnx-go is becoming a product and the vision statement is:
 
 > For the Go developer 
-> who needs to add a machine learning capability to its code
+> who needs to add a machine learning capability to his/her code
 > `onnx-go` is a package 
 > that facilitates the use of neural network models (software 2.0)
 > and unlike any other computation library,
