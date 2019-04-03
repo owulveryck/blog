@@ -50,6 +50,7 @@
 
 
 
+
 <link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
 
 
@@ -61,7 +62,7 @@
 <meta property="og:description" content="Olivier Wulveryck&#39;s (tech) blog" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://blog.owulveryck.info/" />
-<meta property="og:updated_time" content="2015-12-07T08:48:20&#43;00:00"/>
+<meta property="og:updated_time" content="2016-01-30T11:35:36&#43;01:00"/>
 <meta itemprop="name" content="Unladen swallow">
 <meta itemprop="description" content="Olivier Wulveryck&#39;s (tech) blog">
 
@@ -89,22 +90,6 @@ if (!doNotTrack) {
 }
 </script>
 <script async src='https://www.google-analytics.com/analytics.js'></script>
-
-
-       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Droid Sans" type="text/css" media="all" />
-     
-       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Fira Mono" type="text/css" media="all" />
-     
-
- <style>
- body {
-     font-family: 'Droid Sans';
- }
- code {
-    font-family: 'Fira Mono';
- }
- </style>
-
 
 
 
@@ -261,6 +246,63 @@ if (!doNotTrack) {
     
       <article class="post bg-white">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/2016/01/30/nas-for-macos-on-freebsd.html">nas for macos on freebsd</a></h1>
+    
+    <div class="post-meta">
+      <span class="post-time"> 2016-01-30 </span>
+      
+      <span class="more-meta"> 11 words </span>
+      <span class="more-meta"> 1 min read </span>
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+       Creating the jail:
+iocage create tag=nas resolver=&#34;nameserver 192.168.1.1&#34; hostname=&#34;nas&#34; ip4_addr=&#34;lo1|192.168.1.100/24&#34; mDNSresponder 
+    </div>
+    <div class="read-more">
+      <a href="/2016/01/30/nas-for-macos-on-freebsd.html" class="read-more-link">Read more</a>
+    </div>
+    
+  </div>
+</article>
+
+    
+      <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/2016/01/24/setting-up-my-new-bsd-box.html">Setting up my new BSD box</a></h1>
+    
+    <div class="post-meta">
+      <span class="post-time"> 2016-01-24 </span>
+      
+      <span class="more-meta"> 508 words </span>
+      <span class="more-meta"> 3 min read </span>
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      About the server I have subscribed for a now dedicated BSD box. The provider is OVH, and this box is hosted in Canada.
+It&rsquo;s been a few years since I first subscribed a box a OVH, and I really enjoy their service.
+The main usage for this box is a geek box. I use it to exeperiment some stuffs, I cannot experiment into my home PC. Therefore I usually create a bunch of jails, and each jail is dedicated to a task
+    </div>
+    <div class="read-more">
+      <a href="/2016/01/24/setting-up-my-new-bsd-box.html" class="read-more-link">Read more</a>
+    </div>
+    
+  </div>
+</article>
+
+    
+      <article class="post bg-white">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/2015/12/07/oaas-orchestrator-as-a-service---part-1.html">OaaS orchestrator as a service - part 1</a></h1>
     
     <div class="post-meta">
@@ -350,65 +392,6 @@ Note I&rsquo;m really talking about the engine of the script, (the shebang defin
 </article>
 
     
-      <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2015/11/20/tosca-lifecycle-as-a-digraph.html">TOSCA lifecycle as a digraph</a></h1>
-    
-    <div class="post-meta">
-      <span class="post-time"> 2015-11-20 </span>
-      
-      <span class="more-meta"> 1103 words </span>
-      <span class="more-meta"> 6 min read </span>
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      About TOSCA The TOSCA acronym stands for Topology and Orchestration Specification for Cloud Applications. It&rsquo;s an OASIS standard.
-The purpose of the TOSCA project is to represent an application by its topology and formalize it using the TOSCA grammar.
-The [TOSCA-Simple-Profile-YAML-v1.0] current specification in YAML introduces the following concepts.
-  TOSCA YAML service template: A YAML document artifact containing a (TOSCA) service template that represents a Cloud application. TOSCA processor: An engine or tool that is capable of parsing and interpreting a TOSCA YAML service template for a particular purpose.
-    </div>
-    <div class="read-more">
-      <a href="/2015/11/20/tosca-lifecycle-as-a-digraph.html" class="read-more-link">Read more</a>
-    </div>
-    
-  </div>
-</article>
-
-    
-      <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/2015/11/17/playing-with-openstack-keystone.html">Playing with (Openstack) Keystone</a></h1>
-    
-    <div class="post-meta">
-      <span class="post-time"> 2015-11-17 </span>
-      
-      <span class="more-meta"> 1833 words </span>
-      <span class="more-meta"> 9 min read </span>
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      In the cloud computing, alongside of the hosting monsters such as amazon or google, there is the Openstack Platform.
-Openstack is not a single software, it is more a galaxy of components aim to control the infrastructure, such as hardware pools, storage, network. The management can then be done via a Web based interface or via a bunch of RESTful API.
-I would like to evaluate its identity service named keystone and use it as a AuthN and AuthZ backend for my simple_iaas example.
-    </div>
-    <div class="read-more">
-      <a href="/2015/11/17/playing-with-openstack-keystone.html" class="read-more-link">Read more</a>
-    </div>
-    
-  </div>
-</article>
-
-    
   </section>
 
   
@@ -482,8 +465,6 @@ I would like to evaluate its identity service named keystone and use it as a Aut
 
             
             
-              
-            
 
           
           
@@ -492,12 +473,6 @@ I would like to evaluate its identity service named keystone and use it as a Aut
         
 
         
-        
-          <li class="">
-            <a href="/page/2.html">
-              2
-            </a>
-          </li>
         
 
       
@@ -874,6 +849,37 @@ I would like to evaluate its identity service named keystone and use it as a Aut
 
       
 
+        
+
+        
+        
+
+          
+          
+          
+
+            
+            
+              
+            
+
+          
+          
+
+        
+        
+
+        
+        
+          <li class="">
+            <a href="/page/15.html">
+              15
+            </a>
+          </li>
+        
+
+      
+
       
       
       <li><a href="/page/13.html">»</a></li>
@@ -881,7 +887,7 @@ I would like to evaluate its identity service named keystone and use it as a Aut
 
       
       
-      <li><a href="/page/14.html">»»</a></li>
+      <li><a href="/page/15.html">»»</a></li>
       
 
       </ul>
@@ -922,7 +928,7 @@ I would like to evaluate its identity service named keystone and use it as a Aut
     &copy;
     
       2015 -
-    2018
+    2019
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span><span class="author">

@@ -21,6 +21,7 @@ mathjax: false
 ---
 
 <!--more-->
+In this post, I am describing the state of the `onnx-go` project that I started a couple of months ago. The purpose of this post is to explain why I started the project, how I developed the idea, and what the package `onnx-go` is.
 
 ## When onnx-go was a project...
 On March the 25th, I was at the dotGO conference. I gave a lightning talk about `onnx-go`, a project I started a couple of months ago.
