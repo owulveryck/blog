@@ -114,7 +114,7 @@ type OperationCarrier interface {
 
 Let's put aside what and `Operation` is by now and just consider it's an object with a name and some named attributes (for example "Convolution" with "padding, strides, dilation").
 
-The `DataCarrier` was first a `TensorCarrier` because all I needed to address were tensors in ONNX. A talk with Xuanyi Chew convinced me that, even if the carried type was a `tensor.Tensor`, technically speaking a tensor is data+operation... Well, `DataCarrier` is a good name.
+The `DataCarrier` was first a `TensorCarrier` because all I needed to address were tensors in ONNX. A talk with [Xuanyi Chew](https://twitter.com/chewxy) convinced me that, even if the carried type was a `tensor.Tensor`, technically speaking a tensor is data+operation... Well, `DataCarrier` is a good name.
 
 By now, the interface for `DataCarrier` is: 
 
@@ -153,7 +153,7 @@ I need to reimplement Gorgonia as a working backend. The goal is to be able to r
 
 ### Tests
 
-I learn TDD from my friends (thanks JDU) and I know that it's a design method more than a test method.
+I learn TDD from my friends (thanks [Jonathan](https://twitter.com/jducraft)) and I know that it's a design method more than a test method.
 I am not, by now, able to write my code in TDD, but driving the design by the test is, in my humble opinion, mandatory.
 This is what lead me to the current implementation which will keep on moving.
 
