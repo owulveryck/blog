@@ -27,7 +27,8 @@ In this post, I am describing the state of the `onnx-go` project that I started 
 On March the 25th, I was at the dotGO conference. I gave a lightning talk about `onnx-go`, a project I started a couple of months ago.
 
 The purpose of `onnx-go` is to be able to import pre-trained neural network models (software 2.0) into the Go ecosystem.
-Indeed, it's been a while since I machine learning started to buzz.
+
+It's been a while since machine learning started to buzz.
 However, the software developers still need to learn many concepts before being able to use a neural network as a regular capacity in their code.
 
 > if neural networks is a software 2.0, a "regular" developer should be able to use it, like any other library, easily. 
