@@ -192,11 +192,12 @@ Wait for the file to be compiled by your browser (the run button will become ava
 Then draw a digit... and the machine will tell you what it is
 
 <center>
-<a style="color:red" id="guess">.</a>
 <canvas id="canvasBox"position="relative" width="280" height="280"></canvas>
 
 <button id="btnSubmit">Submit</button>
 <button onclick="reset()">Reset</button>
+
+<h3>Machine says it's <a style="color:red" id="guess">.</a></h3>
 <br/>
 
 </center>
