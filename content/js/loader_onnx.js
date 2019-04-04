@@ -14,9 +14,10 @@ function initCanvas(){
 
 window.onload = function(){
     initCanvas();
+   reset();
     // submit button
-  //var btnsub = document.getElementById('btnSubmit');
-  //btnsub.addEventListener('click', postImg());
+  // var btnsub = document.getElementById('btnSubmit');
+  // btnsub.addEventListener('click', postImg());
 };
 
 //reset canvas
