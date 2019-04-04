@@ -189,14 +189,16 @@ Load the onnx-go small interpreter into the browser (the file is big, take care 
 
 Wait for the file to be compiled by your browser (the run button will become available): <button onClick="run();" id="runButton" style="width:125px;" disabled>Run</button>
 
-Then draw a digit...
+Then draw a digit... and the machine will tell you what it is
+
 <center>
+<a style="color:red" id="guess">.</a>
 <canvas id="canvasBox"position="relative" width="280" height="280"></canvas>
-<br/>
+
 <button id="btnSubmit">Submit</button>
 <button onclick="reset()">Reset</button>
+<br/>
 
-Machine says it's a <a style="color:red" id="guess">.</a>
 </center>
 
 

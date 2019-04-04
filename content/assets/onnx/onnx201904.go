@@ -34,6 +34,15 @@ func main() {
 	// Declare callback
 	cb := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		// handle event
+		// Get the picture
+		pic := js.Global().Get("document").Call("getElementById", "canvasBox").Call("toDataURL")
+		picpic, err := dataurl.DecodeString(pic.String())
+		if err != nil {
+			log.Println(err)
+			return nil
+		}
+		log.Println(picpic.Data)
+
 		js.Global().Get("document").
 			Call("getElementById", "guess").
 			Set("innerHTML", "hello wasm")
