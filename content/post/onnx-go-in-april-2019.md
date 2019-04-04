@@ -176,20 +176,22 @@ I've compiled a small utility based on the old version of onnx-go and Gorgonia.
 You can load the the MNIST pre-trained model and play with it!
 
 **Warning** Just a couple of warning. It can hang a tab of your browser and even all the browser.
-I don't think it works on a mobile.
+I don't think it works on a mobile. For more information on the wiring that makes this work with WASM etc., please refer to this [post](/2018/06/11/recurrent-neural-network-serverless-with-webassembly-and-s3.html).
 
 ---
 
-Download the MNIST model.onnx from my [blog](/assets/onnx/mnist/model.onnx), or from the [model zoo (you may need to unzip it first)](https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz)
+Download the MNIST model.onnx from the [model zoo (you may need to unzip it first)](https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz) (if not available, there is a copy [here](/assets/onnx/mnist/model.onnx)). This files contains the neural network itself
+
 
 Upload it here: <input type="file" id="knowledgeFile" multiple size="1" style="width:250px" accept=".onnx">
 
-Load the WASM file (the file is 25Mo): <button onClick="load();" id="loadButton" style="width:125px;">Load</button>
+Load the onnx-go small interpreter into the browser (the file is big, take care of your bandwidth): <button onClick="load();" id="loadButton" style="width:125px;">Load</button>
 
-Wait for the file to be compiled (the run button will become available): <button onClick="run();" id="runButton" style="width:125px;" disabled>Run</button>
+Wait for the file to be compiled by your browser (the run button will become available): <button onClick="run();" id="runButton" style="width:125px;" disabled>Run</button>
 
+Then draw a digit...
 <center>
-<canvas id="canvasBox"position="relative" width="280" height="280"></canvas>                             
+<canvas id="canvasBox"position="relative" width="280" height="280"></canvas>
 <button id="btnSubmit" onclick="postImg()">Submit</button>
 <button onclick="reset()">Reset</button>
 <h1 id="guess"></h1>
