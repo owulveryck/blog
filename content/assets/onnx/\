@@ -29,12 +29,11 @@ func main() {
 			log.Println(err)
 			return
 		}
-		_ = dataURL
+		log.Println(dataURL)
 		// modelonnx = dataURL.Data
 	}
 	// Declare callback
 	cb := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
-		fmt.Println("Hello")
 		// handle event
 		js.Global().Get("document").
 			Call("getElementById", "guess").

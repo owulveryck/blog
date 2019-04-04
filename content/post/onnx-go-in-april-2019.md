@@ -193,7 +193,8 @@ Then draw a digit...
 <canvas id="canvasBox"position="relative" width="280" height="280"></canvas>
 <button id="btnSubmit">Submit</button>
 <button onclick="reset()">Reset</button>
-<h1 id="guess"></h1>
+
+Machine says it's a <a style="color:red" id="guess">.</a>
 </center>
 
 
