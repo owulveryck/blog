@@ -19,6 +19,10 @@ contentCopyright: false
 reward: false
 mathjax: false
 ---
+<script src="/js/wasm_exec.js"></script>
+<script src="/js/loader_onnx.js"></script>
+<script src="/js/fabric.min.js"></script>
+<script src="/js/jquery-3.2.1.min.js"></script>
 
 <!--more-->
 In this post, I am describing the state of the `onnx-go` project that I started a couple of months ago. The purpose of this post is to explain why I started the project, how I developed the idea, and what the package `onnx-go` is.
@@ -162,4 +166,33 @@ Once all of this is ok, I can re-implement the Gorgonia operators one by one, an
 
 On top of that, I am also considering writing a very simple and light backend based on gonum without symbolic computation. This can be useful for to run on small plateforms such as a RPI.
 
-Stay tuned!
+Stay tuned and follow [github.com/owulveryck/onnx-go](https://github.com/owulveryck/onnx-go)!
+
+## One more thing...
+
+To give you the taste of what can be done, I've setup a small demo that runs entirely in the browser (I've compiled the Go code to WebAssembly).
+I've compiled a small utility based on the old version of onnx-go and Gorgonia.
+
+You can load the the MNIST pre-trained model and play with it!
+
+**Warning** Just a couple of warning. It can hang a tab of your browser and even all the browser.
+I don't think it works on a mobile.
+
+---
+
+Download the MNIST model.onnx from my [blog](/assets/onnx/mnist/model.onnx), or from the [model zoo (you may need to unzip it first)](https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz)
+
+Upload it here: <input type="file" id="knowledgeFile" multiple size="1" style="width:250px" accept=".onnx">
+
+Load the WASM file (the file is 25Mo): <button onClick="load();" id="loadButton" style="width:125px;">Load</button>
+
+Wait for the file to be compiled (the run button will become available): <button onClick="run();" id="runButton" style="width:125px;" disabled>Run</button>
+
+<center>
+<canvas id="canvasBox"position="relative" width="280" height="280"></canvas>                             
+<button id="btnSubmit" onclick="postImg()">Submit</button>
+<button onclick="reset()">Reset</button>
+<h1 id="guess"></h1>
+</center>
+
+
