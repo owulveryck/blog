@@ -19,10 +19,9 @@ contentCopyright: false
 reward: false
 mathjax: false
 ---
-<script src="/js/wasm_exec.js"></script>
+<script src="/js/wasm_exec1.12.js"></script>
 <script src="/js/loader_onnx.js"></script>
 <script src="/js/fabric.min.js"></script>
-<script src="/js/jquery-3.2.1.min.js"></script>
 
 <!--more-->
 In this post, I am describing the state of the `onnx-go` project that I started a couple of months ago. The purpose of this post is to explain why I started the project, how I developed the idea, and what the package `onnx-go` is.
@@ -192,7 +191,7 @@ Wait for the file to be compiled by your browser (the run button will become ava
 Then draw a digit...
 <center>
 <canvas id="canvasBox"position="relative" width="280" height="280"></canvas>
-<button id="btnSubmit" onclick="postImg()">Submit</button>
+<button id="btnSubmit">Submit</button>
 <button onclick="reset()">Reset</button>
 <h1 id="guess"></h1>
 </center>

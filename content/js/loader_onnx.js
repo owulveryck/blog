@@ -25,21 +25,6 @@ function reset() {
     $('#guess').text('');     
 }
 
-function postImg(){                        
-    var imgURL = canvas.toDataURL();   
-
-    //Send Ajax call
-    $.ajax({
-        type: 'post',
-        url: '/picture',
-        data: imgURL,
-    
-        success: function(data){
-            $('#guess').text(data);
-        }              
-    });                     
-}
-
 if (!WebAssembly.instantiateStreaming) { // polyfill
          WebAssembly.instantiateStreaming = async (resp, importObject) => {
                  const source = await (await resp).arrayBuffer();
@@ -51,7 +36,7 @@ if (!WebAssembly.instantiateStreaming) { // polyfill
   let mod, inst;
 async function load() {
   document.getElementById("loadButton").disabled = true;
-  WebAssembly.instantiateStreaming(fetch("/wasm/nnre.wasm"), go.importObject).then((result) => {
+  WebAssembly.instantiateStreaming(fetch("/assets/onnx/onnx201904.wasm"), go.importObject).then((result) => {
          mod = result.module;
          inst = result.instance;
          document.getElementById("runButton").disabled = false;
