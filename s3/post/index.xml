@@ -20,8 +20,9 @@
       <pubDate>Wed, 03 Apr 2019 20:33:42 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2019/04/03/from-a-project-to-a-product-the-state-of-onnx-go.html</guid>
-      <description>In this post, I am describing the state of the onnx-go project that I started a couple of months ago. The purpose of this post is to explain why I started the project, how I developed the idea, and what the package onnx-go is.
-When onnx-go was a project&amp;hellip; On March the 25th, I was at the dotGO conference. I gave a lightning talk about onnx-go, a project I started a couple of months ago.</description>
+      <description>&lt;script src=&#34;https://blog.owulveryck.info/js/fabric.min.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://blog.owulveryck.info/js/wasm_exec1.12.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://blog.owulveryck.info/js/loader_onnx.js&#34;&gt;&lt;/script&gt;</description>
     </item>
     
     <item>

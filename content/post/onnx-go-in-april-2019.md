@@ -169,8 +169,8 @@ Stay tuned and follow [github.com/owulveryck/onnx-go](https://github.com/owulver
 
 ## One more thing...
 
-To give you the taste of what can be done, I've setup a small demo that runs entirely in the browser (I've compiled the Go code to WebAssembly).
-I've compiled a small utility based on the old version of onnx-go and Gorgonia.
+Before moving on to the new implementation of ONNX, I've setup a small demo that runs entirely in the browser (I've compiled the Go code to WebAssembly).
+This is a WASM port of the sample I made with Gorgonia and onnx-go to load the MNIST model.
 
 You can load the the MNIST pre-trained model and play with it!
 
@@ -185,11 +185,11 @@ Download the MNIST model.onnx from the [model zoo (you may need to unzip it firs
 
 Upload it here: <input type="file" id="knowledgeFile" multiple size="1" style="width:250px" accept=".onnx">
 
-Load the onnx-go small interpreter into the browser (the file is big, take care of your bandwidth): <button onClick="load();" id="loadButton" style="width:125px;">Load</button>
+Load the onnx-go small interpreter into the browser (the file is big, I use this trick to spare the bandwith if you do not want to run the demo): <button onClick="load();" id="loadButton" style="width:125px;">Load</button>
 
-Wait for the file to be compiled by your browser (the run button will become available): <button onClick="run();" id="runButton" style="width:125px;" disabled>Run</button>
+Wait for the file to be compiled by your browser, and then click on this button when it turns green: <button onClick="run();" id="runButton" style="width:125px;color:red" disabled>Run</button>
 
-Then draw a digit... and the machine will tell you what it is
+Then draw a digit (around the center of the square)... and the machine will tell you what it is
 
 <center>
 <canvas id="canvasBox"position="relative" width="280" height="280"></canvas>

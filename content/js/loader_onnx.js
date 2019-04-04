@@ -14,7 +14,8 @@ function initCanvas(){
 
 window.onload = function(){
     initCanvas();
-   reset();
+     reset();
+  //canvas.backgroundColor = '#FFFFFF';            
     // submit button
   // var btnsub = document.getElementById('btnSubmit');
   // btnsub.addEventListener('click', postImg());
@@ -41,6 +42,7 @@ async function load() {
          mod = result.module;
          inst = result.instance;
          document.getElementById("runButton").disabled = false;
+         document.getElementById("runButton").style.color = "green";
   });
 }
 
