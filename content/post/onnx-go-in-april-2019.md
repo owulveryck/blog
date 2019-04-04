@@ -19,9 +19,9 @@ contentCopyright: false
 reward: false
 mathjax: false
 ---
+<script src="/js/fabric.min.js"></script>
 <script src="/js/wasm_exec1.12.js"></script>
 <script src="/js/loader_onnx.js"></script>
-<script src="/js/fabric.min.js"></script>
 
 <!--more-->
 In this post, I am describing the state of the `onnx-go` project that I started a couple of months ago. The purpose of this post is to explain why I started the project, how I developed the idea, and what the package `onnx-go` is.
@@ -174,8 +174,9 @@ I've compiled a small utility based on the old version of onnx-go and Gorgonia.
 
 You can load the the MNIST pre-trained model and play with it!
 
-**Warning** Just a couple of warning. It can hang a tab of your browser and even all the browser.
-I don't think it works on a mobile. For more information on the wiring that makes this work with WASM etc., please refer to this [post](/2018/06/11/recurrent-neural-network-serverless-with-webassembly-and-s3.html).
+**Warning** Just a couple of warning. It can hang a tab of your browser (and maybe all the browser).
+I don't think it works on a mobile. 
+For more information on the wiring that makes this work with WASM etc., please refer to this [post](/2018/06/11/recurrent-neural-network-serverless-with-webassembly-and-s3.html).
 
 ---
 
@@ -191,6 +192,7 @@ Wait for the file to be compiled by your browser (the run button will become ava
 Then draw a digit...
 <center>
 <canvas id="canvasBox"position="relative" width="280" height="280"></canvas>
+<br/>
 <button id="btnSubmit">Submit</button>
 <button onclick="reset()">Reset</button>
 
