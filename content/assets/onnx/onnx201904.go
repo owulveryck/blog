@@ -29,14 +29,16 @@ func main() {
 			log.Println(err)
 			return
 		}
+		log.Println(dataURL)
 		// modelonnx = dataURL.Data
 	}
 	// Declare callback
-	cb := js.NewEventCallback(js.PreventDefault, func(ev js.Value) {
+	cb := js.FuncOf(func(this js.Value, args []js.Value) interface{} {
 		// handle event
 		js.Global().Get("document").
 			Call("getElementById", "guess").
 			Set("value", "hello wasm")
+		return nil
 	})
 	// Hook it up with a DOM event
 	js.Global().Get("document").
