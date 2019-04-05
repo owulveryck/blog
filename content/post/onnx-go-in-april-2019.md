@@ -180,12 +180,12 @@ For more information on the wiring that makes this work with WASM etc., please r
 
 ---
 
-Download the MNIST model.onnx from the [model zoo (you may need to unzip it first)](https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz) (if not available, there is a copy [here](/assets/onnx/mnist/model.onnx)). This files contains the neural network itself
+Download the MNIST `model.onnx` from the [model zoo (you may need to unzip it first)](https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz) (if not available, there is a copy [here](/assets/onnx/mnist/model.onnx)). This file contains the pre-trained neural network.
 
 
-Upload it here: <input type="file" id="knowledgeFile" multiple size="1" style="width:250px" accept=".onnx">
+<a style="color:red">Upload it here: </a><input type="file" id="knowledgeFile" multiple size="1" style="width:250px" accept=".onnx">
 
-Load the onnx-go small interpreter into the browser (the file is big, I use this trick to spare the bandwith if you do not want to run the demo): <button onClick="load();" id="loadButton" style="width:125px;">Load</button>
+Load the onnx-go small interpreter into the browser (the WASM file is not preloaded to spare bandwidth): <button onClick="load();" id="loadButton" style="width:125px;">Load</button>
 
 Wait for the file to be compiled by your browser, and then click on this button when it turns green: <button onClick="run();" id="runButton" style="width:125px;color:red" disabled>Run</button>
 
@@ -200,6 +200,11 @@ Then draw a digit (around the center of the square)... and the machine will tell
 <h3>Machine says it's <a style="color:red" id="guess">.</a></h3>
 <br/>
 
+</center>
+
+For the most curious, here is how it works internally...
+<center>
+{{< figure src="/assets/images/onnx-wasm-principle_small.png" link="/assets/images/onnx-wasm-principle.png" title="Schema" >}}
 </center>
 
 

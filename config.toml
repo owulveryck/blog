@@ -102,7 +102,7 @@ uglyURLs = true
   [params.social]
       # Optional, used for attribution in Twitter cards
       # See: https://dev.twitter.com/cards/types/summary-large-image
-      twitter = "owulveryck"
+      #twitter = "owulveryck"
       c-twitter = "https://twitter.com/owulveryck"
 
   [params.sharingicons]
