@@ -183,21 +183,20 @@ For more information on the wiring that makes this work with WASM etc., please r
 Download the MNIST `model.onnx` from the [model zoo (you may need to unzip it first)](https://www.cntk.ai/OnnxModels/mnist/opset_7/mnist.tar.gz) (if not available, there is a copy [here](/assets/onnx/mnist/model.onnx)). This file contains the pre-trained neural network.
 
 
-<a style="color:red">Upload it here: </a><input type="file" id="knowledgeFile" multiple size="1" style="width:250px" accept=".onnx">
+<a style="color:red">Upload it here: </a><input type="file" id="knowledgeFile" multiple size="1" style="width:250px" accept=".onnx" onChange="fileOK();">
 
-Load the onnx-go small interpreter into the browser (the WASM file is not preloaded to spare bandwidth): <button onClick="load();" id="loadButton" style="width:125px;">Load</button>
+Load the onnx-go small interpreter into the browser (the WASM file is not preloaded to spare bandwidth): <button onClick="load();" id="loadButton" style="width:125px;color:grey;" disabled>Load</button>
 
-Wait for the file to be compiled by your browser, and then click on this button when it turns green: <button onClick="run();" id="runButton" style="width:125px;color:red" disabled>Run</button>
+Wait for the file to be compiled by your browser, and then click on this button when it turns green: <button onClick="run();" id="runButton" style="width:125px;color:grey" disabled>Run</button>
 
-Then draw a digit (around the center of the square)... and the machine will tell you what it is
+<!-- Then draw a digit (around the center of the square)... and the machine will tell you what it is -->
 
 <center>
+<p id="info" style="color:green;">...</p>
 <canvas style="touch-action: none;" id="canvasBox"position="relative" width="280" height="280"></canvas>
 
 <button id="btnSubmit">Submit</button>
 <button onclick="reset()">Reset</button>
-
-<h3>Machine says it's <a style="color:red" id="guess">.</a></h3>
 <br/>
 
 </center>

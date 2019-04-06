@@ -30,7 +30,7 @@ window.onload = function(){
 //reset canvas
 function reset() {           
     canvas.clear();   
-    $('#guess').text('');     
+   document.getElementById("info").innerHTML = "...";
 }
 
 if (!WebAssembly.instantiateStreaming) { // polyfill
@@ -44,16 +44,21 @@ if (!WebAssembly.instantiateStreaming) { // polyfill
   let mod, inst;
 async function load() {
   document.getElementById("loadButton").disabled = true;
-  WebAssembly.instantiateStreaming(fetch("/assets/onnx/onnx201904.wasm"), go.importObject).then((result) => {
+   document.getElementById("loadButton").style.color = "grey";
+   document.getElementById("info").innerHTML = "Processing WASM file, please wait...";
+  WebAssembly.instantiateStreaming(fetch("/assets/onnx/onnx20190405.wasm"), go.importObject).then((result) => {
          mod = result.module;
          inst = result.instance;
          document.getElementById("runButton").disabled = false;
+   document.getElementById("info").innerHTML = "Ready to run...";
          document.getElementById("runButton").style.color = "green";
   });
 }
 
 async function run() {
+         document.getElementById("runButton").disabled = true;
        console.clear();
+   document.getElementById("info").innerHTML = "Starting...";
        await go.run(inst);
        inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
 }
@@ -85,4 +90,11 @@ function loadFile(){
         }
     }
     document.getElementById("demo").innerHTML = txt;
+   document.getElementById("loadButton").disabled = false;
+         document.getElementById("loadButton").style.color = "green";
+}
+
+function fileOK() {
+   document.getElementById("loadButton").disabled = false;
+   document.getElementById("loadButton").style.color = "green";
 }
