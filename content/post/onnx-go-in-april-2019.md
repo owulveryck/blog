@@ -11,9 +11,9 @@ author: "Olivier Wulveryck"
 
 # You can also close(false) or open(true) something for this content.
 # P.S. comment can only be closed
-comment: false
-toc: false
-autoCollapseToc: false
+comment: true
+toc: true
+autoCollapseToc: true
 # You can also define another contentCopyright. e.g. contentCopyright: "This is another copyright."
 contentCopyright: false
 reward: false
@@ -192,7 +192,7 @@ Wait for the file to be compiled by your browser, and then click on this button 
 Then draw a digit (around the center of the square)... and the machine will tell you what it is
 
 <center>
-<canvas id="canvasBox"position="relative" width="280" height="280"></canvas>
+<canvas style="touch-action: none;" id="canvasBox"position="relative" width="280" height="280"></canvas>
 
 <button id="btnSubmit">Submit</button>
 <button onclick="reset()">Reset</button>

@@ -10,6 +10,12 @@ function initCanvas(){
     canvas.freeDrawingBrush.width = bThick;
     canvas.freeDrawingBrush.color = cColour;
     canvas.backgroundColor = '#000000';            
+   canvas.allowTouchScrolling = false;
+    canvas.ontouchstart = function(e) {
+        if (e.touches) e = e.touches[0];
+        return false;
+    }
+    $('.canvas-container').on('touchmove', function(evt){ evt.preventDefault(); });
 }
 
 window.onload = function(){
