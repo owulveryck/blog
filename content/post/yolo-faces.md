@@ -53,25 +53,43 @@ $ cd azFce && tree | grep -v png
 ./yad2k.py \
         ../azFace/net_cfg/tiny-yolo-azface-fddb.cfg \
         ../azFace/weights/tiny-yolo-azface-fddb_82000.weights \
-        model_data/yolo2.h5
+        ../FACES/keras/yolo2.h5
 ```
 
 [The h5 version](https://drive.google.com/file/d/1O4BF8m3WrrHTIHnqFtl2oghaw_esRaYn/view)
 
 ```python
 from keras.models import load_model
-keras_model= load_model('../../FACES/keras/yolo.h5')
-from keras.utils import plot_model
-plot_model(keras_model, to_file='model.png')
+keras_model= load_model('../FACES/keras/yolo.h5')
+keras_model.summary()
 ```
 
-<figure>
-  <img src="/assets/yolofaces/keras-preview.png"
-  <figcaption>
-      <h4>Keras representation of the tiny yolo v2 graph</h4>
-  </figcaption>
-</figure>
+```
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+input_1 (InputLayer)         (None, 416, 416, 3)       0         
+_________________________________________________________________
+conv2d_1 (Conv2D)            (None, 416, 416, 16)      432       
+_________________________________________________________________
+...
+_________________________________________________________________
+conv2d_9 (Conv2D)            (None, 13, 13, 30)        30750     
+=================================================================
+Total params: 15,770,510
+Trainable params: 15,764,398
+Non-trainable params: 6,112
+_________________________________________________________________
+```
 
+```python
+from keras.models import load_model
+import numpy as np
+keras_model= load_model('../FACES/keras/yolo.h5')
+
+output = keras_model.predict(np.zeros((1,416,416,3)))
+np.save("../FACES/keras/output.npy",output)
+```
 
 ```python
 import onnxmltools
@@ -84,7 +102,7 @@ import keras2onnx
 onnx_model = keras2onnx.convert_keras(keras_model, name=None, doc_string='', target_opset=None, channel_first_inputs=None)
 # onnx_model = onnxmltools.convert_keras(keras_model, target_opset=7)
 # Save the ONNX model
-onnx.save(onnx_model, '../FACES/yolo2.onnx')
+onnx.save(onnx_model, '../FACES/yolo.onnx')
 ```
 
 [Link to the model](https://github.com/owulveryck/gofaces/raw/master/model.onnx)
@@ -103,3 +121,64 @@ https://lutzroeder.github.io/netron/
 A copy of the full representation is [here](/assets/yolofaces/netron.png)
 
 # Entering the Go world
+
+```go
+import (
+        "github.com/owulveryck/onnx-go"
+        "github.com/owulveryck/onnx-go/backend/x/gorgonnx"
+        "gorgonia.org/gorgonia/encoding/dot"
+        "gorgonia.org/tensor"
+)
+
+func main() {
+        b, _ := ioutil.ReadFile("../FACES/yolo.onnx")
+        backend := gorgonnx.NewGraph()
+        model := onnx.NewModel(backend)
+        model.UnmarshalBinary(b)
+
+        t := tensor.New(
+                tensor.WithShape(1, 416, 416, 3), 
+                tensor.Of(tensor.Float32))
+        _ = model.SetInput(0, t)
+
+        exprGraph, _ := backend.GetExprGraph()
+        b, _ := dot.Marshal(exprGraph)
+        fmt.Println(string(b))
+}
+```
+
+which gives:
+<figure>
+  <img src="/assets/yolofaces/onnx-gorgonia-preview.png" >
+  <figcaption>
+      <h4>Gorgonia representation of the tiny yolo v2 graph</h4>
+  </figcaption>
+</figure>
+
+```go
+func main(){
+        //...
+        must(backend.Run())
+        outputT, err := model.GetOutputTensors()
+        must(err)
+        file, err := os.Open("../FACES/keras/output.npy")
+        must(err)
+        defer file.Close()
+
+        expectedOutput := new(tensor.Dense)
+        must(expectedOutput.ReadNpy(file))
+
+        if ! eqInDelta(expectedOutput,outputT[0],5e-5) {
+                log.Fatal("tensors differs")
+        }
+}
+```
+the comparison function is [here](https://gist.github.com/owulveryck/3d15c0eb9cf7dea6518116ec0a5be581#file-compare_tensor-go)
+
+## Setting an input...
+
+
+## Post-processing the output...
+
+
+## Result
