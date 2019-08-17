@@ -35,7 +35,9 @@ Therefore, in this post I will use the following technologies:
 * ONNX
 * Go
 
-**Note**: Some of the terms such as _domain_, _application_, and _infrastructure_ refer to the concepts from Domain Driver Design (DDD) or the hexagonal architecture. For example, do not consider the infrastructure as boxes and wires, but see it as a service layer. The infrastructure represents everything that exists independently of the application.
+**Note**: Some of the terms such as _domain_, _application_, and _infrastructure_ refer to the concepts from Domain Driver Design (DDD) or the hexagonal architecture. For example, do not consider the infrastructure as boxes and wires, but see it as a service layer. The infrastructure represents everything that exists independently of the application. 
+
+**Disclaimer**: I am using those concepts to illustrate what I do; This is not a proper DDD design nor a true hexagonal architecture.
 
 The architecture of our tool can be described by three layers:
 <center>
@@ -114,7 +116,7 @@ keras_model= load_model('../FACES/keras/yolo.h5')
 keras_model.summary()
 ```
 
-```
+```txt
 _________________________________________________________________
 Layer (type)                 Output Shape              Param #   
 =================================================================
@@ -136,7 +138,7 @@ Sounds ok!
 
 ### Generate the onnx file
 
-The onnx version is generated simply with the tool keras2onnx with this simple script:
+The onnx version is generated with the tool keras2onnx with this script:
 ```python
 import onnxmltools
 import onnx
@@ -178,17 +180,26 @@ output = keras_model.predict(np.zeros((1,416,416,3)))
 np.save("../FACES/keras/output.npy",output)
 ```
 
-Now, let's mode to the infrastructure and application part.
+Now, let's move to the infrastructure and application part.
 
 # Infrastructure: Entering the Go world
 
+No surprise here: the infrastructure I am using is made of [`onnx-go`](https://github.com/owulveryck/onnx-go) to decode the onnx file,
+and [Gorgonia](https://github.com/gorgonia/gorgonia) to execute the model.
+This solution is an efficient solution for a tool; all the dependencies I needed to build the pre-trained model are not needed anymore. This gives the end-user of the tool a much better experience.
+
+### The Service Provider Interface (SPI)
+
+Onnx-go provides an implementation of a `Model` object. It is a Go structure that acts as a receiver of the neural network model.
+
+Gorgonia provides a runtime environment that can execute the model.
+
+The basic usage of those services is:
 
 ```go
 import (
         "github.com/owulveryck/onnx-go"
         "github.com/owulveryck/onnx-go/backend/x/gorgonnx"
-        "gorgonia.org/gorgonia/encoding/dot"
-        "gorgonia.org/tensor"
 )
 
 func main() {
@@ -196,50 +207,56 @@ func main() {
         backend := gorgonnx.NewGraph()
         model := onnx.NewModel(backend)
         model.UnmarshalBinary(b)
-
-        t := tensor.New(
-                tensor.WithShape(1, 416, 416, 3), 
-                tensor.Of(tensor.Float32))
-        _ = model.SetInput(0, t)
-
-        exprGraph, _ := backend.GetExprGraph()
-        b, _ := dot.Marshal(exprGraph)
-        fmt.Println(string(b))
 }
 ```
 
-which gives:
+
+To use the model, we need to interact with its inputs and output.
+The model takes a tensor as input. To set it, the helper function `SetInput` is used.
+The outputs are obtained via a call to `GetTensorOutput()`
+
+```go
+t := tensor.New(
+        tensor.WithShape(1, 416, 416, 3), 
+        tensor.Of(tensor.Float32))
+model.SetInput(0, t)
+```
+
+We can now test the infrastructure to see if the implementation is ok. We set an empty tensor, compute it with Gorgonia and compare the result with the one
+saved previously:
+
+I wrote a small `test` file hosted on a gist [here](https://gist.github.com/owulveryck/3d15c0eb9cf7dea6518116ec0a5be581#file-yolo_test-go). 
+
+```text
+# go test
+PASS
+ok      tmp/graph       1.054s
+```
+
+_Note_: The ExprGraph used by gorgonia can also be represented visually with graphviz. This code generates the _dot_ representation:
+
+```go
+exprGraph, _ := backend.GetExprGraph()
+b, _ := dot.Marshal(exprGraph)
+fmt.Println(string(b))
+}
+```
+
+Here is an extract of the result (the full picture is [here](/assets/yolofaces/yolo-gorgonia.png))
+
+<center>
 <figure>
-  <img src="/assets/yolofaces/onnx-gorgonia-preview.png" >
+  <img src="/assets/yolofaces/onnx-gorgonia-preview.png" width="50%">
   <figcaption>
       <h4>Gorgonia representation of the tiny yolo v2 graph</h4>
   </figcaption>
 </figure>
+</center>
 
-```go
-func main(){
-        //...
-        must(backend.Run())
-        outputT, err := model.GetOutputTensors()
-        must(err)
-        file, err := os.Open("../FACES/keras/output.npy")
-        must(err)
-        defer file.Close()
+The infrastructure is ok, and is implementing the SPI! Let's move to the application part!
 
-        expectedOutput := new(tensor.Dense)
-        must(expectedOutput.ReadNpy(file))
-
-        if ! eqInDelta(expectedOutput,outputT[0],5e-5) {
-                log.Fatal("tensors differs")
-        }
-}
-```
-the comparison function is [here](https://gist.github.com/owulveryck/3d15c0eb9cf7dea6518116ec0a5be581#file-compare_tensor-go)
-
-## Setting an input...
+### The API
 
 
-## Post-processing the output...
+# Conclusion
 
-
-## Result
