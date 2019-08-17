@@ -20,6 +20,36 @@ reward: false
 mathjax: false
 ---
 
+In this article, I will show you how to build a tool to detect faces in a picture.
+The goal of this post is:
+
+* to build the business model thanks to a neural network;
+* to adapt the network to the specific domain of face detection by changing its knowledge;
+* to use the resulting domain with a go-based infrastructure;
+* to code a little application in Go to communicate with the outside world.
+
+_Note_: some terms such as domain, application and infrastructure refers to concepts such as the DDD or the
+hexagonal architecture.
+
+<center>
+<figure>
+  <img src="/assets/yolofaces/archi1.png" >
+  <figcaption>
+      <h4>Overall picture of the architecture</h4>
+  </figcaption>
+</figure>
+</center>
+
+This article can be considered as a sort of how-to use a keras model in Go.
+Therefore, in this post I will use the following technologies:
+
+* Python / Keras
+* ONNX
+* Go
+
+
+# Implementing the business logic with a neural network
+
 <!--more-->
 
 ```
