@@ -20,7 +20,7 @@ reward: false
 mathjax: false
 ---
 
-In this article, I will show you how to build a tool to detect faces in a picture.
+In this article, I explain how to build a tool to detect faces in a picture.
 The goal of this post is:
 
 * to build the business model thanks to a neural network;
@@ -28,9 +28,16 @@ The goal of this post is:
 * to use the resulting domain with a go-based infrastructure;
 * to code a little application in Go to communicate with the outside world.
 
-_Note_: some terms such as domain, application and infrastructure refers to concepts such as the DDD or the
-hexagonal architecture.
+This article can be considered as a sort of how-to use a keras model in Go.
+Therefore, in this post I will use the following technologies:
 
+* Python / Keras
+* ONNX
+* Go
+
+**Note**: Some of the terms such as _domain_, _application_, and _infrastructure_ refer to the concepts from Domain Driver Design (DDD) or the hexagonal architecture. For example, do not consider the infrastructure as boxes and wires, but see it as a service layer. The infrastructure represents everything that exists independently of the application.
+
+The architecture of our tool can be described by three layers:
 <center>
 <figure>
   <img src="/assets/yolofaces/archi1.png" >
@@ -40,45 +47,57 @@ hexagonal architecture.
 </figure>
 </center>
 
-This article can be considered as a sort of how-to use a keras model in Go.
-Therefore, in this post I will use the following technologies:
-
-* Python / Keras
-* ONNX
-* Go
-
+Therefore each layer is described in a paragraph of this article.
 
 # Implementing the business logic with a neural network
 
-<!--more-->
+The core functionality of the tool is to detect faces on a picture.
+I will use a neural network to achieve this. The model I have chosen is 
+[Tiny YOLO v2](https://pjreddie.com/darknet/yolov2/) what is able to perform real time object detection.
+
+> This model is designed to be small but powerful. It attains the same top-1 and top-5 performance as AlexNet but with 1/10th the parameters. It uses mostly convolutional layers without the large fully connected layers at the end. It is about twice as fast as AlexNet on CPU making it more suitable for some vision applications.
+
+I am using the "tiny" version which is based off of the Darknet reference network and is much faster but less accurate than the normal YOLO model.
+
+The model is just an “envelope.” It needs some training to be able to detect some objects. The objects it can detect is dependant of its knowledge. The weights tensors represent its knowledge.
+To detect faces, we need to apply the model to the picture with a knowledge (some weights) able to recognize faces.
+
+
+### Getting the weights
+By luck, an engineer named [Azmath Moosa](https://github.com/azmathmoosa) has trained the model and released a tool called [azface](https://github.com/azmathmoosa/azFace).
+The project is available on GitHub in LGPLv3 but, it does not contain the sources of the tool (only a Windows binary and some DLL are present). However what I am interested in is not the tool as I am building my own. What I am seeking now is the weights; and the weights are present in the repository as well.
+
+_Disclaimer_: my tool is for academic purpose, I am confident that his tool is much better.
+
+Let's clone the repository:
+
+`$ git clone https://github.com/azmathmoosa/azFace`
+
+The weights are this heavy file `weights/tiny-yolo-azface-fddb_82000.weights` of 61Mb
+
+### Combining the weights and the model
+
+Now, we need to combine the knowledge and the model. Together, they constitute the core functionality of our domain.
+
+A business logic should be as independant as possible of any framework. The best way to represent the neural network is to be as close as possible as 
+its definition; The original implementation of the yolo model (from "darknet") is written in C; There are other reimplementation in Tensorflow, Keras, Java, ...
+
+I will use [ONNX](https://onnx.ai/) as a format for the business logic; so I will be independant of a framework, and I will be able to use the power of different _infrastructures_.
+
+To create the ONNX format, I will use Keras with the tools: 
+
+* [`yad2k`](https://github.com/allanzelener/yad2k.git) to create a keras model;
+* [`keras2onnx`](https://pypi.org/project/keras2onnx/) to encode it into ONNX.
+
+
+The workflow is:
 
 ```
-$ git clone https://github.com/azmathmoosa/azFace
-$ cd azFce && tree | grep -v png
-.
-├── LICENSE
-├── README.md
-├── darknet.exe
-├── data
-│   └── labels
-│       └── make_labels.py
-├── net_cfg
-│   ├── azface.data
-│   ├── azface.names
-│   └── tiny-yolo-azface-fddb.cfg
-├── pthreadGC2.dll
-├── pthreadVC2.dll
-├── weights
-│   └── tiny-yolo-azface-fddb_82000.weights
-└── yolo_cpp_dll.dll
+                          yad2k                   keras2onnx               
+darknet config + weights -------->  keras model --------------> onnx model
 ```
 
-`git clone https://github.com/allanzelener/yad2k.git`
-
-`conda env create -f environment.yml`
-
-
-
+let's create a keras model from the config and the weights of `azface`
 ```bash
 ./yad2k.py \
         ../azFace/net_cfg/tiny-yolo-azface-fddb.cfg \
@@ -86,8 +105,9 @@ $ cd azFce && tree | grep -v png
         ../FACES/keras/yolo2.h5
 ```
 
-[The h5 version](https://drive.google.com/file/d/1O4BF8m3WrrHTIHnqFtl2oghaw_esRaYn/view)
+This generates a pre-trained [h5 version](https://drive.google.com/file/d/1O4BF8m3WrrHTIHnqFtl2oghaw_esRaYn/view) of the tiny yolo v2 model, able to find faces.
 
+Let's analyze it:
 ```python
 from keras.models import load_model
 keras_model= load_model('../FACES/keras/yolo.h5')
@@ -112,6 +132,43 @@ Non-trainable params: 6,112
 _________________________________________________________________
 ```
 
+Sounds ok!
+
+### Generate the onnx file
+
+The onnx version is generated simply with the tool keras2onnx with this simple script:
+```python
+import onnxmltools
+import onnx
+import keras2onnx
+from keras.models import load_model
+
+keras_model= load_model('../FACES/keras/yolo.h5')
+onnx_model = keras2onnx.convert_keras(keras_model, name=None, doc_string='', target_opset=None, channel_first_inputs=None)
+onnx.save(onnx_model, '../FACES/yolo.onnx')
+```
+
+I have uploaded the result [herel](https://github.com/owulveryck/gofaces/raw/master/model.onnx)
+
+#### Model visualisation
+
+It is interesting to see the result. I am using the tool `netron` which have a [web version](https://lutzroeder.github.io/netron/).
+The result looks like this:
+
+<figure>
+  <img src="/assets/yolofaces/netron-extract.png" link="/assets/yolofaces/netron.png">
+  <figcaption>
+      <h4>Netron representation of the tiny yolo v2 graph</h4>
+  </figcaption>
+</figure>
+
+I made a copy of the full representation which is available [here](/assets/yolofaces/netron.png)
+
+#### Preparing the test of the infrastructure
+
+In order to validate our future infrastructure, let's prepare a simple test:
+Apply the model on a zero value and save the result. I will do the same once the final infrastructure is up and compare the result.
+
 ```python
 from keras.models import load_model
 import numpy as np
@@ -121,36 +178,10 @@ output = keras_model.predict(np.zeros((1,416,416,3)))
 np.save("../FACES/keras/output.npy",output)
 ```
 
-```python
-import onnxmltools
-import onnx
-from keras.models import load_model
+Now, let's mode to the infrastructure and application part.
 
-keras_model= load_model('../FACES/keras/yolo.h5')
-# Convert it! The target_opset parameter is optional.
-import keras2onnx
-onnx_model = keras2onnx.convert_keras(keras_model, name=None, doc_string='', target_opset=None, channel_first_inputs=None)
-# onnx_model = onnxmltools.convert_keras(keras_model, target_opset=7)
-# Save the ONNX model
-onnx.save(onnx_model, '../FACES/yolo.onnx')
-```
+# Infrastructure: Entering the Go world
 
-[Link to the model](https://github.com/owulveryck/gofaces/raw/master/model.onnx)
-
-## Model visualisation
-
-https://lutzroeder.github.io/netron/
-
-<figure>
-  <img src="/assets/yolofaces/netron-extract.png" link="/assets/yolofaces/netron.png">
-  <figcaption>
-      <h4>Netron representation of the tiny yolo v2 graph</h4>
-  </figcaption>
-</figure>
-
-A copy of the full representation is [here](/assets/yolofaces/netron.png)
-
-# Entering the Go world
 
 ```go
 import (
