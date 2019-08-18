@@ -150,7 +150,7 @@ onnx_model = keras2onnx.convert_keras(keras_model, name=None, doc_string='', tar
 onnx.save(onnx_model, '../FACES/yolo.onnx')
 ```
 
-I have uploaded the result [herel](https://github.com/owulveryck/gofaces/raw/master/model.onnx)
+I have uploaded the result [here](https://github.com/owulveryck/gofaces/raw/master/model.onnx)
 
 #### Model visualisation
 
@@ -194,7 +194,7 @@ Onnx-go provides an implementation of a `Model` object. It is a Go structure tha
 
 Gorgonia provides a runtime environment that can execute the model.
 
-The basic usage of those services is:
+The basic usage of those services in the main package of a tool is:
 
 ```go
 import (
@@ -255,8 +255,43 @@ Here is an extract of the result (the full picture is [here](/assets/yolofaces/y
 
 The infrastructure is ok, and is implementing the SPI! Let's move to the application part!
 
-### The API
+# Writing the application in Go
 
+## The API
+
+Let's start with the interface of the application. I create a package `gofaces` that will hold the logic of the application.
+It will be a layer that will add some facilities to communicate with the outside world. This package can be instanciated by a anything from a simple cli to 
+a webservice.
+
+### Input
+
+#### GetTensorFromImage
+
+This function takes an image as input; The image is transfered to the function with a stream of bytes (`io.Reader`). This let the possibility for the end user
+to use a regular file, to get the file from stdin, or to build a webservice and get the file via http.
+This function returns a tensor usable with the yolo faces model; it also returns any error if it cannot process the file.
+
+_Note_ the full signature can be found on [`GoDoc / GetTensorFromImage`](https://godoc.org/github.com/owulveryck/gofaces#GetTensorFromImage) 
+
+We can take back the skeleton of the tool we started before and add the input (I skip the errors checking for clarity):
+
+```go
+func main() {
+        b, _ := ioutil.ReadFile("../FACES/yolo.onnx")
+        // Instanciate the infrastructure
+        backend := gorgonnx.NewGraph()
+        model := onnx.NewModel(backend)
+        // Loading the business logic (the neural net)
+        model.UnmarshalBinary(b)
+        // Accessing the I/O through the API
+        inputT, _ := gofaces.GetTensorFromImage(img)
+        model.SetInput(0, inputT)
+}
+```
+
+The model can be executed with a call to `model.Run()`o
+
+### Output
 
 # Conclusion
 
