@@ -14,7 +14,7 @@ publishdir = "public"
 # # true: use pygments-css or false: color-codes directly
 pygmentsUseClasses =true
 pygmentsCodeFences=true
-#pygmentsOptions = "linenos=table"
+pygmentsOptions = "linenos=table"
 
 # Theme to use (located in /themes/THEMENAME/)
 # theme = "hugo-bootstrap"
@@ -61,12 +61,12 @@ uglyURLs = true
   url = "https://about.me/owulveryck"
 
 [params]
-     googlefonts = ["Droid Sans", "Fira Mono"]
-     fontbody = 'Droid Sans'
-     fontcode = 'Fira Mono'
+    googlefonts = ["Droid Sans", "Fira Mono"]
+    fontbody = 'Droid Sans'
+    fontcode = 'Fira Mono'
     author = "Olivier Wulveryck"
     description = "Olivier Wulveryck's (tech) blog"
-    #footline = "code with <i class='fa fa-heart'></i>"
+    footline = "code with <i class='fa fa-heart'></i>"
 
     # Text for the top menu link, which goes the root URL for the site.
     # Default (if omitted) is "Home"
@@ -117,11 +117,7 @@ uglyURLs = true
 
   [params.sidebar]
       # Optional about block for sidebar (can be Markdown)
-      about = "This is a place where I share my technical experiences alongside my life of IT professional<br> \
-               Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br> \
-              __Sir Bedevere__: _How do know so much about swallows?_<br>\
-             __King Arthur__: _Well, you have to know these things when you're a king, you know._<br><br>_Monty Python and the Holy Grail_"
-
+      about = "This is a place where I share my technical experiences alongside my life of IT professional<br>  Because even finding the air-speed velocity of an unladen swallow can be fun.<br><br>  __Sir Bedevere__: _How do know so much about swallows?_<br> __King Arthur__: _Well, you have to know these things when you're a king, you know._<br><br>_Monty Python and the Holy Grail_" 
       # How many posts to show on the sidebar (Default: 5)
       
   #num_recent_posts = 2
