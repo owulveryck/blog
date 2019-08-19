@@ -43,24 +43,30 @@ if (!WebAssembly.instantiateStreaming) { // polyfill
   const go = new Go();
   let mod, inst;
 async function load() {
-  document.getElementById("loadButton").disabled = true;
-   document.getElementById("loadButton").style.color = "grey";
-   document.getElementById("info").innerHTML = "Processing WASM file, please wait...";
-  WebAssembly.instantiateStreaming(fetch("/assets/onnx/onnx20190405.wasm"), go.importObject).then((result) => {
+    document.getElementById("loadButton").disabled = true;
+    document.getElementById("loadButton").style.color = "grey";
+    document.getElementById("info").innerHTML = "Downloading WASM file...";
+    const fetchPromise = fetch('/assets/onnx/onnx201904_mem.wasm');
+    document.getElementById("info").innerHTML = "Compiling WASM file, please wait...";
+    WebAssembly.instantiateStreaming(fetchPromise, go.importObject).then((result) => {
          mod = result.module;
          inst = result.instance;
          document.getElementById("runButton").disabled = false;
-   document.getElementById("info").innerHTML = "Ready to run...";
+    document.getElementById("info").innerHTML = "Ready to run...";
          document.getElementById("runButton").style.color = "green";
   });
 }
 
 async function run() {
-         document.getElementById("runButton").disabled = true;
-       console.clear();
-   document.getElementById("info").innerHTML = "Starting...";
-       await go.run(inst);
-       inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
+    document.getElementById("runButton").disabled = true;
+    console.clear();
+    document.getElementById("info").innerHTML = "Starting...";
+    await go.run(inst);
+  //inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
+    inst = await WebAssembly.instantiate(mod, go.importObject).catch(error => {
+      document.getElementById("info").innerHTML = "program failed (out-of-memory?)<br>(this program does not run properly on mobile)<br>reload the page to retry";
+         document.getElementById("info").style.color = "red";
+    });
 }
 function loadFile(){
     var x = document.getElementById("knowledgeFile");
