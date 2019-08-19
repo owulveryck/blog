@@ -3,17 +3,17 @@ title: "A simple face detection utility from Python to Go"
 date: 2019-08-16T21:25:30+02:00
 lastmod: 2019-08-16T21:25:30+02:00
 draft: true
-keywords: []
-description: ""
+keywords: ["onnx","DDD","Keras","Go","Neural Net","YOLO"]
+description: "This post describes how to build a face detection tool with neural net. The full conception is described, from the design to the implementation."
 tags: []
 categories: []
 author: ""
 
 # You can also close(false) or open(true) something for this content.
 # P.S. comment can only be closed
-comment: false
-toc: false
-autoCollapseToc: false
+comment: true
+toc: true
+autoCollapseToc: true
 # You can also define another contentCopyright. e.g. contentCopyright: "This is another copyright."
 contentCopyright: false
 reward: false
@@ -79,7 +79,7 @@ Let's clone the repository:
 
 `$ git clone https://github.com/azmathmoosa/azFace`
 
-The weights are this heavy file `weights/tiny-yolo-azface-fddb_82000.weights` of 61Mb
+The weights are this heavy file of 61Mb: `weights/tiny-yolo-azface-fddb_82000.weights`.
 
 ### Combining the weights and the model
 
