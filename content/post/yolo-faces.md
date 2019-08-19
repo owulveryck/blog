@@ -345,7 +345,7 @@ gives the following result
 So it has detected only one face; It is possible to play with the confidence threshold to detect other faces.
 I have found that it is not possible to detect the face of the _lover_; probably because the picture do not show her full face.
 
-### Getting an output pocture
+### Getting an output picture
 
 
 ```shell
