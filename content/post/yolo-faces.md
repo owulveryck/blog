@@ -380,4 +380,15 @@ convert \
 
 # Conclusion
 
-TODO
+We made a tool composed of three packages (`gofaces`, `draw` and, obviously, `main`).
+
+The Go self-contained binary makes it the right choice for playing with face detection on personal computers. On top of that, It is easy, for a developer, to adapt the main package. He can use face detection to write the funniest or fanciest tool. The sky is the limit.
+
+Thanks to the ONNX Intermediate Representation (IR), it is now possible to use machine learning to describe part of the business logic of a tool.
+Third-party implementations of the ONNX format allows writing efficient applications with different frameworks or runtime environments.
+
+What I like the most with this idea is that we have a separation of concerns for building a modular and testable tool.
+Each part can have its lifecycle as long as they still fulfill the interfaces.
+
+On top of that, each layer is fully testable, which brings quality in the final result.
+
