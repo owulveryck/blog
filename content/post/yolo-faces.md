@@ -311,8 +311,59 @@ A box contains a set of [`Elements`](https://godoc.org/github.com/owulveryck/gof
 
 #### Get the bounding boxes
 
+
+TODO 
 * [`ProcessOutput`](https://godoc.org/github.com/owulveryck/gofaces#ProcessOutput)
 * [`Sanitize`](https://godoc.org/github.com/owulveryck/gofaces#Sanitize)
 
-# Conclusion
+# Final result
 
+You can find the code of the application in my [`gofaces`](https://github.com/owulveryck/gofaces) repository.
+
+I am using a famous meme as input (you can find the image [here](/assets/yolofaces/meme.jpg))
+<center>
+<figure>
+  <img src="/assets/yolofaces/meme.jpg" width="30%">
+</figure>
+</center>
+
+
+```shell
+cd $GOPATH/src/github.com/owulveryck/gofaces/cmd
+go run main.go \
+        -img /tmp/meme.jpg \
+        -model ../model/model.onnx
+```
+
+gives the following result
+```text
+[At (187,85)-(251,147) (confidence 0.20):
+        - face - 1
+]
+```
+
+So it has detected only one face; It is possible to play with the confidence threshold to detect other faces.
+I have found that it is not possible to detect the face of the _lover_; probably because the picture do not show her full face.
+
+### Getting an output pocture
+
+
+```shell
+YOLO_CONFIDENCE_THRESHOLD=0.1 go run main.go \
+        -img /tmp/meme.jpg \
+        -output /tmp/mask2.png \
+        -model ../model/model.onnx
+convert \
+        /tmp/meme.jpg \
+        /tmp/mask2.png \
+        \( -resize 418x \) \
+        -compose over -composite /tmp/result2.png
+```
+
+<center>
+<img src="/assets/yolofaces/mask2.png" width="30%" style="border-width: 1px;border-color: black;border-style: solid;">
+<img src="/assets/yolofaces/result2.png" width="30%">
+</center>
+
+
+# Conclusion
