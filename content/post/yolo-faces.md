@@ -2,7 +2,7 @@
 title: "A simple face detection utility from Python to Go"
 date: 2019-08-16T21:25:30+02:00
 lastmod: 2019-08-16T21:25:30+02:00
-draft: true
+draft: false
 keywords: ["onnx","DDD","Keras","Go","Neural Net","YOLO"]
 description: "This post describes how to build a face detection tool with a neural network. The full conception is described, from the design to the implementation."
 tags: []
@@ -332,7 +332,7 @@ The repository is composed of:
 * a `cmd` subdirectory is holding a sample implementation to analyze the picture in the command line.
 
 ## Example 
-I am using a famous meme as input (you can find the image [here](/assets/yolofaces/meme.jpg))
+I am using a famous meme as input.
 <center>
 <figure>
   <img src="/assets/yolofaces/meme.jpg" width="30%">
@@ -385,9 +385,9 @@ convert \
 
 # Conclusion
 
-We made a tool composed of three packages (`gofaces`, `draw` and, obviously, `main`).
+Alongside this article, we made a tool by writing three testable packages (`gofaces`, `draw` and, obviously, `main`).
 
-The Go self-contained binary makes it the right choice for playing with face detection on personal computers. On top of that, It is easy, for a developer, to adapt the main package. He can use face detection to write the funniest or fanciest tool. The sky is the limit.
+The Go self-contained binary makes it the right choice for playing with face detection on personal computers. On top of that, It is easy, for a developer, to adapt the tool by tweaking only the `main` package. He can use face detection to write the funniest or fanciest tool. The sky is the limit.
 
 Thanks to the ONNX Intermediate Representation (IR), it is now possible to use machine learning to describe part of the business logic of a tool.
 Third-party implementations of the ONNX format allows writing efficient applications with different frameworks or runtime environments.
