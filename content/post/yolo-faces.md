@@ -39,6 +39,7 @@ Therefore, in this post I will use the following technologies:
 
 **Disclaimer**: I am using those concepts to illustrate what I do; This is not a proper DDD design nor a true hexagonal architecture.
 
+
 The architecture of our tool can be described by three layers:
 <center>
 <figure>
@@ -49,7 +50,10 @@ The architecture of our tool can be described by three layers:
 </figure>
 </center>
 
+The basic principle is that every layer is a "closed area"; therefore it is accessed through API and every layer can be tested independently.
 Therefore each layer is described in a paragraph of this article.
+
+The "actor" here is a simple cli tool. It is the main package of the application (and in go the main package is the package `main`); In the rest of the article, I will reference it as "**the actor**.
 
 # Implementing the business logic with a neural network
 
@@ -157,12 +161,14 @@ I have uploaded the result [here](https://github.com/owulveryck/gofaces/raw/mast
 It is interesting to see the result. I am using the tool `netron` which have a [web version](https://lutzroeder.github.io/netron/).
 The result looks like this:
 
+<center>
 <figure>
-  <img src="/assets/yolofaces/netron-extract.png" link="/assets/yolofaces/netron.png">
+  <img src="/assets/yolofaces/netron-extract.png" link="/assets/yolofaces/netron.png" width="50%">
   <figcaption>
       <h4>Netron representation of the tiny yolo v2 graph</h4>
   </figcaption>
 </figure>
+</center>
 
 I made a copy of the full representation which is available [here](/assets/yolofaces/netron.png)
 
@@ -190,11 +196,11 @@ This solution is an efficient solution for a tool; all the dependencies I needed
 
 ### The Service Provider Interface (SPI)
 
-Onnx-go provides an implementation of a `Model` object. It is a Go structure that acts as a receiver of the neural network model.
+We've seen that the neural network is represented by its model. The SPI should implement a model to fulfill the contract and understand the ONNX Intermediate Representation (IR). [Onnx-go](https://github.com/owulveryck/onnx-go)'s [`Model`](https://godoc.org/github.com/owulveryck/onnx-go#Model) object is a Go structure that acts as a receiver of the neural network model.
 
-Gorgonia provides a runtime environment that can execute the model.
+The other service required is a computation engine that understands and executes the model. This function is assumed by [Gorgonia](https://github.com/gorgonia/gorgonia).
 
-The basic usage of those services in the main package of a tool is:
+The **actor** will use those services. A basic implementation in Go is (note the package is `main`):
 
 ```go
 import (
@@ -212,7 +218,7 @@ func main() {
 
 
 To use the model, we need to interact with its inputs and output.
-The model takes a tensor as input. To set it, the helper function `SetInput` is used.
+The model takes a tensor as input. To set it onnx-go provides a helper function: `SetInput`.
 The outputs are obtained via a call to `GetTensorOutput()`
 
 ```go
@@ -222,10 +228,14 @@ t := tensor.New(
 model.SetInput(0, t)
 ```
 
+The **actor** could use those methods, but, as the goal of the application is to analyze pictures, the application will encapsulate them to provide a richer user experience for the actor (the actors will probably not want to mess up with tensors).
+
+#### Testing the infrastructure 
+
 We can now test the infrastructure to see if the implementation is ok. We set an empty tensor, compute it with Gorgonia and compare the result with the one
 saved previously:
 
-I wrote a small `test` file hosted on a gist [here](https://gist.github.com/owulveryck/3d15c0eb9cf7dea6518116ec0a5be581#file-yolo_test-go). 
+I wrote a small `test` file in the go format; for clarity I will not copy/paste it here, but host on a [gist](https://gist.github.com/owulveryck/3d15c0eb9cf7dea6518116ec0a5be581#file-yolo_test-go). 
 
 ```text
 # go test
@@ -242,7 +252,7 @@ fmt.Println(string(b))
 }
 ```
 
-Here is an extract of the result (the full picture is [here](/assets/yolofaces/yolo-gorgonia.png))
+(the full graph is [here](/assets/yolofaces/yolo-gorgonia.png))
 
 <center>
 <figure>
@@ -271,9 +281,9 @@ This function takes an image as input; The image is transfered to the function w
 to use a regular file, to get the file from stdin, or to build a webservice and get the file via http.
 This function returns a tensor usable with the yolo faces model; it also returns any error if it cannot process the file.
 
-_Note_ the full signature can be found on [`GoDoc / GetTensorFromImage`](https://godoc.org/github.com/owulveryck/gofaces#GetTensorFromImage) 
+_Note_ the full signature of the `GetTensorFromImage` function can be found on [GoDoc](https://godoc.org/github.com/owulveryck/gofaces#GetTensorFromImage) 
 
-We can take back the skeleton of the tool we started before and add the input (I skip the errors checking for clarity):
+We can take back the **actor** implementation and add the input picture (I skip the errors checking for clarity):
 
 ```go
 func main() {
@@ -289,9 +299,20 @@ func main() {
 }
 ```
 
-The model can be executed with a call to `model.Run()`o
+The model can be executed with a call to [`backend.Run()`] because Gorgonia fulfills the [`ComputationBackend`](https://godoc.org/github.com/owulveryck/onnx-go/backend#ComputationBackend) interface.
 
 ### Output
+
+#### Bounding boxes
+
+The model outputs a tensor. This tensors holds all of the informations to extract bounding boxes. 
+Getting the bounding boxes is the responsibility of the application. Therefore, the package `gofaces` defines a [`Box`](https://godoc.org/github.com/owulveryck/gofaces#Box) structure.  
+A box contains a set of [`Elements`](https://godoc.org/github.com/owulveryck/gofaces#Element)
+
+#### Get the bounding boxes
+
+* [`ProcessOutput`](https://godoc.org/github.com/owulveryck/gofaces#ProcessOutput)
+* [`Sanitize`](https://godoc.org/github.com/owulveryck/gofaces#Sanitize)
 
 # Conclusion
 
