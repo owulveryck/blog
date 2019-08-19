@@ -316,17 +316,22 @@ A box contains a set of [`Elements`](https://godoc.org/github.com/owulveryck/gof
 
 #### Get the bounding boxes
 
-The application's goal is to analyze the picture and to provide the bounding boxes that contains faces.
+The application's goal is to analyze the picture and to provide the bounding boxes that contain faces.
+What the **actor** needs are the resulting bounding boxes.
+The application provides them via a call to the [`ProcessOutput`](https://godoc.org/github.com/owulveryck/gofaces#ProcessOutput) function.
 
-* [`ProcessOutput`](https://godoc.org/github.com/owulveryck/gofaces#ProcessOutput)
-* [`Sanitize`](https://godoc.org/github.com/owulveryck/gofaces#Sanitize)
-
-TODO
+_Note_ On top of this function, I include a function to [`Sanitize`](https://godoc.org/github.com/owulveryck/gofaces#Sanitize) the results (which could be in a separate package though because it is part of the post-processing).
 
 # Final result
 
 You can find the code of the application in my [`gofaces`](https://github.com/owulveryck/gofaces) repository.
 
+The repository is composed of:
+
+* the `gofaces` package which is at the root level (see the godoc [here](https://godoc.org/github.com/owulveryck/gofaces);
+* a `cmd` subdirectory is holding a sample implementation to analyze the picture in the command line.
+
+## Example 
 I am using a famous meme as input (you can find the image [here](/assets/yolofaces/meme.jpg))
 <center>
 <figure>
