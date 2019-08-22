@@ -1,18 +1,30 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Unladen swallow</title>
+    <title>Basics on Unladen swallow</title>
     <link>https://blog.owulveryck.info/</link>
-    <description>Recent content on Unladen swallow</description>
+    <description>Recent content in Basics on Unladen swallow</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <managingEditor>olivier.wulveryck@gmail.com (Olivier Wulveryck)</managingEditor>
     <webMaster>olivier.wulveryck@gmail.com (Olivier Wulveryck)</webMaster>
     <copyright>All rights reserved</copyright>
-    <lastBuildDate>Wed, 03 Apr 2019 20:33:42 +0200</lastBuildDate>
+    <lastBuildDate>Fri, 16 Aug 2019 21:25:30 +0200</lastBuildDate>
     
         <atom:link href="https://blog.owulveryck.info/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>A simple face detection utility from Python to Go</title>
+      <link>https://blog.owulveryck.info/2019/08/16/a-simple-face-detection-utility-from-python-to-go.html</link>
+      <pubDate>Fri, 16 Aug 2019 21:25:30 +0200</pubDate>
+      <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
+      <guid>https://blog.owulveryck.info/2019/08/16/a-simple-face-detection-utility-from-python-to-go.html</guid>
+      
+        <description>In this article, I explain how to build a tool to detect faces in a picture. This article is a sort of how-to design and implements a tool by using a neural network.
+For the design part, I describe how to:
+ build the business model thanks to a neural network; adapt the network to the specific domain of face detection by changing its knowledge; use the resulting domain with a go-based infrastructure; code a little application in Go to communicate with the outside world.</description>
+      
+    </item>
     
     <item>
       <title>From a project to a product: the state of onnx-go</title>
@@ -29,10 +41,10 @@
     
     <item>
       <title>My journey with ONNX and Go - Running the graph</title>
-      <link>https://blog.owulveryck.info/2018/09/19/my-journey-with-onnx-and-go---running-the-graph.html</link>
+      <link>https://blog.owulveryck.info/2018/09/19/my-journey-with-onnx-and-go-running-the-graph.html</link>
       <pubDate>Wed, 19 Sep 2018 08:53:09 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>https://blog.owulveryck.info/2018/09/19/my-journey-with-onnx-and-go---running-the-graph.html</guid>
+      <guid>https://blog.owulveryck.info/2018/09/19/my-journey-with-onnx-and-go-running-the-graph.html</guid>
       
         <description>In the previous post, I made an introduction and a POC to interact with ONNX models and Go.
 I have decoded the information to reconstruct a graph. Now I propose to expand the principle and to create a proper execution backend based on Gorgonia. This post is a bit more technical than the previous one because all the concepts needed to work should be present in the last article.</description>
@@ -41,10 +53,10 @@ I have decoded the information to reconstruct a graph. Now I propose to expand t
     
     <item>
       <title>My journey with ONNX and Go - The beginning</title>
-      <link>https://blog.owulveryck.info/2018/08/14/my-journey-with-onnx-and-go---the-beginning.html</link>
+      <link>https://blog.owulveryck.info/2018/08/14/my-journey-with-onnx-and-go-the-beginning.html</link>
       <pubDate>Tue, 14 Aug 2018 20:41:30 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>https://blog.owulveryck.info/2018/08/14/my-journey-with-onnx-and-go---the-beginning.html</guid>
+      <guid>https://blog.owulveryck.info/2018/08/14/my-journey-with-onnx-and-go-the-beginning.html</guid>
       
         <description>This year has started with a lot of deep thoughts about the software 2.0. My conclusion (which is slightly different from Andrej Karpathy&amp;rsquo;s consideration) is that a software 2.0 is a combination of a Neural network model and its associated weights. This is a concept; now the question is: how to materialize the idea? What artifact represents a software 2.0.
 I emitted several ideas and tried one of them: to serialize the mathematical model and the weights.</description>
@@ -71,10 +83,7 @@ All those experiments led me to a write a proof of concepts that can illustrate 
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
       <guid>https://blog.owulveryck.info/2018/06/08/some-notes-about-the-upcoming-webassembly-support-in-go.html</guid>
       
-        <description>This is a rapid post about webassembly. Its goal is to act as a reminder for me more than a tutorial on how to use it.
-The upcoming version of go 1.11 will have support for Wasm. @neelance has done most of the work of implementation. The support for wasm can already be tested by extracting his working branch from GitHub.
-See this article for more information.
-Setup of the toolchain To generate a wasm file from a go source, you need to get and patch the go toolset from the sources:</description>
+        <description></description>
       
     </item>
     
@@ -92,10 +101,10 @@ This post describes the concept of software 2.0. It evaluates an instance of the
     
     <item>
       <title>Parsing mathematical equation to generate computation graphs - First step from software 1.0 to 2.0 in go</title>
-      <link>https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html</link>
+      <link>https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs-first-step-from-software-1.0-to-2.0-in-go.html</link>
       <pubDate>Mon, 18 Dec 2017 16:47:27 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs---first-step-from-software-1.0-to-2.0-in-go.html</guid>
+      <guid>https://blog.owulveryck.info/2017/12/18/parsing-mathematical-equation-to-generate-computation-graphs-first-step-from-software-1.0-to-2.0-in-go.html</guid>
       
         <description>In a previous article, I described an implementation of an RNN from scratch in go. The target is to use the RNN as a processing unit. The ultimate goal is to create a portable tool cross platform and able to grab and process data where they are. I have many applications in mind such as finding the root-cause of an incident or managing the capacity of an infrastructure.
 Note I stick to the Go language for many reasons: Some of them a personnal and not opposable (I simply like it).</description>
@@ -128,10 +137,10 @@ This post is the second part of the experiment. I will go deeper in the code and
     
     <item>
       <title>From command line tools to microservices - The example of Hashicorp tools (terraform) and gRPC</title>
-      <link>https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html</link>
+      <link>https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices-the-example-of-hashicorp-tools-terraform-and-grpc.html</link>
       <pubDate>Sat, 02 Sep 2017 13:28:36 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices---the-example-of-hashicorp-tools-terraform-and-grpc.html</guid>
+      <guid>https://blog.owulveryck.info/2017/09/02/from-command-line-tools-to-microservices-the-example-of-hashicorp-tools-terraform-and-grpc.html</guid>
       
         <description>This post is a little different from the last ones. As usual, the introduction tries to be open, but it quickly goes deeper into a go implementation. Some explanations may be tricky from time to times and therefore not very clear. As usual, do not hesitate to send me any comment via this blog or via twitter @owulveryck.
 TL;DR: This is a step-by-step example that turns a golang cli utility into a webservice powered by gRPC and protobuf.</description>
@@ -170,10 +179,10 @@ Why this parody?
     
     <item>
       <title>Chrome, the eye of the cloud - Computer vision with deep learning and only 2Gb of RAM</title>
-      <link>https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html</link>
+      <link>https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud-computer-vision-with-deep-learning-and-only-2gb-of-ram.html</link>
       <pubDate>Tue, 16 May 2017 21:43:46 +0200</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud---computer-vision-with-deep-learning-and-only-2gb-of-ram.html</guid>
+      <guid>https://blog.owulveryck.info/2017/05/16/chrome-the-eye-of-the-cloud-computer-vision-with-deep-learning-and-only-2gb-of-ram.html</guid>
       
         <description>TL;DR: Thank you for passing by. This article is, as usual, geek oriented. However, if you are not a geek, and/or you are in a hurry, you can jump to the conclusion: Any real application?
 During the month of may, I have had the chance to attend to the Google Next event in London and the dotAI in Paris. In both conferences I learned a lot about machine learning.</description>
@@ -536,10 +545,10 @@ I &amp;ldquo;geeked&amp;rdquo; it a little bit and I installed my favorites dev 
     
     <item>
       <title>Simple polling, a cloud native app - part 1</title>
-      <link>https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1.html</link>
+      <link>https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app-part-1.html</link>
       <pubDate>Fri, 23 Oct 2015 09:54:27 +0100</pubDate>
       <author>olivier.wulveryck@gmail.com (Olivier Wulveryck)</author>
-      <guid>https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app---part-1.html</guid>
+      <guid>https://blog.owulveryck.info/2015/10/23/simple-polling-a-cloud-native-app-part-1.html</guid>
       
         <description>In this series of posts I&amp;rsquo;ll explain how to setup a simple polling app, the cloud way. This app, written in go, will be hosted on a PAAS, and I&amp;rsquo;ve chosen the Google App Engine for convenience.
 I will not explain in this post how to setup the Development environment as it is described here

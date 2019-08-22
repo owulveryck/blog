@@ -19,7 +19,6 @@ contentCopyright: false
 reward: false
 mathjax: false
 ---
-
 In this article, I explain how to build a tool to detect faces in a picture.
 This article is a sort of how-to design and implements a tool by using a neural network.
 
@@ -55,7 +54,7 @@ Those layers can represent the architecture of the tool:
 The basic principle is that every layer is a "closed area"; therefore, it is accessible through API, and every layer is testable independently.
 Different paragraphs of this post describe each layer.
 
-The "actor" here is a simple CLI tool. It is the main package of the application (and in go the main package is the package `main`); In the rest of the article, I reference it as "**the actor**.
+The "actor" here is a simple CLI tool. It is the main package of the application (and in go the main package is the package `main`); In the rest of the article, I reference it as "**the actor**".
 
 # Implementing the business logic with a neural network
 
@@ -91,9 +90,9 @@ Now, we need to combine the knowledge and the model. Together, they constitute t
 The business logic should be as independent as possible of any framework. The best way to represent the neural network is to be as close as possible as 
 its definition; The original implementation of the YOLO model (from "darknet") is in C; There are other reimplementations in Tensorflow, Keras, Java, ...
 
-I am using [ONNX](https://onnx.ai/) as a format for the business logic; It is an Intermediate Representation that is, therefore, of a framework. 
+I am using [ONNX](https://onnx.ai/) as a format for the business logic; It is an Intermediate Representation that is, as a consequence, independant of a framework. 
 
-To create the ONNX format, I am using Keras with the tools: 
+To create the ONNX format, I am using Keras with thei following tools: 
 
 * [`yad2k`](https://github.com/allanzelener/yad2k.git) to create a Keras model from YOLO;
 * [`keras2onnx`](https://pypi.org/project/keras2onnx/) to encode it into ONNX.
