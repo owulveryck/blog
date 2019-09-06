@@ -30,9 +30,9 @@ mathjax: false
 
 ### About terratest
 
-# The goal of this IaC
+# The goal of the module
 
-I am writing this code to manage a simple infrastructure. The goal is to fit a need I have when I develop something related to machine learning.
+I am writing this module to fit a need I have when I develop something related to machine learning.
 
 ## The usecase - "_eat your own dog food_"
 
@@ -47,9 +47,9 @@ All the material I need to work as a developer is installed in user space in my 
 During the life cycle of the development, I need different computation power. Most of the time, I need a basic CPU to run my editor, the linter and some basic tests.
 
 ### Vision statement
-This paragraph aim to find a vision statement for the terraform stack. The vision statement will guide us toward the process of design an development.
+This paragraph aim to find a vision statement for the module. The vision statement will guide us toward the process of design an development.
 
-> For the developer who needs elastic CPU/GPU power, this terraform stack facilitates the creation of a development environment in the cloud,
+> For the developer who needs elastic CPU/GPU power, the Terraform module will facilitate the creation of a development environment in the cloud,
 > and unlike other solution, any change in the environment has no impact on the work and settings of the user.
 
 # Overall picture
@@ -75,41 +75,23 @@ The list of the AWS elements along with their terraform resources required to fu
 
 ## Layering
 
-One of the goal of this article is to show how to design and develop this stack. [TDD](https://en.wikipedia.org/wiki/Test-driven_development) is a software development
-process. It is a design method.
-
-If I quote [wikipedia](https://en.wikipedia.org/wiki/Test-driven_development#Keep_the_unit_small):
-
-> For TDD, a unit is most commonly defined as a class, or a group of related functions often called a module. Keeping units relatively small is claimed to provide critical benefits, including:
->
-> - Reduced debugging effort – When test failures are detected, having smaller units aids in tracking down errors.
->
-> - Self-documenting tests – Small test cases are easier to read and to understand.[*](https://en.wikipedia.org/wiki/Test-driven_development#cite_note-Pathfinder_Solutions-8)
-
-The first benefit I can take from this design method is the need to split/group subcomponents.
-
-_draw the boundaries_
-
-| Layer    | AWS element        | Terraform resource                                                                               |
-|----------|--------------------|--------------------------------------------------------------------------------------------------|
-| `00_data`| EBS                | [aws_ebs_volume](https://www.terraform.io/docs/providers/aws/r/ebs_volume.html)                  |
-| `10_net` | VPC                | [aws_vpc](https://www.terraform.io/docs/providers/aws/r/vpc.html)                                |
-| `10_net` | Security Group     | [aws_security_group](https://www.terraform.io/docs/providers/aws/r/security_group.html)          |
-| `10_net` | DNS Hosted zone    | [aws_route53_zone](https://www.terraform.io/docs/providers/aws/r/route53_zone.html)              |
-| `20_env` | EC2                | [aws_instance](https://www.terraform.io/docs/providers/aws/r/instance.html)                      |
-| `20_env` | Attachement        | [aws_volume_attachment](https://www.terraform.io/docs/providers/aws/r/volume_attachment.html)    |
-| `20_env` | SG rule            | [aws_security_group_rule](https://www.terraform.io/docs/providers/aws/r/security_group_rule.html)|
-| `20_env` | DNS record         | [aws_route53_record](https://www.terraform.io/docs/providers/aws/r/route53_record.html)          |
-| `20_env` | Reference to AMI   | [aws_ami](https://www.terraform.io/docs/providers/aws/d/ami.html)                                |
+| Layer   | AWS element        | Terraform resource                                                                               |
+|---------|--------------------|--------------------------------------------------------------------------------------------------|
+| `0_dat`a  | EBS                | [aws_ebs_volume](https://www.terraform.io/docs/providers/aws/r/ebs_volume.html)                  |
+| 1_net   | VPC                | [aws_vpc](https://www.terraform.io/docs/providers/aws/r/vpc.html)                                |
+| 1_net   | Security Group     | [aws_security_group](https://www.terraform.io/docs/providers/aws/r/security_group.html)          |
+| 1_net   | DNS Hosted zone    | [aws_route53_zone](https://www.terraform.io/docs/providers/aws/r/route53_zone.html)              |
+| 2_infra | EC2                | [aws_instance](https://www.terraform.io/docs/providers/aws/r/instance.html)                      |
+| 2_infra | Attachement        | [aws_volume_attachment](https://www.terraform.io/docs/providers/aws/r/volume_attachment.html)    |
+| 2_infra | SG rule            | [aws_security_group_rule](https://www.terraform.io/docs/providers/aws/r/security_group_rule.html)|
+| 2_infra | DNS record         | [aws_route53_record](https://www.terraform.io/docs/providers/aws/r/route53_record.html)          |
+| 2_infra | Reference to AMI   | [aws_ami](https://www.terraform.io/docs/providers/aws/d/ami.html)                                |
 
 
-# first layer
-
-## First test
 
 
-> _technical debt is in the eye of the stakeholder_
+### Input variables
 
-[blog octo](https://blog.octo.com/dette-technique-et-procedes-en-conflit/)
+### Output
 
 # Conclusion
