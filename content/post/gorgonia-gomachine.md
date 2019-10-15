@@ -4,7 +4,7 @@ date: 2019-10-14T22:26:42+02:00
 lastmod: 2019-10-14T22:26:42+02:00
 draft: true
 keywords: []
-description: ""
+description: "In this article, I describe the prototype of a new computation machine for graph processing.  This machine takes its inspiration from the Pregel paradigm and uses Go's concurrency mechanism as a lever for a simple implementation."
 tags: []
 categories: []
 author: ""
@@ -65,10 +65,10 @@ from Stanford University gives a useful résumé of what Pregel is:
 
 ### Pregel in Go ?
 
-So, Pregel is a computation graph designed to solve the problem of graph processing by leveraging the power of cloud computing
-(I mean, using a cluster of inexpensive machines).
+So, Pregel's goal is to solve the problem of graph processing by leveraging the power used for cloud computing.
+(a cluster of inexpensive machines).
 
-Distributed programming can be hard, but the original paper mention that:
+Distributed programming, most of the time efficient, is nevertheless hard. But the original paper mention that:
 
 > The model (...) implied synchronicity makes reasoning about programs easier.
 
@@ -204,8 +204,76 @@ benchmark           old ns/op     new ns/op     delta
 BenchmarkTest-4     276892        213892        -22.75%
 ```
 
+eescription: "In this article, I describe the prototype of a new computation machine for graph processing.  This machine takes its inspiration from the Pregel paradigm and uses Go's concurrency mechanism as a lever for a simple implementation."
 Computing machine Learning equations is dealing with of massive objects (matrices) on significant graphs. Let's try this implementation for real in Gorgonia.
 
 # About Gorgonia
 
+Gorgonia is a computation library written in Go.
+Its goal it to facilitate machine learning in this language.
 
+The principle of Gorgonia is:
+
+* it gives the primitives to build an expression graph;
+* it implements "machines" to compute the expression graph and provide the result;
+* it can also do automatic differentiation, but let's put this aside for now;
+
+## The Expression Graph
+
+The vertices of the ExprGraph are Go structures called [`Node`](https://godoc.org/gorgonia.org/gorgonia#Node).
+
+A node carries a [`Value`](https://godoc.org/gorgonia.org/gorgonia#Value) and an [`Op`eration](https://godoc.org/gorgonia.org/gorgonia#Op).
+
+The Operation is an object with a special method Do:
+
+```go
+Do(...Value) (Value, error)
+```
+
+It looks possible to write a computation engine on the principle we've evaluated before.
+
+* create a channel of `Value` for every edge of the graph.
+* create a goroutine for every node of the graph
+  * The goroutine takes the input from the channels that reach the node
+  * The goroutine executes the `Do` statement of the operation
+  * The goroutine write the output value to every channel issued from the current node
+
+## How? Gorgonia's VM
+
+Gorgonia describes a [VM](https://godoc.org/gorgonia.org/gorgonia#VM) via a Go interface
+From the documentation:
+
+> VM represents a structure that can execute a graph or program.
+
+So, the "pregel" implementation we are seeking is eventually an implementation of the VM interface.
+
+I made such experimental implementation called `GoMachine`. It can be found in the master branch of Gorgonia.
+The code and godoc are accessible [here](https://godoc.org/gorgonia.org/gorgonia/x/vm#GoMachine).
+
+Of course there are caveats in the trivial implementation described in this post. For example, the vertex cannot read or write the IO channels
+sequentially, otherwise it may end with a deadlock.
+The GoMachine takes care of that. But the principle is not different from what has been described here; nor the code is mode complicated.
+
+I've used this machine for onnx-go, and successfully run some models with very good performances with it.
+
+Do not hesitate to give it a try.
+
+# Conclusion
+
+Some of the coolest features of the Go language are its simplicity from the development process to the distribution of the final binary.
+
+This is why I started using Go for machine learning in first place. It was the easiest way to run a neural net into production without worrying about
+dependencies.
+
+But the real power of the Go language goes far beyond those principle.
+Actually concurrency is a key point in this. Using this lever can really improve efficiency while keeping things simple.
+The concurrent machine is a perfect example of this.
+
+The full implementation, able to run some neural net models such as Resnet or (tiny)Yolo is less than 200 lines of code.
+
+I do not want to stop the experiment here. Some stuffs I'd like to see are:
+
+* The gradient computation to the machine
+* The usage of CUDA for the operator supporting it
+* ...
+* A true distributed graph computation over several machines in the cloud maybe?
