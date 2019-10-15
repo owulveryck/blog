@@ -40,14 +40,14 @@ This machine takes its inspiration from the Pregel paradigm and uses Go's concur
 
 # Computation model for graph processing
 
-Efficient graph processing is actually a key to modern computing and to machine learning success.
+Efficient graph processing is key to modern computing and machine learning success.
 
-In graph processing, [_Spark_](https://spark.apache.org/) is a reference. It is known for its abitilty to process large computation graph.
+In graph processing, [_Spark_](https://spark.apache.org/) is a reference. It is known for its ability to process large computation graphs.
 
-Spark is base on the [Pregel paradigm](https://kowshik.github.io/JPregel/pregel_paper.pdf), which is a system or large graph processing.
-let's take a closer look at this piece of art involved behind the scene.
+Spark is base on the [Pregel paradigm](https://kowshik.github.io/JPregel/pregel_paper.pdf), which is a system for large graph processing.
+Let's take a closer look at this piece of art involved behind the scene.
 
-### About pregel
+### About Pregel
 
 Pregel is a computation model, not an algorithm. From the original paper, Pregel's goal is to define a program as
 
@@ -63,20 +63,20 @@ from Stanford University gives a useful résumé of what Pregel is:
 > is to ”think like a vertex” - algorithms within the Pregel framework are algorithms in which the
 > computation of state for a given node depends only on the states of its neighbours.
 
-### Pregel in Go ?
+### Pregel in Go?
 
 So, Pregel's goal is to solve the problem of graph processing by leveraging the power used for cloud computing.
 (a cluster of inexpensive machines).
 
-Distributed programming, most of the time efficient, is nevertheless hard. But the original paper mention that:
+Distributed programming is, most of the time, efficient, nevertheless hard. But the original paper mention that:
 
 > The model (...) implied synchronicity makes reasoning about programs easier.
 
 And Go's concurrency mechanism makes it (super) easy to synchronize concurrent routines.
 
-Let's draw a very basic computation graph.
+Let's draw an elementary computation graph.
 
-As a support, let's consider this equation (which is a typical layer of a neural network):
+Consider this equation (which is a patterned layer of a neural network):
 
 $$f(X) = \sigma(W \cdot X+b)$$
 
@@ -104,8 +104,8 @@ Now, let's think _like a vertex_:
 ### Trivial implementation
 Implementing this in Go is fairly easy.
 
-Consider the message as a `float64` value that will flow through channels of communication.
-A vertex is then a function that reads from the channels apply its content body and write its result to the output channel:
+Consider the message as a `float64` value that flows through channels of communication.
+A vertex is then a function that reads from the channels apply its content body and writes its result to the output channel:
 
 ```go
 type message float64
@@ -139,16 +139,16 @@ Running this code prints `0.8807970779778823` (see the full code [here](https://
 
 ### Adding concurrency
 
-The main issue in the trivial implementation is that it is not possible to set the values after the operators application. Doing this would lead to a deadlock:
+The main issue in the trivial implementation is that it is not possible to set the values after calling operators. Doing this would lead to a deadlock:
 
 ```go
 mul(C, A, B)
 A <- message(1.0)
 ```
 
-because assignation to `A` will happen after `mul`'s execution, but `mul` is waiting for a value in channel `A`.
+because assignation to `A` happens after `mul`'s execution, but `mul` is waiting for a value in channel `A`.
 
-Solution to this problem can be solve thanks to go-routines like this:
+A solution to this problem is to use go-routines:
 
 ```go
 go mul(C, A, B)
@@ -160,8 +160,8 @@ B <- message(1.0)
 D <- message(1.0)
 ```
 
-Now every vertex runs in a goroutine and the deadlock's gone. Even better, this mechanism has implicit synchronization.
-Therefore, computing this graph is more efficient with this mechanism that coding it sequentially because the `mul` operation will be computed in parralel:
+Now every vertex runs in a goroutine, and the deadlock's gone. Even better, this mechanism has implicit synchronization.
+Therefore, computing this graph is more efficient with this mechanism that coding it sequentially because the `mul` operations are computed ~~in parallel~~ concurrently:
 
 <center>
 ![graph](/assets/pregel/graph3.png)
@@ -204,13 +204,12 @@ benchmark           old ns/op     new ns/op     delta
 BenchmarkTest-4     276892        213892        -22.75%
 ```
 
-eescription: "In this article, I describe the prototype of a new computation machine for graph processing.  This machine takes its inspiration from the Pregel paradigm and uses Go's concurrency mechanism as a lever for a simple implementation."
-Computing machine Learning equations is dealing with of massive objects (matrices) on significant graphs. Let's try this implementation for real in Gorgonia.
+Let's see how to apply this to machine learning.
 
 # About Gorgonia
 
 Gorgonia is a computation library written in Go.
-Its goal it to facilitate machine learning in this language.
+Its goal is to facilitate machine learning in this language.
 
 The principle of Gorgonia is:
 
@@ -224,7 +223,7 @@ The vertices of the ExprGraph are Go structures called [`Node`](https://godoc.or
 
 A node carries a [`Value`](https://godoc.org/gorgonia.org/gorgonia#Value) and an [`Op`eration](https://godoc.org/gorgonia.org/gorgonia#Op).
 
-The Operation is an object with a special method Do:
+The Operation is an object with a particular method named Do:
 
 ```go
 Do(...Value) (Value, error)
@@ -240,40 +239,43 @@ It looks possible to write a computation engine on the principle we've evaluated
 
 ## How? Gorgonia's VM
 
-Gorgonia describes a [VM](https://godoc.org/gorgonia.org/gorgonia#VM) via a Go interface
+Gorgonia describes a [VM](https://godoc.org/gorgonia.org/gorgonia#VM) via a Go interface.
+
 From the documentation:
 
 > VM represents a structure that can execute a graph or program.
 
-So, the "pregel" implementation we are seeking is eventually an implementation of the VM interface.
+So, the "Pregel" implementation we are seeking is eventually an implementation of the VM interface.
 
-I made such experimental implementation called `GoMachine`. It can be found in the master branch of Gorgonia.
+There is an experimental implementation called `GoMachine`. It lives in the master branch of Gorgonia (under the `x` subdirectory).
 The code and godoc are accessible [here](https://godoc.org/gorgonia.org/gorgonia/x/vm#GoMachine).
 
-Of course there are caveats in the trivial implementation described in this post. For example, the vertex cannot read or write the IO channels
-sequentially, otherwise it may end with a deadlock.
-The GoMachine takes care of that. But the principle is not different from what has been described here; nor the code is mode complicated.
+There are some caveats in the trivial implementation described in this post. For example, the vertex cannot read or write the IO channels
+sequentially. Otherwise, it can end in a deadlock.
+The GoMachine takes care of that. But the principle is not different from what is described here and the code remains simple.
 
-I've used this machine for onnx-go, and successfully run some models with very good performances with it.
+But as of today, I've been able to run this machine with onnx-go, and successfully executed complex models with excellent performances.
 
-Do not hesitate to give it a try.
+Do not hesitate to give it a try and send some feedback.
 
 # Conclusion
 
-Some of the coolest features of the Go language are its simplicity from the development process to the distribution of the final binary.
+Some of the coolest features of the Go language are its simplicity. This goes from the development process to the distribution of the final binary.
 
-This is why I started using Go for machine learning in first place. It was the easiest way to run a neural net into production without worrying about
+This is why I started using Go for machine learning in the first place. It was the easiest way to run a neural net into production without worrying about
 dependencies.
 
-But the real power of the Go language goes far beyond those principle.
-Actually concurrency is a key point in this. Using this lever can really improve efficiency while keeping things simple.
-The concurrent machine is a perfect example of this.
+But the real power of the Go language goes far beyond those principles.
+Concurrency is a crucial point. Using this lever can improve efficiency while keeping things simple.
+To me, the concurrent machine is a perfect example of this.
 
-The full implementation, able to run some neural net models such as Resnet or (tiny)Yolo is less than 200 lines of code.
+Indeed, the full implementation is less than 200 lines of code and can run graphs such as ResNET.
 
-I do not want to stop the experiment here. Some stuffs I'd like to see are:
+I do not want to stop the experiment here. Some stuff I'd like to see are:
 
 * The gradient computation to the machine
 * The usage of CUDA for the operator supporting it
 * ...
-* A true distributed graph computation over several machines in the cloud maybe?
+* A truly distributed graph computation over several machines, in the cloud, ...
+
+Please let me know what you think about this.
